@@ -47,13 +47,13 @@ create table `user_t`(
     `country` char(30),
     `province` char(30),
     `city` char(30),
-    `addrid_default` int,
-    foreign key(`addrid_default`) references `addr_t`(`id`) on delete set null
+    `addrid` int,
+    foreign key(`addrid`) references `addr_t`(`id`) on delete set null
 );
 
 create table `addr_t`(
 	`id` int auto_increment primary key,
-    `valid` tinyint default 1,
+    `valid` tinyint not null default 1,
 	`name` char(12) not null,
     `cellnum` char(11) not null,
 	`detail` char(150) not null,
