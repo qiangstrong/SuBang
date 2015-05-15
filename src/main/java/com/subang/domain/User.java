@@ -15,9 +15,9 @@ public class User implements Serializable {
 	private String name;
 	private String nickname;
 	private String cellnum;
-	private Integer score;
+	private int score;
 	private String photo; // 用户微信头像的地址
-	private Sex sex;
+	private int sex;
 	private String country;
 	private String province;
 	private String city; // 利用微信接口获取的城市
@@ -26,9 +26,8 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(Integer id, String openid, String name, String nickname, String cellnum,
-			Integer score, String photo, Sex sex, String country, String province, String city,
-			Integer addrid) {
+	public User(Integer id, String openid, String name, String nickname, String cellnum, int score,
+			String photo, int sex, String country, String province, String city, Integer addrid) {
 		this.id = id;
 		this.openid = openid;
 		this.name = name;
@@ -83,11 +82,11 @@ public class User implements Serializable {
 		this.cellnum = cellnum;
 	}
 
-	public Integer getScore() {
+	public int getScore() {
 		return score;
 	}
 
-	public void setScore(Integer score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 
@@ -99,22 +98,22 @@ public class User implements Serializable {
 		this.photo = photo;
 	}
 
-	public Sex getSex() {
+	public int getSex() {
 		return sex;
 	}
 
-	public int getSexOrdinal() {
-		return sex.ordinal();
+	public Sex getSexEnum() {
+		return Sex.values()[sex];
 	}
-
-	public void setSex(Sex sex) {
+	
+	public void setSex(int sex) {
 		this.sex = sex;
 	}
 
-	public void setSex(int ordinal) {
-		this.sex=Sex.values()[ordinal];
+	public void setSex(Sex sex) {
+		this.sex = sex.ordinal();
 	}
-
+	
 	public String getCountry() {
 		return country;
 	}
@@ -146,5 +145,5 @@ public class User implements Serializable {
 	public void setAddrid(Integer addrid) {
 		this.addrid = addrid;
 	}
-
+	
 }

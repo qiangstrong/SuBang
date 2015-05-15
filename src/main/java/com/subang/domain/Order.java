@@ -17,11 +17,11 @@ public class Order implements Serializable {
 
 	private Integer id;
 	private String orderno; // 订单号
-	private Category category;
-	private State state;
-	private float price;
+	private int category;
+	private int state;
+	private Float price;
 	private Date date; // 用户指定的取件日期
-	private Byte time; // 用户指定的取件时间，时间间隔为（time，time+1）
+	private int time; // 用户指定的取件时间，时间间隔为（time，time+1）
 	private String comment;
 	private Integer userid;
 	private Integer addrid;
@@ -31,9 +31,9 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Integer id, String orderno, Category category, State state,
-			float price, Date date, Byte time, String comment, Integer userid,
-			Integer addrid, Integer workerid, Integer laundryid) {
+	public Order(Integer id, String orderno, int category, int state, Float price, Date date,
+			int time, String comment, Integer userid, Integer addrid, Integer workerid,
+			Integer laundryid) {
 		this.id = id;
 		this.orderno = orderno;
 		this.category = category;
@@ -64,43 +64,43 @@ public class Order implements Serializable {
 		this.orderno = orderno;
 	}
 
-	public Category getCategory() {
+	public int getCategory() {
 		return category;
 	}
-	
-	public int getCategoryOrdinal() {
-		return category.ordinal();
-	}
 
-	public void setCategory(Category category) {
+	public Category getCategoryEnum() {
+		return Category.values()[category];
+	}
+	
+	public void setCategory(int category) {
 		this.category = category;
 	}
 
-	public void setCategory(int ordinal) {
-		this.category = Category.values()[ordinal];
+	public void setCategory(Category category) {
+		this.category = category.ordinal();
 	}
 	
-	public State getState() {
+	public int getState() {
 		return state;
 	}
-	
-	public int getStateOrdinal() {
-		return state.ordinal();
+
+	public State getStateEnum() {
+		return State.values()[state];
 	}
 	
-	public void setState(State state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 
-	public void setState(int ordinal) {
-		this.state = State.values()[ordinal];
+	public void setState(State state) {
+		this.state = state.ordinal();
 	}
 	
-	public float getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 
@@ -112,11 +112,11 @@ public class Order implements Serializable {
 		this.date = date;
 	}
 
-	public Byte getTime() {
+	public int getTime() {
 		return time;
 	}
 
-	public void setTime(Byte time) {
+	public void setTime(int time) {
 		this.time = time;
 	}
 
@@ -159,5 +159,7 @@ public class Order implements Serializable {
 	public void setLaundryid(Integer laundryid) {
 		this.laundryid = laundryid;
 	}
+
+	
 
 }

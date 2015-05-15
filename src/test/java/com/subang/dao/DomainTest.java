@@ -69,17 +69,6 @@ public class DomainTest {
 		System.out.println(addr.isValid());
 	}
 	
-	
-	public void testUser1()
-	{
-		User user=new User();
-		user.setId(1);
-		user.setSex(Sex.female);
-		String sqlStr="update user_t set sex=? where id=?";
-		Object[] args={user.getSexOrdinal(),user.getId()};
-		jdbcTemplate.update(sqlStr,args);
-	}
-	
 	@Test
 	public void testUser2()
 	{
@@ -89,8 +78,9 @@ public class DomainTest {
 		jdbcTemplate.query(sqlStr, new Object[] { user.getId() }, new RowCallbackHandler() {
 			public void processRow(ResultSet rs) throws SQLException {
 				user.setSex(rs.getInt("sex"));
+				user.setCountry(rs.getString("country"));
 			}
 		});
-		System.out.println(user.getSex());
+		System.out.println(user.getCountry());
 	}
 }

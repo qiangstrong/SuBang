@@ -90,3 +90,9 @@ create table `history_t`(
     `orderid` int not null,
     foreign key(`orderid`) references `order_t`(`id`) on delete cascade
 );
+
+create table `admin_t`(
+	`id` int auto_Increment primary key,
+    `username` char(30) not null unique,
+    `password` char(30) not null
+);

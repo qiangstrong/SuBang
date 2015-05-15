@@ -13,14 +13,14 @@ public class History implements Serializable {
 	}
 
 	private Integer id;
-	private Operation operation;
+	private int operation;
 	private Timestamp time; // 操作发生的日期和时间
 	private Integer orderid;
 
 	public History() {
 	}
 
-	public History(Integer id, Operation operation, Timestamp time,
+	public History(Integer id, int operation, Timestamp time,
 			Integer orderid) {
 		this.id = id;
 		this.operation = operation;
@@ -36,20 +36,20 @@ public class History implements Serializable {
 		this.id = id;
 	}
 
-	public Operation getOperation() {
+	public int getOperation() {
 		return operation;
 	}
 	
-	public int getOperationOrdinal() {
-		return operation.ordinal();
+	public Operation getOperationEnum() {
+		return Operation.values()[operation];
 	}
 	
-	public void setOperation(Operation operation) {
+	public void setOperation(int operation) {
 		this.operation = operation;
 	}
 	
-	public void setOperation(int ordinal) {
-		this.operation = Operation.values()[ordinal];
+	public void setOperation(Operation operation) {
+		this.operation = operation.ordinal();
 	}
 
 	public Timestamp getTime() {

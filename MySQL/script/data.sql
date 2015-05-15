@@ -8,3 +8,4 @@ insert into addr_t values(null,1,'小明','15500000004','辽宁省沈阳市和�
 update user_t set addrid=1 where id=1;
 insert into order_t values(null,'201505092148510022815',0,0,null,curdate(),9,'这是第一个订单',1,1,1,1);
 insert into history_t values(null,0,now(),1);
+insert into admin_t values(null,'admin','admin');
