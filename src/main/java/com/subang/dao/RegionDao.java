@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.subang.bean.Area;
 import com.subang.domain.Region;
+import com.subang.utility.Common;
 
 @Repository
 public class RegionDao extends BaseDao<Region> {
@@ -45,8 +47,8 @@ public class RegionDao extends BaseDao<Region> {
 	}
 
 	public List<Region> findByName(String name) {
-		String sql = "select * from region_t where name=?";
-		Object[] args = { name };
+		String sql = "select * from region_t where name like ?";
+		Object[] args = { Common.getLikeStr(name) };
 		List<Region> regions = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Region>(
 				Region.class));
 		return regions;
@@ -59,4 +61,32 @@ public class RegionDao extends BaseDao<Region> {
 				Region.class));
 		return regions;
 	}
+
+	public List<Area> findAreaByArea(Area area) {
+		String sql = "SELECT city_t.id 'cityid', city_t.name 'cityname', district_t.id 'districtid', "
+				+ " district_t.name 'districtname', region_t.id 'regionid', region_t.name 'regionname', "
+				+ " region_t.workerid 'workerid' "
+				+ " FROM city_t, district_t, region_t "
+				+ " where city_t.id=district_t.cityid and district_t.id=region_t.districtid and "
+				+ "city_t.name like ? and district_t.name like ? and region_t.name like ?";
+		Object[] args = { Common.getLikeStr(area.getCityname()),
+				Common.getLikeStr(area.getDistrictname()), Common.getLikeStr(area.getRegionname()) };
+		List<Area> areas = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<Area>(Area.class));
+		return areas;
+	}
+	
+	public List<Area> findAreaByWorkerid(Integer workerid) {
+		String sql = "SELECT city_t.id 'cityid', city_t.name 'cityname', district_t.id 'districtid', "
+				+ " district_t.name 'districtname', region_t.id 'regionid', region_t.name 'regionname', "
+				+ " region_t.workerid 'workerid' "
+				+ " FROM city_t, district_t, region_t "
+				+ " where city_t.id=district_t.cityid and district_t.id=region_t.districtid and "
+				+ "region_t.workerid=?";
+		Object[] args = { workerid };
+		List<Area> areas = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<Area>(Area.class));
+		return areas;
+	}
+
 }

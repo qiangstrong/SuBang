@@ -14,6 +14,7 @@ public class User implements Serializable {
 	private String openid;
 	private String name;
 	private String nickname;
+	private String password;
 	private String cellnum;
 	private int score;
 	private String photo; // 用户微信头像的地址
@@ -26,12 +27,13 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(Integer id, String openid, String name, String nickname, String cellnum, int score,
+	public User(Integer id, String openid, String name, String nickname, String password, String cellnum, int score,
 			String photo, int sex, String country, String province, String city, Integer addrid) {
 		this.id = id;
 		this.openid = openid;
 		this.name = name;
 		this.nickname = nickname;
+		this.password=password;
 		this.cellnum = cellnum;
 		this.score = score;
 		this.photo = photo;
@@ -77,7 +79,15 @@ public class User implements Serializable {
 	public String getCellnum() {
 		return cellnum;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 	public void setCellnum(String cellnum) {
 		this.cellnum = cellnum;
 	}

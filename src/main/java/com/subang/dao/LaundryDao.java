@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Laundry;
 import com.subang.domain.Region;
+import com.subang.utility.Common;
 
 @Repository
 public class LaundryDao extends BaseDao<Laundry> {
@@ -47,21 +48,17 @@ public class LaundryDao extends BaseDao<Laundry> {
 		return laundrys;
 	}
 
-	public Laundry findByName(String name) {
-		String sql = "select * from laundry_t where name=?";
-		Object[] args = { name };
-		Laundry laundry = null;
-		try {
-			jdbcTemplate.queryForObject(sql, args,
-					new BeanPropertyRowMapper<Laundry>(Laundry.class));
-		} catch (EmptyResultDataAccessException e) {
-		}
-		return laundry;
+	public List<Laundry> findByName(String name) {
+		String sql = "select * from laundry_t where name like ?";
+		Object[] args = { Common.getLikeStr(name) };
+		List<Laundry> laundrys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Laundry>(
+				Laundry.class));
+		return laundrys;
 	}
 
 	public List<Laundry> findByCellnum(String cellnum) {
-		String sql = "select * from laundry_t where cellnum=?";
-		Object[] args = { cellnum };
+		String sql = "select * from laundry_t where cellnum like ?";
+		Object[] args = { Common.getLikeStr(cellnum) };
 		List<Laundry> laundrys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Laundry>(
 				Laundry.class));
 		return laundrys;

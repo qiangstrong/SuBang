@@ -15,18 +15,18 @@ public class Order implements Serializable {
 		accepted, fetched, finished, canceled
 	}
 
-	private Integer id;
-	private String orderno; // 订单号
-	private int category;
-	private int state;
-	private Float price;
-	private Date date; // 用户指定的取件日期
-	private int time; // 用户指定的取件时间，时间间隔为（time，time+1）
-	private String comment;
-	private Integer userid;
-	private Integer addrid;
-	private Integer workerid;
-	private Integer laundryid;
+	protected Integer id;
+	protected String orderno; // 订单号
+	protected int category;
+	protected int state;
+	protected Float price;
+	protected Date date; // 用户指定的取件日期
+	protected int time; // 用户指定的取件时间，时间间隔为（time，time+1）
+	protected String comment;
+	protected Integer userid;
+	protected Integer addrid;
+	protected Integer workerid;
+	protected Integer laundryid;
 
 	public Order() {
 	}

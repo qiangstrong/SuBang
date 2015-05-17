@@ -6,7 +6,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.subang.bean.StatItem;
 import com.subang.domain.User;
+import com.subang.utility.Common;
 import com.subang.utility.WebConstant;
 
 @Repository
@@ -21,19 +23,20 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?)";
-		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getCellnum(),
-				user.getScore(), user.getPhoto(), user.getSex(), user.getCountry(),
-				user.getProvince(), user.getCity(), user.getAddrid() };
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?)";
+		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getPassword(),
+				user.getCellnum(), user.getScore(), user.getPhoto(), user.getSex(),
+				user.getCountry(), user.getProvince(), user.getCity(), user.getAddrid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
-		String sql = "update user_t set openid=? ,name=? ,nickname=? ,cellnum=? ,score=? ,"
+		String sql = "update user_t set openid=? ,name=? ,nickname=? ,password=? ,cellnum=? ,score=? ,"
 				+ "photo=? ,sex=? ,country=? ,province=? ,city=? ,addrid=? where id=?";
-		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getCellnum(),
-				user.getScore(), user.getPhoto(), user.getSex(), user.getCountry(),
-				user.getProvince(), user.getCity(), user.getAddrid(), user.getId() };
+		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getPassword(),
+				user.getCellnum(), user.getScore(), user.getPhoto(), user.getSex(),
+				user.getCountry(), user.getProvince(), user.getCity(), user.getAddrid(),
+				user.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -56,7 +59,7 @@ public class UserDao extends BaseDao<User> {
 		return users;
 	}
 
-	public User findByOrderno(String openid) {
+	public User findByOpenid(String openid) {
 		String sql = "select * from user_t where openid=?";
 		Object[] args = { openid };
 		User user = null;
@@ -67,19 +70,52 @@ public class UserDao extends BaseDao<User> {
 		return user;
 	}
 
-	public List<User> findByName(String name) {
-		String sql = "select * from user_t where name=?";
-		Object[] args = { name };
+	public List<User> findByNickname(String nickname) {
+		String sql = "select * from user_t where nickname like ?";
+		Object[] args = { Common.getLikeStr(nickname) };
 		List<User> users = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
 	}
 
 	public List<User> findByCellnum(String cellnum) {
-		String sql = "select * from user_t where cellnum=?";
-		Object[] args = { cellnum };
+		String sql = "select * from user_t where cellnum like ?";
+		Object[] args = { Common.getLikeStr(cellnum) };
 		List<User> users = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
+	}
+
+	public List<StatItem> statUserNumByRegion() {
+		String sql = "select concat(city_t.name, district_t.name, region_t.name) 'name', count(user_t.id) 'quantity' "
+				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
+				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
+				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
+				+ "group by region_t.id";
+		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
+				StatItem.class));
+		return statItems;
+	}
+
+	public List<StatItem> statUserNumByDistrict() {
+		String sql = "select concat(city_t.name, district_t.name) 'name', count(user_t.id) 'quantity' "
+				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
+				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
+				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
+				+ "group by district_t.id";
+		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
+				StatItem.class));
+		return statItems;
+	}
+
+	public List<StatItem> statUserNumByCity() {
+		String sql = "select city_t.name 'name', count(user_t.id) 'quantity' "
+				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
+				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
+				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
+				+ "group by city_t.id";
+		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
+				StatItem.class));
+		return statItems;
 	}
 }

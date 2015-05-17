@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.City;
+import com.subang.utility.Common;
 
 @Repository
 public class CityDao extends BaseDao<City> {
@@ -43,14 +44,11 @@ public class CityDao extends BaseDao<City> {
 		return citys;
 	}
 
-	public City findByName(String name) {
-		String sql = "select * from city_t where name=?";
-		Object[] args = { name };
-		City city = null;
-		try {
-			jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<City>(City.class));
-		} catch (EmptyResultDataAccessException e) {
-		}
-		return city;
+	public List<City> findByName(String name) {
+		String sql = "select * from city_t where name like=?";
+		Object[] args = { Common.getLikeStr(name) };
+		List<City> citys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<City>(
+				City.class));
+		return citys;
 	}
 }

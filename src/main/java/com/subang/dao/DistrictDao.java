@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.District;
+import com.subang.utility.Common;
 
 @Repository
 public class DistrictDao extends BaseDao<District> {
@@ -44,8 +45,8 @@ public class DistrictDao extends BaseDao<District> {
 	}
 
 	public List<District> findByName(String name) {
-		String sql = "select * from district_t where name=?";
-		Object[] args = { name };
+		String sql = "select * from district_t where name like ?";
+		Object[] args = { Common.getLikeStr(name) };
 		List<District> districts = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<District>(District.class));
 		return districts;

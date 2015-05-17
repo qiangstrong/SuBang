@@ -9,20 +9,14 @@ import com.subang.domain.Admin;
 @Repository
 public class AdminDao extends BaseDao<Admin> {
 
-	public int getMatchCount(String username, String password) {
-		String sql = "select count(*) from admin_t where username=? and password=?";
-		Object[] args = new Object[] { username, password };
-		int count = jdbcTemplate.queryForInt(sql, args);
-		return count;
-	}
-
-	public Admin findByUsername(String username) {
-		String sql = "select * from admin_t where username=?";
-		Object[] args = { username };
-		Admin admin = null;
+	public Admin findMatch(Admin admin) {
+		String sql = "select * from admin_t where username=? and password=?";
+		Object[] args = { admin.getUsename(), admin.getPassword() };
+		admin = null;
 		try {
-			admin=jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Admin>(Admin.class));
-		} catch (EmptyResultDataAccessException e) {			
+			admin = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Admin>(
+					Admin.class));
+		} catch (EmptyResultDataAccessException e) {
 		}
 		return admin;
 	}

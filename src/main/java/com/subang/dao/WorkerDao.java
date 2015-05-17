@@ -2,11 +2,11 @@ package com.subang.dao;
 
 import java.util.List;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Worker;
+import com.subang.utility.Common;
 
 @Repository
 public class WorkerDao extends BaseDao<Worker> {
@@ -45,20 +45,17 @@ public class WorkerDao extends BaseDao<Worker> {
 		return workers;
 	}
 
-	public Worker findByName(String name) {
-		String sql = "select * from worker_t where name=?";
-		Object[] args = { name };
-		Worker worker = null;
-		try {
-			jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Worker>(Worker.class));
-		} catch (EmptyResultDataAccessException e) {
-		}
-		return worker;
+	public List<Worker> findByName(String name) {
+		String sql = "select * from worker_t where name like ?";
+		Object[] args = { Common.getLikeStr(name) };
+		List<Worker> workers = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Worker>(
+				Worker.class));
+		return workers;
 	}
 
 	public List<Worker> findByCellnum(String cellnum) {
-		String sql = "select * from worker_t where cellnum=?";
-		Object[] args = { cellnum };
+		String sql = "select * from worker_t where cellnum like ?";
+		Object[] args = { Common.getLikeStr(cellnum) };
 		List<Worker> workers = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Worker>(
 				Worker.class));
 		return workers;

@@ -19,8 +19,8 @@ public class HistoryDao extends BaseDao<History> {
 	}
 
 	public void save(History history) {
-		String sql = "insert into history_t values(null,?,?,?)";
-		Object[] args = { history.getOperation(), history.getTime(), history.getOrderid() };
+		String sql = "insert into history_t values(null,?,now(),?)";
+		Object[] args = { history.getOperation(), history.getOrderid() };
 		jdbcTemplate.update(sql, args);
 	}
 
