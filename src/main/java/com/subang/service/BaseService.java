@@ -17,6 +17,8 @@ public class BaseService {
 	@Autowired
 	protected HistoryDao historyDao;
 	@Autowired
+	protected InfoDao infoDao;
+	@Autowired
 	protected LaundryDao laundryDao;
 	@Autowired
 	protected OrderDao orderDao;

@@ -107,3 +107,14 @@ create table `admin_t`(
     `username` char(10) not null unique,
     `password` char(50) not null
 );
+
+create table `info_t`(
+	`id` int auto_Increment primary key,
+	`price_path` char(100),
+    `price_text` varchar(1000),
+    `scope_path` char(100),
+    `scope_text` varchar(1000),
+    `about` varchar(1000),
+    `term` varchar(1000),
+    `phone` varchar(1000)
+);

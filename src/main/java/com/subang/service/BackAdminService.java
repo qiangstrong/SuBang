@@ -8,9 +8,11 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.subang.bean.Area;
+import com.subang.dao.InfoDao;
 import com.subang.domain.Admin;
 import com.subang.domain.City;
 import com.subang.domain.District;
+import com.subang.domain.Info;
 import com.subang.domain.Laundry;
 import com.subang.domain.Region;
 import com.subang.domain.Worker;
@@ -19,7 +21,7 @@ import com.subang.utility.WebConstant;
 
 /**
  * @author Qiang 
- * 后台对管理员，工作人员，商家，区域的管理
+ * 后台对管理员，工作人员，商家，区域和产品运营的管理
  */
 @Service
 public class BackAdminService extends BaseService {
@@ -218,5 +220,16 @@ public class BackAdminService extends BaseService {
 		} catch (DataIntegrityViolationException e) {
 			throw new BackException("请先删除此小区的所有订单，再尝试删除此小区。");
 		}
+	}
+
+	/**
+	 * 与产品运营相关的操作
+	 */
+	public Info listInfo() {
+		return infoDao.find();
+	}
+
+	public void modifyInfo(Info info) {
+		infoDao.update(info);
 	}
 }
