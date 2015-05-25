@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.subang.bean.StatItem;
 import com.subang.domain.User;
-import com.subang.utility.Common;
-import com.subang.utility.WebConstant;
+import com.subang.util.Common;
+import com.subang.util.WebConstant;
 
 @Repository
 public class UserDao extends BaseDao<User> {
@@ -86,34 +86,25 @@ public class UserDao extends BaseDao<User> {
 		return users;
 	}
 
+	/**
+	 * 只统计曾经下过订单（无论订单是完成还是取消）的用户，
+	 */
 	public List<StatItem> statUserNumByRegion() {
-		String sql = "select concat(city_t.name, district_t.name, region_t.name) 'name', count(user_t.id) 'quantity' "
-				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
-				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
-				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
-				+ "group by region_t.id";
+		String sql = Common.getProperty("statUserNumByRegion");
 		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
 				StatItem.class));
 		return statItems;
 	}
 
 	public List<StatItem> statUserNumByDistrict() {
-		String sql = "select concat(city_t.name, district_t.name) 'name', count(user_t.id) 'quantity' "
-				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
-				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
-				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
-				+ "group by district_t.id";
+		String sql = Common.getProperty("statUserNumByDistrict");
 		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
 				StatItem.class));
 		return statItems;
 	}
 
 	public List<StatItem> statUserNumByCity() {
-		String sql = "select city_t.name 'name', count(user_t.id) 'quantity' "
-				+ "from user_t, order_t, addr_t, region_t, district_t, city_t "
-				+ "where order_t.userid=user_t.id and order_t.addrid=addr_t.id and addr_t.regionid=region_t.id "
-				+ "and region_t.districtid=district_t.id and district_t.cityid=city_t.id "
-				+ "group by city_t.id";
+		String sql = Common.getProperty("statUserNumByCity");
 		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
 				StatItem.class));
 		return statItems;

@@ -12,7 +12,11 @@ public class Order implements Serializable {
 	}
 
 	public enum State {
-		accepted, fetched, finished, canceled
+		accepted, fetched, finished, canceled;
+		
+		public static State toState(String arg){
+			return State.values()[new Integer(arg)];
+		}
 	}
 
 	protected Integer id;
@@ -72,6 +76,19 @@ public class Order implements Serializable {
 		return Category.values()[category];
 	}
 	
+	public String getCategoryDes(){
+		String description=null;
+		switch(getCategoryEnum()){
+		case clothes:
+			description="衣服";
+			break;
+		case shoe:
+			description="鞋";
+			break;
+		}
+		return description;
+	}
+	
 	public void setCategory(int category) {
 		this.category = category;
 	}
@@ -86,6 +103,25 @@ public class Order implements Serializable {
 
 	public State getStateEnum() {
 		return State.values()[state];
+	}
+	
+	public String getStateDes(){
+		String description=null;
+		switch (getStateEnum()) {
+		case accepted:
+			description="已接受";
+			break;
+		case fetched:
+			description="已取走";
+			break;
+		case finished:
+			description="已完成";
+			break;
+		case canceled:
+			description="已取消";
+			break;
+		}
+		return description;
 	}
 	
 	public void setState(int state) {
@@ -116,6 +152,12 @@ public class Order implements Serializable {
 		return time;
 	}
 
+	public String getTimeDes(){
+		String description="";
+		description=time+":00-"+(time+1)+":00";
+		return description;
+	}
+	
 	public void setTime(int time) {
 		this.time = time;
 	}

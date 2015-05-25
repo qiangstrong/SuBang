@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Laundry;
 import com.subang.domain.Region;
-import com.subang.utility.Common;
+import com.subang.util.Common;
 
 @Repository
 public class LaundryDao extends BaseDao<Laundry> {

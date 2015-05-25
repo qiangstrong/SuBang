@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Worker;
-import com.subang.utility.Common;
+import com.subang.util.Common;
 
 @Repository
 public class WorkerDao extends BaseDao<Worker> {

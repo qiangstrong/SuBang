@@ -6,7 +6,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="context-root" value="/SuBang"/>
         <property name="java-output-path" value="/SuBang/WebRoot/WEB-INF/classes"/>
+        <property name="context-root" value="/subang"/>
     </wb-module>
 </project-modules>

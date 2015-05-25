@@ -1,14 +1,21 @@
 package com.subang.dao;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.stereotype.Repository;
+
+import com.subang.domain.Addr;
 import com.subang.domain.Info;
 
+@Repository
 public class InfoDao extends BaseDao<Info> {
 
-	public Info find() {
-		String sql = "select * from info_t";
-		Info info = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Info>(Info.class));
+	public Info get(Integer id) {
+		String sql = "select * from info_t where id=?";
+		Object[] args = { id };
+		Info info = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Info>(
+				Info.class));
 		return info;
 	}
 
@@ -19,5 +26,11 @@ public class InfoDao extends BaseDao<Info> {
 				info.getScope_text(), info.getAbout(), info.getTerm(), info.getPhone(),
 				info.getId() };
 		jdbcTemplate.update(sql, args);
+	}
+
+	public List<Info> findALL() {
+		String sql = "select * from info_t";
+		List<Info> infos = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Info>(Info.class));
+		return infos;
 	}
 }

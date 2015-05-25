@@ -6,16 +6,16 @@ public class Admin implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-	private String usename;
-	private String password;
+	protected Integer id;
+	protected String username;
+	protected String password;
 
 	public Admin() {
 	}
 
-	public Admin(Integer id, String usename, String password) {
+	public Admin(Integer id, String username, String password) {
 		this.id = id;
-		this.usename = usename;
+		this.username = username;
 		this.password = password;
 	}
 
@@ -27,12 +27,12 @@ public class Admin implements Serializable {
 		this.id = id;
 	}
 
-	public String getUsename() {
-		return usename;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUsename(String usename) {
-		this.usename = usename;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -42,4 +42,5 @@ public class Admin implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 }

@@ -44,6 +44,25 @@ public class History implements Serializable {
 		return Operation.values()[operation];
 	}
 	
+	public String getOperationDes(){
+		String description=null;
+		switch (getOperationEnum()) {
+		case accept:
+			description="下单";
+			break;
+		case fetch:
+			description="取走";
+			break;
+		case finish:
+			description="结束";
+			break;
+		case cancel:
+			description="取消";
+			break;
+		}
+		return description;
+	}
+	
 	public void setOperation(int operation) {
 		this.operation = operation;
 	}

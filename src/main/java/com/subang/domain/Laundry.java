@@ -2,11 +2,14 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+
 public class Laundry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	@Length(min=1, max=10)
 	private String name;
 	private String cellnum;
 	private String detail; // 商家详细地址
@@ -15,8 +18,7 @@ public class Laundry implements Serializable {
 	public Laundry() {
 	}
 
-	public Laundry(Integer id, String name, String cellnum, String detail,
-			String comment) {
+	public Laundry(Integer id, String name, String cellnum, String detail, String comment) {
 		this.id = id;
 		this.name = name;
 		this.cellnum = cellnum;

@@ -8,8 +8,8 @@ public class OrderDetail extends Order {
 
 	private String workername;
 	private String workercellnum;
-	private String addrname;
-	private String addrcellnum;
+	private String addrname;	//订单地址中填写的姓名
+	private String addrcellnum;	//订单地址中填写的手机号
 	private String cityname;
 	private String districtname;
 	private String regionname;
@@ -34,7 +34,7 @@ public class OrderDetail extends Order {
 		this.regionname = regionname;
 		this.addrdetail = addrdetail;
 	}
-
+	
 	public String getWorkername() {
 		return workername;
 	}

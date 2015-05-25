@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.subang.bean.Area;
 import com.subang.domain.Region;
-import com.subang.utility.Common;
+import com.subang.util.Common;
 
 @Repository
 public class RegionDao extends BaseDao<Region> {

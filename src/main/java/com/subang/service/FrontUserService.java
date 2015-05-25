@@ -1,5 +1,8 @@
 package com.subang.service;
 
-public class FrontUserService extends BaseService {
+import org.springframework.stereotype.Service;
+
+@Service
+public class FrontUserService extends CommUserService {
 
 }

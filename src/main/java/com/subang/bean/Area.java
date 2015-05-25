@@ -1,6 +1,25 @@
 package com.subang.bean;
 
+
 public class Area {
+
+	public static Area toArea(String arg) {
+		final int layernum=3;
+		String[] names = new String[layernum];
+		String[] subArgs = arg.split("\\.", -1);
+		int i = 0;
+		for (; i < subArgs.length&&i<layernum; i++) {
+			names[i] = subArgs[i];
+		}
+		for (; i < layernum; i++) {
+			names[i] = "";
+		}
+		Area area = new Area();
+		area.setCityname(names[0]);
+		area.setDistrictname(names[1]);
+		area.setRegionname(names[2]);
+		return area;
+	}
 
 	private Integer cityid;
 	private String cityname;

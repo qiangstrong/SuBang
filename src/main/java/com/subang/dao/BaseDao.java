@@ -31,24 +31,20 @@ public class BaseDao<T> {
 
 	protected List<T> findByPage(final String sql, final Object[] args, final int offset,
 			final int pageSize) {
-		
-		final List<T> pageItems=new ArrayList<T>();
-		final BeanPropertyRowMapper<T> rowMapper=new BeanPropertyRowMapper<T>(entityClass);
-		jdbcTemplate.query(
-                sql,
-                args,
-                new RowCallbackHandler() {
-					public void processRow(ResultSet rs) throws SQLException {
-						int currentRow = 0;
-						rs.beforeFirst();
-                        while (rs.next() && currentRow < offset + pageSize) {
-                            if (currentRow >= offset) {
-                                pageItems.add((T)rowMapper.mapRow(rs, currentRow));
-                            }
-                            currentRow++;                           
-                        }
+		final List<T> pageItems = new ArrayList<T>();
+		final BeanPropertyRowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(entityClass);
+		jdbcTemplate.query(sql, args, new RowCallbackHandler() {
+			public void processRow(ResultSet rs) throws SQLException {
+				int currentRow = 0;
+				rs.beforeFirst();
+				while (rs.next() && currentRow < offset + pageSize) {
+					if (currentRow >= offset) {
+						pageItems.add((T) rowMapper.mapRow(rs, currentRow));
 					}
-				});
+					currentRow++;
+				}
+			}
+		});
 		return pageItems;
 
 	}
