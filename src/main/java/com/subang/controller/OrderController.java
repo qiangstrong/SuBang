@@ -3,8 +3,10 @@ package com.subang.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,10 +24,10 @@ import com.subang.util.WebConstant;
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseController {
-	
+
 	private static final String INDEX_PAGE = "/order/index";
 	private static final String KEY_DATA = "orderDetails";
-	
+
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
@@ -44,7 +46,7 @@ public class OrderController extends BaseController {
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
-	
+
 	@RequestMapping("/list")
 	public ModelAndView list(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -65,7 +67,7 @@ public class OrderController extends BaseController {
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
-	
+
 	@RequestMapping("/delete")
 	public ModelAndView delete(HttpSession session, @RequestParam("orderids") String orderids) {
 		ModelAndView view = new ModelAndView();
@@ -82,7 +84,7 @@ public class OrderController extends BaseController {
 		view.setViewName("redirect:/order/index.html?type=1");
 		return view;
 	}
-	
+
 	@RequestMapping("/finish")
 	public ModelAndView finish(HttpSession session, @RequestParam("orderids") String orderids) {
 		ModelAndView view = new ModelAndView();
@@ -99,7 +101,7 @@ public class OrderController extends BaseController {
 		view.setViewName("redirect:/order/index.html?type=1");
 		return view;
 	}
-	
+
 	@RequestMapping("/cancel")
 	public ModelAndView cancel(HttpSession session, @RequestParam("orderids") String orderids) {
 		ModelAndView view = new ModelAndView();
@@ -130,18 +132,20 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/modify")
-	public ModelAndView modify(Order order) {
+	public ModelAndView modify(@Valid Order order, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		boolean isException = false;
-		try {
-			backUserService.modifyOrder(order);
-		} catch (BackException e) {
-			view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
-			view.addObject("order", order);
-			isException = true;
-		}
-		if (!isException) {
-			view.addObject(KEY_INFO_MSG, "修改成功。");
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				backUserService.modifyOrder(order);
+			} catch (BackException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("order", order);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
 		}
 		SearchArg searchArg = new SearchArg(WebConstant.SEARCH_ALL, null);
 		List<Laundry> laundrys = backAdminService.searchLaundry(searchArg);
@@ -149,14 +153,14 @@ public class OrderController extends BaseController {
 		view.setViewName("order/modify");
 		return view;
 	}
-	
+
 	@RequestMapping("/history")
-	public ModelAndView listHistory(Integer orderid){
+	public ModelAndView listHistory(Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		List<History> historys=backUserService.listHistoryByOrderid(orderid);
+		List<History> historys = backUserService.listHistoryByOrderid(orderid);
 		view.addObject("historys", historys);
-		Order order=backUserService.getOrder(orderid);
-		String desMsg="订单号："+order.getOrderno()+"。此订单的操作历史如下：";
+		Order order = backUserService.getOrder(orderid);
+		String desMsg = "订单号：" + order.getOrderno() + "。此订单的操作历史如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 		view.setViewName("order/history");
 		return view;

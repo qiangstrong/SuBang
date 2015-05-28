@@ -2,11 +2,14 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+
 public class Region  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	@Length(min = 1, max = 10)
 	private String name;
 	private Integer districtid;
 	private Integer workerid;

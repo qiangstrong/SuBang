@@ -2,12 +2,16 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+
 public class Admin implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
+	@Length(min = 1, max = 10)
 	protected String username;
+	@Length(min = 1, max = 50)
 	protected String password;
 
 	public Admin() {

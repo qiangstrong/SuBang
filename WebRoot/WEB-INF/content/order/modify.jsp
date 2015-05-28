@@ -51,6 +51,10 @@
 							<td><form:input path="orderno" disabled="true" size="21"/></td>
 						</tr>
 						<tr>
+							<td></td>
+							<td><form:errors path="price"/></td>
+						</tr>
+						<tr>
 							<td>订单价格：</td>
 							<td><form:input path="price" size="21"/></td>
 						</tr>

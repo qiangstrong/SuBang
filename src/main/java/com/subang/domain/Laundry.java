@@ -2,6 +2,8 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.Length;
 
 public class Laundry implements Serializable {
@@ -9,10 +11,13 @@ public class Laundry implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	@Length(min=1, max=10)
+	@Length(min = 1, max = 10)
 	private String name;
+	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
+	@Length(max = 50)
 	private String detail; // 商家详细地址
+	@Length(max = 50)
 	private String comment;
 
 	public Laundry() {

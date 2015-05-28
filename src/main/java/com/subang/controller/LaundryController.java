@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,22 +76,20 @@ public class LaundryController extends BaseController {
 	}
 
 	@RequestMapping("/add")
-	public ModelAndView add(@Valid Laundry laundry, BindingResult laundryResult) {
+	public ModelAndView add(@Valid Laundry laundry, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		if (laundryResult.hasErrors()) {
-			view.setViewName("laundry/add");
-			return view;
-		}
-		boolean isException = false;
-		try {
-			backAdminService.addLaundry(laundry);
-		} catch (BackException e) {
-			view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
-			view.addObject("laundry", laundry);
-			isException = true;
-		}
-		if (!isException) {
-			view.addObject(KEY_INFO_MSG, "添加成功。");
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				backAdminService.addLaundry(laundry);
+			} catch (BackException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				view.addObject("laundry", laundry);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
 		}
 		view.setViewName("laundry/add");
 		return view;
@@ -122,22 +122,20 @@ public class LaundryController extends BaseController {
 	}
 
 	@RequestMapping("/modify")
-	public ModelAndView modify(@Valid Laundry laundry, BindingResult laundryResult) {
+	public ModelAndView modify(@Valid Laundry laundry, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		if (laundryResult.hasErrors()) {
-			view.setViewName("laundry/modify");
-			return view;
-		}
-		boolean isException = false;
-		try {
-			backAdminService.modifyLaundry(laundry);
-		} catch (BackException e) {
-			view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
-			view.addObject("laundry", laundry);
-			isException = true;
-		}
-		if (!isException) {
-			view.addObject(KEY_INFO_MSG, "修改成功。");
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				backAdminService.modifyLaundry(laundry);
+			} catch (BackException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("laundry", laundry);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
 		}
 		view.setViewName("laundry/modify");
 		return view;

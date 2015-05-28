@@ -37,16 +37,32 @@
 				<form:form modelAttribute="laundry" action="laundry/add.html" method="post">
 					<table>
 						<tr>
+							<td></td>
+							<td><form:errors path="name" /></td>
+						</tr>
+						<tr>
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="cellnum" /></td>
 						</tr>
 						<tr>
 							<td>手机号：</td>
 							<td><form:input path="cellnum" /></td>
 						</tr>
 						<tr>
+							<td></td>
+							<td><form:errors path="detail" /></td>
+						</tr>
+						<tr>
 							<td>详细地址：</td>
 							<td><form:input path="detail" size="100"/></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="comment" /></td>
 						</tr>
 						<tr>
 							<td>备注：</td>

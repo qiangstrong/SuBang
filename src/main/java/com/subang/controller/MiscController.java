@@ -1,22 +1,16 @@
 package com.subang.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.AdminBean;
 import com.subang.domain.Admin;
-import com.subang.domain.Info;
 import com.subang.exception.BackException;
-import com.subang.util.Common;
 
 /**
  * @author Qiang
@@ -47,20 +41,21 @@ public class MiscController extends BaseController {
 	}
 
 	@RequestMapping("/modifyadmin")
-	public ModelAndView modify(HttpSession session, AdminBean adminBean) {
+	public ModelAndView modify(HttpSession session, @Valid AdminBean adminBean,BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		
-		if (adminBean.validate()) {
-			try {
-				backAdminService.modifyAdmin(adminBean);
-				view.addObject(KEY_INFO_MSG, "修改成功。");
-			} catch (BackException e) {
-				view.addObject(KEY_INFO_MSG, "修改失败。"+e.getMessage());
+		if (!result.hasErrors()) {
+			if (adminBean.validate()) {
+				try {
+					backAdminService.modifyAdmin(adminBean);
+					view.addObject(KEY_INFO_MSG, "修改成功。");
+				} catch (BackException e) {
+					view.addObject("adminBean", adminBean);
+					view.addObject(KEY_INFO_MSG, "修改失败。"+e.getMessage());
+				}
+			}else {
+				view.addObject(KEY_INFO_MSG, "修改失败。两次输入的密码不同。");
 			}
-		}else {
-			view.addObject(KEY_INFO_MSG, "修改失败。两次输入的密码不同。");
-		}
-		view.addObject("adminBean", adminBean);		
+		}	
 		view.setViewName("misc/modifyadmin");
 		return view;
 	}

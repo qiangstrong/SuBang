@@ -38,12 +38,24 @@
 					<form:hidden path="id"/>
 					<table>
 						<tr>
+							<td></td>
+							<td><form:errors path="name" /></td>
+						</tr>
+						<tr>
 							<td>姓名：</td>
 							<td><form:input path="name" /></td>
 						</tr>
 						<tr>
+							<td></td>
+							<td><form:errors path="cellnum" /></td>
+						</tr>
+						<tr>
 							<td>手机号：</td>
 							<td><form:input path="cellnum" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="comment" /></td>
 						</tr>
 						<tr>
 							<td>备注：</td>

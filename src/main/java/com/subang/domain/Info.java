@@ -2,17 +2,26 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+
 public class Info implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	@Length(max = 100)
 	private String price_path;
+	@Length(max = 1000)
 	private String price_text;
+	@Length(max = 100)
 	private String scope_path;
+	@Length(max = 1000)
 	private String scope_text;
+	@Length(max = 1000)
 	private String about;
+	@Length(max = 1000)
 	private String term;
+	@Length(max = 1000)
 	private String phone;
 	
 	public Info() {

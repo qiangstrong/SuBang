@@ -3,6 +3,10 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.validation.constraints.Digits;
+
+import org.hibernate.validator.constraints.Length;
+
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -23,9 +27,11 @@ public class Order implements Serializable {
 	protected String orderno; // 订单号
 	protected int category;
 	protected int state;
+	@Digits(integer=3, fraction=1)
 	protected Float price;
 	protected Date date; // 用户指定的取件日期
 	protected int time; // 用户指定的取件时间，时间间隔为（time，time+1）
+	@Length(max = 50)
 	protected String comment;
 	protected Integer userid;
 	protected Integer addrid;

@@ -38,12 +38,24 @@
 					<form:hidden path="id"/>
 					<table>
 						<tr>
+							<th></th>
+							<td><form:errors path="username" /></td>
+						</tr>
+						<tr>
 							<th>用户名</th>
 							<td><form:input path="username" /></td>
 						</tr>
 						<tr>
+							<th></th>
+							<td><form:errors path="password" /></td>
+						</tr>
+						<tr>
 							<th>密码</th>
 							<td><form:password path="password" /></td>
+						</tr>
+						<tr>
+							<th></th>
+							<td><form:errors path="passwordCopy" /></td>
 						</tr>
 						<tr>
 							<th>确认密码</th>

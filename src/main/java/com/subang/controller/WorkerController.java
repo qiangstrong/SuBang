@@ -77,10 +77,12 @@ public class WorkerController extends BaseController {
 	}
 
 	@RequestMapping("/add")
-	public ModelAndView add(Worker worker) {
+	public ModelAndView add(@Valid Worker worker, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		backAdminService.addWorker(worker);
-		view.addObject(KEY_INFO_MSG, "添加成功。");
+		if (!result.hasErrors()) {
+			backAdminService.addWorker(worker);
+			view.addObject(KEY_INFO_MSG, "添加成功。");
+		}
 		view.setViewName("worker/add");
 		return view;
 	}
@@ -112,21 +114,23 @@ public class WorkerController extends BaseController {
 	}
 
 	@RequestMapping("/modify")
-	public ModelAndView modify(Worker worker) {
+	public ModelAndView modify(@Valid Worker worker,BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		backAdminService.modifyWorker(worker);
-		view.addObject(KEY_INFO_MSG, "修改成功。");
+		if (!result.hasErrors()) {
+			backAdminService.modifyWorker(worker);
+			view.addObject(KEY_INFO_MSG, "修改成功。");
+		}
 		view.setViewName("worker/modify");
 		return view;
 	}
-	
+
 	@RequestMapping("area")
-	public ModelAndView listArea(Integer workerid){
-		ModelAndView view=new ModelAndView();
-		List<Area> areas=backAdminService.listAreaByWorkerid(workerid);
+	public ModelAndView listArea(Integer workerid) {
+		ModelAndView view = new ModelAndView();
+		List<Area> areas = backAdminService.listAreaByWorkerid(workerid);
 		view.addObject("areas", areas);
-		Worker worker=backAdminService.getWorker(workerid);
-		String desMsg="姓名："+worker.getName()+"。此工作人员负责的区域如下：";
+		Worker worker = backAdminService.getWorker(workerid);
+		String desMsg = "姓名：" + worker.getName() + "。此工作人员负责的区域如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 		view.setViewName("worker/area");
 		return view;

@@ -2,6 +2,10 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -12,11 +16,16 @@ public class User implements Serializable {
 
 	private Integer id;
 	private String openid;
+	@Length(max = 4)
 	private String name;
+	@Length(max = 100)
 	private String nickname;
+	@Length(max = 50)
 	private String password;
+	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
 	private int score;
+	@Length(max = 100)
 	private String photo; // 用户微信头像的地址
 	private int sex;
 	private String country;

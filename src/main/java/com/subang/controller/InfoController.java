@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,18 +44,20 @@ public class InfoController extends BaseController {
 	}
 
 	@RequestMapping("/modify")
-	public ModelAndView modify(HttpServletRequest request, Info info) {
+	public ModelAndView modify(HttpServletRequest request, @Valid Info info ,BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		if (!result.hasErrors()) {
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			MultipartFile price_img = multipartRequest.getFile("price_img");
+			MultipartFile scope_img = multipartRequest.getFile("scope_img");
+			Common.saveMultipartFile(price_img, info.getPrice_path());
+			Common.saveMultipartFile(scope_img, info.getScope_path());
 
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-		MultipartFile price_img = multipartRequest.getFile("price_img");
-		MultipartFile scope_img = multipartRequest.getFile("scope_img");
-		Common.saveMultipartFile(price_img, info.getPrice_path());
-		Common.saveMultipartFile(scope_img, info.getScope_path());
-
-		backAdminService.modifyInfo(info);
-		view.addObject("info", info);
-		view.addObject(KEY_INFO_MSG, "修改成功。");
+			backAdminService.modifyInfo(info);
+			view.addObject(KEY_INFO_MSG, "修改成功。");
+		}else{
+			view.addObject(KEY_INFO_MSG, "修改失败。请检查字段的长度。");
+		}
 		view.setViewName("info/modify");
 		return view;
 	}

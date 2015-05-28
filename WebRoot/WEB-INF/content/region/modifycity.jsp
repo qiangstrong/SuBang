@@ -38,6 +38,10 @@
 					<form:hidden path="id"/>
 					<table>
 						<tr>
+							<td></td>
+							<td><form:errors path="name" /></td>
+						</tr>
+						<tr>
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
