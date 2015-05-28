@@ -29,8 +29,8 @@ public class BackAdminService extends BaseService {
 	/**
 	 * 与管理员相关的操作
 	 */
-	public Admin getMatchAdmin(Admin admin) {
-		return adminDao.findMatch(admin);
+	public Admin getAdminByMatch(Admin admin) {
+		return adminDao.findByMatch(admin);
 	}
 
 	public void modifyAdmin(Admin admin) throws BackException {

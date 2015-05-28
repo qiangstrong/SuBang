@@ -13,34 +13,40 @@ import javax.servlet.ServletContext;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import bsh.This;
+
 public class Common {
 
-	private static Properties properties = null;
 	private static ServletContext servletContext = null;
-
+	private static Properties properties = null;
+	
 	public static ServletContext getServletContext() {
 		return servletContext;
 	}
 
 	public static void setServletContext(ServletContext servletContext) {
-		Common.servletContext = servletContext;
-	}
-
-	public static void loadProperties(){
-		properties = new Properties();
-		String path=servletContext.getRealPath("WEB-INF/classes/sql.properties");
-		InputStream in=null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(path));
-			properties.load(in);
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		if (Common.servletContext==null) {
+			Common.servletContext = servletContext;
+		}	
 	}
 	
 	public static String getProperty(String key){
 		return properties.getProperty(key);
+	}
+
+	public static void loadProperties(){
+		if (properties==null) {
+			properties = new Properties();
+			String path=servletContext.getRealPath("WEB-INF/classes/sql.properties");
+			InputStream in=null;
+			try {
+				in = new BufferedInputStream(new FileInputStream(path));
+				properties.load(in);
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static String getLikeStr(String str) {

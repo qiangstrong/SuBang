@@ -44,9 +44,10 @@ public class MainController extends BaseController {
 	@RequestMapping("/login")
 	public ModelAndView login(HttpSession session, Admin admin){
 		ModelAndView view = new ModelAndView();
-		Admin matchAdmin=backAdminService.getMatchAdmin(admin);
+		Admin matchAdmin=backAdminService.getAdminByMatch(admin);
 		if (matchAdmin!=null) {
 			setAdmin(session, matchAdmin);
+			session.setMaxInactiveInterval(WebConstant.SESSION_INTERVAL);
 			Common.setServletContext(session.getServletContext());
 			Common.loadProperties();
 			view.setViewName("redirect:/index.html?type=0");

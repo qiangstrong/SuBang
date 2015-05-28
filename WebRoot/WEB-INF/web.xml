@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
 	<description>速帮到家</description>
 	<display-name>SuBang</display-name>
 	<context-param>
@@ -12,6 +13,25 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+
+	<servlet>
+		<servlet-name>subang</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>subang</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>backFilter</filter-name>
+		<filter-class>com.subang.web.BackFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>backFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -29,18 +49,13 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*.html</url-pattern>
 	</filter-mapping>
-	
-	<servlet>
-		<servlet-name>subang</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>subang</servlet-name>
-		<url-pattern>*.html</url-pattern>
-	</servlet-mapping>
-	
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/content/404.jsp</location>
+	</error-page>
 </web-app>

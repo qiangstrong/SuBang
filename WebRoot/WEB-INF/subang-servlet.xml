@@ -29,8 +29,19 @@
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basename" value="classpath:/i18n/message"/>
+		<property name="basename" value="classpath:/i18n/message" />
 		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView">
+			<value>common/error</value>
+		</property>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">common/error</prop>
+			</props>
+		</property>
 	</bean>
 
 </beans>

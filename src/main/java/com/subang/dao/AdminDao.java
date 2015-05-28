@@ -10,7 +10,7 @@ import com.subang.domain.Admin;
 @Repository
 public class AdminDao extends BaseDao<Admin> {
 
-	public Admin findMatch(Admin admin) {
+	public Admin findByMatch(Admin admin) {
 		String sql = "select * from admin_t where username=? and password=?";
 		Object[] args = { admin.getUsername(), admin.getPassword() };
 		admin = null;
