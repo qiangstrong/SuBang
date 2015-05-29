@@ -18,8 +18,8 @@
 	<script type="text/javascript" src="javascript/stat.js"></script>   
 	<script>
 		function restore(){
-			<c:if test="${statArg!=null}">
-				restoreStatState('${statArg.type0}','${statArg.type1}','${statArg.type2}');
+			<c:if test="${pageState!=null}">
+				restoreStatState('${pageState.statArg.type0}','${pageState.statArg.type1}','${pageState.statArg.type2}');
 			</c:if>
 		}
 	</script> 

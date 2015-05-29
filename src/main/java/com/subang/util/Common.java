@@ -37,7 +37,7 @@ public class Common {
 	public static void loadProperties(){
 		if (properties==null) {
 			properties = new Properties();
-			String path=servletContext.getRealPath("WEB-INF/classes/sql.properties");
+			String path=servletContext.getRealPath("WEB-INF/classes/subang.properties");
 			InputStream in=null;
 			try {
 				in = new BufferedInputStream(new FileInputStream(path));

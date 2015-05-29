@@ -1,11 +1,15 @@
 package com.subang.service;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import com.subang.bean.StatArg;
+import com.subang.bean.StatItem;
 import com.subang.util.Common;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -14,7 +18,8 @@ public class DaoTest extends BaseService{
 	
 	@Test
 	public void test() {
-		String str=Common.getProperty("1");
+		StatArg statArg=new StatArg(1,1,1);
+		List<StatItem> statItems =statDao.findByStatArg(statArg);
 		pause();
 	}
 

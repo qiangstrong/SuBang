@@ -9,7 +9,7 @@
 <body>
 	<table width="80%" border="1px" align="center">
 		<tr>
-			<td align="center"><a href="index.html?type=0">系统首页</a></td>
+			<td align="center"><a href="index.html">系统首页</a></td>
 			<td align="center"><a href="order/index.html?type=0">订单管理</a></td>
 			<td align="center"><a href="user/index.html?type=0">用户管理</a></td>
 			<td align="center"><a href="laundry/index.html?type=0">商家管理</a></td>

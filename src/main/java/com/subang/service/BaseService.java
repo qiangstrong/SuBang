@@ -28,4 +28,6 @@ public class BaseService {
 	protected UserDao userDao;
 	@Autowired
 	protected WorkerDao workerDao;
+	@Autowired
+	protected StatDao statDao;
 }

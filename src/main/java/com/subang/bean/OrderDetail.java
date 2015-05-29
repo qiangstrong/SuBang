@@ -6,49 +6,43 @@ import com.subang.domain.Order;
 
 public class OrderDetail extends Order {
 
-	private String workername;
-	private String workercellnum;
+	private String nickname;
 	private String addrname;	//订单地址中填写的姓名
 	private String addrcellnum;	//订单地址中填写的手机号
 	private String cityname;
 	private String districtname;
 	private String regionname;
 	private String addrdetail;
+	private String workername;
+	private String workercellnum;
 	
 	public OrderDetail() {
 	}
 
 	public OrderDetail(Integer id, String orderno, int category, int state, Float price, Date date,
 			int time, String comment, Integer userid, Integer addrid, Integer workerid,
-			Integer laundryid, String workername, String workercellnum, String addrname,
-			String addrcellnum, String cityname, String districtname, String regionname,
-			String addrdetail) {
+			Integer laundryid, String nickname, String addrname, String addrcellnum,
+			String cityname, String districtname, String regionname, String addrdetail,
+			String workername, String workercellnum) {
 		super(id, orderno, category, state, price, date, time, comment, userid, addrid, workerid,
 				laundryid);
-		this.workername = workername;
-		this.workercellnum = workercellnum;
+		this.nickname = nickname;
 		this.addrname = addrname;
 		this.addrcellnum = addrcellnum;
 		this.cityname = cityname;
 		this.districtname = districtname;
 		this.regionname = regionname;
 		this.addrdetail = addrdetail;
-	}
-	
-	public String getWorkername() {
-		return workername;
-	}
-
-	public void setWorkername(String workername) {
 		this.workername = workername;
-	}
-
-	public String getWorkercellnum() {
-		return workercellnum;
-	}
-
-	public void setWorkercellnum(String workercellnum) {
 		this.workercellnum = workercellnum;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public String getAddrname() {
@@ -98,5 +92,20 @@ public class OrderDetail extends Order {
 	public void setAddrdetail(String addrdetail) {
 		this.addrdetail = addrdetail;
 	}
-		
+
+	public String getWorkername() {
+		return workername;
+	}
+
+	public void setWorkername(String workername) {
+		this.workername = workername;
+	}
+
+	public String getWorkercellnum() {
+		return workercellnum;
+	}
+
+	public void setWorkercellnum(String workercellnum) {
+		this.workercellnum = workercellnum;
+	}
 }

@@ -63,26 +63,16 @@ public class RegionDao extends BaseDao<Region> {
 	}
 
 	public List<Area> findAreaByArea(Area area) {
-		String sql = "SELECT city_t.id 'cityid', city_t.name 'cityname', district_t.id 'districtid', "
-				+ " district_t.name 'districtname', region_t.id 'regionid', region_t.name 'regionname', "
-				+ " region_t.workerid 'workerid' "
-				+ " FROM city_t, district_t, region_t "
-				+ " where city_t.id=district_t.cityid and district_t.id=region_t.districtid and "
-				+ "city_t.name like ? and district_t.name like ? and region_t.name like ?";
+		String sql = "select * from area_v where cityname like ? and districtname like ? and regionname like ?";
 		Object[] args = { Common.getLikeStr(area.getCityname()),
 				Common.getLikeStr(area.getDistrictname()), Common.getLikeStr(area.getRegionname()) };
 		List<Area> areas = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<Area>(Area.class));
 		return areas;
 	}
-	
+
 	public List<Area> findAreaByWorkerid(Integer workerid) {
-		String sql = "SELECT city_t.id 'cityid', city_t.name 'cityname', district_t.id 'districtid', "
-				+ " district_t.name 'districtname', region_t.id 'regionid', region_t.name 'regionname', "
-				+ " region_t.workerid 'workerid' "
-				+ " FROM city_t, district_t, region_t "
-				+ " where city_t.id=district_t.cityid and district_t.id=region_t.districtid and "
-				+ "region_t.workerid=?";
+		String sql ="select * from area_v where workerid=?";
 		Object[] args = { workerid };
 		List<Area> areas = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<Area>(Area.class));

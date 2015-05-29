@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.subang.bean.AddrDetail;
 import com.subang.domain.Addr;
 import com.subang.domain.User;
 
@@ -52,5 +53,13 @@ public class AddrDao extends BaseDao<Addr> {
 		List<Addr> addrs = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<Addr>(Addr.class));
 		return addrs;
+	}
+	
+	public List<AddrDetail> findAddrDetailByUserid(Integer userid) {
+		String sql = "select * from addrdetail_v where userid=? and valid=1";
+		Object[] args = { userid };
+		List<AddrDetail> addrDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<AddrDetail>(AddrDetail.class));
+		return addrDetails;
 	}
 }

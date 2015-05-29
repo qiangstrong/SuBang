@@ -2,21 +2,24 @@ package com.subang.bean;
 
 public class PageState {
 
-	private SearchArg searchArg;
+	private Object contentArg;
 
 	public PageState() {
 	}
 
-	public PageState(SearchArg searchArg) {
-		this.searchArg = searchArg;
+	public PageState(Object contentArg) {
+		this.contentArg = contentArg;
+	}
+
+	public void setContentArg(Object contentArg) {
+		this.contentArg = contentArg;
 	}
 
 	public SearchArg getSearchArg() {
-		return searchArg;
+		return (SearchArg) contentArg;
 	}
 
-	public void setSearchArg(SearchArg searchArg) {
-		this.searchArg = searchArg;
+	public StatArg getStatArg() {
+		return (StatArg) contentArg;
 	}
-
 }

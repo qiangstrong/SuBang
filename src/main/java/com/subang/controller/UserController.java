@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.AddrDetail;
 import com.subang.bean.PageState;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
@@ -27,11 +28,12 @@ public class UserController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
-		PageState pageState = (PageState) session.getAttribute(KEY_PAGE_STATE);
-		if (type == WebConstant.INDEX_BREAK || pageState == null) {
-			pageState = new PageState(new SearchArg(WebConstant.SEARCH_NULL, null));
-			session.setAttribute(KEY_PAGE_STATE, pageState);
+		
+		if (type==WebConstant.INDEX_BREAK) {
+			savePageState(session, new SearchArg(WebConstant.SEARCH_NULL, null));
 		}
+		PageState pageState=getPageState(session);
+
 
 		List<User> users = backUserService.searchUser(pageState.getSearchArg());
 		view.addObject(KEY_DATA, users);
@@ -88,8 +90,8 @@ public class UserController extends BaseController {
 	@RequestMapping("/addr")
 	public ModelAndView listAddr(HttpSession session, @RequestParam("userid") Integer userid) {
 		ModelAndView view = new ModelAndView();
-		List<Addr> addrs = backUserService.listAddrByUserid(userid);
-		view.addObject("addrs", addrs);
+		List<AddrDetail> addrDetails = backUserService.listAddrDetailByUserid(userid);
+		view.addObject("addrDetails", addrDetails);
 		User user = backUserService.getUser(userid);
 		String desMsg = "用户昵称：" + user.getNickname() + ",手机号：" + user.getCellnum() + "。此用户的地址如下：";
 		view.addObject(KEY_DES_MSG, desMsg);

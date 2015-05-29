@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.subang.bean.AddrDetail;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
@@ -62,8 +63,8 @@ public class BackUserService extends CommUserService {
 	/**
 	 * 与用户地址相关的操作
 	 */
-	public List<Addr> listAddrByUserid(Integer userid) {
-		return addrDao.findByUserid(userid);
+	public List<AddrDetail> listAddrDetailByUserid(Integer userid) {
+		return addrDao.findAddrDetailByUserid(userid);
 	}
 
 	public Addr getAddr(Integer addrid){

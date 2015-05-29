@@ -7,7 +7,6 @@ public class StatArg {
 	private int type2;
 
 	public StatArg() {
-		this.type0=0;
 	}
 
 	public StatArg(int type0, int type1, int type2) {

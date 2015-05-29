@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.subang.bean.PageState;
-import com.subang.bean.SearchArg;
 import com.subang.domain.Admin;
 import com.subang.service.BackAdminService;
 import com.subang.service.BackStatService;
@@ -33,15 +32,19 @@ public class BaseController {
 		return (PageState) session.getAttribute(KEY_PAGE_STATE);
 	}
 
-	protected void savePageState(HttpSession session, SearchArg searchArg) {
+	protected void savePageState(HttpSession session, Object contentArg) {
 		PageState pageState = getPageState(session);
 		if (pageState == null) {
 			pageState = new PageState();
 			session.setAttribute(KEY_PAGE_STATE, pageState);
 		}
-		pageState.setSearchArg(searchArg);
+		pageState.setContentArg(contentArg);
 	}
 
+	protected void invalidtePageState(HttpSession session){
+		session.removeAttribute(KEY_PAGE_STATE);
+	}
+	
 	protected Admin getAdmin(HttpSession session) {
 		return (Admin) session.getAttribute(KEY_ADMIN);
 	}

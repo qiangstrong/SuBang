@@ -22,13 +22,9 @@ import com.subang.util.WebConstant;
 public class MainController extends BaseController {
 
 	@RequestMapping("/index")
-	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
+	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		PageState pageState = (PageState) session.getAttribute(KEY_PAGE_STATE);
-		if (type == WebConstant.INDEX_BREAK || pageState == null) {
-			pageState = new PageState(new SearchArg(WebConstant.SEARCH_NULL, null));
-			session.setAttribute(KEY_PAGE_STATE, pageState);
-		}
+		invalidtePageState(session);
 		view.setViewName("index");
 		return view;
 	}

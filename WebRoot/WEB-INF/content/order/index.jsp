@@ -104,14 +104,15 @@
 						<th>取件日期</th>
 						<th>取件时间</th>
 						<th>备注</th>
-						<th>工作人员姓名</th>
-						<th>工作人员手机号</th>
-						<th>用户姓名</th>
-						<th>用户手机号</th>
+						<th>用户昵称</th>
+						<th>地址姓名</th>
+						<th>地址手机号</th>
 						<th>城市名称</th>
 						<th>区名称</th>
 						<th>小区名称</th>
 						<th>详细地址</th>
+						<th>工作人员姓名</th>
+						<th>工作人员手机号</th>
 						<th>历史</th>
 						<th>修改</th>						
 					</tr>
@@ -125,14 +126,15 @@
 							<td>${orderDetail.date}</td>
 							<td>${orderDetail.timeDes}</td>
 							<td>${orderDetail.comment}</td>
-							<td>${orderDetail.workername}</td>
-							<td>${orderDetail.workercellnum}</td>
+							<td>${orderDetail.nickname}</td>
 							<td>${orderDetail.addrname}</td>
 							<td>${orderDetail.addrcellnum}</td>
 							<td>${orderDetail.cityname}</td>
 							<td>${orderDetail.districtname}</td>
 							<td>${orderDetail.regionname}</td>
 							<td>${orderDetail.addrdetail}</td>
+							<td>${orderDetail.workername}</td>
+							<td>${orderDetail.workercellnum}</td>
 							<td>
 							 	<a href="<c:url value="/order/history.html?orderid=${orderDetail.id}"/>">历史</a>
 							</td>

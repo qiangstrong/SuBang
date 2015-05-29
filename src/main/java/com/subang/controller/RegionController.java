@@ -27,7 +27,7 @@ public class RegionController extends BaseController {
 	@RequestMapping("/city")
 	public ModelAndView listCity(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		session.removeAttribute(KEY_PAGE_STATE);
+		invalidtePageState(session);
 		List<City> citys = backAdminService.listCity();
 		view.addObject("citys", citys);
 		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));

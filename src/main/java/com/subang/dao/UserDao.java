@@ -85,28 +85,4 @@ public class UserDao extends BaseDao<User> {
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
 	}
-
-	/**
-	 * 只统计曾经下过订单（无论订单是完成还是取消）的用户，
-	 */
-	public List<StatItem> statUserNumByRegion() {
-		String sql = Common.getProperty("statUserNumByRegion");
-		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
-				StatItem.class));
-		return statItems;
-	}
-
-	public List<StatItem> statUserNumByDistrict() {
-		String sql = Common.getProperty("statUserNumByDistrict");
-		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
-				StatItem.class));
-		return statItems;
-	}
-
-	public List<StatItem> statUserNumByCity() {
-		String sql = Common.getProperty("statUserNumByCity");
-		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
-				StatItem.class));
-		return statItems;
-	}
 }

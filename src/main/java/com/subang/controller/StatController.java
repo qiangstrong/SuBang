@@ -22,9 +22,8 @@ public class StatController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, StatArg statArg) {
 		ModelAndView view = new ModelAndView();
-		session.removeAttribute(KEY_PAGE_STATE);
+		savePageState(session, statArg);
 		List<StatItem> statItems=backStatService.stat(statArg);
-		view.addObject("statArg", statArg);
 		view.addObject(KEY_DATA, statItems);
 		view.setViewName(INDEX_PAGE);
 		return view;

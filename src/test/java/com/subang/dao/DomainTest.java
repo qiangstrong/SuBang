@@ -16,8 +16,10 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.subang.bean.StatItem;
 import com.subang.domain.*;
 import com.subang.domain.User.Sex;
+import com.subang.util.Common;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -28,16 +30,12 @@ public class DomainTest {
 
 	@Test
 	public void test() {
-		String sql = "select * from admin_t";
-		try {
-			jdbcTemplate.queryForObject(sql,  new BeanPropertyRowMapper<Admin>(
-					Admin.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "call subang.statOrderNumByRegion()";
+		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
+				StatItem.class));
 		pause();
 	}
-	
+		
 	public void pause() {
 
 	}

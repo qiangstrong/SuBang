@@ -27,7 +27,7 @@ public class InfoController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		session.removeAttribute(KEY_PAGE_STATE);
+		invalidtePageState(session);
 		List<Info> infos = backAdminService.listInfo();
 		view.addObject(KEY_DATA, infos);
 		view.setViewName(INDEX_PAGE);

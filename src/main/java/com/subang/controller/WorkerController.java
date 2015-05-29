@@ -31,11 +31,12 @@ public class WorkerController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
-		PageState pageState = (PageState) session.getAttribute(KEY_PAGE_STATE);
-		if (type == WebConstant.INDEX_BREAK || pageState == null) {
-			pageState = new PageState(new SearchArg(WebConstant.SEARCH_NULL, null));
-			session.setAttribute(KEY_PAGE_STATE, pageState);
+		
+		if (type==WebConstant.INDEX_BREAK) {
+			savePageState(session, new SearchArg(WebConstant.SEARCH_NULL, null));
 		}
+		PageState pageState=getPageState(session);
+
 
 		List<Worker> workers = backAdminService.searchWorker(pageState.getSearchArg());
 		view.addObject(KEY_DATA, workers);

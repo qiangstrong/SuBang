@@ -55,14 +55,20 @@
 						<th><input type="checkbox" onclick="switchCheckboxs('addrid')" /></th>
 						<th>姓名</th>
 						<th>手机号</th>
-						<th>地址</th>
+						<th>城市名称</th>
+						<th>区名称</th>
+						<th>小区名称</th>
+						<th>详细地址</th>
 					</tr>
-					<c:forEach var="addr" items="${addrs}">
+					<c:forEach var="addrDetail" items="${addrDetails}">
 						<tr>
-							<td><input type="checkbox" name="addrid" value="${addr.id}" /></td>
-							<td>${addr.name}</td>
-							<td>${addr.cellnum}</td>
-							<td>${addr.detail}</td>
+							<td><input type="checkbox" name="addrid" value="${addrDetail.id}" /></td>
+							<td>${addrDetail.name}</td>
+							<td>${addrDetail.cellnum}</td>
+							<td>${addrDetail.cityname}</td>
+							<td>${addrDetail.districtname}</td>
+							<td>${addrDetail.regionname}</td>
+							<td>${addrDetail.detail}</td>
 						</tr>
 					</c:forEach>
 				</table>

@@ -3,11 +3,9 @@ package com.subang.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-
 import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,12 +28,12 @@ public class LaundryController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
-		PageState pageState = (PageState) session.getAttribute(KEY_PAGE_STATE);
-		if (type == WebConstant.INDEX_BREAK || pageState == null) {
-			pageState = new PageState(new SearchArg(WebConstant.SEARCH_NULL, null));
-			session.setAttribute(KEY_PAGE_STATE, pageState);
+		
+		if (type==WebConstant.INDEX_BREAK) {
+			savePageState(session, new SearchArg(WebConstant.SEARCH_NULL, null));
 		}
-
+		PageState pageState=getPageState(session);
+		
 		List<Laundry> laundrys = backAdminService.searchLaundry(pageState.getSearchArg());
 		view.addObject(KEY_DATA, laundrys);
 		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
