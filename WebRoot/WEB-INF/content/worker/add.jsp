@@ -45,6 +45,10 @@
 							<td><form:input path="name" /></td>
 						</tr>
 						<tr>
+							<td>核心：</td>
+							<td><form:checkbox path="core"/></td>
+						</tr>
+						<tr>
 							<td></td>
 							<td><form:errors path="cellnum" /></td>
 						</tr>

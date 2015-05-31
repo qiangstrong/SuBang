@@ -38,20 +38,28 @@ public class MainController extends BaseController {
 	}
 	
 	@RequestMapping("/login")
-	public ModelAndView login(HttpSession session, Admin admin){
+	public ModelAndView login(HttpSession session, Admin admin, @RequestParam("vericode") String vericodeFront){
 		ModelAndView view = new ModelAndView();
+		
+		String vericodeBack=(String)session.getAttribute(WebConstant.KEY_VERICODE);
+		if (!vericodeBack.equalsIgnoreCase(vericodeFront.trim())) {
+			view.addObject(KEY_INFO_MSG, "登录失败。验证码错误。");
+			view.addObject("admin", admin);
+			view.setViewName("login");
+			return view;
+		}
 		Admin matchAdmin=backAdminService.getAdminByMatch(admin);
-		if (matchAdmin!=null) {
-			setAdmin(session, matchAdmin);
-			session.setMaxInactiveInterval(WebConstant.SESSION_INTERVAL);
-			Common.setServletContext(session.getServletContext());
-			Common.loadProperties();
-			view.setViewName("redirect:/index.html?type=0");
-		}else {
+		if (matchAdmin==null) {
 			view.addObject(KEY_INFO_MSG, "登录失败。用户名或密码错误。");
 			view.addObject("admin", admin);
 			view.setViewName("login");
+			return view;
 		}
+		setAdmin(session, matchAdmin);
+		session.setMaxInactiveInterval(WebConstant.SESSION_INTERVAL);
+		Common.setServletContext(session.getServletContext());
+		Common.loadProperties();
+		view.setViewName("redirect:/index.html?type=0");
 		return view;
 	}
 	

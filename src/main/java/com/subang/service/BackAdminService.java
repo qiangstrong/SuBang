@@ -89,7 +89,7 @@ public class BackAdminService extends BaseService {
 		workerDao.update(worker);
 	}
 
-	public void deleteWorker(List<Integer> workerids) throws BackException {
+	public void deleteWorkers(List<Integer> workerids) throws BackException {
 		boolean isAll = true;
 		for (Integer workerid : workerids) {
 			try {
@@ -145,7 +145,7 @@ public class BackAdminService extends BaseService {
 		}
 	}
 
-	public void deleteLaundry(List<Integer> laundryids) throws BackException {
+	public void deleteLaundrys(List<Integer> laundryids) throws BackException {
 		boolean isAll = true;
 		for (Integer laundryid : laundryids) {
 			try {
@@ -191,7 +191,7 @@ public class BackAdminService extends BaseService {
 		}
 	}
 
-	public void deleteCity(List<Integer> cityids) throws BackException {
+	public void deleteCitys(List<Integer> cityids) throws BackException {
 		boolean isAll = true;
 		for (Integer cityid : cityids) {
 			try {
@@ -229,7 +229,7 @@ public class BackAdminService extends BaseService {
 		}
 	}
 
-	public void deleteDistrict(List<Integer> districtids) throws BackException {
+	public void deleteDistricts(List<Integer> districtids) throws BackException {
 		boolean isAll = true;
 		for (Integer districtid : districtids) {
 			try {
@@ -267,7 +267,7 @@ public class BackAdminService extends BaseService {
 		}
 	}
 
-	public void deleteRegion(List<Integer> regionids) throws BackException {
+	public void deleteRegions(List<Integer> regionids) throws BackException {
 		boolean isAll = true;
 		for (Integer regionid : regionids) {
 			try {

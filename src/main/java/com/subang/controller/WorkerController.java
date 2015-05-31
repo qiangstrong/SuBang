@@ -93,7 +93,7 @@ public class WorkerController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backAdminService.deleteWorker(Common.getIds(workerids));
+			backAdminService.deleteWorkers(Common.getIds(workerids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;

@@ -20,15 +20,16 @@ public class WorkerDao extends BaseDao<Worker> {
 	}
 
 	public void save(Worker worker) {
-		String sql = "insert into worker_t values(null,?,?,?)";
-		Object[] args = { worker.getName(), worker.getCellnum(), worker.getComment() };
+		String sql = "insert into worker_t values(null,?,?,?,?)";
+		Object[] args = { worker.isCore(), worker.getName(), worker.getCellnum(),
+				worker.getComment() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Worker worker) {
-		String sql = "update worker_t set name=? ,cellnum=? ,comment=? where id=?";
-		Object[] args = { worker.getName(), worker.getCellnum(), worker.getComment(),
-				worker.getId() };
+		String sql = "update worker_t set core=?, name=? ,cellnum=? ,comment=? where id=?";
+		Object[] args = { worker.isCore(), worker.getName(), worker.getCellnum(),
+				worker.getComment(), worker.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -57,6 +58,13 @@ public class WorkerDao extends BaseDao<Worker> {
 		String sql = "select * from worker_t where cellnum like ?";
 		Object[] args = { Common.getLikeStr(cellnum) };
 		List<Worker> workers = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Worker>(
+				Worker.class));
+		return workers;
+	}
+
+	public List<Worker> findByCore() {
+		String sql = "select * from worker_t where core=1";
+		List<Worker> workers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Worker>(
 				Worker.class));
 		return workers;
 	}

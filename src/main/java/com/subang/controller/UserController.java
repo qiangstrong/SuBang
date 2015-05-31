@@ -69,7 +69,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/delete")
 	public ModelAndView delete(HttpSession session, @RequestParam("userids") String userids) {
 		ModelAndView view = new ModelAndView();
-		backUserService.deleteUser(Common.getIds(userids));
+		backUserService.deleteUsers(Common.getIds(userids));
 		session.setAttribute(KEY_INFO_MSG, "删除成功。");
 		view.setViewName("redirect:/user/index.html?type=1");
 		return view;
@@ -109,7 +109,7 @@ public class UserController extends BaseController {
 		boolean isException = false;
 		List<Integer> addridList = Common.getIds(addrids);
 		try {
-			backUserService.deleteAddr(addridList);
+			backUserService.deleteAddrs(addridList);
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;

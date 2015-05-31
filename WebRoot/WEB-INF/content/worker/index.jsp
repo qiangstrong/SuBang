@@ -75,6 +75,7 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('workerid')" /></th>
 						<th>姓名</th>
+						<th>核心</th>
 						<th>手机号</th>
 						<th>备注</th>
 						<th>区域</th>
@@ -84,6 +85,7 @@
 						<tr>
 							<td><input type="checkbox" name="workerid" value="${worker.id}" /></td>
 							<td>${worker.name}</td>
+							<td>${worker.coreDes}</td>
 							<td>${worker.cellnum}</td>
 							<td>${worker.comment}</td>
 							<td>

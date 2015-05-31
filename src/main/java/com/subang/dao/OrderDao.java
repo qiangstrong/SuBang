@@ -22,6 +22,14 @@ public class OrderDao extends BaseDao<Order> {
 				Order.class));
 		return order;
 	}
+	
+	public Order getByOrderno(String orderno) {
+		String sql = "select * from order_t where orderno=?";
+		Object[] args = { orderno };
+		Order order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
+				Order.class));
+		return order;
+	}
 
 	public void save(Order order) {
 		String sql = "insert into order_t values(null,?,?,?,?,?,?,?,?,?,?,?)";
@@ -68,6 +76,14 @@ public class OrderDao extends BaseDao<Order> {
 		return orders;
 	}
 
+	public List<Order> findByState(State state) {
+		String sql = "select * from order_t where state=?";
+		Object[] args = { state.ordinal() };
+		List<Order> orders = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Order>(
+				Order.class));
+		return orders;
+	}
+
 	public List<Order> findByUserid(Integer userid) {
 		String sql = "select * from order_t where userid=?";
 		Object[] args = { userid };
@@ -99,6 +115,14 @@ public class OrderDao extends BaseDao<Order> {
 		return orders;
 	}
 
+	public OrderDetail getOrderDetail(Integer id) {
+		String sql = "select * from orderdetail_v where id=?";
+		Object[] args = { id };
+		OrderDetail orderDetail = jdbcTemplate.queryForObject(sql, args,
+				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetail;
+	}
+
 	public List<OrderDetail> findOrderDetailAll() {
 		String sql = "select * from orderdetail_v";
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql,
@@ -107,7 +131,7 @@ public class OrderDao extends BaseDao<Order> {
 	}
 
 	public List<OrderDetail> findOrderDetailByState(State state) {
-		String sql ="select * from orderdetail_v where state=?";
+		String sql = "select * from orderdetail_v where state=?";
 		Object[] args = { state.ordinal() };
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));

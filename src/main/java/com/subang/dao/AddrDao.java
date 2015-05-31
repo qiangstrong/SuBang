@@ -54,7 +54,15 @@ public class AddrDao extends BaseDao<Addr> {
 				new BeanPropertyRowMapper<Addr>(Addr.class));
 		return addrs;
 	}
-	
+
+	public AddrDetail getAddrDetail(Integer id) {
+		String sql = "select * from addrdetail_v where id=?";
+		Object[] args = { id };
+		AddrDetail addrDetail = jdbcTemplate.queryForObject(sql, args,
+				new BeanPropertyRowMapper<AddrDetail>(AddrDetail.class));
+		return addrDetail;
+	}
+
 	public List<AddrDetail> findAddrDetailByUserid(Integer userid) {
 		String sql = "select * from addrdetail_v where userid=? and valid=1";
 		Object[] args = { userid };

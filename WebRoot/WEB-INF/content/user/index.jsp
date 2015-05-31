@@ -73,6 +73,7 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('userid')" /></th>
 						<th>用户昵称</th>
+						<th>关注</th>
 						<th>手机号</th>
 						<th>积分</th>
 						<th>地址</th>
@@ -82,7 +83,8 @@
 						<tr>
 							<td><input type="checkbox" name="userid" value="${user.id}" /></td>
 							<td>${user.nickname}</td>
-							<td>${user.cellnum}</td>
+							<td>${user.validDes}</td>
+							<td>${user.cellnumDes}</td>
 							<td>${user.score}</td>
 							<td>
 								<a href="<c:url value="/user/addr.html?userid=${user.id}"/>">地址</a>

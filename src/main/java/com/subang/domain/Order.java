@@ -141,6 +141,13 @@ public class Order implements Serializable {
 	public Float getPrice() {
 		return price;
 	}
+	
+	public String getPriceDes(){
+		if (price==null) {
+			return "未确定";
+		}
+		return price.toString();
+	}
 
 	public void setPrice(Float price) {
 		this.price = price;

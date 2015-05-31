@@ -16,6 +16,7 @@ import com.subang.domain.Order;
 import com.subang.domain.Order.State;
 import com.subang.domain.User;
 import com.subang.exception.BackException;
+import com.subang.util.Common;
 import com.subang.util.WebConstant;
 
 /**
@@ -46,15 +47,7 @@ public class BackUserService extends CommUserService {
 		return users;
 	}
 
-	public User getUser(Integer userid) {
-		return userDao.get(userid);
-	}
-
-	public void modifyUser(User user) {
-		userDao.update(user);
-	}
-
-	public void deleteUser(List<Integer> userids) {
+	public void deleteUsers(List<Integer> userids) {
 		for (Integer userid : userids) {
 			userDao.delete(userid);
 		}
@@ -63,17 +56,9 @@ public class BackUserService extends CommUserService {
 	/**
 	 * 与用户地址相关的操作
 	 */
-	public List<AddrDetail> listAddrDetailByUserid(Integer userid) {
-		return addrDao.findAddrDetailByUserid(userid);
-	}
-
-	public Addr getAddr(Integer addrid){
-		return addrDao.get(addrid);
-	}
-	
-	public void deleteAddr(List<Integer> addrids) throws BackException {
+	public void deleteAddrs(List<Integer> addrids) throws BackException {
 		Addr addr = null;
-		User user = null;		
+		User user = null;
 		boolean isAll = true;
 		for (Integer addrid : addrids) {
 			addr = addrDao.get(addrid);
@@ -87,8 +72,8 @@ public class BackUserService extends CommUserService {
 						userDao.update(user);
 					}
 				}
-			}else {
-				isAll=false;
+			} else {
+				isAll = false;
 			}
 		}
 		if (!isAll) {
@@ -109,10 +94,10 @@ public class BackUserService extends CommUserService {
 			orderDetails = orderDao.findOrderDetailAll();
 			break;
 		case WebConstant.SEARCH_ORDER_USERID:
-			orderDetails=orderDao.findOrderDetailByUserid(new Integer(searchArg.getArg()));
+			orderDetails = orderDao.findOrderDetailByUserid(new Integer(searchArg.getArg()));
 			break;
 		case WebConstant.SEARCH_ORDER_STATE:
-			orderDetails=orderDao.findOrderDetailByState(State.toState(searchArg.getArg()));
+			orderDetails = orderDao.findOrderDetailByState(State.toState(searchArg.getArg()));
 			break;
 		case WebConstant.SEARCH_ORDER_ORDERNO:
 			orderDetails = orderDao.findOrderDetailByOrderno(searchArg.getArg());
@@ -142,10 +127,6 @@ public class BackUserService extends CommUserService {
 		return orderDetails;
 	}
 
-	public Order getOrder(Integer orderid){
-		return orderDao.get(orderid);
-	}
-	
 	// 完成订单分配商家，指定价格的功能
 	public void modifyOrder(Order order) throws BackException {
 		if (order.getStateEnum() == State.fetched) {
@@ -155,19 +136,10 @@ public class BackUserService extends CommUserService {
 		}
 	}
 
-	public void finishOrder(List<Integer> orderids) throws BackException {
+	public void finishOrders(List<Integer> orderids) throws BackException {
 		boolean isAll = true;
-		Order order = null;
-		History history = new History();
-		history.setOperation(Operation.finish);
 		for (Integer orderid : orderids) {
-			order = orderDao.get(orderid);
-			if (order.getStateEnum() == State.fetched) {
-				order.setState(State.finished);
-				history.setOrderid(order.getId());
-				orderDao.update(order);
-				historyDao.save(history);
-			} else {
+			if (!finishOrder(orderid)) {
 				isAll = false;
 			}
 		}
@@ -176,19 +148,31 @@ public class BackUserService extends CommUserService {
 		}
 	}
 
-	public void cancelOrder(List<Integer> orderids) throws BackException {
+	private boolean finishOrder(Integer orderid) {
+		History history = null;
+		Order order = orderDao.get(orderid);
+		if (order.getStateEnum() == State.fetched) {
+			order.setState(State.finished);
+			orderDao.update(order);
+
+			history = new History();
+			history.setOrderid(order.getId());
+			history.setOperation(Operation.finish);
+			historyDao.save(history);
+			
+			User user=userDao.get(order.getUserid());
+			user.setScore(user.getScore()+Common.getcScore(order.getPrice()));
+			userDao.update(user);
+			
+			return true;
+		}
+		return false;
+	}
+
+	public void cancelOrders(List<Integer> orderids) throws BackException {
 		boolean isAll = true;
-		Order order = null;
-		History history = new History();
-		history.setOperation(Operation.cancel);
 		for (Integer orderid : orderids) {
-			order = orderDao.get(orderid);
-			if (order.getStateEnum() == State.accepted) {
-				order.setState(State.canceled);
-				history.setOrderid(order.getId());
-				orderDao.update(order);
-				historyDao.save(history);
-			} else {
+			if (!cancelOrder(orderid)) {
 				isAll = false;
 			}
 		}
@@ -197,18 +181,10 @@ public class BackUserService extends CommUserService {
 		}
 	}
 
-	public void deleteOrder(List<Integer> orderids) throws BackException {
+	public void deleteOrders(List<Integer> orderids) throws BackException {
 		boolean isAll = true;
-		Order order = null;
 		for (Integer orderid : orderids) {
-			order = orderDao.get(orderid);
-			if (order.getStateEnum() == State.finished || order.getStateEnum() == State.canceled) {
-				orderDao.delete(orderid);
-				Addr addr = addrDao.get(order.getAddrid());
-				if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
-					addrDao.delete(addr.getId());
-				}
-			} else {
+			if (!deleteOrder(orderid)) {
 				isAll = false;
 			}
 		}
@@ -217,10 +193,4 @@ public class BackUserService extends CommUserService {
 		}
 	}
 
-	/**
-	 * 与操作历史相关的操作
-	 */
-	public List<History> listHistoryByOrderid(Integer orderid) {
-		return historyDao.findByOrderid(orderid);
-	}
 }

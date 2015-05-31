@@ -40,6 +40,14 @@
 				<td width="80%"><form:password path="password" /></td>
 			</tr>
 			<tr>
+				<td width="20%">验证码:</td>
+				<td width="80%"><input type="text" name="vericode"></td>
+			</tr>
+			<tr>
+				<td width="20%"></td>
+				<td width="80%"><img src="image/vericode.jpg"></td>
+			</tr>
+			<tr>
 				<td><input type="submit" value="登录" /></td>
 				<td><input type="reset" value="重置" /></td>
 			</tr>

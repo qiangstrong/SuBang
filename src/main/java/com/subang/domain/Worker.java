@@ -11,6 +11,7 @@ public class Worker implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	private boolean core; // 是否是核心取衣员
 	@Length(min = 1, max = 4)
 	private String name;
 	@Pattern(regexp = "\\d{11}")
@@ -21,8 +22,9 @@ public class Worker implements Serializable {
 	public Worker() {
 	}
 
-	public Worker(Integer id, String name, String cellnum, String comment) {
+	public Worker(Integer id, boolean core, String name, String cellnum, String comment) {
 		this.id = id;
+		this.setCore(core);
 		this.name = name;
 		this.cellnum = cellnum;
 		this.comment = comment;
@@ -34,6 +36,21 @@ public class Worker implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public boolean isCore() {
+		return core;
+	}
+
+	public String getCoreDes(){
+		if(core){
+			return "是";
+		}
+		return "否";
+	}
+	
+	public void setCore(boolean core) {
+		this.core = core;
 	}
 
 	public String getName() {

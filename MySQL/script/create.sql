@@ -8,6 +8,7 @@ set foreign_key_checks=1;
 
 create table `worker_t`(
 	`id` int auto_increment primary key,
+    `core` tinyint not null default 0,
     `name` char(4) not null,
 	`cellnum` char(11) not null,
     `comment` varchar(50)
@@ -47,6 +48,7 @@ create table `laundry_t`(
 SET foreign_key_checks=0;
 create table `user_t`(
 	`id` int auto_increment primary key,
+    `valid` tinyint not null default 1,
     `openid` char(28) not null unique,
     `name` char(4),
     `nickname` varchar(100),
@@ -96,6 +98,7 @@ create table `order_t`(
 
 create table `history_t`(
 	`id` int auto_Increment primary key,
+    `operatorid` int not null,
     `operation` tinyint not null,
     `time` datetime not null,
     `orderid` int not null,

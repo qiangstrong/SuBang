@@ -2,6 +2,11 @@ package com.subang.util;
 
 public interface WebConstant {
 
+	String KEY_VERICODE="vericode";
+	int VERI_LENGTH=6;
+	
+	int ORDERNO_RANDOM_LENGTH=7;	
+	
 	int SESSION_INTERVAL = 3600; // session过期时间，1小时
 
 	int PAGE_SIZE = 10;
@@ -35,4 +40,8 @@ public interface WebConstant {
 	int AREA_CITY = 0;
 	int AREA_DISTRICT = 1;
 	int AREA_REGION = 2;
+
+	// 前台部分
+	int ORDER_STATE_UNDONE = 1;
+	int ORDER_STATE_DONE = 2;
 }

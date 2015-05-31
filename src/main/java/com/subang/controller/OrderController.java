@@ -31,12 +31,11 @@ public class OrderController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
-		
-		if (type==WebConstant.INDEX_BREAK) {
+
+		if (type == WebConstant.INDEX_BREAK) {
 			savePageState(session, new SearchArg(WebConstant.SEARCH_NULL, null));
 		}
-		PageState pageState=getPageState(session);
-
+		PageState pageState = getPageState(session);
 
 		List<OrderDetail> orderDetails = backUserService.searchOrder(pageState.getSearchArg());
 		view.addObject(KEY_DATA, orderDetails);
@@ -74,7 +73,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backUserService.deleteOrder(Common.getIds(orderids));
+			backUserService.deleteOrders(Common.getIds(orderids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;
@@ -91,7 +90,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backUserService.finishOrder(Common.getIds(orderids));
+			backUserService.finishOrders(Common.getIds(orderids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "结束订单失败。" + e.getMessage());
 			isException = true;
@@ -108,7 +107,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backUserService.cancelOrder(Common.getIds(orderids));
+			backUserService.cancelOrders(Common.getIds(orderids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "取消订单失败。" + e.getMessage());
 			isException = true;

@@ -71,7 +71,7 @@ public class RegionController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backAdminService.deleteCity(Common.getIds(cityids));
+			backAdminService.deleteCitys(Common.getIds(cityids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;
@@ -169,7 +169,7 @@ public class RegionController extends BaseController {
 		boolean isException = false;
 		List<Integer> districtidList = Common.getIds(districtids);
 		try {
-			backAdminService.deleteDistrict(districtidList);
+			backAdminService.deleteDistricts(districtidList);
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;
@@ -279,7 +279,7 @@ public class RegionController extends BaseController {
 		boolean isException = false;
 		List<Integer> regionidList = Common.getIds(regionids);
 		try {
-			backAdminService.deleteRegion(regionidList);
+			backAdminService.deleteRegions(regionidList);
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;

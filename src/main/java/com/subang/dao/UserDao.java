@@ -23,20 +23,21 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?)";
-		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getPassword(),
-				user.getCellnum(), user.getScore(), user.getPhoto(), user.getSex(),
-				user.getCountry(), user.getProvince(), user.getCity(), user.getAddrid() };
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		Object[] args = { user.isValid(), user.getOpenid(), user.getName(), user.getNickname(),
+				user.getPassword(), user.getCellnum(), user.getScore(), user.getPhoto(),
+				user.getSex(), user.getCountry(), user.getProvince(), user.getCity(),
+				user.getAddrid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
-		String sql = "update user_t set openid=? ,name=? ,nickname=? ,password=? ,cellnum=? ,score=? ,"
+		String sql = "update user_t set valid=?, openid=? ,name=? ,nickname=? ,password=? ,cellnum=? ,score=? ,"
 				+ "photo=? ,sex=? ,country=? ,province=? ,city=? ,addrid=? where id=?";
-		Object[] args = { user.getOpenid(), user.getName(), user.getNickname(), user.getPassword(),
-				user.getCellnum(), user.getScore(), user.getPhoto(), user.getSex(),
-				user.getCountry(), user.getProvince(), user.getCity(), user.getAddrid(),
-				user.getId() };
+		Object[] args = { user.isValid(), user.getOpenid(), user.getName(), user.getNickname(),
+				user.getPassword(), user.getCellnum(), user.getScore(), user.getPhoto(),
+				user.getSex(), user.getCountry(), user.getProvince(), user.getCity(),
+				user.getAddrid(), user.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

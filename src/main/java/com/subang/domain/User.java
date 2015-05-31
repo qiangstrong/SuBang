@@ -15,6 +15,7 @@ public class User implements Serializable {
 	}
 
 	private Integer id;
+	private boolean valid;		//默认为true，用户取消关注后，为false
 	private String openid;
 	@Length(max = 4)
 	private String name;
@@ -36,13 +37,15 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(Integer id, String openid, String name, String nickname, String password, String cellnum, int score,
-			String photo, int sex, String country, String province, String city, Integer addrid) {
+	public User(Integer id, boolean valid, String openid, String name, String nickname,
+			String password, String cellnum, int score, String photo, int sex, String country,
+			String province, String city, Integer addrid) {
 		this.id = id;
+		this.valid = valid;
 		this.openid = openid;
 		this.name = name;
 		this.nickname = nickname;
-		this.password=password;
+		this.password = password;
 		this.cellnum = cellnum;
 		this.score = score;
 		this.photo = photo;
@@ -59,6 +62,21 @@ public class User implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+	
+	public String getValidDes(){
+		if (valid) {
+			return "是";
+		}
+		return "否";
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 
 	public String getOpenid() {
@@ -84,10 +102,6 @@ public class User implements Serializable {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-
-	public String getCellnum() {
-		return cellnum;
-	}
 	
 	public String getPassword() {
 		return password;
@@ -95,6 +109,17 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getCellnum() {
+		return cellnum;
+	}
+
+	public String getCellnumDes(){
+		if (cellnum==null) {
+			return "未绑定";
+		}
+		return cellnum;
 	}
 	
 	public void setCellnum(String cellnum) {
@@ -124,7 +149,7 @@ public class User implements Serializable {
 	public Sex getSexEnum() {
 		return Sex.values()[sex];
 	}
-	
+
 	public void setSex(int sex) {
 		this.sex = sex;
 	}
@@ -132,7 +157,7 @@ public class User implements Serializable {
 	public void setSex(Sex sex) {
 		this.sex = sex.ordinal();
 	}
-	
+
 	public String getCountry() {
 		return country;
 	}
@@ -164,5 +189,5 @@ public class User implements Serializable {
 	public void setAddrid(Integer addrid) {
 		this.addrid = addrid;
 	}
-	
+
 }

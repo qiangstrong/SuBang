@@ -122,7 +122,7 @@
 							<td>${orderDetail.orderno}</td>
 							<td>${orderDetail.categoryDes}</td>
 							<td>${orderDetail.stateDes}</td>
-							<td>${orderDetail.price}</td>
+							<td>${orderDetail.priceDes}</td>
 							<td>${orderDetail.date}</td>
 							<td>${orderDetail.timeDes}</td>
 							<td>${orderDetail.comment}</td>

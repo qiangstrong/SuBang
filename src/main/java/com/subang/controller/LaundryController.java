@@ -98,7 +98,7 @@ public class LaundryController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backAdminService.deleteLaundry(Common.getIds(laundryids));
+			backAdminService.deleteLaundrys(Common.getIds(laundryids));
 		} catch (BackException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;

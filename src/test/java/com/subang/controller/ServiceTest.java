@@ -21,7 +21,7 @@ public class ServiceTest extends BaseController {
 		laundryids.add(1);
 		laundryids.add(2);
 		try {
-			backAdminService.deleteLaundry(laundryids);
+			backAdminService.deleteLaundrys(laundryids);
 		} catch (BackException e) {
 			e.printStackTrace();
 		}
