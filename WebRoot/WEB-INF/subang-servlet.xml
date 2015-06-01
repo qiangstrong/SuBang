@@ -33,7 +33,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<!-- 异常
+	<!-- 
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView">
 			<value>common/error</value>
@@ -44,5 +44,5 @@
 			</props>
 		</property>
 	</bean>
-  	-->
+	 -->
 </beans>

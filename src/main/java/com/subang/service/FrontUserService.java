@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.subang.bean.OrderDetail;
 import com.subang.domain.Addr;
+import com.subang.domain.City;
+import com.subang.domain.District;
 import com.subang.domain.History;
 import com.subang.domain.Info;
 import com.subang.domain.Order;
@@ -129,6 +131,21 @@ public class FrontUserService extends CommUserService {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * 与区域相关的操作
+	 */
+	public List<City> listCity(){
+		return cityDao.findAllValid();
+	}
+	
+	public List<District> listDistrictByCityid(Integer cityid) {
+		return districtDao.findValidByCityid(cityid);
+	}
+	
+	public List<Region> listRegionByDistrictid(Integer districtid) {
+		return regionDao.findByDistrictid(districtid);
 	}
 	
 	/**

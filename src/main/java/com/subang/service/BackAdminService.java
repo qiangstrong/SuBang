@@ -162,7 +162,6 @@ public class BackAdminService extends BaseService {
 	/**
 	 * 与区域相关的操作
 	 */
-
 	public List<Area> listAreaByWorkerid(Integer workerid) {
 		return regionDao.findAreaByWorkerid(workerid);
 	}

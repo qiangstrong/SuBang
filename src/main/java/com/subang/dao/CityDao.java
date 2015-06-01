@@ -43,6 +43,12 @@ public class CityDao extends BaseDao<City> {
 		List<City> citys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<City>(City.class));
 		return citys;
 	}
+	
+	public List<City> findAllValid(){
+		String sql = "select distinct cityid `id`, cityname `name` from area_v";
+		List<City> citys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<City>(City.class));
+		return citys;
+	}
 
 	public List<City> findByName(String name) {
 		String sql = "select * from city_t where name like=?";

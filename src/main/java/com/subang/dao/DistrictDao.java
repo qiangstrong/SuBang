@@ -59,4 +59,12 @@ public class DistrictDao extends BaseDao<District> {
 				new BeanPropertyRowMapper<District>(District.class));
 		return districts;
 	}
+
+	public List<District> findValidByCityid(Integer cityid) {
+		String sql = "select distinct districtid `id`, districtname `name`, ? `cityid` from area_v where cityid=?";
+		Object[] args = { cityid, cityid };
+		List<District> districts = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<District>(District.class));
+		return districts;
+	}
 }

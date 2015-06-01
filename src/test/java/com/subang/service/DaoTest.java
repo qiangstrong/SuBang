@@ -11,6 +11,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.StatArg;
 import com.subang.bean.StatItem;
+import com.subang.domain.District;
 import com.subang.domain.History.Operation;
 import com.subang.util.Common;
 import com.subang.util.SMS;
@@ -21,8 +22,7 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		OrderDetail orderDetail = orderDao.getOrderDetail(1);
-		String content = SMS.toUserContent("123456");
+		List<District> districts =districtDao.findValidByCityid(1);
 		pause();
 	}
 
