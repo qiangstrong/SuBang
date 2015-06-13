@@ -11,7 +11,7 @@ import com.subang.domain.User;
 import com.subang.domain.History.Operation;
 import com.subang.domain.Order.State;
 import com.subang.domain.Worker;
-import com.subang.util.SMS;
+import com.subang.util.SmsUtil;
 
 public class CommUserService extends BaseService {
 
@@ -62,21 +62,8 @@ public class CommUserService extends BaseService {
 			
 			Worker worker=workerDao.get(order.getWorkerid());
 			OrderDetail orderDetail=orderDao.getOrderDetail(orderid);
-			SMS.send(worker.getCellnum(), SMS.toWorkerContent(Operation.cancel, orderDetail));
+			SmsUtil.send(worker.getCellnum(), SmsUtil.toWorkerContent(Operation.cancel, orderDetail));
 			
-			return true;
-		}
-		return false;
-	}
-
-	public boolean deleteOrder(Integer orderid) {
-		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() == State.finished || order.getStateEnum() == State.canceled) {
-			orderDao.delete(orderid);
-			Addr addr = addrDao.get(order.getAddrid());
-			if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
-				addrDao.delete(addr.getId());
-			}
 			return true;
 		}
 		return false;

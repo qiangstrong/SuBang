@@ -2,6 +2,7 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
@@ -10,16 +11,21 @@ public class Addr implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-	private boolean valid;
+	protected  Integer id;
+	protected  boolean valid;
+	@NotNull
 	@Length(min = 1, max = 4)
-	private String name;
+	protected  String name;
+	@NotNull
 	@Pattern(regexp = "\\d{11}")
-	private String cellnum;
+	protected  String cellnum;
+	@NotNull
 	@Length(max = 50)
-	private String detail;
-	private Integer userid;
-	private Integer regionid;
+	protected  String detail;
+	
+	protected  Integer userid;
+	@NotNull
+	protected  Integer regionid;
 
 	public Addr() {
 	}

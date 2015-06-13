@@ -10,6 +10,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:/applicationContext.xml</param-value>
 	</context-param>
+	
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -24,18 +25,6 @@
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
 
-	<!-- 
-	<filter>
-		<filter-name>backFilter</filter-name>
-		<filter-class>com.subang.web.BackFilter</filter-class>
-	</filter>
-	 
-	<filter-mapping>
-		<filter-name>backFilter</filter-name>
-		<url-pattern>*.html</url-pattern>
-	</filter-mapping>
-	-->
-	
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -53,14 +42,24 @@
 		<url-pattern>*.html</url-pattern>
 	</filter-mapping>
 
+	<session-config>
+		<!-- 涉及到前后端数据的同步，必须慎重修改 -->
+		<session-timeout>60</session-timeout>
+	</session-config>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	
 	<!-- 
 	<error-page>
+		<error-code>400</error-code>
+		<location>/content/400.jsp</location>
+	</error-page>
+	<error-page>
 		<error-code>404</error-code>
 		<location>/content/404.jsp</location>
 	</error-page>
-	 -->
+	-->
+	 
 </web-app>

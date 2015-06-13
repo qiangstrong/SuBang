@@ -1,5 +1,7 @@
 package com.subang.bean;
 
+import com.subang.util.WebConst;
+
 public class StatArg {
 
 	private int type0;
@@ -7,6 +9,7 @@ public class StatArg {
 	private int type2;
 
 	public StatArg() {
+		this.type0=WebConst.STAT_NULL;
 	}
 
 	public StatArg(int type0, int type1, int type2) {

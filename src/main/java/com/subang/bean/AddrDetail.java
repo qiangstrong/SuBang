@@ -43,5 +43,16 @@ public class AddrDetail extends Addr {
 	public void setRegionname(String regionname) {
 		this.regionname = regionname;
 	}
+	
+	public String toString(){
+		StringBuffer description = new StringBuffer();
+		description.append(name+" ");
+		description.append(cellnum +" ");
+		description.append(cityname+" ");
+		description.append(districtname+" ");
+		description.append(regionname+" ");
+		description.append(detail);
+		return description.toString();
+	}
 
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,10 +15,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowCallbackHandler;
 
+import com.subang.controller.BaseController;
 import com.subang.domain.Addr;
 
 public class BaseDao<T> {
 
+	protected static final Logger LOG = Logger.getLogger ( BaseDao.class.getName());
+	
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 

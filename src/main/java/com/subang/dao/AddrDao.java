@@ -2,6 +2,8 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -58,8 +60,12 @@ public class AddrDao extends BaseDao<Addr> {
 	public AddrDetail getAddrDetail(Integer id) {
 		String sql = "select * from addrdetail_v where id=?";
 		Object[] args = { id };
-		AddrDetail addrDetail = jdbcTemplate.queryForObject(sql, args,
-				new BeanPropertyRowMapper<AddrDetail>(AddrDetail.class));
+		AddrDetail addrDetail = null;
+		try {
+			addrDetail = jdbcTemplate.queryForObject(sql, args,
+					new BeanPropertyRowMapper<AddrDetail>(AddrDetail.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return addrDetail;
 	}
 

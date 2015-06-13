@@ -10,7 +10,7 @@ import com.subang.bean.StatItem;
 import com.subang.domain.Order;
 import com.subang.domain.Order.State;
 import com.subang.util.Common;
-import com.subang.util.WebConstant;
+import com.subang.util.WebConst;
 
 @Repository
 public class OrderDao extends BaseDao<Order> {
@@ -62,9 +62,9 @@ public class OrderDao extends BaseDao<Order> {
 	}
 
 	public List<Order> findAll(int pageno) {
-		int offset = (pageno - 1) * WebConstant.PAGE_SIZE;
+		int offset = (pageno - 1) * WebConst.PAGE_SIZE;
 		String sql = "select * from order_t";
-		List<Order> orders = findByPage(sql, new Object[] {}, offset, WebConstant.PAGE_SIZE);
+		List<Order> orders = findByPage(sql, new Object[] {}, offset, WebConst.PAGE_SIZE);
 		return orders;
 	}
 

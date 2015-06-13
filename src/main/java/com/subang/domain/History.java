@@ -3,6 +3,8 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotNull;
+
 public class History implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -13,8 +15,11 @@ public class History implements Serializable {
 	}
 
 	private Integer id;
+	@NotNull
 	private int operation;
+	@NotNull
 	private Timestamp time; // 操作发生的日期和时间
+	@NotNull
 	private Integer orderid;
 
 	public History() {

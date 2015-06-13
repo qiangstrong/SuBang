@@ -2,6 +2,8 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 
 public class Info implements Serializable{
@@ -9,18 +11,23 @@ public class Info implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	@NotNull
 	@Length(max = 100)
 	private String price_path;
 	@Length(max = 1000)
 	private String price_text;
+	@NotNull
 	@Length(max = 100)
 	private String scope_path;
 	@Length(max = 1000)
 	private String scope_text;
+	@NotNull
 	@Length(max = 1000)
 	private String about;
+	@NotNull
 	@Length(max = 1000)
 	private String term;
+	@NotNull
 	@Length(max = 1000)
 	private String phone;
 	

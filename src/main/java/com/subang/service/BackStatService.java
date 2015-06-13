@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.subang.bean.StatArg;
 import com.subang.bean.StatItem;
-import com.subang.util.WebConstant;
+import com.subang.util.WebConst;
 
 @Service
 public class BackStatService extends BaseService {
@@ -15,11 +15,11 @@ public class BackStatService extends BaseService {
 	public List<StatItem> stat(StatArg statArg){
 		List<StatItem> statItems=null;
 		switch (statArg.getType0()) {
-		case WebConstant.STAT_NULL:
+		case WebConst.STAT_NULL:
 			statItems=new ArrayList<StatItem>();
 			break;
-		case WebConstant.STAT_AREA:
-		case WebConstant.STAT_USER:
+		case WebConst.STAT_AREA:
+		case WebConst.STAT_USER:
 			statItems=statDao.findByStatArg(statArg);
 			break;
 		}	

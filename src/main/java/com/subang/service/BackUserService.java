@@ -17,7 +17,7 @@ import com.subang.domain.Order.State;
 import com.subang.domain.User;
 import com.subang.exception.BackException;
 import com.subang.util.Common;
-import com.subang.util.WebConstant;
+import com.subang.util.WebConst;
 
 /**
  * @author Qiang 后台对用户，地址，订单，操作历史的管理
@@ -31,16 +31,16 @@ public class BackUserService extends CommUserService {
 	public List<User> searchUser(SearchArg searchArg) {
 		List<User> users = null;
 		switch (searchArg.getType()) {
-		case WebConstant.SEARCH_NULL:
+		case WebConst.SEARCH_NULL:
 			users = new ArrayList<User>();
 			break;
-		case WebConstant.SEARCH_ALL:
+		case WebConst.SEARCH_ALL:
 			users = userDao.findAll();
 			break;
-		case WebConstant.SEARCH_NAME:
+		case WebConst.SEARCH_NAME:
 			users = userDao.findByNickname(searchArg.getArg());
 			break;
-		case WebConstant.SEARCH_CELLNUM:
+		case WebConst.SEARCH_CELLNUM:
 			users = userDao.findByCellnum(searchArg.getArg());
 			break;
 		}
@@ -87,36 +87,36 @@ public class BackUserService extends CommUserService {
 	public List<OrderDetail> searchOrder(SearchArg searchArg) {
 		List<OrderDetail> orderDetails = null;
 		switch (searchArg.getType()) {
-		case WebConstant.SEARCH_NULL:
+		case WebConst.SEARCH_NULL:
 			orderDetails = new ArrayList<OrderDetail>();
 			break;
-		case WebConstant.SEARCH_ALL:
+		case WebConst.SEARCH_ALL:
 			orderDetails = orderDao.findOrderDetailAll();
 			break;
-		case WebConstant.SEARCH_ORDER_USERID:
+		case WebConst.SEARCH_ORDER_USERID:
 			orderDetails = orderDao.findOrderDetailByUserid(new Integer(searchArg.getArg()));
 			break;
-		case WebConstant.SEARCH_ORDER_STATE:
+		case WebConst.SEARCH_ORDER_STATE:
 			orderDetails = orderDao.findOrderDetailByState(State.toState(searchArg.getArg()));
 			break;
-		case WebConstant.SEARCH_ORDER_ORDERNO:
+		case WebConst.SEARCH_ORDER_ORDERNO:
 			orderDetails = orderDao.findOrderDetailByOrderno(searchArg.getArg());
 			break;
-		case WebConstant.SEARCH_ORDER_USER_NICKNAME:
+		case WebConst.SEARCH_ORDER_USER_NICKNAME:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<User> users1 = userDao.findByNickname(searchArg.getArg());
 			for (User user : users1) {
 				orderDetails.addAll(orderDao.findOrderDetailByUserid(user.getId()));
 			}
 			break;
-		case WebConstant.SEARCH_ORDER_USER_CELLNUM:
+		case WebConst.SEARCH_ORDER_USER_CELLNUM:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<User> users2 = userDao.findByCellnum(searchArg.getArg());
 			for (User user : users2) {
 				orderDetails.addAll(orderDao.findOrderDetailByUserid(user.getId()));
 			}
 			break;
-		case WebConstant.SEARCH_ORDER_LAUNDRY_NAME:
+		case WebConst.SEARCH_ORDER_LAUNDRY_NAME:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<Laundry> laundrys = laundryDao.findByName(searchArg.getArg());
 			for (Laundry laundry : laundrys) {
@@ -191,6 +191,19 @@ public class BackUserService extends CommUserService {
 		if (!isAll) {
 			throw new BackException("由于订单状态不符，部分订单没有完成指定操作。");
 		}
+	}
+	
+	private boolean deleteOrder(Integer orderid) {
+		Order order = orderDao.get(orderid);
+		if (order.getStateEnum() == State.finished || order.getStateEnum() == State.canceled) {
+			orderDao.delete(orderid);
+			Addr addr = addrDao.get(order.getAddrid());
+			if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
+				addrDao.delete(addr.getId());
+			}
+			return true;
+		}
+		return false;
 	}
 
 }

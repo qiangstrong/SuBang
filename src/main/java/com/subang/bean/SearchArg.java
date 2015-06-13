@@ -1,12 +1,15 @@
 package com.subang.bean;
 
+import com.subang.util.WebConst;
+
 
 public class SearchArg{
 
 	private int type;
 	private String arg;
 
-	public SearchArg() {		
+	public SearchArg() {	
+		this.type=WebConst.SEARCH_ALL;
 	}
 
 	public SearchArg(int type, String arg) {

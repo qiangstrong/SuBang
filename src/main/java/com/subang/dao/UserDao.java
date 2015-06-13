@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.subang.bean.StatItem;
 import com.subang.domain.User;
 import com.subang.util.Common;
-import com.subang.util.WebConstant;
+import com.subang.util.WebConst;
 
 @Repository
 public class UserDao extends BaseDao<User> {
@@ -54,9 +54,9 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public List<User> findAll(int pageno) {
-		int offset = (pageno - 1) * WebConstant.PAGE_SIZE;
+		int offset = (pageno - 1) * WebConst.PAGE_SIZE;
 		String sql = "select * from user_t";
-		List<User> users = findByPage(sql, new Object[] {}, offset, WebConstant.PAGE_SIZE);
+		List<User> users = findByPage(sql, new Object[] {}, offset, WebConst.PAGE_SIZE);
 		return users;
 	}
 
@@ -65,7 +65,7 @@ public class UserDao extends BaseDao<User> {
 		Object[] args = { openid };
 		User user = null;
 		try {
-			jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(User.class));
+			user=jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(User.class));
 		} catch (EmptyResultDataAccessException e) {
 		}
 		return user;

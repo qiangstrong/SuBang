@@ -2,17 +2,22 @@ package com.subang.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.subang.bean.PageState;
 import com.subang.domain.Admin;
+import com.subang.domain.User;
 import com.subang.service.BackAdminService;
 import com.subang.service.BackStatService;
 import com.subang.service.BackUserService;
 import com.subang.service.FrontUserService;
+import com.subang.weixin.WeixinInit;
 
 public class BaseController {
 
+	protected static final Logger LOG = Logger.getLogger ( BaseController.class.getName());
+	
 	@Autowired
 	protected BackAdminService backAdminService;
 	@Autowired
@@ -23,6 +28,7 @@ public class BaseController {
 	protected FrontUserService frontUserService;
 
 	protected static final String KEY_ADMIN = "admin";
+	protected static final String KEY_USER = "user";
 	protected static final String KEY_DES_MSG = "desMsg";		//显示下一级列表的描述信息，比如：订单历史，用户地址等
 	protected static final String KEY_INFO_MSG = "infoMsg";		//直接显示此类消息
 	protected static final String KEY_ERR_MSG = "errMsg";		//弹出显示此类消息，很少用到此种类型
@@ -52,5 +58,12 @@ public class BaseController {
 	protected void setAdmin(HttpSession session, Admin admin) {
 		session.setAttribute(KEY_ADMIN, admin);
 	}
+	
+	protected User getUser(HttpSession session) {
+		return (User) session.getAttribute(KEY_USER);
+	}
 
+	protected void setUser(HttpSession session, User user) {
+		session.setAttribute(KEY_USER, user);
+	}
 }

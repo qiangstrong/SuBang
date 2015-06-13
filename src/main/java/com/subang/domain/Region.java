@@ -2,6 +2,8 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 
 public class Region  implements Serializable {
@@ -9,8 +11,10 @@ public class Region  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	@NotNull
 	@Length(min = 1, max = 10)
 	private String name;
+	@NotNull
 	private Integer districtid;
 	private Integer workerid;
 	

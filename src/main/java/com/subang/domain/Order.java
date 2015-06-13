@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.subang.util.TimeUtil;
 
 public class Order implements Serializable {
 
@@ -25,15 +28,20 @@ public class Order implements Serializable {
 
 	protected Integer id;
 	protected String orderno; // 订单号
+	@NotNull
 	protected int category;
 	protected int state;
 	@Digits(integer=3, fraction=1)
 	protected Float price;
+	@NotNull
 	protected Date date; // 用户指定的取件日期
+	@NotNull
 	protected int time; // 用户指定的取件时间，时间间隔为（time，time+1）
 	@Length(max = 50)
 	protected String comment;
+	
 	protected Integer userid;
+	@NotNull
 	protected Integer addrid;
 	protected Integer workerid;
 	protected Integer laundryid;
@@ -157,6 +165,10 @@ public class Order implements Serializable {
 		return date;
 	}
 
+	public String getDateDes(){
+		return TimeUtil.getDateDes(date);
+	}
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -166,9 +178,7 @@ public class Order implements Serializable {
 	}
 
 	public String getTimeDes(){
-		String description="";
-		description=time+":00-"+(time+1)+":00";
-		return description;
+		return TimeUtil.getTimeDes(time);
 	}
 	
 	public void setTime(int time) {

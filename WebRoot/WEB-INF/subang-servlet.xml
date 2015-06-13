@@ -11,9 +11,11 @@
 	   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<context:component-scan base-package="com.subang.controller" />
+	
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/content/"
+		p:viewClass="org.springframework.web.servlet.view.JstlView" 
+		p:prefix="/WEB-INF/content/"
 		p:suffix=".jsp" />
 
 	<bean id="multipartResolver"
@@ -33,7 +35,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<!-- 
+	<!--  
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView">
 			<value>common/error</value>
@@ -44,5 +46,20 @@
 			</props>
 		</property>
 	</bean>
-	 -->
+	-->
+	
+	<mvc:interceptors>  
+        <mvc:interceptor>  
+            <mvc:mapping path="/back/*" />  
+            <mvc:mapping path="/back/*/*" />  
+            <bean class="com.subang.web.BackInterceptor"/>  
+        </mvc:interceptor>  
+        <mvc:interceptor>  
+            <mvc:mapping path="/weixin/*" />  
+            <mvc:mapping path="/weixin/*/*" />  
+            <bean class="com.subang.web.WeixinInterceptor"/>  
+        </mvc:interceptor> 
+    </mvc:interceptors>  
+    
+    
 </beans>

@@ -17,7 +17,7 @@ import com.subang.domain.Laundry;
 import com.subang.domain.Region;
 import com.subang.domain.Worker;
 import com.subang.exception.BackException;
-import com.subang.util.WebConstant;
+import com.subang.util.WebConst;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 /**
@@ -47,19 +47,19 @@ public class BackAdminService extends BaseService {
 	public List<Worker> searchWorker(SearchArg searchArg) {
 		List<Worker> workers = null;
 		switch (searchArg.getType()) {
-		case WebConstant.SEARCH_NULL:
+		case WebConst.SEARCH_NULL:
 			workers = new ArrayList<Worker>();
 			break;
-		case WebConstant.SEARCH_ALL:
+		case WebConst.SEARCH_ALL:
 			workers = workerDao.findAll();
 			break;
-		case WebConstant.SEARCH_NAME:
+		case WebConst.SEARCH_NAME:
 			workers = workerDao.findByName(searchArg.getArg());
 			break;
-		case WebConstant.SEARCH_CELLNUM:
+		case WebConst.SEARCH_CELLNUM:
 			workers = workerDao.findByCellnum(searchArg.getArg());
 			break;
-		case WebConstant.SEARCH_AREA:
+		case WebConst.SEARCH_AREA:
 			workers = seachWorkerByArea(Area.toArea(searchArg.getArg()));
 			break;
 		}
@@ -109,16 +109,16 @@ public class BackAdminService extends BaseService {
 	public List<Laundry> searchLaundry(SearchArg searchArg) {
 		List<Laundry> laundrys = null;
 		switch (searchArg.getType()) {
-		case WebConstant.SEARCH_NULL:
+		case WebConst.SEARCH_NULL:
 			laundrys = new ArrayList<Laundry>();
 			break;
-		case WebConstant.SEARCH_ALL:
+		case WebConst.SEARCH_ALL:
 			laundrys = laundryDao.findAll();
 			break;
-		case WebConstant.SEARCH_NAME:
+		case WebConst.SEARCH_NAME:
 			laundrys = laundryDao.findByName(searchArg.getArg());
 			break;
-		case WebConstant.SEARCH_CELLNUM:
+		case WebConst.SEARCH_CELLNUM:
 			laundrys = laundryDao.findByCellnum(searchArg.getArg());
 			break;
 		}

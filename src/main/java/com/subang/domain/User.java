@@ -2,23 +2,43 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.subang.util.Common;
+
 
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public static User toUser(weixin.popular.bean.User user_weixin){
+		User user=new User();
+		user.valid=true;
+		user.openid=user_weixin.getOpenid();
+		user.nickname=user_weixin.getNickname();
+		user.score=0;
+		user.photo=Common.getUserPhoto(user.openid);
+		user.sex=user_weixin.getSex();
+		user.country=user_weixin.getCountry();
+		user.province=user_weixin.getProvince();
+		user.city=user_weixin.getCity();
+		return user;
+	}
+	
 	public enum Sex {
 		unknown, male, female
 	}
 
 	private Integer id;
 	private boolean valid;		//默认为true，用户取消关注后，为false
+	@NotNull
 	private String openid;
 	@Length(max = 4)
 	private String name;
+	@NotNull
 	@Length(max = 100)
 	private String nickname;
 	@Length(max = 50)

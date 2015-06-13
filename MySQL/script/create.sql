@@ -51,7 +51,7 @@ create table `user_t`(
     `valid` tinyint not null default 1,
     `openid` char(28) not null unique,
     `name` char(4),
-    `nickname` varchar(100),
+    `nickname` varchar(100) not null,
     `password` char(50),
     `cellnum` char(11),
     `score` int zerofill,
@@ -67,7 +67,7 @@ create table `user_t`(
 create table `addr_t`(
 	`id` int auto_increment primary key,
     `valid` tinyint not null default 1,
-	`name` char(2) not null,
+	`name` char(4) not null,
     `cellnum` char(11) not null,
 	`detail` char(50) not null,
     `userid` int not null,
@@ -113,11 +113,11 @@ create table `admin_t`(
 
 create table `info_t`(
 	`id` int auto_Increment primary key,
-	`price_path` char(100),
+	`price_path` char(100) not null,
     `price_text` varchar(1000),
-    `scope_path` char(100),
+    `scope_path` char(100) not null,
     `scope_text` varchar(1000),
-    `about` varchar(1000),
-    `term` varchar(1000),
-    `phone` varchar(1000)
+    `about` varchar(1000) not null,
+    `term` varchar(1000) not null,
+    `phone` varchar(1000) not null
 );
