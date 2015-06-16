@@ -45,7 +45,7 @@
 			</tr>
 			<tr>
 				<td width="20%"></td>
-				<td width="80%"><img src="image/authcode.jpg"></td>
+				<td width="80%"><a href="javascript:void(0)"><img src="image/authcode.jpg" onclick="this.src='image/authcode.jpg'"></a></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="登录" /></td>

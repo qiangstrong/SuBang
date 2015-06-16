@@ -73,7 +73,9 @@
 						<td>
 							<select id="addrid" name="addrid" >
 								<c:forEach var="addrDetail" items="${addrDetails}">
-								<option value="${addrDetail.id }">${addrDetail}</option>
+								<option value="${addrDetail.id }" <c:if test="${addrDetail.id==defaultAddr.id }">selected="selected"</c:if>>
+									${addrDetail}
+								</option>								
 								</c:forEach>
 							</select>
 						</td>
