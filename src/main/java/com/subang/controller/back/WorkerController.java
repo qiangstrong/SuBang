@@ -74,7 +74,7 @@ public class WorkerController extends BaseController {
 	public ModelAndView showAdd() {
 		ModelAndView view = new ModelAndView();
 		view.addObject("worker", new Worker());
-		view.setViewName(WebConst.BACK_PREFIX+"worker/add");
+		view.setViewName(WebConst.BACK_PREFIX+"/worker/add");
 		return view;
 	}
 
@@ -85,7 +85,7 @@ public class WorkerController extends BaseController {
 			backAdminService.addWorker(worker);
 			view.addObject(KEY_INFO_MSG, "添加成功。");
 		}
-		view.setViewName(WebConst.BACK_PREFIX+"worker/add");
+		view.setViewName(WebConst.BACK_PREFIX+"/worker/add");
 		return view;
 	}
 

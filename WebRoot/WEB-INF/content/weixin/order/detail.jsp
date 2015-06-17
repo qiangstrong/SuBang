@@ -12,49 +12,68 @@
 	<base href="<%=basePath%>">
 	<title>订单详情</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-	<%@ include file="../common/header.jsp"%>
-	<table align="center">
+	<%@ include file="../common/menu.jsp"%>
+	<table align="left">
 		<tr>
-			<td><strong>订单号：</strong></td>
+			<td class="label"><strong>订单号：</strong></td>
+		</tr>
+		<tr>
 			<td>${order.orderno }</td>
 		</tr>
 		<tr>
-			<td>订单类别：</td>
+			<td class="label">订单类别：</td>
+		</tr>
+		<tr>
 			<td>${order.categoryDes }</td>
 		</tr>
 		<tr>
-			<td>订单状态：</td>
+			<td class="label">订单状态：</td>
+		</tr>
+		<tr>
 			<td>${order.stateDes }</td>
 		</tr>
 		<tr>
-			<td>订单金额：</td>
+			<td class="label">订单金额：</td>
+		</tr>
+		<tr>
 			<td>${order.priceDes }</td>
 		</tr>	
 		<tr>
-			<td>取件时间：</td>
+			<td class="label">取件时间：</td>
+		</tr>
+		<tr>
 			<td>${order.dateDes } ${order.timeDes }</td>
 		</tr>
 		<tr>
-			<td>订单备注：</td>
+			<td class="label">订单备注：</td>
+		</tr>
+		<tr>
 			<td>${order.comment }</td>
 		</tr>
 		<tr>
-			<td>订单地址：</td>
-			<td>${addrDetail }</td>
+			<td class="label">订单地址：</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td>${addrDetail }</td>
+		</tr>		
+	</table>
+	<hr>
+	<table>
+		<tr>
+			<td class="label" colspan="2">
 				<strong>订单追踪：</strong>
 			</td>
 		</tr>
 		<c:forEach var="history" items="${historys}">
 		<tr>
-			<td>${history.operationDes }</td>
+			<td class="label">${history.operationDes }：</td>
 			<td>${history.time }</td>
 		</tr>
 		</c:forEach>

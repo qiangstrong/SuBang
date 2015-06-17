@@ -12,13 +12,15 @@
 	<base href="<%=basePath%>">
 	<title>绑定手机号</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-	<%@ include file="../common/header.jsp"%>
-	<table align="center">
+	<%@ include file="../common/menu.jsp"%>
+	<table align="left">
 		<tr>
 			<td>
 				<c:if test="${infoMsg!=null}">
@@ -32,14 +34,16 @@
 				<form action="weixin/user/cellnum.html" method="post">
 					<table>
 						<tr>
-							<td>手机号:</td>
+							<td class="label">手机号:</td>
+						</tr>
+						<tr>
 							<td>
-								<input id="cellnum" type="text" name="cellnum" value="${cellnum }"/>
+								<input class="inputtext" id="cellnum" type="text" name="cellnum" value="${cellnum }"/>
 							</td>
 						</tr>
 						<tr>
-							<td align="left">
-								<input type="submit" value="确定" />
+							<td>
+								<input class="submit"  type="submit" value="确定" />
 							</td>
 						</tr>
 					</table>
@@ -50,14 +54,16 @@
 				<form action="weixin/user/authcode.html" method="post">
 					<table>
 						<tr>
-							<td>验证码:</td>
+							<td class="label">验证码:</td>
+						</tr>
+						<tr>
 							<td>
-								<input id="authcode" type="text" name="authcode"/>
+								<input class="inputtext" id="authcode" type="text" name="authcode"/>
 							</td>
 						</tr>
 						<tr>
-							<td align="left">
-								<input type="submit" value="确定" />
+							<td>
+								<input class="submit" type="submit" value="确定" />
 							</td>
 						</tr>
 					</table>

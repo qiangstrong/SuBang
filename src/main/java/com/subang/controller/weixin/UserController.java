@@ -1,6 +1,5 @@
 package com.subang.controller.weixin;
 
-import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,6 +14,7 @@ import com.subang.controller.BaseController;
 import com.subang.domain.User;
 import com.subang.util.Common;
 import com.subang.util.SmsUtil;
+import com.subang.util.Validator;
 import com.subang.util.WebConst;
 
 @Controller("userController_weixin")
@@ -26,8 +26,8 @@ public class UserController extends BaseController {
 
 	private static int STATE_CELLNUM = 0;
 	private static int STATE_AUTHCODE = 1;
-	
-	private static String KEY_CELLNUM="cellnum";
+
+	private static String KEY_CELLNUM = "cellnum";
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
@@ -41,58 +41,68 @@ public class UserController extends BaseController {
 	public ModelAndView showValidate() {
 		ModelAndView view = new ModelAndView();
 		view.addObject("state", STATE_CELLNUM);
-		view.setViewName(VIEW_PREFIX+"/validate");
+		view.setViewName(VIEW_PREFIX + "/validate");
 		return view;
 	}
 
 	@RequestMapping("/cellnum")
 	public ModelAndView getCellnum(final HttpSession session, @RequestParam("cellnum") String cellnum) {
-		ModelAndView view = new ModelAndView();
-		String authcode=Common.getUserAuthcode();
-		session.setAttribute(KEY_CELLNUM, cellnum);
-		session.setAttribute(WebConst.KEY_USER_AUTHCODE, authcode);
-		if(!SmsUtil.send(cellnum, SmsUtil.toUserContent(authcode))){
-			session.setAttribute(KEY_INFO_MSG, "发送验证码错误。");
+		ModelAndView view = new ModelAndView();	
+		if (!Validator.ValidCellnum(cellnum)) {
+			view.addObject(KEY_INFO_MSG, "手机号码格式不正确。");
 			view.addObject("state", STATE_CELLNUM);
 			view.addObject(KEY_CELLNUM, cellnum);
-			view.setViewName(VIEW_PREFIX+"/validate");
+			view.setViewName(VIEW_PREFIX + "/validate");
 			return view;
 		}
 		
-		Timer timer=new Timer();
-		TimerTask task=new TimerTask() {
-			
+		String authcode = Common.getUserAuthcode();
+		session.setAttribute(KEY_CELLNUM, cellnum);
+		session.setAttribute(WebConst.KEY_USER_AUTHCODE, authcode);
+		if (!SmsUtil.send(cellnum, SmsUtil.toUserContent(authcode))) {
+			view.addObject(KEY_INFO_MSG, "发送验证码错误。");
+			view.addObject("state", STATE_CELLNUM);
+			view.addObject(KEY_CELLNUM, cellnum);
+			view.setViewName(VIEW_PREFIX + "/validate");
+			return view;
+		}
+
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+
 			@Override
 			public void run() {
 				session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 			}
 		};
 		timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
-		
+
 		view.addObject("state", STATE_AUTHCODE);
-		view.setViewName(VIEW_PREFIX+"/validate");
+		view.setViewName(VIEW_PREFIX + "/validate");
 		return view;
 	}
-	
+
 	@RequestMapping("/authcode")
-	public ModelAndView getAuthcode(HttpSession session, @RequestParam("authcode") String authcodeFront) {
+	public ModelAndView getAuthcode(HttpSession session,
+			@RequestParam("authcode") String authcodeFront) {
 		ModelAndView view = new ModelAndView();
-		String authcodeBack=(String)session.getAttribute(WebConst.KEY_USER_AUTHCODE);
-		if (authcodeBack==null) {
+		session.removeAttribute(KEY_INFO_MSG);
+		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
+		if (authcodeBack == null) {
 			view.addObject(KEY_INFO_MSG, "验证码已失效，请重新获取验证码。");
 			view.addObject("state", STATE_CELLNUM);
-			view.addObject(KEY_CELLNUM,(String)session.getAttribute(KEY_CELLNUM) );
-			view.setViewName(VIEW_PREFIX+"/validate");
+			view.addObject(KEY_CELLNUM, (String) session.getAttribute(KEY_CELLNUM));
+			view.setViewName(VIEW_PREFIX + "/validate");
 			return view;
 		}
 		if (!authcodeBack.equalsIgnoreCase(authcodeFront.trim())) {
 			view.addObject(KEY_INFO_MSG, "验证码输入错误，请重新输入。");
 			view.addObject("state", STATE_AUTHCODE);
-			view.setViewName(VIEW_PREFIX+"/validate");
+			view.setViewName(VIEW_PREFIX + "/validate");
 			return view;
 		}
-		User user=getUser(session);
-		user.setCellnum((String)session.getAttribute(KEY_CELLNUM));
+		User user = getUser(session);
+		user.setCellnum((String) session.getAttribute(KEY_CELLNUM));
 		frontUserService.modifyUser(user);
 		session.removeAttribute(KEY_CELLNUM);
 		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);

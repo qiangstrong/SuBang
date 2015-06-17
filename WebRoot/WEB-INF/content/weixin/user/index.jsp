@@ -12,38 +12,42 @@
 	<base href="<%=basePath%>">
 	<title>个人中心</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-	<%@ include file="../common/header.jsp"%>
-	<table align="center">
+	<%@ include file="../common/menu.jsp"%>
+	<table>
 		<tr>
-			<td><img width="100" src="${user.photo}" /></td>
-			<td>${user.nickname }</td>
-		</tr>
-		<tr>
-			<c:if test="${user.cellnum!=null }">
-			<td>手机号</td>
-			<td>${user.cellnum }</td>
-			</c:if>
-			<c:if test="${user.cellnum==null }">
-			<td colspan="2">
-				<a href="weixin/user/showvalidate.html">绑定手机号</a>
-			</td>
-			</c:if>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<a href="weixin/addr/index.html">查看地址</a>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<a href="weixin/info/term.html">服务条款</a>
+			<td><img height="50px" src="${user.photo}" /></td>
+			<td>
+				<table>
+					<tr>
+						<td>${user.nickname }</td>						
+					</tr>
+					<tr>
+						<c:if test="${user.cellnum!=null }">
+						<td>${user.cellnum }</td>
+						</c:if>
+						<c:if test="${user.cellnum==null }">
+						<td>
+							<a href="weixin/user/showvalidate.html">绑定手机号</a>
+						</td>
+						</c:if>
+					</tr>
+				</table>
 			</td>
 		</tr>
 	</table>
+	
+	<ul class="list">
+        <li><a href="weixin/order/index.html?type=1">我的订单</a></li>
+        <li><a href="weixin/addr/index.html">我的地址</a></li>
+        <li><a href="weixin/info/term.html">服务条款</a></li>
+    </ul>
+    
 </body>
 </html>

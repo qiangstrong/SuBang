@@ -13,9 +13,11 @@
 	<base href="<%=basePath%>">
 	<title>下单</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">   
+	<meta http-equiv="expires" content="0"> 
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>  
 	<script type="text/javascript" src="javascript/user.js"></script> 
 	<script type="text/javascript" src="javascript/jquery-1.7.1.min.js"></script>
 	<script>
@@ -28,15 +30,17 @@
 		}		
 	</script> 
 </head>
-<body>
-	<%@ include file="../common/header.jsp" %>
-	<table align="center">
+<body>	
+	<%@ include file="../common/menu.jsp" %>
+	<table align="left">
 		<tr>
 		<td>
 			<form:form  modelAttribute="order" action="weixin/order/add.html" method="post">
 				<table>
 					<tr>
-						<td>类别</td>
+						<td class="label">类别：</td>
+					</tr>
+					<tr>
 						<td>
 							<select id="category" name="category">
 								<option value="0">衣服</option>
@@ -45,7 +49,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td>取件日期</td>
+						<td class="label">取件日期：</td>
+					</tr>
+					<tr>
 						<td>
 							<select id="date" name="date" onchange="getData('date','weixin/order/select.html',updateTime)">
 								<c:forEach var="date" items="${dates}">
@@ -55,7 +61,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td>取件时间</td>
+						<td class="label">取件时间：</td>
+					</tr>
+					<tr>
 						<td>
 							<select id="time" name="time" >
 								<c:forEach var="time" items="${times}">
@@ -65,13 +73,15 @@
 						</td>
 					</tr>
 					<tr>
-						<td>地址</td>
+						<td class="label">地址：</td>
+					</tr>
+					<tr>
 						<c:if test="${fn:length(addrDetails) == 0 }">
 						<td><a href="weixin/addr/showadd.html">添加地址</a></td>
 						</c:if>
 						<c:if test="${fn:length(addrDetails) != 0 }">
 						<td>
-							<select id="addrid" name="addrid" >
+							<select id="addrid" name="addrid">
 								<c:forEach var="addrDetail" items="${addrDetails}">
 								<option value="${addrDetail.id }" <c:if test="${addrDetail.id==defaultAddr.id }">selected="selected"</c:if>>
 									${addrDetail}
@@ -82,33 +92,29 @@
 						</c:if>
 					</tr>
 					<tr>
-						<td></td>
-						<td><form:errors path="comment" /></td>
+						<td class="label">备注：</td>
 					</tr>
 					<tr>
-						<td>备注</td>
+						<td class="error"><form:errors path="comment" /></td>
+					</tr>
+					<tr>
 						<td>
-							<input id="comment" type="text" name="comment" />
+							<textarea id="comment" name="comment"></textarea>
 						</td>						
 					</tr>
-					<tr> 
-						<td colspan="2">
-							<a href="javascript:void(0)" onclick="toggle('term')">服务条款</a>
-						</td>
-					</tr>
-					<tr> 
-						<td colspan="2">
-							<textarea id="term" style="display:none" rows="5" cols="135" disabled="disabled">${term}</textarea>
-						</td>
-					</tr>
 					<tr>
-						<td colspan="2">
-							<input type="submit" value="提交" />
+						<td>
+							<input class="submit" type="submit" value="提交" />
 						</td>
 					</tr>
 				</table>
 			</form:form>
 		</td>
+		</tr>
+		<tr> 
+			<td>
+				<a href="weixin/info/term.html">服务条款</a>
+			</td>
 		</tr>
 	</table>
 </body>

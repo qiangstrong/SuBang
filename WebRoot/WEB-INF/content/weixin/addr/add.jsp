@@ -12,9 +12,11 @@
 	<base href="<%=basePath%>">
 	<title>添加地址</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">   
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 	<script type="text/javascript" src="javascript/user.js"></script> 
 	<script type="text/javascript" src="javascript/jquery-1.7.1.min.js"></script>
 	<script>
@@ -43,30 +45,34 @@
 	</script>  
 </head>
 <body>
-	<%@ include file="../common/header.jsp" %>
-	<table align="center">
+	<%@ include file="../common/menu.jsp" %>
+	<table align="left">
 		<tr>
 		<td>
 			<form:form modelAttribute="addr" action="weixin/addr/add.html" method="post">
 				<table>
 					<tr>
-						<td></td>
-						<td><form:errors path="name" /></td>
+						<td class="error"><form:errors path="name" /></td>
 					</tr>
 					<tr>
-						<td>名称</td>
-						<td><form:input path="name" /></td>
+						<td class="label">名称：</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td><form:errors path="cellnum" /></td>
+						<td><form:input class="inputtext" path="name" /></td>
 					</tr>
 					<tr>
-						<td>手机号</td>
-						<td><form:input path="cellnum" /></td>
+						<td class="error"><form:errors path="cellnum" /></td>
 					</tr>
 					<tr>
-						<td>城市</td>
+						<td class="label">手机号：</td>
+					</tr>
+					<tr>
+						<td><form:input class="inputtext" path="cellnum" /></td>
+					</tr>
+					<tr>
+						<td class="label">城市：</td>
+					</tr>
+					<tr>
 						<td>    
 							<select id="cityid" name="cityid" onchange="getData('cityid','weixin/addr/select.html',updateDistrict)">
 								<c:forEach var="city" items="${citys}">
@@ -76,7 +82,9 @@
         				</td>
 					</tr>
 					<tr>
-						<td>区</td>
+						<td class="label">区：</td>
+					</tr>
+					<tr>
 						<td>    
 							<select id="districtid" name="districtid" onchange="getData('districtid','weixin/addr/select.html',updateRegion)">
 								<c:forEach var="district" items="${districts}">
@@ -86,22 +94,25 @@
         				</td>
 					</tr>
 					<tr>
-						<td>小区</td>
+						<td class="label">小区：</td>
+					</tr>
+					<tr>
 						<td>      
 							<form:select path="regionid" items="${regions}" itemLabel="name" itemValue="id"></form:select>           					
         				</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td><form:errors path="detail" /></td>
+						<td class="error"><form:errors path="detail" /></td>
 					</tr>
 					<tr>
-						<td>详细地址</td>
-						<td><form:input path="detail"/></td>
+						<td class="label">详细地址：</td>
 					</tr>
 					<tr>
-						<td colspan="2">
-							<input type="submit" value="添加地址" />
+						<td><form:input class="inputtext" path="detail"/></td>
+					</tr>
+					<tr>
+						<td>
+							<input class="submit" type="submit" value="添加地址" />
 						</td>
 					</tr>
 				</table>

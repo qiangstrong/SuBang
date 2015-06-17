@@ -119,8 +119,5 @@ public class OrderController extends BaseController {
 
 		List<Option> times = TimeUtil.getTimeOptions(dates.get(0).getValue());
 		view.addObject("times", times);
-
-		String term = frontUserService.getInfo().getTerm();
-		view.addObject("term", term);
 	}
 }
