@@ -13,22 +13,22 @@
 	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_WEB"/>
 	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_Test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/mysql-connector-java-5.1.35-bin.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/bean-validator-1.1.10.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/glassfish/hk2/bean-validator/1.1.10/bean-validator-1.1.10-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="C:/MyEclipse/Common/plugins/com.genuitec.eclipse.j2eedt.core_10.5.0.me201207171805/data/libraryset/EE_6/javax.servlet.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://java.sun.com/javaee/6/docs/api/"/>
 			<attribute name="deploy-excludes" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/export/weixin-popular-2.4.0.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/fastjson-1.2.0.jar" sourcepath="C:/Users/lenovo/.m2/repository/com/alibaba/fastjson/1.2.0/fastjson-1.2.0-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpclient-4.3.5.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpcore-4.3.2.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpmime-4.3.4.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/bean-validator-1.1.10.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/mysql-connector-java-5.1.35-bin.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin-popular-2.4.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/fastjson-1.2.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpclient-4.3.5.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpmime-4.3.4.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
