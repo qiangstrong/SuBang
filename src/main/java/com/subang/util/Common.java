@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,18 +16,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Timer;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import bsh.This;
-
 public class Common {
 
 	public static Random random = new Random();
+	public static Timer timer = new Timer();
 
 	private static SimpleDateFormat sdf_orderno = new SimpleDateFormat("yyyyMMddHHmmss");
 	private static ServletContext servletContext = null;

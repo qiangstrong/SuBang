@@ -3,7 +3,7 @@ use `subang`;
 set foreign_key_checks=0;
 drop table if exists `subang`.`addr_t`, `subang`.`admin_t`, `subang`.`city_t`, 
 `subang`.`district_t`, `subang`.`history_t`, `subang`.`laundry_t`, 
-`subang`.`order_t`, `subang`.`region_t`, `subang`.`user_t`, `subang`.`worker_t`;
+`subang`.`order_t`, `subang`.`region_t`, `subang`.`user_t`, `subang`.`worker_t`, `subang`.`info_t`;
 set foreign_key_checks=1;
 
 create table `worker_t`(
@@ -98,7 +98,6 @@ create table `order_t`(
 
 create table `history_t`(
 	`id` int auto_Increment primary key,
-    `operatorid` int not null,
     `operation` tinyint not null,
     `time` datetime not null,
     `orderid` int not null,

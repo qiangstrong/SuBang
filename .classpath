@@ -29,5 +29,6 @@
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpclient-4.3.5.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpcore-4.3.2.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2-sources.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/weixin/httpmime-4.3.4.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/apache/httpcomponents/httpmime/4.3.4/httpmime-4.3.4-sources.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

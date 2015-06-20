@@ -1,6 +1,5 @@
 package com.subang.controller.weixin;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.servlet.http.HttpSession;
@@ -14,6 +13,7 @@ import com.subang.controller.BaseController;
 import com.subang.domain.User;
 import com.subang.util.Common;
 import com.subang.util.SmsUtil;
+import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.Validator;
 import com.subang.util.WebConst;
 
@@ -28,7 +28,8 @@ public class UserController extends BaseController {
 	private static int STATE_AUTHCODE = 1;
 
 	private static String KEY_CELLNUM = "cellnum";
-
+	private static String KEY_TIMERTASK = "timerTask_authcode";
+	
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -46,8 +47,9 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/cellnum")
-	public ModelAndView getCellnum(final HttpSession session, @RequestParam("cellnum") String cellnum) {
-		ModelAndView view = new ModelAndView();	
+	public ModelAndView getCellnum(final HttpSession session,
+			@RequestParam("cellnum") String cellnum) {
+		ModelAndView view = new ModelAndView();
 		if (!Validator.ValidCellnum(cellnum)) {
 			view.addObject(KEY_INFO_MSG, "手机号码格式不正确。");
 			view.addObject("state", STATE_CELLNUM);
@@ -55,11 +57,16 @@ public class UserController extends BaseController {
 			view.setViewName(VIEW_PREFIX + "/validate");
 			return view;
 		}
+
+		TimerTask task=(TimerTask)session.getAttribute(KEY_TIMERTASK);
+		if (task!=null) {
+			task.cancel();
+		}
 		
 		String authcode = Common.getUserAuthcode();
 		session.setAttribute(KEY_CELLNUM, cellnum);
 		session.setAttribute(WebConst.KEY_USER_AUTHCODE, authcode);
-		if (!SmsUtil.send(cellnum, SmsUtil.toUserContent(authcode))) {
+		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toUserContent(authcode))) {
 			view.addObject(KEY_INFO_MSG, "发送验证码错误。");
 			view.addObject("state", STATE_CELLNUM);
 			view.addObject(KEY_CELLNUM, cellnum);
@@ -67,15 +74,15 @@ public class UserController extends BaseController {
 			return view;
 		}
 
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask() {
 
+		task = new TimerTask() {
 			@Override
 			public void run() {
 				session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 			}
 		};
-		timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
+		Common.timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
+
 
 		view.addObject("state", STATE_AUTHCODE);
 		view.setViewName(VIEW_PREFIX + "/validate");

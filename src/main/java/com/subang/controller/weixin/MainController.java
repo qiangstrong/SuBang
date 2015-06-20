@@ -1,5 +1,7 @@
 package com.subang.controller.weixin;
 
+import java.io.InputStreamReader;
+
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +33,7 @@ public class MainController extends BaseController {
 			throws Exception {
 		response.setContentType("text/xml");
 		ServletInputStream inputStream = request.getInputStream();
+		/*
 		// 验证请求签名
 		if (!getArg.validate()) {
 			return;
@@ -41,10 +44,10 @@ public class MainController extends BaseController {
 			Common.outputStreamWrite(response.getOutputStream(), getArg.getEchostr());
 			return;
 		}
-
+		*/
 		if (inputStream != null) {
 			EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class,
-					inputStream);
+					new InputStreamReader(inputStream, "utf-8"));
 			String expireKey = eventMessage.getFromUserName() + "__" + eventMessage.getToUserName()
 					+ "__" + eventMessage.getMsgId() + "__" + eventMessage.getCreateTime();
 			if (expireSet.contains(expireKey)) {
@@ -68,7 +71,7 @@ public class MainController extends BaseController {
 				eventMessage.getToUserName(), Common.getProperty("welcomeMsg"));
 		xmlTextMessage.outputStreamWrite(response.getOutputStream());
 		response.flushBuffer();
-		
+
 		weixin.popular.bean.User user_weixin = UserAPI.userInfo(TokenManager.getDefaultToken(),
 				eventMessage.getFromUserName());
 		User user = User.toUser(user_weixin);

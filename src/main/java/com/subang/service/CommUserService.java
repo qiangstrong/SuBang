@@ -12,6 +12,7 @@ import com.subang.domain.History.Operation;
 import com.subang.domain.Order.State;
 import com.subang.domain.Worker;
 import com.subang.util.SmsUtil;
+import com.subang.util.SmsUtil.SmsType;
 
 public class CommUserService extends BaseService {
 
@@ -59,11 +60,11 @@ public class CommUserService extends BaseService {
 			history.setOperation(Operation.cancel);
 			history.setOrderid(order.getId());
 			historyDao.save(history);
-			
-			Worker worker=workerDao.get(order.getWorkerid());
-			OrderDetail orderDetail=orderDao.getOrderDetail(orderid);
-			SmsUtil.send(worker.getCellnum(), SmsUtil.toWorkerContent(Operation.cancel, orderDetail));
-			
+
+			Worker worker = workerDao.get(order.getWorkerid());
+			OrderDetail orderDetail = orderDao.getOrderDetail(orderid);
+			SmsUtil.send(worker.getCellnum(), SmsType.cancel, SmsUtil.toWorkerContent(orderDetail));
+
 			return true;
 		}
 		return false;

@@ -19,6 +19,7 @@ import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.util.Common;
 import com.subang.util.SmsUtil;
+import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.WebConst;
 
 @Service
@@ -80,16 +81,16 @@ public class FrontUserService extends CommUserService {
 	/**
 	 * 与订单相关的操作
 	 */
-	public List<Order> searchOrderByState(int stateType) {
+	public List<Order> searchOrderByUseridAndState(Integer userid, int stateType) {
 		List<Order> orders = new ArrayList<Order>();
 		switch (stateType) {
 		case WebConst.ORDER_STATE_UNDONE:
-			orders.addAll(orderDao.findByState(State.accepted));
-			orders.addAll(orderDao.findByState(State.fetched));
+			orders.addAll(orderDao.findByUseridAndState(userid, State.accepted));
+			orders.addAll(orderDao.findByUseridAndState(userid, State.fetched));
 			break;
 		case WebConst.ORDER_STATE_DONE:
-			orders.addAll(orderDao.findByState(State.finished));
-			orders.addAll(orderDao.findByState(State.canceled));
+			orders.addAll(orderDao.findByUseridAndState(userid, State.finished));
+			orders.addAll(orderDao.findByUseridAndState(userid, State.canceled));
 			break;
 		}
 		return orders;
@@ -122,7 +123,7 @@ public class FrontUserService extends CommUserService {
 
 		Worker worker = workerDao.get(order.getWorkerid());
 		OrderDetail orderDetail = orderDao.getOrderDetail(order.getId());
-		SmsUtil.send(worker.getCellnum(), SmsUtil.toWorkerContent(Operation.accept, orderDetail));
+		SmsUtil.send(worker.getCellnum(), SmsType.accept, SmsUtil.toWorkerContent(orderDetail));
 	}
 
 	public boolean fetchOrder(Integer orderid) {

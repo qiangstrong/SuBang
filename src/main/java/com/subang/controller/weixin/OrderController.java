@@ -34,9 +34,9 @@ public class OrderController extends BaseController {
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
 
 	@RequestMapping("/index")
-	public ModelAndView index(@RequestParam("type") int stateType) {
+	public ModelAndView index(HttpSession session,@RequestParam("type") int stateType) {
 		ModelAndView view = new ModelAndView();
-		List<Order> orders = frontUserService.searchOrderByState(stateType);
+		List<Order> orders = frontUserService.searchOrderByUseridAndState(getUser(session).getId(),stateType);
 		view.addObject("orders", orders);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -47,7 +47,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		Order order = frontUserService.getOrder(orderid);
 		List<History> historys = frontUserService.listHistoryByOrderid(orderid);
-		AddrDetail addrDetail=frontUserService.getAddrDetail(order.getAddrid());
+		AddrDetail addrDetail = frontUserService.getAddrDetail(order.getAddrid());
 		view.addObject("order", order);
 		view.addObject("historys", historys);
 		view.addObject("addrDetail", addrDetail);

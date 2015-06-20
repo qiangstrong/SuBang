@@ -1,34 +1,55 @@
 package com.subang.util;
 
+import java.util.HashMap;
+
+import org.apache.log4j.Logger;
+
+import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.subang.bean.OrderDetail;
-import com.subang.domain.History.Operation;
 
 public class SmsUtil {
 
-	public static boolean send(String cellnum, String content) {
-		return true;
+	protected static final Logger LOG = Logger.getLogger(SmsUtil.class.getName());
+
+	public interface SmsType {
+		String authcode = "templateId_authcode";
+		String accept = "templateId_accept";
+		String cancel = "templateId_cancel";
 	}
 
-	public static String toWorkerContent(Operation operation, OrderDetail orderDetail) {
-		StringBuffer content = new StringBuffer();
-		if (operation == Operation.accept) {
-			content.append("用户下单。");
-		} else if (operation == Operation.cancel) {
-			content.append("用户取消订单。");
+	private static String STATUS_SUCC = "000000";
+	private static CCPRestSmsSDK restAPI;
+
+	public static void init() {
+		restAPI = new CCPRestSmsSDK();
+		restAPI.init(Common.getProperty("serverIP_sms"), Common.getProperty("serverPort_sms"));
+		restAPI.setAccount(Common.getProperty("accountSid_sms"),
+				Common.getProperty("accountToken_sms"));
+		restAPI.setAppId(Common.getProperty("appId_sms"));
+	}
+
+	public static boolean send(String cellnum, String type, String[] content) {
+		HashMap<String, Object> result = restAPI.sendTemplateSMS(cellnum, Common.getProperty(type),
+				content);
+		if (result.get("statusCode").equals(STATUS_SUCC)) {
+			return true;
 		}
-		content.append("用户信息：" + orderDetail.getAddrname() + "," + orderDetail.getAddrcellnum()
-				+ "," + orderDetail.getCityname() + "," + orderDetail.getDistrictname() + ","
-				+ orderDetail.getRegionname() + "," + orderDetail.getAddrdetail() + "。");
-		content.append("订单信息：" + "," + orderDetail.getOrderno() + "," + orderDetail.getCategoryDes()
-				+ "," + orderDetail.getDate() + "," + orderDetail.getTimeDes() + "。");
-		return content.toString();
+		LOG.error("错误码=" + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
+		return false;
 	}
 
-	public static String toUserContent(String authcode) {
-		StringBuffer content = new StringBuffer();
-		content.append("【速帮到家】您的验证码是");
-		content.append(authcode);
-		content.append(",本验证码5分钟内有效。如非本人操作，请忽略本短信。");
-		return content.toString();
+	public static String[] toWorkerContent(OrderDetail orderDetail) {
+		String[] content = new String[5];
+		content[0] = orderDetail.getOrderno();
+		content[1] = orderDetail.getAddrname();
+		content[2] = orderDetail.getDateDes() + " " + orderDetail.getTimeDes();
+		content[3] = orderDetail.getCityname() + "," + orderDetail.getDistrictname() + ","
+				+ orderDetail.getRegionname() + "," + orderDetail.getAddrdetail();
+		content[4] = orderDetail.getAddrcellnum();
+		return content;
+	}
+
+	public static String[] toUserContent(String authcode) {
+		return new String[] { authcode };
 	}
 }

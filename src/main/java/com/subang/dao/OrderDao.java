@@ -22,7 +22,7 @@ public class OrderDao extends BaseDao<Order> {
 				Order.class));
 		return order;
 	}
-	
+
 	public Order getByOrderno(String orderno) {
 		String sql = "select * from order_t where orderno=?";
 		Object[] args = { orderno };
@@ -87,6 +87,14 @@ public class OrderDao extends BaseDao<Order> {
 	public List<Order> findByUserid(Integer userid) {
 		String sql = "select * from order_t where userid=?";
 		Object[] args = { userid };
+		List<Order> orders = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Order>(
+				Order.class));
+		return orders;
+	}
+
+	public List<Order> findByUseridAndState(Integer userid, State state) {
+		String sql = "select * from order_t where userid=? and state=?";
+		Object[] args = { userid, state.ordinal() };
 		List<Order> orders = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Order>(
 				Order.class));
 		return orders;

@@ -1,5 +1,10 @@
 package com.subang.util;
 
+import java.io.IOException;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +19,7 @@ public class UtilTest {
 	
 	private static final Logger LOG = Logger.getLogger ( UtilTest.class.getName());
 	@Test
-	public void test() {
-		String url=SnsAPI.connectOauth2Authorize(WeixinConst.APPID, "http://202.118.18.56?type=1", false, null);
+	public void test(HttpServletRequest request) throws Exception {
 		pause();
 	}
 
