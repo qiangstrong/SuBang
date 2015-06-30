@@ -27,7 +27,8 @@ public class DaoTest extends BaseService {
 	
 	@Test
 	public void test() {
-		User user=userDao.findByOpenid("o64-8vkEc7aqJ2SAHbO0_3BPa0KE");
+		User user =userDao.get(8);
+		userDao.update(user);
 		pause();
 	}
 

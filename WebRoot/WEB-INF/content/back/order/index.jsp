@@ -56,11 +56,15 @@
 	<table align="center">
 		<tr>
 			<td align="right" colspan="2">
-				<a href="back/order/search.html?type=2&arg=0">已接受</a>
-				<a href="back/order/search.html?type=2&arg=1">已取走</a>
-				<a href="back/order/search.html?type=2&arg=2">已完成</a>
-				<a href="back/order/search.html?type=2&arg=3">已取消</a>
-				<a href="back/order/list.html">所有订单</a>				
+				<table border="1" cellpadding="4">
+					<tr>
+						<td><a href="back/order/search.html?type=2&arg=0">已接受</a></td>
+						<td><a href="back/order/search.html?type=2&arg=1">已取走</a></td>
+						<td><a href="back/order/search.html?type=2&arg=2">已完成</a></td>
+						<td><a href="back/order/search.html?type=2&arg=3">已取消</a></td>
+						<td><a href="back/order/list.html">所有订单</a></td>							
+					</tr>	
+				</table>		
 			</td>
 		</tr>
 		<tr>

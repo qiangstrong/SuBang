@@ -20,6 +20,7 @@ import com.subang.domain.Worker;
 import com.subang.util.Common;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
+import com.subang.util.StratUtil;
 import com.subang.util.WebConst;
 
 @Service
@@ -98,7 +99,6 @@ public class FrontUserService extends CommUserService {
 
 	public void addOrder(Order order) {
 		order.setState(State.accepted);
-		order.setOrderno(Common.getOrderno());
 
 		Addr addr = addrDao.get(order.getAddrid());
 		Region region = regionDao.get(addr.getRegionid());
@@ -107,7 +107,8 @@ public class FrontUserService extends CommUserService {
 			List<Worker> coreWorkers = workerDao.findByCore();
 			workerid = coreWorkers.get(Common.random.nextInt(coreWorkers.size())).getId();
 		}
-		order.setWorkerid(workerid);
+		order.setOrderno(StratUtil.getOrderno(workerid));
+		order.setWorkerid(workerid);	
 		orderDao.save(order);
 
 		order = orderDao.getByOrderno(order.getOrderno());

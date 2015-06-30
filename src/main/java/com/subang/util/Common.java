@@ -27,7 +27,6 @@ public class Common {
 	public static Random random = new Random();
 	public static Timer timer = new Timer();
 
-	private static SimpleDateFormat sdf_orderno = new SimpleDateFormat("yyyyMMddHHmmss");
 	private static ServletContext servletContext = null;
 	private static Properties properties = null;
 
@@ -118,19 +117,6 @@ public class Common {
 			authcode.append(random.nextInt(10));
 		}
 		return authcode.toString();
-	}
-
-	public static int getcScore(Float price) {
-		return price.intValue();
-	}
-
-	public static String getOrderno() {
-		String no_date = sdf_orderno.format(new Date());
-		StringBuffer on_random = new StringBuffer();
-		for (int i = 0; i < WebConst.ORDERNO_RANDOM_LENGTH; i++) {
-			on_random.append(random.nextInt(10));
-		}
-		return no_date + on_random.toString();
 	}
 
 	public static String getUserPhoto(String openid) {

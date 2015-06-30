@@ -1,0 +1,1 @@
+update user_t set nickname=0xf09f9882 where id=2;

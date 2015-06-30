@@ -33,7 +33,6 @@ public class MainController extends BaseController {
 			throws Exception {
 		response.setContentType("text/xml");
 		ServletInputStream inputStream = request.getInputStream();
-		/*
 		// 验证请求签名
 		if (!getArg.validate()) {
 			return;
@@ -44,7 +43,6 @@ public class MainController extends BaseController {
 			Common.outputStreamWrite(response.getOutputStream(), getArg.getEchostr());
 			return;
 		}
-		*/
 		if (inputStream != null) {
 			EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class,
 					new InputStreamReader(inputStream, "utf-8"));

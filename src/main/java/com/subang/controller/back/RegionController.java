@@ -89,7 +89,7 @@ public class RegionController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		City city = backAdminService.getCity(cityid);
 		view.addObject("city", city);
-		view.setViewName(WebConst.BACK_PREFIX+"region/modifycity");
+		view.setViewName(WebConst.BACK_PREFIX+"/region/modifycity");
 		return view;
 	}
 
@@ -162,7 +162,7 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX+"region/adddistrict");
+		view.setViewName(WebConst.BACK_PREFIX+"/region/adddistrict");
 		return view;
 	}
 
@@ -275,7 +275,7 @@ public class RegionController extends BaseController {
 		List<Worker> workers = backAdminService.searchWorker(searchArg);
 		view.addObject("workers", workers);
 
-		view.setViewName(WebConst.BACK_PREFIX+"region/addregion");
+		view.setViewName(WebConst.BACK_PREFIX+"/region/addregion");
 		return view;
 	}
 

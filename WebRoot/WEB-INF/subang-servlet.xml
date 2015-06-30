@@ -61,5 +61,21 @@
         </mvc:interceptor> 
     </mvc:interceptors>  
     
-    
+	<bean id="cronTriggerDay" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.JobDetailBean">
+				<property name="jobClass" value="com.subang.job.DayJob" />
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 42 10 * * ? *" />
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="cronTriggerDay" />
+			</list>
+		</property>
+	</bean>
+	
 </beans>

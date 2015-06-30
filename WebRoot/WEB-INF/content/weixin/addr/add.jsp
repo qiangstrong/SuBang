@@ -50,21 +50,21 @@
 		<tr>
 		<td>
 			<form:form modelAttribute="addr" action="weixin/addr/add.html" method="post">
-				<table>
+				<table>					
+					<tr>
+						<td class="label"><span class="required">*</span>名称：</td>
+					</tr>
 					<tr>
 						<td class="error"><form:errors path="name" /></td>
 					</tr>
 					<tr>
-						<td class="label">名称：</td>
-					</tr>
-					<tr>
 						<td><form:input class="inputtext" path="name" /></td>
+					</tr>				
+					<tr>
+						<td class="label"><span class="required">*</span>手机号：</td>
 					</tr>
 					<tr>
 						<td class="error"><form:errors path="cellnum" /></td>
-					</tr>
-					<tr>
-						<td class="label">手机号：</td>
 					</tr>
 					<tr>
 						<td><form:input class="inputtext" path="cellnum" /></td>

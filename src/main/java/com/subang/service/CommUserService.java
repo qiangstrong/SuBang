@@ -48,6 +48,10 @@ public class CommUserService extends BaseService {
 	public Order getOrder(Integer orderid) {
 		return orderDao.get(orderid);
 	}
+	
+	public Worker getWorker(Integer workerid){
+		return workerDao.get(workerid);
+	}
 
 	public boolean cancelOrder(Integer orderid) {
 		History history = null;

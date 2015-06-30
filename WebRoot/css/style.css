@@ -1,5 +1,5 @@
 body {
-	font-size: 60%;
+	font-size: 100%;
 }
 
 table {
@@ -13,7 +13,7 @@ select {
 	border-radius: 5px;
 	width: 99%;
 	margin: 0 0 10px 0;
-	padding: 3%;
+	padding: 2%;
 	background: none;
 }
 
@@ -57,10 +57,10 @@ pre {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	background: -moz-linear-gradient(top, #4A2D70 0%, #291742 100%);
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#4A2D70),
-		to(#291742) );
-	border: 1px #291742 solid;
+	background: -moz-linear-gradient(top, #069dd5 0%, #069dd5 100%);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#069dd5),
+		to(#069dd5) );
+	border: 1px #069dd5 solid;
 	font-size: 20px;
 }
 
@@ -105,11 +105,13 @@ ul.list li a {
 }
 
 .label {
-	color: #8A50C1;
-	font-size: 105%;
+	color: #069dd5;
+}
+
+.required{
+	color: #990000;
 }
 
 .error {
 	color: #990000;
-	font-size: 105%;
 }

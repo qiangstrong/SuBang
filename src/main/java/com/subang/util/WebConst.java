@@ -1,19 +1,20 @@
 package com.subang.util;
 
 public interface WebConst {
-	
-	String CONTEXT_PREFIX="/subang";
-	String BACK_PREFIX="/back";
-	String WEIXIN_PREFIX="/weixin";
 
-	String KEY_ADMIN_AUTHCODE="admin_authcode";
-	String KEY_USER_AUTHCODE="user_authcode";
-	
-	int AUTHCODE_LENGTH=6;
-	
-	int ORDERNO_RANDOM_LENGTH=7;	
-	
-	int AUTHCODE_INTERVAL=5*60*1000;//5分钟
+	// String CONTEXT_PREFIX="";
+	String CONTEXT_PREFIX = "/subang";
+	String BACK_PREFIX = "/back";
+	String WEIXIN_PREFIX = "/weixin";
+
+	String KEY_ADMIN_AUTHCODE = "admin_authcode";
+	String KEY_USER_AUTHCODE = "user_authcode";
+
+	int AUTHCODE_LENGTH = 4;
+
+	int ORDERNO_RANDOM_LENGTH = 7;
+
+	int AUTHCODE_INTERVAL = 5 * 60 * 1000;// 5分钟
 
 	int PAGE_SIZE = 10;
 
@@ -50,6 +51,6 @@ public interface WebConst {
 	// 前台部分
 	int ORDER_STATE_UNDONE = 1;
 	int ORDER_STATE_DONE = 2;
-	
-	int EXPIRED_INTERVAL=60;	//重复通知过滤  时效60秒
+
+	int EXPIRED_INTERVAL = 60; // 重复通知过滤 时效60秒
 }

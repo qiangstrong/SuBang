@@ -17,6 +17,7 @@ import com.subang.domain.Order.State;
 import com.subang.domain.User;
 import com.subang.exception.BackException;
 import com.subang.util.Common;
+import com.subang.util.StratUtil;
 import com.subang.util.WebConst;
 
 /**
@@ -161,7 +162,7 @@ public class BackUserService extends CommUserService {
 			historyDao.save(history);
 			
 			User user=userDao.get(order.getUserid());
-			user.setScore(user.getScore()+Common.getcScore(order.getPrice()));
+			user.setScore(user.getScore()+StratUtil.getScore(order.getPrice()));
 			userDao.update(user);
 			
 			return true;

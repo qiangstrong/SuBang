@@ -27,14 +27,22 @@
 			</td>
 		<tr>
 		<tr>
-			<td class="label">
-				订单号：
-			</td>
+			<td class="label">订单号：</td>
 		<tr>
 		<tr>
-			<td>
-				${order.orderno }
-			</td>
+			<td>${order.orderno }</td>
+		<tr>
+		<tr>
+			<td class="label">取衣员姓名：</td>
+		<tr>
+		<tr>
+			<td>${worker.name }</td>
+		<tr>
+		<tr>
+			<td class="label">取衣员手机号：</td>
+		<tr>
+		<tr>
+			<td>${worker.cellnum }</td>
 		<tr>
 	</table>
 </body>

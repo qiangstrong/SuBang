@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpclient-4.3.5.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpmime-4.3.4.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/com.springsource.org.quartz-1.6.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

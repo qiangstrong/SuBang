@@ -79,7 +79,7 @@ SET foreign_key_checks=1;
 
 create table `order_t`(
 	`id` int auto_Increment primary key,
-    `orderno` char(21) not null unique,
+    `orderno` char(13) not null unique,
     `category` tinyint not null,
     `state` tinyint not null,
     `price` float,

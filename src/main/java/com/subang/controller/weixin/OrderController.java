@@ -21,6 +21,7 @@ import com.subang.controller.BaseController;
 import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
+import com.subang.domain.Worker;
 import com.subang.util.Common;
 import com.subang.util.TimeUtil;
 import com.subang.util.TimeUtil.Option;
@@ -34,9 +35,10 @@ public class OrderController extends BaseController {
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
 
 	@RequestMapping("/index")
-	public ModelAndView index(HttpSession session,@RequestParam("type") int stateType) {
+	public ModelAndView index(HttpSession session, @RequestParam("type") int stateType) {
 		ModelAndView view = new ModelAndView();
-		List<Order> orders = frontUserService.searchOrderByUseridAndState(getUser(session).getId(),stateType);
+		List<Order> orders = frontUserService.searchOrderByUseridAndState(getUser(session).getId(),
+				stateType);
 		view.addObject("orders", orders);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -86,7 +88,9 @@ public class OrderController extends BaseController {
 		}
 		order.setUserid(user.getId());
 		frontUserService.addOrder(order);
+		Worker worker = frontUserService.getWorker(order.getWorkerid());
 		view.addObject("order", order);
+		view.addObject("worker", worker);
 		view.setViewName(VIEW_PREFIX + "/result");
 		return view;
 	}

@@ -112,9 +112,21 @@
 		</td>
 		</tr>
 		<tr> 
-			<td>
-				<a href="weixin/info/term.html">服务条款</a>
-			</td>
+		<td>
+			<table>
+				<tr>
+					<td>
+						<a href="weixin/info/term.html">服务条款</a>
+					</td>
+					<td>
+						<a href="weixin/info/price.html">价目表</a>
+					</td>
+					<td>
+						<a href="weixin/info/scope.html">服务范围</a>
+					</td>
+				</tr>
+			</table>
+		</td>
 		</tr>
 	</table>
 </body>

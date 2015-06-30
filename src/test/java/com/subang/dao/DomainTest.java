@@ -27,15 +27,24 @@ public class DomainTest {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
-	@Test
+	
+	@Test	
 	public void test() {
-		String sql = "call subang.statOrderNumByRegion()";
-		List<StatItem> statItems = jdbcTemplate.query(sql, new BeanPropertyRowMapper<StatItem>(
-				StatItem.class));
+		String sql = "update user_t set nickname=? where id=?";
+		byte[] b=new byte[]{(byte) 0xf0,(byte) 0x9f,(byte) 0x98,(byte) 0x82};
+		String nickname=new String(b);
+		Integer id=1;
+		Object[] args={nickname,id};
+		jdbcTemplate.update(sql,args);
 		pause();
 	}
-		
+	
+	public void test1(){
+/*
+		String str=
+		System.out.println(str);*/
+	}
+	
 	public void pause() {
 
 	}
