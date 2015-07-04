@@ -2,7 +2,7 @@ package com.subang.util;
 
 public interface WebConst {
 
-	// String CONTEXT_PREFIX="";
+	//String CONTEXT_PREFIX="";
 	String CONTEXT_PREFIX = "/subang";
 	String BACK_PREFIX = "/back";
 	String WEIXIN_PREFIX = "/weixin";

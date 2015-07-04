@@ -33,7 +33,7 @@
 						<td>${user.cellnum }</td>
 						</c:if>
 						<c:if test="${user.cellnum==null }">
-						<td>
+						<td class="operation">
 							<a href="weixin/user/showvalidate.html">绑定手机号</a>
 						</td>
 						</c:if>

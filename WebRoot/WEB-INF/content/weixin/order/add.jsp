@@ -77,7 +77,7 @@
 					</tr>
 					<tr>
 						<c:if test="${fn:length(addrDetails) == 0 }">
-						<td><a href="weixin/addr/showadd.html">添加地址</a></td>
+						<td class="operation"><a  href="weixin/addr/showadd.html">添加地址</a></td>
 						</c:if>
 						<c:if test="${fn:length(addrDetails) != 0 }">
 						<td>
@@ -116,13 +116,13 @@
 			<table>
 				<tr>
 					<td>
-						<a href="weixin/info/term.html">服务条款</a>
+						<a class="link" href="weixin/info/term.html">服务条款</a>
 					</td>
 					<td>
-						<a href="weixin/info/price.html">价目表</a>
+						<a class="link" href="weixin/info/price.html">价目表</a>
 					</td>
 					<td>
-						<a href="weixin/info/scope.html">服务范围</a>
+						<a class="link" href="weixin/info/scope.html">服务范围</a>
 					</td>
 				</tr>
 			</table>

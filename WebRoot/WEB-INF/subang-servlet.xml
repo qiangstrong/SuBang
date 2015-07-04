@@ -67,7 +67,7 @@
 				<property name="jobClass" value="com.subang.job.DayJob" />
 			</bean>
 		</property>
-		<property name="cronExpression" value="0 42 10 * * ? *" />
+		<property name="cronExpression" value="0 0 0 * * ? *" />
 	</bean>
 	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
