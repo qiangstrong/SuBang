@@ -76,6 +76,9 @@
 						<td class="label">地址：</td>
 					</tr>
 					<tr>
+						<td class="error"><form:errors path="addrid" /></td>
+					</tr>
+					<tr>
 						<c:if test="${fn:length(addrDetails) == 0 }">
 						<td class="operation"><a  href="weixin/addr/showadd.html">添加地址</a></td>
 						</c:if>
