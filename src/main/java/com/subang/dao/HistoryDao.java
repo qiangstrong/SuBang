@@ -44,7 +44,7 @@ public class HistoryDao extends BaseDao<History> {
 	}
 
 	public List<History> findByOrderid(Integer orderid) {
-		String sql = "select * from history_t where orderid=?";
+		String sql = "select * from history_t where orderid=? order by time";
 		Object[] args = { orderid };
 		List<History> historys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<History>(
 				History.class));

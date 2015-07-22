@@ -29,6 +29,9 @@
 						<td>${user.nickname }</td>						
 					</tr>
 					<tr>
+						<td>积分：${user.score }</td>
+					</tr>
+					<tr>
 						<c:if test="${user.cellnum!=null }">
 						<td>${user.cellnum }</td>
 						</c:if>

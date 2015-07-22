@@ -4,6 +4,11 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author Qiang
+ * 策略类。完成一些机制的具体实现。
+ * 比如完成订单号生产的具体策略；积分功能计算的具体策略等。
+ */
 public class StratUtil {
 	
 	private static SimpleDateFormat sdf_orderno = new SimpleDateFormat("yyMMdd");
@@ -25,6 +30,9 @@ public class StratUtil {
 		return dateSTr+workerStr+noStr;
 	}
 	
+	/**
+	 * 把一个整数转换为固定长度的字符串
+	 */
 	public static String intToStr(int value,int length){
         nf.setGroupingUsed(false);
         nf.setMaximumIntegerDigits(length);

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
@@ -30,12 +31,17 @@ public class DomainTest {
 	
 	@Test	
 	public void test() {
-		String sql = "update user_t set nickname=? where id=?";
-		byte[] b=new byte[]{(byte) 0xf0,(byte) 0x9f,(byte) 0x98,(byte) 0x82};
-		String nickname=new String(b);
-		Integer id=1;
-		Object[] args={nickname,id};
-		jdbcTemplate.update(sql,args);
+		String username="";
+		String password="\" or \"1";
+		String sql = "select * from admin_t where username=? and password=?";
+		Object[] args = { username,password };
+		List<Admin> admins=null;
+		try {
+			admins= jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Admin>(
+					Admin.class));
+		} catch (Exception e) {
+			pause();
+		}
 		pause();
 	}
 	

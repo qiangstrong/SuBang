@@ -14,7 +14,7 @@ public class TimeUtil {
 
 	private static SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static final int TIME_START = 8;
+	public static final int TIME_START = 9;
 	public static final int TIME_END = 20;
 	public static final int TIME_DELAY = 1;
 	public static final int TIME_THRESHOLD = TIME_END - TIME_DELAY - 1;

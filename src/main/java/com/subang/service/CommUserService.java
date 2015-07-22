@@ -48,15 +48,15 @@ public class CommUserService extends BaseService {
 	public Order getOrder(Integer orderid) {
 		return orderDao.get(orderid);
 	}
-	
-	public Worker getWorker(Integer workerid){
+
+	public Worker getWorker(Integer workerid) {
 		return workerDao.get(workerid);
 	}
 
 	public boolean cancelOrder(Integer orderid) {
 		History history = null;
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() == State.accepted) {
+		if (order.getStateEnum() == State.accepted || order.getStateEnum() == State.fetched) {
 			order.setState(State.canceled);
 			orderDao.update(order);
 

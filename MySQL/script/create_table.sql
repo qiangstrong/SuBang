@@ -118,5 +118,5 @@ create table `info_t`(
     `scope_text` varchar(1000),
     `about` varchar(1000) not null,
     `term` varchar(1000) not null,
-    `phone` varchar(1000) not null
+    `phone` char(30) not null
 );

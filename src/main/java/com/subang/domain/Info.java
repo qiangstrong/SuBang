@@ -28,7 +28,7 @@ public class Info implements Serializable{
 	@Length(max = 1000)
 	private String term;
 	@NotNull
-	@Length(max = 1000)
+	@Length(max = 30)
 	private String phone;
 	
 	public Info() {

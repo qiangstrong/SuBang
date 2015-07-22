@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -66,8 +64,7 @@ public class Common {
 	}
 
 	/**
-	 * @param desPath
-	 *            相对于WebRoot的路径
+	 * @param desPath 相对于WebRoot的路径
 	 */
 	public static void saveMultipartFile(MultipartFile srcFile, String desPath) {
 		String path = servletContext.getRealPath(desPath);

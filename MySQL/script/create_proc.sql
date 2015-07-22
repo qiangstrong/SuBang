@@ -35,9 +35,9 @@ begin
 end
 $$
 
-
+#统计完整的，不完整的区域
 #只统计处于已完成状态的订单
-#只统计曾经下过订单（无论订单是完成还是取消）的用户，
+#只统计曾经下过订单（无论订单是完成还是取消）的用户
 create procedure `statOrderNumByCity` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 
@@ -88,16 +88,18 @@ group by first_t.regionid;
 end
 $$
 
+#用户没有区域之分,实际统计的是地址的数量
+#统计valid=1的地址
 create procedure `statUserNumByCity` ()
 begin
-select first_t.name 'name', count(second_t.userid) 'quantity' 
+select first_t.name 'name', count(second_t.addrid) 'quantity' 
 from (
 	select concat(city_t.name) 'name', city_t.id 'cityid'
 	from city_t
 ) as first_t left join (
-	select city_t.id 'cityid', user_t.id 'userid'
-    from city_t, district_t, region_t, addr_t, order_t, user_t
-    where city_t.id=district_t.cityid and district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.id=order_t.addrid and order_t.userid=user_t.id
+	select city_t.id 'cityid', addr_t.id 'addrid'
+    from city_t, district_t, region_t, addr_t
+    where city_t.id=district_t.cityid and district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.valid=1
 ) as second_t on first_t.cityid=second_t.cityid
 group by first_t.cityid;
 end
@@ -105,15 +107,15 @@ $$
 
 create procedure `statUserNumByDistrict` ()
 begin
-select first_t.name 'name', count(second_t.userid) 'quantity' 
+select first_t.name 'name', count(second_t.addrid) 'quantity' 
 from (
 	select concat(city_t.name, district_t.name) 'name', district_t.id 'districtid'
 	from city_t, district_t
     where city_t.id=district_t.cityid
 ) as first_t left join (
-	select district_t.id 'districtid', user_t.id 'userid'
-    from district_t, region_t, addr_t, order_t, user_t
-    where district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.id=order_t.addrid and order_t.userid=user_t.id 
+	select district_t.id 'districtid', addr_t.id 'addrid'
+    from district_t, region_t, addr_t
+    where district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.valid=1
 ) as second_t on first_t.districtid=second_t.districtid
 group by first_t.districtid;
 end
@@ -121,20 +123,22 @@ $$
 
 create procedure `statUserNumByRegion` ()
 begin
-select first_t.name 'name', count(second_t.userid) 'quantity' 
+select first_t.name 'name', count(second_t.addrid) 'quantity' 
 from (
 	select concat(city_t.name, district_t.name, region_t.name) 'name', region_t.id 'regionid'
 	from city_t, district_t, region_t
     where city_t.id=district_t.cityid and district_t.id=region_t.districtid
 ) as first_t left join (
-	select region_t.id 'regionid', user_t.id 'userid'
-    from region_t, addr_t, order_t, user_t
-    where region_t.id=addr_t.regionid and addr_t.id=order_t.addrid and order_t.userid=user_t.id
+	select region_t.id 'regionid', addr_t.id 'addrid'
+    from region_t, addr_t
+    where region_t.id=addr_t.regionid and addr_t.valid=1
 ) as second_t on first_t.regionid=second_t.regionid
 group by first_t.regionid;
 end
 $$
 
+#统计处于关注和取消关注状态的用户
+#统计处于完成状态的订单
 create procedure `statOrderNumByUser` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 

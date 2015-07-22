@@ -18,10 +18,12 @@
 		p:prefix="/WEB-INF/content/"
 		p:suffix=".jsp" />
 
+	<!-- 文件上传 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 		p:defaultEncoding="utf-8" />
 
+	<!-- 数据校验 -->
 	<mvc:annotation-driven validator="validator" />
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -35,19 +37,21 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
+	<!-- 异常解析 -->
 	<!--  
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView">
-			<value>common/error</value>
+			<value>back/common/error</value>
 		</property>
 		<property name="exceptionMappings">
 			<props>
-				<prop key="java.lang.Exception">common/error</prop>
+				<prop key="java.lang.Exception">back/common/error</prop>
 			</props>
 		</property>
 	</bean>
 	-->
 	
+	<!-- 拦截器 -->
 	<mvc:interceptors>  
         <mvc:interceptor>  
             <mvc:mapping path="/back/*" />  
@@ -61,6 +65,7 @@
         </mvc:interceptor> 
     </mvc:interceptors>  
     
+    <!-- 自动调度 -->
 	<bean id="cronTriggerDay" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail">
 			<bean class="org.springframework.scheduling.quartz.JobDetailBean">

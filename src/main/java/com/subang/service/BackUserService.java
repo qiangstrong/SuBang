@@ -145,14 +145,15 @@ public class BackUserService extends CommUserService {
 			}
 		}
 		if (!isAll) {
-			throw new BackException("由于订单状态不符，部分订单没有完成指定操作。");
+			throw new BackException("由于订单状态不符或者没有为订单指定商家或价格，部分订单没有完成指定操作。");
 		}
 	}
 
 	private boolean finishOrder(Integer orderid) {
 		History history = null;
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() == State.fetched) {
+		if (order.getStateEnum() == State.fetched && order.getPrice() != null
+				&& order.getLaundryid() != null) {
 			order.setState(State.finished);
 			orderDao.update(order);
 
@@ -160,11 +161,11 @@ public class BackUserService extends CommUserService {
 			history.setOrderid(order.getId());
 			history.setOperation(Operation.finish);
 			historyDao.save(history);
-			
-			User user=userDao.get(order.getUserid());
-			user.setScore(user.getScore()+StratUtil.getScore(order.getPrice()));
+
+			User user = userDao.get(order.getUserid());
+			user.setScore(user.getScore() + StratUtil.getScore(order.getPrice()));
 			userDao.update(user);
-			
+
 			return true;
 		}
 		return false;
@@ -193,7 +194,7 @@ public class BackUserService extends CommUserService {
 			throw new BackException("由于订单状态不符，部分订单没有完成指定操作。");
 		}
 	}
-	
+
 	private boolean deleteOrder(Integer orderid) {
 		Order order = orderDao.get(orderid);
 		if (order.getStateEnum() == State.finished || order.getStateEnum() == State.canceled) {

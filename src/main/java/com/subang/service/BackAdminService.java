@@ -18,7 +18,6 @@ import com.subang.domain.Region;
 import com.subang.domain.Worker;
 import com.subang.exception.BackException;
 import com.subang.util.WebConst;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 
 /**
  * @author Qiang 后台对管理员，工作人员，商家，区域和产品运营的管理
