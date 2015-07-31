@@ -2,11 +2,11 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.bean.OrderDetail;
-import com.subang.bean.StatItem;
 import com.subang.domain.Order;
 import com.subang.domain.Order.State;
 import com.subang.util.Common;
@@ -26,8 +26,12 @@ public class OrderDao extends BaseDao<Order> {
 	public Order getByOrderno(String orderno) {
 		String sql = "select * from order_t where orderno=?";
 		Object[] args = { orderno };
-		Order order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
-				Order.class));
+		Order order=null;
+		try {
+			order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
+					Order.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return order;
 	}
 

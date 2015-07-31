@@ -9,31 +9,30 @@ import org.hibernate.validator.constraints.Length;
 
 import com.subang.util.Common;
 
-
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static User toUser(weixin.popular.bean.User user_weixin){
-		User user=new User();
-		user.valid=true;
-		user.openid=user_weixin.getOpenid();
-		user.nickname=user_weixin.getNickname();
-		user.score=0;
-		user.photo=Common.getUserPhoto(user.openid);
-		user.sex=user_weixin.getSex();
-		user.country=user_weixin.getCountry();
-		user.province=user_weixin.getProvince();
-		user.city=user_weixin.getCity();
+	public static User toUser(weixin.popular.bean.User user_weixin) {
+		User user = new User();
+		user.valid = true;
+		user.openid = user_weixin.getOpenid();
+		user.nickname = user_weixin.getNickname();
+		user.score = 0;
+		user.photo = Common.getUserPhoto(user.openid);
+		user.sex = user_weixin.getSex();
+		user.country = user_weixin.getCountry();
+		user.province = user_weixin.getProvince();
+		user.city = user_weixin.getCity();
 		return user;
 	}
-	
+
 	public enum Sex {
 		unknown, male, female
 	}
 
 	private Integer id;
-	private boolean valid;		//默认为true，用户取消关注后，为false
+	private boolean valid; // 默认为true，用户取消关注后，为false
 	@NotNull
 	private String openid;
 	@Length(max = 4)
@@ -46,6 +45,7 @@ public class User implements Serializable {
 	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
 	private int score;
+	private double money;
 	@Length(max = 100)
 	private String photo; // 用户微信头像的地址
 	private int sex;
@@ -55,11 +55,13 @@ public class User implements Serializable {
 	private Integer addrid; // 用户的默认地址
 
 	public User() {
+		this.score = 0;
+		this.money = 0;
 	}
 
 	public User(Integer id, boolean valid, String openid, String name, String nickname,
-			String password, String cellnum, int score, String photo, int sex, String country,
-			String province, String city, Integer addrid) {
+			String password, String cellnum, int score, double money, String photo, int sex,
+			String country, String province, String city, Integer addrid) {
 		this.id = id;
 		this.valid = valid;
 		this.openid = openid;
@@ -68,6 +70,7 @@ public class User implements Serializable {
 		this.password = password;
 		this.cellnum = cellnum;
 		this.score = score;
+		this.money = money;
 		this.photo = photo;
 		this.sex = sex;
 		this.country = country;
@@ -87,8 +90,8 @@ public class User implements Serializable {
 	public boolean isValid() {
 		return valid;
 	}
-	
-	public String getValidDes(){
+
+	public String getValidDes() {
 		if (valid) {
 			return "是";
 		}
@@ -122,7 +125,7 @@ public class User implements Serializable {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -130,18 +133,18 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getCellnum() {
 		return cellnum;
 	}
 
-	public String getCellnumDes(){
-		if (cellnum==null) {
+	public String getCellnumDes() {
+		if (cellnum == null) {
 			return "未绑定";
 		}
 		return cellnum;
 	}
-	
+
 	public void setCellnum(String cellnum) {
 		this.cellnum = cellnum;
 	}
@@ -152,6 +155,14 @@ public class User implements Serializable {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
 	}
 
 	public String getPhoto() {

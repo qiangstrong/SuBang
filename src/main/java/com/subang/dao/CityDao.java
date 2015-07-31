@@ -15,8 +15,12 @@ public class CityDao extends BaseDao<City> {
 	public City get(Integer id) {
 		String sql = "select * from city_t where id=?";
 		Object[] args = { id };
-		City city = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<City>(
-				City.class));
+		City city = null;
+		try {
+			city = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<City>(
+					City.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return city;
 	}
 
@@ -43,18 +47,27 @@ public class CityDao extends BaseDao<City> {
 		List<City> citys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<City>(City.class));
 		return citys;
 	}
-	
-	public List<City> findAllValid(){
+
+	public List<City> findAllValid() {
 		String sql = "select distinct cityid `id`, cityname `name` from area_v";
 		List<City> citys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<City>(City.class));
 		return citys;
 	}
 
 	public List<City> findByName(String name) {
-		String sql = "select * from city_t where name like=?";
+		String sql = "select * from city_t where name like ?";
 		Object[] args = { Common.getLikeStr(name) };
-		List<City> citys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<City>(
-				City.class));
+		List<City> citys = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<City>(City.class));
 		return citys;
 	}
+
+	public List<City> findValidByName(String name) {
+		String sql = "select distinct cityid `id`, cityname `name` from area_v where cityname like ?";
+		Object[] args = { Common.getLikeStr(name) };
+		List<City> citys = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<City>(City.class));
+		return citys;
+	}
+
 }

@@ -76,7 +76,9 @@
 						<td>    
 							<select id="cityid" name="cityid" onchange="getData('cityid','weixin/addr/select.html',updateDistrict)">
 								<c:forEach var="city" items="${citys}">
-								<option value="${city.id }">${city.name }</option>
+								<option value="${city.id }" <c:if test="${city.id==defaultCityid }">selected="selected"</c:if> >
+									${city.name }
+								</option>
 								</c:forEach>
 							</select>           					
         				</td>
@@ -88,7 +90,9 @@
 						<td>    
 							<select id="districtid" name="districtid" onchange="getData('districtid','weixin/addr/select.html',updateRegion)">
 								<c:forEach var="district" items="${districts}">
-								<option value="${district.id }">${district.name }</option>
+								<option value="${district.id }" <c:if test="${district.id==defaultDistrictid }">selected="selected"</c:if> >
+									${district.name }
+								</option>
 								</c:forEach>
 							</select>           					
         				</td>
@@ -98,7 +102,13 @@
 					</tr>
 					<tr>
 						<td>      
-							<form:select path="regionid" items="${regions}" itemLabel="name" itemValue="id"></form:select>           					
+							<select id="regionid" name="regionid">
+								<c:forEach var="region" items="${regions}">
+								<option value="${region.id }" <c:if test="${region.id==defaultRegionid }">selected="selected"</c:if> >
+									${region.name }
+								</option>
+								</c:forEach>
+							</select>              					
         				</td>
 					</tr>
 					<tr>

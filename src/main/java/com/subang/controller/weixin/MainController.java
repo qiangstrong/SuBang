@@ -18,9 +18,11 @@ import weixin.popular.util.XMLConverUtil;
 
 import com.subang.bean.weixin.GetArg;
 import com.subang.controller.BaseController;
+import com.subang.domain.Location;
 import com.subang.domain.User;
 import com.subang.util.Common;
 import com.subang.util.WebConst;
+
 
 @Controller("mainController_weixin")
 @RequestMapping("/weixin")
@@ -58,6 +60,8 @@ public class MainController extends BaseController {
 					subscribe(eventMessage, response);
 				} else if (eventMessage.getEvent().equals("unsubscribe")) {
 					unsubscribe(eventMessage, response);
+				} else if (eventMessage.getEvent().equals("LOCATION")){
+					location(eventMessage, response);
 				}
 			}
 		}
@@ -85,6 +89,24 @@ public class MainController extends BaseController {
 		if (user != null) {
 			user.setValid(false);
 			frontUserService.modifyUser(user);
+		}
+	}
+	
+	private void location(EventMessage eventMessage, HttpServletResponse response) {
+		User user = frontUserService.getUserByOpenid(eventMessage.getFromUserName());
+		if (user != null) {
+			Location location=frontUserService.getLocationByUserid(user.getId());
+			if (location!=null) {
+				location.setLatitude(eventMessage.getLatitude());
+				location.setLongitude(eventMessage.getLongitude());
+				frontUserService.modifyLocation(location);
+			} else {
+				location=new Location();
+				location.setLatitude(eventMessage.getLatitude());
+				location.setLongitude(eventMessage.getLongitude());
+				location.setUserid(user.getId());
+				frontUserService.addLocation(location);
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.subang.bean.StatItem;
 import com.subang.domain.User;
 import com.subang.util.Common;
 import com.subang.util.WebConst;
@@ -17,27 +16,31 @@ public class UserDao extends BaseDao<User> {
 	public User get(Integer id) {
 		String sql = "select * from user_t where id=?";
 		Object[] args = { id };
-		User user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
-				User.class));
+		User user=null;
+		try {
+			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
+					User.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return user;
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		Object[] args = { user.isValid(), user.getOpenid(), user.getName(), user.getNickname(),
-				user.getPassword(), user.getCellnum(), user.getScore(), user.getPhoto(),
-				user.getSex(), user.getCountry(), user.getProvince(), user.getCity(),
-				user.getAddrid() };
+				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
+				user.getPhoto(), user.getSex(), user.getCountry(), user.getProvince(),
+				user.getCity(), user.getAddrid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
-		String sql = "update user_t set valid=?, openid=? ,name=? ,nickname=? ,password=? ,cellnum=? ,score=? ,"
+		String sql = "update user_t set valid=?, openid=? ,name=? ,nickname=? ,password=? ,cellnum=? ,score=? ,money=?, "
 				+ "photo=? ,sex=? ,country=? ,province=? ,city=? ,addrid=? where id=?";
 		Object[] args = { user.isValid(), user.getOpenid(), user.getName(), user.getNickname(),
-				user.getPassword(), user.getCellnum(), user.getScore(), user.getPhoto(),
-				user.getSex(), user.getCountry(), user.getProvince(), user.getCity(),
-				user.getAddrid(), user.getId() };
+				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
+				user.getPhoto(), user.getSex(), user.getCountry(), user.getProvince(),
+				user.getCity(), user.getAddrid(), user.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -65,7 +68,8 @@ public class UserDao extends BaseDao<User> {
 		Object[] args = { openid };
 		User user = null;
 		try {
-			user=jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(User.class));
+			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
+					User.class));
 		} catch (EmptyResultDataAccessException e) {
 		}
 		return user;

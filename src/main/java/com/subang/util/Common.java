@@ -120,4 +120,11 @@ public class Common {
 		return "image/photo/" + openid + ".jpg";
 	}
 
+	public static <T> T getFirst(List<T> list){
+		T t=null;
+		if (!list.isEmpty()) {
+			t=list.get(0);
+		}
+		return t;
+	}
 }

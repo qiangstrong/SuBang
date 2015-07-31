@@ -38,7 +38,7 @@
 	</bean>
 
 	<!-- 异常解析 -->
-	<!--  
+	<!-- 
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView">
 			<value>back/common/error</value>
@@ -49,7 +49,7 @@
 			</props>
 		</property>
 	</bean>
-	-->
+	 -->
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors>  

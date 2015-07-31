@@ -16,8 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import weixin.popular.util.JsonUtil;
 
+import com.subang.bean.AddrData;
 import com.subang.bean.AddrDetail;
+import com.subang.bean.Area;
 import com.subang.controller.BaseController;
+import com.subang.dao.RegionDao;
 import com.subang.domain.Addr;
 import com.subang.domain.City;
 import com.subang.domain.District;
@@ -46,10 +49,11 @@ public class AddrController extends BaseController {
 	}
 
 	@RequestMapping("/showadd")
-	public ModelAndView showAdd() {
+	public ModelAndView showAdd(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		prepare(view);
-		view.addObject("addr", new Addr());
+		Addr addr = new Addr();
+		prepare(view, getUser(session), addr);
+		view.addObject("addr", addr);
 		view.setViewName(VIEW_PREFIX + "/add");
 		return view;
 	}
@@ -83,12 +87,13 @@ public class AddrController extends BaseController {
 	@RequestMapping("/add")
 	public ModelAndView add(HttpSession session, @Valid Addr addr, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		if(result.hasErrors()){
-			prepare(view);
+		User user = getUser(session);
+		if (result.hasErrors()) {
+			prepare(view, null, addr);
 			view.setViewName(VIEW_PREFIX + "/add");
 			return view;
 		}
-		addr.setUserid(getUser(session).getId());
+		addr.setUserid(user.getId());
 		frontUserService.addAddr(addr);
 		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(getUser(session)
 				.getId());
@@ -108,13 +113,19 @@ public class AddrController extends BaseController {
 		return view;
 	}
 
-	private void prepare(ModelAndView view) {
-		
-		List<City> citys = frontUserService.listCity();
-		view.addObject("citys", citys);
-		List<District> districts = frontUserService.listDistrictByCityid(citys.get(0).getId());
-		view.addObject("districts", districts);
-		List<Region> regions = frontUserService.listRegionByDistrictid(districts.get(0).getId());
-		view.addObject("regions", regions);		
+	private void prepare(ModelAndView view, User user, Addr addr) {
+		AddrData addrData;
+		if (user != null) {
+			addrData = frontUserService.getAddrData(user);
+			addr.setDetail(addrData.getDetail());
+		} else {
+			addrData=frontUserService.getAddrData(addr.getRegionid());
+		}
+		view.addObject("citys", addrData.getCitys());
+		view.addObject("defaultCityid", addrData.getDefaultCityid());
+		view.addObject("districts", addrData.getDistricts());
+		view.addObject("defaultDistrictid", addrData.getDefaultDistrictid());
+		view.addObject("regions", addrData.getRegions());
+		view.addObject("defaultRegionid", addrData.getDefaultRegionid());
 	}
 }

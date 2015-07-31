@@ -2,6 +2,7 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,12 @@ public class DistrictDao extends BaseDao<District> {
 	public District get(Integer id) {
 		String sql = "select * from district_t where id=?";
 		Object[] args = { id };
-		District district = jdbcTemplate.queryForObject(sql, args,
-				new BeanPropertyRowMapper<District>(District.class));
+		District district=null;
+		try {
+			district = jdbcTemplate.queryForObject(sql, args,
+					new BeanPropertyRowMapper<District>(District.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return district;
 	}
 
@@ -47,6 +52,14 @@ public class DistrictDao extends BaseDao<District> {
 	public List<District> findByName(String name) {
 		String sql = "select * from district_t where name like ?";
 		Object[] args = { Common.getLikeStr(name) };
+		List<District> districts = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<District>(District.class));
+		return districts;
+	}
+	
+	public List<District> findValidByCityidAndName(Integer cityid,String name){
+		String sql = "select distinct districtid `id`, districtname `name`, ? `cityid` from area_v where cityid=? and districtname like ?";
+		Object[] args = { cityid, cityid ,Common.getLikeStr(name)};
 		List<District> districts = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<District>(District.class));
 		return districts;

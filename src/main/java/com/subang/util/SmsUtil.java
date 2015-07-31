@@ -34,7 +34,7 @@ public class SmsUtil {
 		if (result.get("statusCode").equals(STATUS_SUCC)) {
 			return true;
 		}
-		LOG.error("错误码=" + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
+		LOG.error("错误码:" + result.get("statusCode") + "; 错误信息:" + result.get("statusMsg"));
 		return false;
 	}
 

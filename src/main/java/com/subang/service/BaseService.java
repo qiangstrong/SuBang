@@ -29,6 +29,8 @@ public class BaseService {
 	protected RegionDao regionDao;
 	@Autowired
 	protected UserDao userDao;
+	@Autowired 
+	protected LocationDao locationDao;
 	@Autowired
 	protected WorkerDao workerDao;
 	@Autowired

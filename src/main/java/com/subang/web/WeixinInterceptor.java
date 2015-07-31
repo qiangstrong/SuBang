@@ -32,7 +32,7 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 		String code = request.getParameter("code");
 		if (code == null) {
 			User user = getUser(request.getSession());			
-			if (user==null && isRestrictedURI(request.getRequestURI())) {
+			if ((user==null||!user.isValid()) && isRestrictedURI(request.getRequestURI())) {
 				String redirect_uri = request.getRequestURL() + "?" + request.getQueryString();
 				String url = SnsAPI.connectOauth2Authorize(Common.getProperty("appid"),
 						redirect_uri, false, null);

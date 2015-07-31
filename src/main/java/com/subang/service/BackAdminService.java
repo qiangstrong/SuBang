@@ -28,6 +28,10 @@ public class BackAdminService extends BaseService {
 	/**
 	 * 与管理员相关的操作
 	 */
+	public Admin getAdmin(Integer adminid) {
+		return adminDao.get(adminid);
+	}
+	
 	public Admin getAdminByMatch(Admin admin) {
 		return adminDao.findByMatch(admin);
 	}

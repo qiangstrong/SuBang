@@ -9,13 +9,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import com.subang.bean.AddrDetail;
+import com.subang.bean.Area;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.StatArg;
 import com.subang.bean.StatItem;
+import com.subang.dao.HistoryDao;
+import com.subang.domain.Addr;
+import com.subang.domain.City;
 import com.subang.domain.District;
+import com.subang.domain.History;
 import com.subang.domain.History.Operation;
 import com.subang.domain.User;
 import com.subang.util.Common;
+import com.subang.util.LocUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.UtilTest;
 
@@ -27,8 +34,7 @@ public class DaoTest extends BaseService {
 	
 	@Test
 	public void test() {
-		User user =userDao.get(8);
-		userDao.update(user);
+		Area area=regionDao.getAreaByRegionid(1);
 		pause();
 	}
 

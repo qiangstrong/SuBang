@@ -9,6 +9,18 @@ import com.subang.domain.Admin;
 
 @Repository
 public class AdminDao extends BaseDao<Admin> {
+	
+	public Admin get(Integer id) {
+		String sql = "select * from admin_t where id=?";
+		Object[] args = { id };
+		Admin admin=null;
+		try {
+			admin = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Admin>(
+					Admin.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return admin;
+	}
 
 	public Admin findByMatch(Admin admin) {
 		String sql = "select * from admin_t where username=? and password=?";

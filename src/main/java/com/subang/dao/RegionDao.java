@@ -2,6 +2,7 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,12 @@ public class RegionDao extends BaseDao<Region> {
 	public Region get(Integer id) {
 		String sql = "select * from region_t where id=?";
 		Object[] args = { id };
-		Region region = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Region>(
-				Region.class));
+		Region region=null;
+		try {
+			region = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Region>(
+					Region.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return region;
 	}
 
@@ -62,6 +67,18 @@ public class RegionDao extends BaseDao<Region> {
 		return regions;
 	}
 
+	public Area getAreaByRegionid(Integer regionid){
+		String sql = "select * from area_v where regionid=?";
+		Object[] args = { regionid };
+		Area area=null;
+		try {
+			area = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Area>(
+					Area.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return area;
+	}
+	
 	public List<Area> findAreaByArea(Area area) {
 		String sql = "select * from area_v where cityname like ? and districtname like ? and regionname like ?";
 		Object[] args = { Common.getLikeStr(area.getCityname()),

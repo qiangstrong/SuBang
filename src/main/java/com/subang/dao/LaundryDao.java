@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Laundry;
-import com.subang.domain.Region;
 import com.subang.util.Common;
 
 @Repository
@@ -16,8 +15,12 @@ public class LaundryDao extends BaseDao<Laundry> {
 	public Laundry get(Integer id) {
 		String sql = "select * from laundry_t where id=?";
 		Object[] args = { id };
-		Laundry laundry = jdbcTemplate.queryForObject(sql, args,
-				new BeanPropertyRowMapper<Laundry>(Laundry.class));
+		Laundry laundry=null;
+		try {
+			laundry = jdbcTemplate.queryForObject(sql, args,
+					new BeanPropertyRowMapper<Laundry>(Laundry.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return laundry;
 	}
 

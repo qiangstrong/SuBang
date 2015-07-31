@@ -54,7 +54,8 @@ create table `user_t`(
     `nickname` varchar(100) not null,
     `password` char(50),
     `cellnum` char(11),
-    `score` int zerofill,
+    `score` int not null default 0,
+    `money` double not null default 0,
     `photo` char(100),
     `sex` tinyint default 0,
     `country` char(10),
@@ -62,6 +63,15 @@ create table `user_t`(
     `city` char(10),
     `addrid` int,
     foreign key(`addrid`) references `addr_t`(`id`) on delete set null
+);
+
+create table `location_t`(
+	`id` int auto_increment primary key,
+	`latitude` char(15) not null,
+    `longitude` char(15) not null,
+	`time` datetime not null,
+    `userid` int,
+    foreign key(`userid`) references `user_t`(`id`) on delete cascade
 );
 
 create table `addr_t`(

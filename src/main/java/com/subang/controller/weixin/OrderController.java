@@ -111,10 +111,13 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
+	/**
+	 * 为展示层准备相应的数据
+	 * 默认地址的添加删除逻辑保证：只要用户有地址，默认地址就不为空
+	 */
 	private void prepare(ModelAndView view, User user) {
 
-		AddrDetail addrDetail = frontUserService.getAddrDetail(user.getAddrid());
-		view.addObject("defaultAddr", addrDetail);
+		view.addObject("defaultAddrid", user.getAddrid());
 		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(user.getId());
 		view.addObject("addrDetails", addrDetails);
 

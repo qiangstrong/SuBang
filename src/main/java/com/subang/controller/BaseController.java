@@ -52,18 +52,20 @@ public class BaseController {
 	}
 	
 	protected Admin getAdmin(HttpSession session) {
-		return (Admin) session.getAttribute(KEY_ADMIN);
+		Integer adminid=(Integer) session.getAttribute(KEY_ADMIN);
+		return backAdminService.getAdmin(adminid);
 	}
 
 	protected void setAdmin(HttpSession session, Admin admin) {
-		session.setAttribute(KEY_ADMIN, admin);
+		session.setAttribute(KEY_ADMIN, admin.getId());
 	}
 	
 	protected User getUser(HttpSession session) {
-		return (User) session.getAttribute(KEY_USER);
+		Integer userid=(Integer)session.getAttribute(KEY_USER);
+		return frontUserService.getUser(userid);
 	}
 
 	protected void setUser(HttpSession session, User user) {
-		session.setAttribute(KEY_USER, user);
+		session.setAttribute(KEY_USER, user.getId());
 	}
 }

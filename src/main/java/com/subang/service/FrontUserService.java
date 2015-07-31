@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.subang.bean.AddrData;
+import com.subang.bean.Area;
+import com.subang.bean.GeoLoc;
 import com.subang.bean.OrderDetail;
 import com.subang.domain.Addr;
 import com.subang.domain.City;
@@ -12,12 +15,14 @@ import com.subang.domain.District;
 import com.subang.domain.History;
 import com.subang.domain.History.Operation;
 import com.subang.domain.Info;
+import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.Order.State;
 import com.subang.domain.Region;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.util.Common;
+import com.subang.util.LocUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.StratUtil;
@@ -46,6 +51,29 @@ public class FrontUserService extends CommUserService {
 			userBack.setCity(userFront.getCity());
 			userDao.update(userBack);
 		}
+	}
+
+	/**
+	 * 与用户位置相关的操作
+	 */
+	public Location getLocation(Integer locationid) {
+		return locationDao.get(locationid);
+	}
+
+	public Location getLocationByUserid(Integer userid) {
+		List<Location> locations = locationDao.findByUserid(userid);
+		if (locations.isEmpty()) {
+			return null;
+		}
+		return locations.get(0);
+	}
+
+	public void addLocation(Location location) {
+		locationDao.save(location);
+	}
+
+	public void modifyLocation(Location location) {
+		locationDao.update(location);
 	}
 
 	/**
@@ -108,7 +136,7 @@ public class FrontUserService extends CommUserService {
 			workerid = coreWorkers.get(Common.random.nextInt(coreWorkers.size())).getId();
 		}
 		order.setOrderno(StratUtil.getOrderno(workerid));
-		order.setWorkerid(workerid);	
+		order.setWorkerid(workerid);
 		orderDao.save(order);
 
 		order = orderDao.getByOrderno(order.getOrderno());
@@ -155,6 +183,63 @@ public class FrontUserService extends CommUserService {
 
 	public List<Region> listRegionByDistrictid(Integer districtid) {
 		return regionDao.findByDistrictid(districtid);
+	}
+	
+	public AddrData getAddrData(User user){
+		AddrData addrData=new AddrData();
+		
+		List<Location> locations=locationDao.findByUserid(user.getId());
+		Location location=Common.getFirst(locations);
+		GeoLoc geoLoc=LocUtil.getGeoLoc(location);
+		
+		addrData.setCitys(cityDao.findAllValid());
+		addrData.setDefaultRegionid(null);
+				
+		if (geoLoc==null) {
+			addrData.setDefaultCityid(null);
+			addrData.setDistricts(districtDao.findValidByCityid(addrData.getCitys().get(0).getId()));
+			addrData.setDefaultDistrictid(null);
+			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
+			addrData.setDetail(null);
+			return addrData;
+		}
+		
+		City defaultCity=Common.getFirst(cityDao.findValidByName(geoLoc.getCity()));
+		if (defaultCity==null) {
+			addrData.setDefaultCityid(null);
+			addrData.setDistricts(districtDao.findValidByCityid(addrData.getCitys().get(0).getId()));
+			addrData.setDefaultDistrictid(null);
+			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
+			addrData.setDetail(geoLoc.getDetail());
+			return addrData;
+		}
+		
+		addrData.setDefaultCityid(defaultCity.getId());
+		addrData.setDistricts(districtDao.findValidByCityid(addrData.getDefaultCityid()));
+		District defaultDistrict=Common.getFirst(districtDao.findValidByCityidAndName(addrData.getDefaultCityid(), geoLoc.getDistrict()));
+		if (defaultDistrict==null) {
+			addrData.setDefaultDistrictid(null);
+			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
+			addrData.setDetail(geoLoc.getDetail());
+			return addrData;
+		}
+		
+		addrData.setDefaultDistrictid(defaultDistrict.getId());
+		addrData.setRegions(regionDao.findByDistrictid(addrData.getDefaultDistrictid()));
+		addrData.setDetail(geoLoc.getDetail());
+		return addrData;
+	}
+	
+	public AddrData getAddrData(Integer regionid){
+		AddrData addrData=new AddrData();		
+		Area area=regionDao.getAreaByRegionid(regionid);
+		addrData.setDefaultCityid(area.getCityid());
+		addrData.setDefaultDistrictid(area.getDistrictid());
+		addrData.setDefaultRegionid(area.getRegionid());
+		addrData.setCitys(cityDao.findAllValid());
+		addrData.setDistricts(districtDao.findValidByCityid(area.getCityid()));
+		addrData.setRegions(regionDao.findByDistrictid(area.getDistrictid()));
+		return addrData;
 	}
 
 	/**

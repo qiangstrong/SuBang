@@ -2,14 +2,12 @@ package com.subang.dao;
 
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.bean.AddrDetail;
 import com.subang.domain.Addr;
-import com.subang.domain.User;
 
 @Repository
 public class AddrDao extends BaseDao<Addr> {
@@ -17,8 +15,12 @@ public class AddrDao extends BaseDao<Addr> {
 	public Addr get(Integer id) {
 		String sql = "select * from addr_t where id=?";
 		Object[] args = { id };
-		Addr addr = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Addr>(
-				Addr.class));
+		Addr addr=null;
+		try {
+			addr = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Addr>(
+					Addr.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return addr;
 	}
 

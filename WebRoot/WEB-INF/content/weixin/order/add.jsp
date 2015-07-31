@@ -86,7 +86,7 @@
 						<td>
 							<select id="addrid" name="addrid">
 								<c:forEach var="addrDetail" items="${addrDetails}">
-								<option value="${addrDetail.id }" <c:if test="${addrDetail.id==defaultAddr.id }">selected="selected"</c:if>>
+								<option value="${addrDetail.id }" <c:if test="${addrDetail.id==defaultAddrid }">selected="selected"</c:if>>
 									${addrDetail}
 								</option>								
 								</c:forEach>
@@ -102,7 +102,7 @@
 					</tr>
 					<tr>
 						<td>
-							<textarea id="comment" name="comment"></textarea>
+							<textarea id="comment" name="comment">${order.comment }</textarea>
 						</td>						
 					</tr>
 					<tr>

@@ -2,6 +2,7 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,12 @@ public class WorkerDao extends BaseDao<Worker> {
 	public Worker get(Integer id) {
 		String sql = "select * from worker_t where id=?";
 		Object[] args = { id };
-		Worker worker = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Worker>(
-				Worker.class));
+		Worker worker=null;
+		try {
+			worker = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Worker>(
+					Worker.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return worker;
 	}
 

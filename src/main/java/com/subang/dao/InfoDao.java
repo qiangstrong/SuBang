@@ -2,10 +2,10 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.subang.domain.Addr;
 import com.subang.domain.Info;
 
 @Repository
@@ -14,8 +14,12 @@ public class InfoDao extends BaseDao<Info> {
 	public Info get(Integer id) {
 		String sql = "select * from info_t where id=?";
 		Object[] args = { id };
-		Info info = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Info>(
-				Info.class));
+		Info info=null;
+		try {
+			info = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Info>(
+					Info.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return info;
 	}
 

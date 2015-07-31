@@ -2,6 +2,7 @@ package com.subang.dao;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,12 @@ public class HistoryDao extends BaseDao<History> {
 	public History get(Integer id) {
 		String sql = "select * from history_t where id=?";
 		Object[] args = { id };
-		History history = jdbcTemplate.queryForObject(sql, args,
-				new BeanPropertyRowMapper<History>(History.class));
+		History history=null;
+		try {
+			history = jdbcTemplate.queryForObject(sql, args,
+					new BeanPropertyRowMapper<History>(History.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return history;
 	}
 
@@ -26,7 +31,7 @@ public class HistoryDao extends BaseDao<History> {
 
 	public void update(History history) {
 		String sql = "update history_t set operation=? ,time=? ,orderid=? where id=?";
-		Object[] args = { history.getOperation(), history.getTime(), history.getOrderid() };
+		Object[] args = { history.getOperation(), history.getTime(), history.getOrderid(),history.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
