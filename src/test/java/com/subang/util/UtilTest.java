@@ -22,14 +22,12 @@ import weixin.popular.api.SnsAPI;
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class UtilTest {
 	
-	private static final Logger LOG = Logger.getLogger ( UtilTest.class.getName());
+	private static final Logger LOG = Logger.getLogger ( "sdfas");
 	
 	@Test
 	public void test() throws Exception {
-		RenderReverseResult result=GeocodingAPI.
-				renderReverse("mHcUBs0GiAfAhArXPy7H9YZf", CoordType.wgs84ll, new LatLng("41.765789", "123.413399"));
-		System.out.println(result.getResult().getFormatted_address());
 
+		LOG.error("wer");
 		pause();
 	}
 

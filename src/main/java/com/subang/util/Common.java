@@ -20,7 +20,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Common {
+public class Common extends BaseUtil {
 
 	public static Random random = new Random();
 	public static Timer timer = new Timer();
@@ -46,6 +46,10 @@ public class Common {
 		return servletContext;
 	}
 
+	public static String getRealPath(String path) {
+		return servletContext.getRealPath(path);
+	}
+
 	public static String getProperty(String key) {
 		return properties.getProperty(key);
 	}
@@ -64,7 +68,8 @@ public class Common {
 	}
 
 	/**
-	 * @param desPath 相对于WebRoot的路径
+	 * @param desPath
+	 *            相对于WebRoot的路径
 	 */
 	public static void saveMultipartFile(MultipartFile srcFile, String desPath) {
 		String path = servletContext.getRealPath(desPath);
@@ -120,10 +125,10 @@ public class Common {
 		return "image/photo/" + openid + ".jpg";
 	}
 
-	public static <T> T getFirst(List<T> list){
-		T t=null;
+	public static <T> T getFirst(List<T> list) {
+		T t = null;
 		if (!list.isEmpty()) {
-			t=list.get(0);
+			t = list.get(0);
 		}
 		return t;
 	}

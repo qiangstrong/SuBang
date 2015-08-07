@@ -1,20 +1,59 @@
 package com.subang.util;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 /**
  * @author Qiang
  * 策略类。完成一些机制的具体实现。
  * 比如完成订单号生产的具体策略；积分功能计算的具体策略等。
  */
-public class StratUtil {
+public class StratUtil extends BaseUtil {
+	
+	private static final String dataPath="data/StatUtil.dat";
 	
 	private static SimpleDateFormat sdf_orderno = new SimpleDateFormat("yyMMdd");
 	private static NumberFormat nf = NumberFormat.getInstance();
 	private static int count_order=0;
 	
+	public static void init(){
+		String path=Common.getRealPath(dataPath);
+		File file=new File(path);
+		try {
+			if (file.exists()) {
+				DataInputStream in = new DataInputStream(new FileInputStream(file));
+				count_order=in.readInt();
+				in.close();
+				LOG.info("读取count_order成功。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deinit(){
+		String path=Common.getRealPath(dataPath);
+		File file = new File(path);
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
+			out.writeInt(count_order);
+			out.close();
+			LOG.info("保存count_order成功。");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void reset(){
 		count_order=0;
 	}

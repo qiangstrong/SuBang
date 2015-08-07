@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.subang.bean.OrderDetail;
 
-public class SmsUtil {
+public class SmsUtil extends BaseUtil {
 
 	protected static final Logger LOG = Logger.getLogger(SmsUtil.class.getName());
 

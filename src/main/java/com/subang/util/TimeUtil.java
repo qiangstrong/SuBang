@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Qiang 下单页取件时间相关的流程
  */
-public class TimeUtil {
+public class TimeUtil extends BaseUtil {
 
 	private static SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -75,8 +75,8 @@ public class TimeUtil {
 
 		Calendar calendar = Calendar.getInstance();
 		Date curDate = new Date(calendar.getTime().getTime());
-		String curDateValue=curDate.toString();
-		
+		String curDateValue = curDate.toString();
+
 		int curHour = calendar.get(Calendar.HOUR_OF_DAY);
 		int hour = TIME_START;
 		if (dateValue.equals(curDateValue)) {
