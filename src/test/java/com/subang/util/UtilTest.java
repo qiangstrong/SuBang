@@ -17,6 +17,10 @@ import com.baidu.map.bean.RenderReverseResult;
 import com.baidu.map.util.CoordType;
 
 import weixin.popular.api.SnsAPI;
+import weixin.popular.api.TicketAPI;
+import weixin.popular.api.TokenAPI;
+import weixin.popular.bean.Ticket;
+import weixin.popular.bean.Token;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -26,8 +30,9 @@ public class UtilTest {
 	
 	@Test
 	public void test() throws Exception {
-
-		LOG.error("wer");
+		Token token = TokenAPI.token("wx0c69fe4ab533a3e5","3525d67ccc785a0985569c13cbdeb414");
+		Ticket ticket = TicketAPI.ticketGetticket(token.getAccess_token());
+		
 		pause();
 	}
 

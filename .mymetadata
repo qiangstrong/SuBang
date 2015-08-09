@@ -3,7 +3,7 @@
   type="WEB"
   name="SuBang"
   id="myeclipse.1431255167328"
-  context-root="/subang"
+  context-root="/ROOT"
   j2ee-spec="5.0"
   archive="SuBang.war">
   <attributes>

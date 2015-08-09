@@ -5,18 +5,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import weixin.popular.support.TicketManager;
+import weixin.popular.util.JsUtil;
 
 import com.subang.domain.User;
 import com.subang.util.Common;
+import com.subang.util.WebConst;
 
 @Controller
 @RequestMapping("/test/weixin")
 public class WeixinController extends BaseController {
+	
+	private static final String VIEW_PREFIX = "/test";
 
 	@RequestMapping("/login")
 	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		User user=frontUserService.getUser(9);
 		setUser(request.getSession(), user);
 		Common.outputStreamWrite(response.getOutputStream(), "登录成功。");
+	}
+	
+	@RequestMapping("/index")
+	public ModelAndView index(){
+		ModelAndView view = new ModelAndView();
+		String url="http://202.118.18.56/subang/test/weixin/index.html";
+		String[] jsApiList={"checkJsApi", "onMenuShareTimeline"};
+		String configStr=JsUtil.generateConfigJson(TicketManager.getDefaultTicket(), false, Common.getProperty("appid"), url, jsApiList);
+		view.addObject("configStr", configStr);
+		view.setViewName(VIEW_PREFIX+"/index");
+		return view;
 	}
 }

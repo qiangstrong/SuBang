@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.subang.bean.PageState;
-import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Admin;
-import com.subang.util.Common;
 import com.subang.util.WebConst;
 
 
@@ -27,6 +24,7 @@ public class MainController extends BaseController {
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		invalidtePageState(session);
+		view.addObject("admin", getAdmin(session));
 		view.setViewName(WebConst.BACK_PREFIX+"/index");
 		return view;
 	}
