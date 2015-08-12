@@ -7,25 +7,25 @@ import com.subang.domain.Order;
 public class OrderDetail extends Order {
 
 	private String nickname;
-	private String addrname;	//订单地址中填写的姓名
-	private String addrcellnum;	//订单地址中填写的手机号
+	private String addrname; // 订单地址中填写的姓名
+	private String addrcellnum; // 订单地址中填写的手机号
 	private String cityname;
 	private String districtname;
 	private String regionname;
 	private String addrdetail;
 	private String workername;
 	private String workercellnum;
-	
+
 	public OrderDetail() {
 	}
 
 	public OrderDetail(Integer id, String orderno, int category, int state, Float price, Date date,
 			int time, String comment, Integer userid, Integer addrid, Integer workerid,
-			Integer laundryid, String nickname, String addrname, String addrcellnum,
-			String cityname, String districtname, String regionname, String addrdetail,
-			String workername, String workercellnum) {
+			Integer laundryid, String prepay_id, String nickname, String addrname,
+			String addrcellnum, String cityname, String districtname, String regionname,
+			String addrdetail, String workername, String workercellnum) {
 		super(id, orderno, category, state, price, date, time, comment, userid, addrid, workerid,
-				laundryid);
+				laundryid, prepay_id);
 		this.nickname = nickname;
 		this.addrname = addrname;
 		this.addrcellnum = addrcellnum;

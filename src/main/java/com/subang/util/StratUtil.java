@@ -29,8 +29,13 @@ public class StratUtil extends BaseUtil {
 		try {
 			if (file.exists()) {
 				DataInputStream in = new DataInputStream(new FileInputStream(file));
+				Long time=in.readLong();
 				count_order=in.readInt();
-				in.close();
+				in.close();				
+				if (!TimeUtil.isTaday(time)) {
+					count_order=0;
+					LOG.info("count_order过时。");
+				}
 				LOG.info("读取count_order成功。");
 			}
 		} catch (Exception e) {
@@ -46,6 +51,7 @@ public class StratUtil extends BaseUtil {
 				file.createNewFile();
 			}
 			DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
+			out.writeLong(System.currentTimeMillis());
 			out.writeInt(count_order);
 			out.close();
 			LOG.info("保存count_order成功。");

@@ -11,7 +11,7 @@ public class History implements Serializable {
 
 	public enum Operation {
 		accept, // 用户下单，系统接收订单
-		fetch, finish, cancel
+		fetch, pay, finish, cancel
 	}
 
 	private Integer id;
@@ -56,6 +56,9 @@ public class History implements Serializable {
 			break;
 		case fetch:
 			description = "取走";
+			break;
+		case pay:
+			description = "支付";
 			break;
 		case finish:
 			description = "结束";

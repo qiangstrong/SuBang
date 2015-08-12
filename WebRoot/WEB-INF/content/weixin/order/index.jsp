@@ -57,6 +57,9 @@
 							<a href="weixin/order/cancel.html?orderid=${order.id}">取消</a>
 							<a href="weixin/order/fetch.html?orderid=${order.id}">取走</a>
 							</c:if>
+							<c:if test="${(order.state==1)&&(order.price!=null) }">
+							<a href="weixin/order/prepay.html?orderid=${order.id}&showwxpaytitle=1">支付</a>
+							</c:if>
 							<a href="weixin/order/detail.html?orderid=${order.id}">详情</a>
 						</td>
 					<tr>

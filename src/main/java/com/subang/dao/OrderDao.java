@@ -18,15 +18,19 @@ public class OrderDao extends BaseDao<Order> {
 	public Order get(Integer id) {
 		String sql = "select * from order_t where id=?";
 		Object[] args = { id };
-		Order order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
-				Order.class));
+		Order order = null;
+		try {
+			order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
+					Order.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
 		return order;
 	}
 
 	public Order getByOrderno(String orderno) {
 		String sql = "select * from order_t where orderno=?";
 		Object[] args = { orderno };
-		Order order=null;
+		Order order = null;
 		try {
 			order = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Order>(
 					Order.class));
@@ -36,20 +40,21 @@ public class OrderDao extends BaseDao<Order> {
 	}
 
 	public void save(Order order) {
-		String sql = "insert into order_t values(null,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into order_t values(null,?,?,?,?,?,?,?,?,?,?,?,?)";
 		Object[] args = { order.getOrderno(), order.getCategory(), order.getState(),
 				order.getPrice(), order.getDate(), order.getTime(), order.getComment(),
-				order.getUserid(), order.getAddrid(), order.getWorkerid(), order.getLaundryid() };
+				order.getUserid(), order.getAddrid(), order.getWorkerid(), order.getLaundryid(),
+				order.getPrepay_id() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Order order) {
 		String sql = "update order_t set orderno=? ,category=? ,state=? ,price=? ,date=? ,time=? ,"
-				+ "comment=? ,userid=? ,addrid=? ,workerid=? ,laundryid=? where id=?";
+				+ "comment=? ,userid=? ,addrid=? ,workerid=? ,laundryid=?, prepay_id=? where id=?";
 		Object[] args = { order.getOrderno(), order.getCategory(), order.getState(),
 				order.getPrice(), order.getDate(), order.getTime(), order.getComment(),
 				order.getUserid(), order.getAddrid(), order.getWorkerid(), order.getLaundryid(),
-				order.getId() };
+				order.getPrepay_id(), order.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

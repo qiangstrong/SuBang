@@ -60,8 +60,9 @@
 					<tr>
 						<td><a href="back/order/search.html?type=2&arg=0">已接受</a></td>
 						<td><a href="back/order/search.html?type=2&arg=1">已取走</a></td>
-						<td><a href="back/order/search.html?type=2&arg=2">已完成</a></td>
-						<td><a href="back/order/search.html?type=2&arg=3">已取消</a></td>
+						<td><a href="back/order/search.html?type=2&arg=2">已支付</a></td>
+						<td><a href="back/order/search.html?type=2&arg=3">已完成</a></td>
+						<td><a href="back/order/search.html?type=2&arg=4">已取消</a></td>
 						<td><a href="back/order/list.html">所有订单</a></td>							
 					</tr>	
 				</table>		

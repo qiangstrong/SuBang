@@ -19,9 +19,9 @@ public class Order implements Serializable {
 	}
 
 	public enum State {
-		accepted, fetched, finished, canceled;
-		
-		public static State toState(String arg){
+		accepted, fetched, paid, finished, canceled;
+
+		public static State toState(String arg) {
 			return State.values()[new Integer(arg)];
 		}
 	}
@@ -31,27 +31,29 @@ public class Order implements Serializable {
 	@NotNull
 	protected int category;
 	protected int state;
-	@Digits(integer=3, fraction=1)
-	protected Float price;
+	@Digits(integer = 3, fraction = 1)
+	protected Float price; // 单位元
 	@NotNull
 	protected Date date; // 用户指定的取件日期
 	@NotNull
 	protected int time; // 用户指定的取件时间，时间间隔为（time，time+1）
 	@Length(max = 50)
 	protected String comment;
-	
+
 	protected Integer userid;
 	@NotNull
 	protected Integer addrid;
 	protected Integer workerid;
 	protected Integer laundryid;
 
+	protected String prepay_id; // 微信预支付id
+
 	public Order() {
 	}
 
 	public Order(Integer id, String orderno, int category, int state, Float price, Date date,
 			int time, String comment, Integer userid, Integer addrid, Integer workerid,
-			Integer laundryid) {
+			Integer laundryid, String prepay_id) {
 		this.id = id;
 		this.orderno = orderno;
 		this.category = category;
@@ -64,6 +66,7 @@ public class Order implements Serializable {
 		this.addrid = addrid;
 		this.workerid = workerid;
 		this.laundryid = laundryid;
+		this.prepay_id = prepay_id;
 	}
 
 	public Integer getId() {
@@ -89,20 +92,20 @@ public class Order implements Serializable {
 	public Category getCategoryEnum() {
 		return Category.values()[category];
 	}
-	
-	public String getCategoryDes(){
-		String description=null;
-		switch(getCategoryEnum()){
+
+	public String getCategoryDes() {
+		String description = null;
+		switch (getCategoryEnum()) {
 		case clothes:
-			description="衣服";
+			description = "衣服";
 			break;
 		case shoe:
-			description="鞋";
+			description = "鞋";
 			break;
 		}
 		return description;
 	}
-	
+
 	public void setCategory(int category) {
 		this.category = category;
 	}
@@ -110,7 +113,7 @@ public class Order implements Serializable {
 	public void setCategory(Category category) {
 		this.category = category.ordinal();
 	}
-	
+
 	public int getState() {
 		return state;
 	}
@@ -118,26 +121,29 @@ public class Order implements Serializable {
 	public State getStateEnum() {
 		return State.values()[state];
 	}
-	
-	public String getStateDes(){
-		String description=null;
+
+	public String getStateDes() {
+		String description = null;
 		switch (getStateEnum()) {
 		case accepted:
-			description="已接受";
+			description = "已接受";
 			break;
 		case fetched:
-			description="已取走";
+			description = "已取走";
+			break;
+		case paid:
+			description = "已支付";
 			break;
 		case finished:
-			description="已完成";
+			description = "已完成";
 			break;
 		case canceled:
-			description="已取消";
+			description = "已取消";
 			break;
 		}
 		return description;
 	}
-	
+
 	public void setState(int state) {
 		this.state = state;
 	}
@@ -145,13 +151,13 @@ public class Order implements Serializable {
 	public void setState(State state) {
 		this.state = state.ordinal();
 	}
-	
+
 	public Float getPrice() {
 		return price;
 	}
-	
-	public String getPriceDes(){
-		if (price==null) {
+
+	public String getPriceDes() {
+		if (price == null) {
 			return "未确定";
 		}
 		return price.toString();
@@ -165,10 +171,10 @@ public class Order implements Serializable {
 		return date;
 	}
 
-	public String getDateDes(){
+	public String getDateDes() {
 		return TimeUtil.getDateDes(date);
 	}
-	
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -177,10 +183,10 @@ public class Order implements Serializable {
 		return time;
 	}
 
-	public String getTimeDes(){
+	public String getTimeDes() {
 		return TimeUtil.getTimeDes(time);
 	}
-	
+
 	public void setTime(int time) {
 		this.time = time;
 	}
@@ -225,6 +231,12 @@ public class Order implements Serializable {
 		this.laundryid = laundryid;
 	}
 
-	
+	public String getPrepay_id() {
+		return prepay_id;
+	}
+
+	public void setPrepay_id(String prepay_id) {
+		this.prepay_id = prepay_id;
+	}
 
 }

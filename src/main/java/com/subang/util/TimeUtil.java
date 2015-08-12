@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 /**
  * @author Qiang 下单页取件时间相关的流程
  */
@@ -112,6 +114,19 @@ public class TimeUtil extends BaseUtil {
 			e.printStackTrace();
 		}
 		return date;
+	}
+	
+	public static boolean isTaday(Long time){
+		Calendar calendar_cur=Calendar.getInstance();
+		Calendar calendar_old=Calendar.getInstance();
+		calendar_old.setTimeInMillis(time);
+		int day_cur=calendar_cur.get(Calendar.DAY_OF_YEAR);
+		int day_old=calendar_old.get(Calendar.DAY_OF_YEAR);
+		if (day_cur==day_old) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }

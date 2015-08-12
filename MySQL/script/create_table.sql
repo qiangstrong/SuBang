@@ -100,6 +100,7 @@ create table `order_t`(
     `addrid` int not null,
     `workerid` int not null,
     `laundryid` int,
+    `prepay_id` char(64),
     foreign key(`userid`) references `user_t`(`id`) on delete cascade,
     foreign key(`addrid`) references `addr_t`(`id`) on delete cascade,
     foreign key(`workerid`) references `worker_t`(`id`) on delete restrict,

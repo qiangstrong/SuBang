@@ -2,8 +2,16 @@ package com.subang.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
+
+import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.paymch.Unifiedorder;
+import weixin.popular.bean.paymch.UnifiedorderResult;
+import weixin.popular.util.StringUtils;
 
 import com.subang.bean.AddrData;
 import com.subang.bean.Area;
@@ -21,6 +29,7 @@ import com.subang.domain.Order.State;
 import com.subang.domain.Region;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
+import com.subang.exception.BackException;
 import com.subang.util.Common;
 import com.subang.util.LocUtil;
 import com.subang.util.SmsUtil;
@@ -116,8 +125,9 @@ public class FrontUserService extends CommUserService {
 		case WebConst.ORDER_STATE_UNDONE:
 			orders.addAll(orderDao.findByUseridAndState(userid, State.accepted));
 			orders.addAll(orderDao.findByUseridAndState(userid, State.fetched));
+			orders.addAll(orderDao.findByUseridAndState(userid, State.paid));
 			break;
-		case WebConst.ORDER_STATE_DONE:
+		case WebConst.ORDER_STATE_DONE:		
 			orders.addAll(orderDao.findByUseridAndState(userid, State.finished));
 			orders.addAll(orderDao.findByUseridAndState(userid, State.canceled));
 			break;
@@ -169,7 +179,67 @@ public class FrontUserService extends CommUserService {
 		}
 		return false;
 	}
+	
+	public void pay(Integer orderid) throws BackException {
+		History history = null;
+		Order order=orderDao.get(orderid);
+		if (order.getPrice()!=null) {
+			order.setState(State.paid);
+			orderDao.update(order);
+			
+			history = new History();
+			history.setOrderid(order.getId());
+			history.setOperation(Operation.pay);
+			historyDao.save(history);
+			
+		}else {
+			throw new BackException("支付失败。订单价格未指定。");
+		}
+	}
+	
+	public void pay(String orderno) throws BackException {
+		pay(orderDao.getByOrderno(orderno).getId());
+	}
+	
+	
+	/**
+	 * 生成预支付id，管理员已经为订单指定价格。这点由前端保证。
+	 */
+	public String getPrepay_id(User user, Order order, HttpServletRequest request) {
+		String prepay_id=order.getPrepay_id();
+		if(prepay_id!=null){
+			return prepay_id;
+		}
+		
+		Unifiedorder unifiedorder = new Unifiedorder();
+		unifiedorder.setAppid(Common.getProperty("appid"));
+		unifiedorder.setMch_id(Common.getProperty("mch_id"));
+		unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
+		unifiedorder.setBody("订单付款");
+		unifiedorder.setOut_trade_no(order.getOrderno());
+		Integer price = (int) (order.getPrice() * 100);
+		unifiedorder.setTotal_fee(price.toString());
+		unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
+		unifiedorder.setNotify_url(Common.getProperty("notify_url"));
+		unifiedorder.setTrade_type("JSAPI");
+		unifiedorder.setOpenid(user.getOpenid());
 
+		UnifiedorderResult result = PayMchAPI.payUnifiedorder(unifiedorder, Common.getProperty("apikey"));
+		if (!result.getReturn_code().equals("SUCCESS")) {
+			LOG.error("错误码:" + result.getReturn_code() + "; 错误信息:" + result.getReturn_msg());
+			return null;
+		}
+		
+		if (!result.getResult_code().equals("SUCCESS")) {
+			LOG.error("错误码:" + result.getErr_code()+ "; 错误信息:" + result.getErr_code_des());
+			return null;
+		}
+		
+		order.setPrepay_id(result.getPrepay_id());
+		orderDao.update(order);
+		return result.getPrepay_id();
+	}
+	
 	/**
 	 * 与区域相关的操作
 	 */

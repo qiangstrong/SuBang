@@ -15,24 +15,22 @@ import com.subang.util.Common;
 import com.subang.util.WebConst;
 
 /**
- * @author Qiang
- * 此类经历了很多次调整；
- * 考虑到响应时间，我们不考虑一下几种情况：
- * 1.用户直接通过URL（而非通过点击菜单）访问了网页；
- * 2.速帮服务器未接收到微信服务器发送的关于“用户关注”和“取消关注”的消息。
+ * @author Qiang 此类经历了很多次调整； 考虑到响应时间，我们不考虑一下几种情况： 1.用户直接通过URL（而非通过点击菜单）访问了网页；
+ *         2.速帮服务器未接收到微信服务器发送的关于“用户关注”和“取消关注”的消息。
  */
 public class WeixinInterceptor extends BaseController implements HandlerInterceptor {
 
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.WEIXIN_PREFIX;
-	private static final String[] FREE_URIS = { "/index.html", "/info/price.html",
-			"/info/scope.html", "/info/about.html", "/misc/activity.html", "/login.html" };
+	private static final String[] FREE_URIS = { "/index.html", "/order/pay.html",
+			"/info/price.html", "/info/scope.html", "/info/about.html", "/misc/activity.html",
+			"/login.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
 		String code = request.getParameter("code");
 		if (code == null) {
-			User user = getUser(request.getSession());			
-			if ((user==null||!user.isValid()) && isRestrictedURI(request.getRequestURI())) {
+			User user = getUser(request.getSession());
+			if ((user == null || !user.isValid()) && isRestrictedURI(request.getRequestURI())) {
 				String redirect_uri = request.getRequestURL() + "?" + request.getQueryString();
 				String url = SnsAPI.connectOauth2Authorize(Common.getProperty("appid"),
 						redirect_uri, false, null);
@@ -50,7 +48,7 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 			}
 
 			User user = frontUserService.getUserByOpenid(snsToken.getOpenid());
-			if (user==null||!user.isValid()) {
+			if (user == null || !user.isValid()) {
 				// 用户没有关注微信号
 				request.getRequestDispatcher("/WEB-INF/content/weixin/common/prompt.jsp").forward(
 						request, response);

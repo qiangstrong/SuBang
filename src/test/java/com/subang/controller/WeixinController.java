@@ -22,7 +22,7 @@ public class WeixinController extends BaseController {
 
 	@RequestMapping("/login")
 	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		User user=frontUserService.getUser(9);
+		User user=frontUserService.getUser(7);
 		setUser(request.getSession(), user);
 		Common.outputStreamWrite(response.getOutputStream(), "登录成功。");
 	}
