@@ -4,6 +4,8 @@ import com.subang.domain.Addr;
 
 public class AddrDetail extends Addr {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private String cityname;
 	private String districtname;
 	private String regionname;

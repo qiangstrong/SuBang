@@ -22,6 +22,16 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 		p:defaultEncoding="utf-8" />
+		
+	<!-- 数据转换 -->
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.subang.util.TimestampConverter"/>
+			</list>
+		</property>
+	</bean>
 
 	<!-- 数据校验 -->
 	<mvc:annotation-driven validator="validator" />

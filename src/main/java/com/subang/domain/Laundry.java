@@ -7,7 +7,6 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-
 public class Laundry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +21,7 @@ public class Laundry implements Serializable {
 	@NotNull
 	@Length(max = 50)
 	private String detail; // 商家详细地址
-	@Length(max = 50)
+	@Length(max = 100)
 	private String comment;
 
 	public Laundry() {

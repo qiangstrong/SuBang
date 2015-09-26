@@ -30,7 +30,7 @@
 					${infoMsg}
 				</c:if>
 			</td>
-			<td align="right"><a href="<c:url value="back//region/region.html?districtid=${region.districtid}"/>">返回</a></td>
+			<td align="right"></td>
 		</tr>
 		<tr>
 			<td colspan="2">

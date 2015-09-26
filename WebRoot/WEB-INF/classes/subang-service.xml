@@ -24,4 +24,8 @@
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
+	
+	<bean  class="com.subang.util.SuUtil">
+    	<property name="noticeDao" ref="noticeDao"/>
+	</bean>
 </beans>

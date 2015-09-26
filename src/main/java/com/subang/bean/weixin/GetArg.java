@@ -2,7 +2,7 @@ package com.subang.bean.weixin;
 
 import weixin.popular.util.SignatureUtil;
 
-import com.subang.util.Common;
+import com.subang.util.SuUtil;
 
 public class GetArg {
 	private String signature;
@@ -56,7 +56,7 @@ public class GetArg {
 		if (signature==null||timestamp==null||nonce==null) {
 			return false;
 		}
-		if (!signature.equals(SignatureUtil.generateEventMessageSignature(Common.getProperty("token"),
+		if (!signature.equals(SignatureUtil.generateEventMessageSignature(SuUtil.getAppProperty("token"),
 				timestamp, nonce))) {
 			return false;
 		}

@@ -50,8 +50,7 @@
 				<form name="searchArg" action="back/user/search.html" method="post">
 					类别：
 					<select id="type" name="type" >
-						<option value="2" selected="selected">用户昵称</option>
-						<option value="3">手机号</option>
+						<option value="3" selected="selected">手机号</option>
 					</select>
 					关键词：
 					<input id="arg" type="text" name="arg" />
@@ -72,20 +71,23 @@
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('userid')" /></th>
-						<th>用户昵称</th>
-						<th>关注</th>
+						
 						<th>手机号</th>
 						<th>积分</th>
+						<th>余额</th>
 						<th>地址</th>
+						<th>卡券</th>
 						<th>订单</th>
 					</tr>
 					<c:forEach var="user" items="${users}">
 						<tr>
 							<td><input type="checkbox" name="userid" value="${user.id}" /></td>
-							<td>${user.nickname}</td>
-							<td>${user.validDes}</td>
-							<td>${user.cellnumDes}</td>
+							<td>${user.cellnum}</td>
 							<td>${user.score}</td>
+							<td>${user.money}</td>
+							<td>
+								<a href="<c:url value="back/user/ticket.html?userid=${user.id}"/>">卡券</a>
+							</td>
 							<td>
 								<a href="<c:url value="back/user/addr.html?userid=${user.id}"/>">地址</a>
 							</td>

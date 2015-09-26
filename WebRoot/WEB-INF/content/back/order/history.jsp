@@ -21,7 +21,7 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"><a href="back/order/index.html?type=1">返回</a></td>
+			<td align="right"></td>
 		</tr>
 		<tr>
 			<td colspan="2">

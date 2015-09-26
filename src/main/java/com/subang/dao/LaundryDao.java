@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.Laundry;
-import com.subang.util.Common;
+import com.subang.util.ComUtil;
 
 @Repository
 public class LaundryDao extends BaseDao<Laundry> {
@@ -53,7 +53,7 @@ public class LaundryDao extends BaseDao<Laundry> {
 
 	public List<Laundry> findByName(String name) {
 		String sql = "select * from laundry_t where name like ?";
-		Object[] args = { Common.getLikeStr(name) };
+		Object[] args = { ComUtil.getLikeStr(name) };
 		List<Laundry> laundrys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Laundry>(
 				Laundry.class));
 		return laundrys;
@@ -61,7 +61,7 @@ public class LaundryDao extends BaseDao<Laundry> {
 
 	public List<Laundry> findByCellnum(String cellnum) {
 		String sql = "select * from laundry_t where cellnum like ?";
-		Object[] args = { Common.getLikeStr(cellnum) };
+		Object[] args = { ComUtil.getLikeStr(cellnum) };
 		List<Laundry> laundrys = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Laundry>(
 				Laundry.class));
 		return laundrys;

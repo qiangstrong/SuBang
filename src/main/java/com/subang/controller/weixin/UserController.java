@@ -11,7 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
-import com.subang.util.Common;
+import com.subang.util.ComUtil;
+import com.subang.util.SuUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.Validator;
@@ -63,7 +64,7 @@ public class UserController extends BaseController {
 			task.cancel();
 		}
 		
-		String authcode = Common.getUserAuthcode();
+		String authcode = SuUtil.getUserAuthcode();
 		session.setAttribute(KEY_CELLNUM, cellnum);
 		session.setAttribute(WebConst.KEY_USER_AUTHCODE, authcode);
 		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toUserContent(authcode))) {
@@ -81,7 +82,7 @@ public class UserController extends BaseController {
 				session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 			}
 		};
-		Common.timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
+		ComUtil.timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
 
 
 		view.addObject("state", STATE_AUTHCODE);
@@ -110,7 +111,7 @@ public class UserController extends BaseController {
 		}
 		User user = getUser(session);
 		user.setCellnum((String) session.getAttribute(KEY_CELLNUM));
-		frontUserService.modifyUser(user);
+		userService.modifyUser(user);
 		session.removeAttribute(KEY_CELLNUM);
 		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 		view.addObject("user", getUser(session));

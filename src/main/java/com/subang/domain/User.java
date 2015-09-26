@@ -7,75 +7,43 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.subang.util.Common;
-
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static User toUser(weixin.popular.bean.User user_weixin) {
-		User user = new User();
-		user.valid = true;
-		user.openid = user_weixin.getOpenid();
-		user.nickname = user_weixin.getNickname();
-		user.score = 0;
-		user.photo = Common.getUserPhoto(user.openid);
-		user.sex = user_weixin.getSex();
-		user.country = user_weixin.getCountry();
-		user.province = user_weixin.getProvince();
-		user.city = user_weixin.getCity();
-		return user;
-	}
-
-	public enum Sex {
-		unknown, male, female
-	}
-
 	private Integer id;
-	private boolean valid; // 默认为true，用户取消关注后，为false
+	private Boolean login;
 	@NotNull
 	private String openid;
-	@Length(max = 4)
-	private String name;
 	@NotNull
 	@Length(max = 100)
 	private String nickname;
-	@Length(max = 50)
+	@NotNull
+	@Length(min = 1, max = 50)
 	private String password;
 	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
-	private int score;
-	private double money;
+	private Integer score;
+	private Double money;
 	@Length(max = 100)
-	private String photo; // 用户微信头像的地址
-	private int sex;
-	private String country;
-	private String province;
-	private String city; // 利用微信接口获取的城市
 	private Integer addrid; // 用户的默认地址
 
 	public User() {
 		this.score = 0;
-		this.money = 0;
+		this.money = 0.0;
 	}
 
-	public User(Integer id, boolean valid, String openid, String name, String nickname,
-			String password, String cellnum, int score, double money, String photo, int sex,
-			String country, String province, String city, Integer addrid) {
+	public User(Integer id, Boolean login, String openid, String nickname, String password,
+			String cellnum, Integer score, Double money, Integer addrid) {
+		super();
 		this.id = id;
-		this.valid = valid;
+		this.login = login;
 		this.openid = openid;
-		this.name = name;
 		this.nickname = nickname;
 		this.password = password;
 		this.cellnum = cellnum;
 		this.score = score;
 		this.money = money;
-		this.photo = photo;
-		this.sex = sex;
-		this.country = country;
-		this.province = province;
-		this.city = city;
 		this.addrid = addrid;
 	}
 
@@ -87,19 +55,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public boolean isValid() {
-		return valid;
+	public Boolean getLogin() {
+		return login;
 	}
 
-	public String getValidDes() {
-		if (valid) {
-			return "是";
-		}
-		return "否";
-	}
-
-	public void setValid(boolean valid) {
-		this.valid = valid;
+	public void setLogin(Boolean login) {
+		this.login = login;
 	}
 
 	public String getOpenid() {
@@ -108,14 +69,6 @@ public class User implements Serializable {
 
 	public void setOpenid(String openid) {
 		this.openid = openid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getNickname() {
@@ -138,79 +91,24 @@ public class User implements Serializable {
 		return cellnum;
 	}
 
-	public String getCellnumDes() {
-		if (cellnum == null) {
-			return "未绑定";
-		}
-		return cellnum;
-	}
-
 	public void setCellnum(String cellnum) {
 		this.cellnum = cellnum;
 	}
 
-	public int getScore() {
+	public Integer getScore() {
 		return score;
 	}
 
-	public void setScore(int score) {
+	public void setScore(Integer score) {
 		this.score = score;
 	}
 
-	public double getMoney() {
+	public Double getMoney() {
 		return money;
 	}
 
-	public void setMoney(double money) {
+	public void setMoney(Double money) {
 		this.money = money;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public int getSex() {
-		return sex;
-	}
-
-	public Sex getSexEnum() {
-		return Sex.values()[sex];
-	}
-
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
-	public void setSex(Sex sex) {
-		this.sex = sex.ordinal();
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
 	}
 
 	public Integer getAddrid() {

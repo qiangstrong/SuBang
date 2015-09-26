@@ -3,8 +3,6 @@ package com.subang.util;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import org.apache.log4j.Logger;
-
 import com.baidu.map.api.GeocodingAPI;
 import com.baidu.map.bean.LatLng;
 import com.baidu.map.bean.RenderReverseResult;
@@ -13,8 +11,6 @@ import com.subang.bean.GeoLoc;
 import com.subang.domain.Location;
 
 public class LocUtil extends BaseUtil {
-
-	protected static final Logger LOG = Logger.getLogger(LocUtil.class.getName());
 
 	public static final int TIMEOUT = 1; // 如果位置的时间戳在一天之前，这个位置无效
 	private static String STATUS_SUCC = "0";
@@ -33,7 +29,7 @@ public class LocUtil extends BaseUtil {
 			return null;
 		}
 		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-		RenderReverseResult result = GeocodingAPI.renderReverse(Common.getProperty("ak_map"),
+		RenderReverseResult result = GeocodingAPI.renderReverse(SuUtil.getAppProperty("ak_map"),
 				CoordType.wgs84ll, latLng);
 		if (!result.getStatus().equals(STATUS_SUCC)) {
 			LOG.error("错误码:" + result.getStatus() + "; 错误信息:用户位置解析失败。");

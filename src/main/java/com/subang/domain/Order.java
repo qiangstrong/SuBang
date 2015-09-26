@@ -8,18 +8,15 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.subang.util.ComUtil;
 import com.subang.util.TimeUtil;
 
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public enum Category {
-		clothes, shoe
-	}
-
 	public enum State {
-		accepted, fetched, paid, finished, canceled;
+		accepted, priced, paid, fetched, checked, delivered, remarked, canceled;
 
 		public static State toState(String arg) {
 			return State.values()[new Integer(arg)];
@@ -28,45 +25,52 @@ public class Order implements Serializable {
 
 	protected Integer id;
 	protected String orderno; // 订单号
-	@NotNull
-	protected int category;
-	protected int state;
+	protected Integer state;
 	@Digits(integer = 3, fraction = 1)
-	protected Float price; // 单位元
+	protected Double money; // 单位元
+	@Digits(integer = 3, fraction = 1)
+	protected Double freight; // 单位元
 	@NotNull
 	protected Date date; // 用户指定的取件日期
 	@NotNull
-	protected int time; // 用户指定的取件时间，时间间隔为（time，time+1）
-	@Length(max = 50)
-	protected String comment;
-
+	protected Integer time; // 用户指定的取件时间，时间间隔为（time，time+1）
+	@Length(max = 100)
+	protected String userComment;
+	@Length(max = 100)
+	protected String workerComment;
+	@Length(max = 100)
+	protected String remark;
+	protected String barcode;
+	protected Integer categoryid;
 	protected Integer userid;
 	@NotNull
 	protected Integer addrid;
 	protected Integer workerid;
 	protected Integer laundryid;
 
-	protected String prepay_id; // 微信预支付id
-
 	public Order() {
 	}
 
-	public Order(Integer id, String orderno, int category, int state, Float price, Date date,
-			int time, String comment, Integer userid, Integer addrid, Integer workerid,
-			Integer laundryid, String prepay_id) {
+	public Order(Integer id, String orderno, Integer state, Double money, Double freight,
+			Date date, Integer time, String userComment, String workerComment, String remark,
+			String barcode, Integer categoryid, Integer userid, Integer addrid, Integer workerid,
+			Integer laundryid) {
 		this.id = id;
 		this.orderno = orderno;
-		this.category = category;
 		this.state = state;
-		this.price = price;
+		this.money = money;
+		this.freight = freight;
 		this.date = date;
 		this.time = time;
-		this.comment = comment;
+		this.userComment = userComment;
+		this.workerComment = workerComment;
+		this.remark = remark;
+		this.barcode = barcode;
+		this.categoryid = categoryid;
 		this.userid = userid;
 		this.addrid = addrid;
 		this.workerid = workerid;
 		this.laundryid = laundryid;
-		this.prepay_id = prepay_id;
 	}
 
 	public Integer getId() {
@@ -85,36 +89,7 @@ public class Order implements Serializable {
 		this.orderno = orderno;
 	}
 
-	public int getCategory() {
-		return category;
-	}
-
-	public Category getCategoryEnum() {
-		return Category.values()[category];
-	}
-
-	public String getCategoryDes() {
-		String description = null;
-		switch (getCategoryEnum()) {
-		case clothes:
-			description = "衣服";
-			break;
-		case shoe:
-			description = "鞋";
-			break;
-		}
-		return description;
-	}
-
-	public void setCategory(int category) {
-		this.category = category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category.ordinal();
-	}
-
-	public int getState() {
+	public Integer getState() {
 		return state;
 	}
 
@@ -128,14 +103,23 @@ public class Order implements Serializable {
 		case accepted:
 			description = "已接受";
 			break;
-		case fetched:
-			description = "已取走";
+		case priced:
+			description = "已计价";
 			break;
 		case paid:
 			description = "已支付";
 			break;
-		case finished:
-			description = "已完成";
+		case fetched:
+			description = "已取走";
+			break;
+		case checked:
+			description = "已分拣";
+			break;
+		case delivered:
+			description = "已送达";
+			break;
+		case remarked:
+			description = "已评价";
 			break;
 		case canceled:
 			description = "已取消";
@@ -144,7 +128,7 @@ public class Order implements Serializable {
 		return description;
 	}
 
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 
@@ -152,19 +136,28 @@ public class Order implements Serializable {
 		this.state = state.ordinal();
 	}
 
-	public Float getPrice() {
-		return price;
+	public Double getMoney() {
+		return money;
 	}
 
-	public String getPriceDes() {
-		if (price == null) {
-			return "未确定";
-		}
-		return price.toString();
+	public String getMoneyDes() {
+		return ComUtil.getDes(money);
 	}
 
-	public void setPrice(Float price) {
-		this.price = price;
+	public void setMoney(Double money) {
+		this.money = money;
+	}
+
+	public Double getFreight() {
+		return freight;
+	}
+
+	public String getFreightDes() {
+		return ComUtil.getDes(freight);
+	}
+
+	public void setFreight(Double freight) {
+		this.freight = freight;
 	}
 
 	public Date getDate() {
@@ -179,7 +172,7 @@ public class Order implements Serializable {
 		this.date = date;
 	}
 
-	public int getTime() {
+	public Integer getTime() {
 		return time;
 	}
 
@@ -187,16 +180,48 @@ public class Order implements Serializable {
 		return TimeUtil.getTimeDes(time);
 	}
 
-	public void setTime(int time) {
+	public void setTime(Integer time) {
 		this.time = time;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getUserComment() {
+		return userComment;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
+	}
+
+	public String getWorkerComment() {
+		return workerComment;
+	}
+
+	public void setWorkerComment(String workerComment) {
+		this.workerComment = workerComment;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public Integer getCategoryid() {
+		return categoryid;
+	}
+
+	public void setCategoryid(Integer categoryid) {
+		this.categoryid = categoryid;
 	}
 
 	public Integer getUserid() {
@@ -231,12 +256,12 @@ public class Order implements Serializable {
 		this.laundryid = laundryid;
 	}
 
-	public String getPrepay_id() {
-		return prepay_id;
+	public boolean isDone() {
+		State stateEnum = getStateEnum();
+		if (stateEnum == State.delivered || stateEnum == State.remarked
+				|| stateEnum == State.canceled) {
+			return true;
+		}
+		return false;
 	}
-
-	public void setPrepay_id(String prepay_id) {
-		this.prepay_id = prepay_id;
-	}
-
 }

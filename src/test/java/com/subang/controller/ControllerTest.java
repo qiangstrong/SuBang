@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.subang.util.Common;
+import com.subang.util.SuUtil;
 
 @Controller
 @RequestMapping("/test")

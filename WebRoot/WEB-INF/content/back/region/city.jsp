@@ -20,7 +20,7 @@
 		function deleteCitys() {
 			var cityids = getCheckedIds("cityid");
 			if (cityids) {
-				var url = "back/city/deletecity.html";
+				var url = "back/region/deletecity.html";
 				submit("cityids", url, cityids);
 			}
 		}
@@ -35,7 +35,10 @@
 	<%@ include file="../common/header.jsp"%>
 	<table align="center">
 		<tr>
-			<td align="right" colspan="2"><a href="back/region/showaddcity.html">添加城市</a></td>
+			<td align="right" colspan="2">
+				<a href="back/region/incomplete.html">不完整区域</a>
+				<a href="back/region/showaddcity.html">添加城市</a>				
+			</td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteCitys()"/></td>
@@ -53,15 +56,21 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('cityid')" /></th>
 						<th>名称</th>
-						<th>区</th>
+						<th>服务范围描述</th>
+						<th>区</th>	
+						<th>服务</th>					
 						<th>修改</th>
 					</tr>
 					<c:forEach var="city" items="${citys}">
 						<tr>
 							<td><input type="checkbox" name="cityid" value="${city.id}" /></td>
 							<td>${city.name}</td>
+							<td>${city.scopeText}</td>
 							<td>
 								<a href="<c:url value="back/region/district.html?cityid=${city.id}"/>">区</a>
+							</td>
+							<td>
+								<a href="<c:url value="back/region/service.html?cityid=${city.id}"/>">服务</a>
 							</td>
 							<td>
 								<a href="<c:url value="back/region/showmodifycity.html?cityid=${city.id}"/>">修改</a>

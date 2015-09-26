@@ -24,7 +24,7 @@ public class StatController extends BaseController {
 	public ModelAndView index(HttpSession session, StatArg statArg) {
 		ModelAndView view = new ModelAndView();
 		savePageState(session, statArg);
-		List<StatItem> statItems=backStatService.stat(statArg);
+		List<StatItem> statItems=statService.stat(statArg);
 		view.addObject(KEY_DATA, statItems);
 		view.setViewName(INDEX_PAGE);
 		return view;

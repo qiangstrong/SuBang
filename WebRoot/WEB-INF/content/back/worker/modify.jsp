@@ -30,7 +30,7 @@
 					${infoMsg}
 				</c:if>
 			</td>
-			<td align="right"><a href="back/worker/index.html?type=1">返回</a></td>
+			<td align="right"></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -56,6 +56,14 @@
 						<tr>
 							<td>手机号：</td>
 							<td><form:input path="cellnum" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="detail" /></td>
+						</tr>
+						<tr>
+							<td>地址：</td>
+							<td><form:input path="detail" size="100"/></td>
 						</tr>
 						<tr>
 							<td></td>

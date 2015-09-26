@@ -156,14 +156,14 @@ $$
 
 create procedure `statPriceAvgByUser` ()
 begin
-select first_t.name 'name', avg(second_t.price) 'quantity' 
+select first_t.name 'name', avg(second_t.money) 'quantity' 
 from (
 	select user_t.nickname 'name', user_t.id 'userid'
     from user_t
 ) as first_t left join (
-	select user_t.id 'userid', order_t.price 'price'
+	select user_t.id 'userid', order_t.money 'money'
     from user_t, order_t 
-	where user_t.id=order_t.userid and order_t.state=2 and order_t.price is not null 
+	where user_t.id=order_t.userid and order_t.money is not null 
 ) as second_t on first_t.userid=second_t.userid
 group by first_t.userid;
 end

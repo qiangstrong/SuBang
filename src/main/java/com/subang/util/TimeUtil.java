@@ -2,19 +2,14 @@ package com.subang.util;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import com.sun.org.apache.regexp.internal.recompile;
 
 /**
  * @author Qiang 下单页取件时间相关的流程
  */
 public class TimeUtil extends BaseUtil {
-
-	private static SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static final int TIME_START = 9;
 	public static final int TIME_END = 20;
@@ -109,22 +104,22 @@ public class TimeUtil extends BaseUtil {
 	public static Date toDate(String dateValue) {
 		Date date = null;
 		try {
-			date = new Date(sdf_date.parse(dateValue).getTime());
+			date = new Date(ComUtil.sdf_date.parse(dateValue).getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return date;
 	}
-	
-	public static boolean isTaday(Long time){
-		Calendar calendar_cur=Calendar.getInstance();
-		Calendar calendar_old=Calendar.getInstance();
+
+	public static boolean isTaday(Long time) {
+		Calendar calendar_cur = Calendar.getInstance();
+		Calendar calendar_old = Calendar.getInstance();
 		calendar_old.setTimeInMillis(time);
-		int day_cur=calendar_cur.get(Calendar.DAY_OF_YEAR);
-		int day_old=calendar_old.get(Calendar.DAY_OF_YEAR);
-		if (day_cur==day_old) {
+		int day_cur = calendar_cur.get(Calendar.DAY_OF_YEAR);
+		int day_old = calendar_old.get(Calendar.DAY_OF_YEAR);
+		if (day_cur == day_old) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

@@ -36,7 +36,7 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"><a href="<c:url value="back/region/district.html?cityid=${cityid}"/>">返回</a></td>
+			<td align="right"></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><a href="<c:url value="back/region/showaddregion.html?districtid=${districtid}"/>">添加小区</a></td>

@@ -2,8 +2,8 @@ package com.subang.util;
 
 public interface WebConst {
 
-	String CONTEXT_PREFIX="";
-	//String CONTEXT_PREFIX = "/subang";
+	String CONTEXT_PREFIX = "";
+	// String CONTEXT_PREFIX = "/subang";
 	String BACK_PREFIX = "/back";
 	String WEIXIN_PREFIX = "/weixin";
 
@@ -26,13 +26,16 @@ public interface WebConst {
 	int SEARCH_NAME = 2; // 按用户昵称，商家名称等进行搜索
 	int SEARCH_CELLNUM = 3;
 	int SEARCH_AREA = 4;
+	int SEARCH_INCOMPLETE = 5;
 
 	int SEARCH_ORDER_STATE = 2;
-	int SEARCH_ORDER_USERID = 3;
-	int SEARCH_ORDER_ORDERNO = 4;
-	int SEARCH_ORDER_USER_NICKNAME = 5;
-	int SEARCH_ORDER_USER_CELLNUM = 6;
-	int SEARCH_ORDER_LAUNDRY_NAME = 7;
+	int SEARCH_ORDER_ORDERNO = 3;
+	int SEARCH_ORDER_USER_NICKNAME = 4;
+	int SEARCH_ORDER_USER_CELLNUM = 5;
+	int SEARCH_ORDER_LAUNDRY_NAME = 6;
+	int SEARCH_ORDER_USERID = 7;
+	int SEARCH_ORDER_WORKERID = 8;
+	int SEARCH_ORDER_LAUNDRYID = 9;
 
 	int STAT_NULL = 0;
 	int STAT_AREA = 1;

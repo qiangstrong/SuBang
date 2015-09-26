@@ -59,9 +59,9 @@ public class AddrDao extends BaseDao<Addr> {
 		return addrs;
 	}
 
-	public AddrDetail getAddrDetail(Integer id) {
+	public AddrDetail getDetail(Integer addrid) {
 		String sql = "select * from addrdetail_v where id=?";
-		Object[] args = { id };
+		Object[] args = { addrid };
 		AddrDetail addrDetail = null;
 		try {
 			addrDetail = jdbcTemplate.queryForObject(sql, args,
@@ -71,7 +71,7 @@ public class AddrDao extends BaseDao<Addr> {
 		return addrDetail;
 	}
 
-	public List<AddrDetail> findAddrDetailByUserid(Integer userid) {
+	public List<AddrDetail> findDetailByUserid(Integer userid) {
 		String sql = "select * from addrdetail_v where userid=? and valid=1";
 		Object[] args = { userid };
 		List<AddrDetail> addrDetails = jdbcTemplate.query(sql, args,

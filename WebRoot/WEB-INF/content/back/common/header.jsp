@@ -7,9 +7,11 @@
 			<td align="center"><a href="back/laundry/index.html?type=0">商家管理</a></td>
 			<td align="center"><a href="back/worker/index.html?type=0">人员管理</a></td>
 			<td align="center"><a href="back/region/city.html">区域管理</a></td>
-			<td align="center"><a href="back/info/index.html">产品运营</a></td>
-			<td align="center"><a href="back/stat/index.html">数据统计</a></td>
-			<td align="center"><a href="back/misc/admin.html">修改信息</a></td>
+			<td align="center"><a href="back/price/category.html">价格管理</a></td>
+			<td align="center"><a href="back/info/info.html">产品运营</a></td>
+			<td align="center"><a href="back/activity/tickettype.html">活动管理</a></td>
+			<td align="center"><a href="back/role/admin.html">角色管理</a></td>
+			<td align="center"><a href="back/stat/index.html">数据统计</a></td>			
 			<td align="center"><a href="back/logout.html">退出系统</a></td>
 		</tr>
 	</table>

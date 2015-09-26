@@ -15,6 +15,8 @@ import com.baidu.map.api.GeocodingAPI;
 import com.baidu.map.bean.LatLng;
 import com.baidu.map.bean.RenderReverseResult;
 import com.baidu.map.util.CoordType;
+import com.subang.domain.Notice.CodeType;
+import com.sun.xml.internal.ws.policy.sourcemodel.ModelNode.Type;
 
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TicketAPI;
@@ -30,8 +32,7 @@ public class UtilTest {
 	
 	@Test
 	public void test() throws Exception {
-		Token token = TokenAPI.token("wx0c69fe4ab533a3e5","3525d67ccc785a0985569c13cbdeb414");
-		Ticket ticket = TicketAPI.ticketGetticket(token.getAccess_token());
+		SuUtil.notice(CodeType.sms, "短信发送失败。");
 		
 		pause();
 	}

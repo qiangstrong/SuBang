@@ -3,10 +3,16 @@ package com.subang.bean;
 import java.sql.Date;
 
 import com.subang.domain.Order;
+import com.subang.domain.Payment.PayType;
 
 public class OrderDetail extends Order {
 
-	private String nickname;
+	private static final long serialVersionUID = 1L;
+
+	private String categoryname;
+	private String cellnum;
+	private Integer payType;
+	private Double moneyTicket;
 	private String addrname; // 订单地址中填写的姓名
 	private String addrcellnum; // 订单地址中填写的手机号
 	private String cityname;
@@ -19,14 +25,19 @@ public class OrderDetail extends Order {
 	public OrderDetail() {
 	}
 
-	public OrderDetail(Integer id, String orderno, int category, int state, Float price, Date date,
-			int time, String comment, Integer userid, Integer addrid, Integer workerid,
-			Integer laundryid, String prepay_id, String nickname, String addrname,
-			String addrcellnum, String cityname, String districtname, String regionname,
-			String addrdetail, String workername, String workercellnum) {
-		super(id, orderno, category, state, price, date, time, comment, userid, addrid, workerid,
-				laundryid, prepay_id);
-		this.nickname = nickname;
+	public OrderDetail(Integer id, String orderno, Integer state, Double money, Double freight,
+			Date date, Integer time, String userComment, String workerComment, String remark,
+			String barcode, Integer categoryid, Integer userid, Integer addrid, Integer workerid,
+			Integer laundryid, String categoryname, String cellnum, Integer payType,
+			Double moneyTicket, String addrname, String addrcellnum, String cityname,
+			String districtname, String regionname, String addrdetail, String workername,
+			String workercellnum) {
+		super(id, orderno, state, money, freight, date, time, userComment, workerComment, remark,
+				barcode, categoryid, userid, addrid, workerid, laundryid);
+		this.categoryname = categoryname;
+		this.cellnum = cellnum;
+		this.payType = payType;
+		this.moneyTicket = moneyTicket;
 		this.addrname = addrname;
 		this.addrcellnum = addrcellnum;
 		this.cityname = cityname;
@@ -37,12 +48,61 @@ public class OrderDetail extends Order {
 		this.workercellnum = workercellnum;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getCategoryname() {
+		return categoryname;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setCategoryname(String categoryname) {
+		this.categoryname = categoryname;
+	}
+
+	public String getCellnum() {
+		return cellnum;
+	}
+
+	public void setCellnum(String cellnum) {
+		this.cellnum = cellnum;
+	}
+
+	public Integer getPayType() {
+		return payType;
+	}
+
+	public PayType getPayTypeEnum() {
+		return PayType.values()[payType];
+	}
+
+	public String getPayTypeDes() {
+		String description = null;
+		switch (getPayTypeEnum()) {
+		case balance:
+			description = "余额";
+			break;
+		case weixin:
+			description = "微信";
+			break;
+		case alipay:
+			description = "支付宝";
+			break;
+		}
+		return description;
+	}
+	
+	public String getPaymentDes() {
+		String description="";
+		return description;
+	}
+
+	public void setPayType(Integer payType) {
+		this.payType = payType;
+	}
+
+	public Double getMoneyTicket() {
+		return moneyTicket;
+	}
+
+	public void setMoneyTicket(Double moneyTicket) {
+		this.moneyTicket = moneyTicket;
 	}
 
 	public String getAddrname() {

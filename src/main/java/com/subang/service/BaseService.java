@@ -14,25 +14,48 @@ public class BaseService {
 	@Autowired
 	protected AdminDao adminDao;
 	@Autowired
+	protected CategoryDao categoryDao;
+	@Autowired
 	protected CityDao cityDao;
 	@Autowired
+	protected ClothesDao clothesDao;
+	@Autowired
+	protected ClothesTypeDao clothesTypeDao;
+	@Autowired
 	protected DistrictDao districtDao;
+	@Autowired
+	protected FaqDao faqDao;
+	@Autowired
+	protected FeedbackDao feedbackDao;
 	@Autowired
 	protected HistoryDao historyDao;
 	@Autowired
 	protected InfoDao infoDao;
 	@Autowired
 	protected LaundryDao laundryDao;
-	@Autowired
-	protected OrderDao orderDao;
-	@Autowired
-	protected RegionDao regionDao;
-	@Autowired
-	protected UserDao userDao;
 	@Autowired 
 	protected LocationDao locationDao;
+	@Autowired 
+	protected NoticeDao noticeDao;
 	@Autowired
-	protected WorkerDao workerDao;
+	protected OrderDao orderDao;
+	@Autowired 
+	protected PaymentDao paymentDao;
+	@Autowired 
+	protected PriceDao priceDao;
+	@Autowired
+	protected RegionDao regionDao;
+	@Autowired 
+	protected ServiceDao serviceDao;
 	@Autowired
 	protected StatDao statDao;
+	@Autowired
+	protected TicketDao ticketDao;
+	@Autowired
+	protected TicketTypeDao ticketTypeDao;
+	@Autowired
+	protected UserDao userDao;
+	@Autowired
+	protected WorkerDao workerDao;
+
 }

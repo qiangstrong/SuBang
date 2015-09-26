@@ -30,12 +30,12 @@
 					${infoMsg}
 				</c:if>
 			</td>
-			<td align="right"><a href="back/region/city.html">返回</a></td>
+			<td align="right"></td>
 		</tr>
 		<tr>
 			<td colspan="2">
-				<form:form modelAttribute="city" action="back/region/modifycity.html" method="post">
-					<form:hidden path="id"/>
+				<form:form modelAttribute="city" action="back/region/modifycity.html" method="post" enctype="multipart/form-data">
+					<form:hidden path="id"/>					
 					<table>
 						<tr>
 							<td></td>
@@ -44,6 +44,22 @@
 						<tr>
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
+						</tr>
+						<tr>
+							<td>服务范围：</td>
+							<td><img width="500" src="${city.scope}" /></td>
+						</tr>
+						<tr>
+							<td>服务范围：</td>
+							<td><input type="file" name="scopeImg"/></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="scopeText" /></td>
+						</tr>
+						<tr>
+							<td>服务范围描述：</td>
+							<td><form:input path="scopeText" size="100"/></td>
 						</tr>
 						<tr >
 							<td><input type="submit" value="修改" /></td>

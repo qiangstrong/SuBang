@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.District;
-import com.subang.util.Common;
+import com.subang.util.ComUtil;
 
 @Repository
 public class DistrictDao extends BaseDao<District> {
@@ -51,7 +51,7 @@ public class DistrictDao extends BaseDao<District> {
 
 	public List<District> findByName(String name) {
 		String sql = "select * from district_t where name like ?";
-		Object[] args = { Common.getLikeStr(name) };
+		Object[] args = { ComUtil.getLikeStr(name) };
 		List<District> districts = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<District>(District.class));
 		return districts;
@@ -59,7 +59,7 @@ public class DistrictDao extends BaseDao<District> {
 	
 	public List<District> findValidByCityidAndName(Integer cityid,String name){
 		String sql = "select distinct districtid `id`, districtname `name`, ? `cityid` from area_v where cityid=? and districtname like ?";
-		Object[] args = { cityid, cityid ,Common.getLikeStr(name)};
+		Object[] args = { cityid, cityid ,ComUtil.getLikeStr(name)};
 		List<District> districts = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<District>(District.class));
 		return districts;

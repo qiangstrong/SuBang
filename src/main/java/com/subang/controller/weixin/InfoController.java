@@ -17,7 +17,7 @@ public class InfoController extends BaseController{
 	@RequestMapping("/price")
 	public ModelAndView getPrice() {
 		ModelAndView view = new ModelAndView();
-		Info info=frontUserService.getInfo();
+		Info info=infoService.getInfo();
 		view.addObject("price_path", info.getPrice_path());
 		view.addObject("price_text", info.getPrice_text());
 		view.setViewName(VIEW_PREFIX+"/price");
@@ -27,7 +27,7 @@ public class InfoController extends BaseController{
 	@RequestMapping("/scope")
 	public ModelAndView getScope() {
 		ModelAndView view = new ModelAndView();
-		Info info=frontUserService.getInfo();
+		Info info=infoService.getInfo();
 		view.addObject("scope_path", info.getScope_path());
 		view.addObject("scope_text", info.getScope_text());
 		view.setViewName(VIEW_PREFIX+"/scope");
@@ -37,7 +37,7 @@ public class InfoController extends BaseController{
 	@RequestMapping("/about")
 	public ModelAndView getAbout() {
 		ModelAndView view = new ModelAndView();
-		Info info=frontUserService.getInfo();
+		Info info=infoService.getInfo();
 		view.addObject("about", info.getAbout());
 		view.addObject("phone", info.getPhone());
 		view.setViewName(VIEW_PREFIX+"/about");
@@ -47,7 +47,7 @@ public class InfoController extends BaseController{
 	@RequestMapping("/term")
 	public ModelAndView getTerm() {
 		ModelAndView view = new ModelAndView();
-		Info info=frontUserService.getInfo();
+		Info info=infoService.getInfo();
 		view.addObject("term", info.getTerm());
 		view.setViewName(VIEW_PREFIX+"/term");
 		return view;

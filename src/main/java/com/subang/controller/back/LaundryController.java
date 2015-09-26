@@ -15,8 +15,8 @@ import com.subang.bean.PageState;
 import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Laundry;
-import com.subang.exception.BackException;
-import com.subang.util.Common;
+import com.subang.exception.SuException;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 @Controller
@@ -35,7 +35,7 @@ public class LaundryController extends BaseController {
 		}
 		PageState pageState=getPageState(session);
 		
-		List<Laundry> laundrys = backAdminService.searchLaundry(pageState.getSearchArg());
+		List<Laundry> laundrys = laundryService.searchLaundry(pageState.getSearchArg());
 		view.addObject(KEY_DATA, laundrys);
 		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
 		session.removeAttribute(KEY_ERR_MSG);
@@ -50,7 +50,7 @@ public class LaundryController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ALL, null);
 		savePageState(session, searchArg);
-		List<Laundry> laundrys = backAdminService.searchLaundry(searchArg);
+		List<Laundry> laundrys = laundryService.searchLaundry(searchArg);
 		view.addObject(KEY_DATA, laundrys);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -60,7 +60,7 @@ public class LaundryController extends BaseController {
 	public ModelAndView search(HttpSession session, SearchArg searchArg) {
 		ModelAndView view = new ModelAndView();
 		savePageState(session, searchArg);
-		List<Laundry> laundrys = backAdminService.searchLaundry(searchArg);
+		List<Laundry> laundrys = laundryService.searchLaundry(searchArg);
 		view.addObject(KEY_DATA, laundrys);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -80,8 +80,8 @@ public class LaundryController extends BaseController {
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
-				backAdminService.addLaundry(laundry);
-			} catch (BackException e) {
+				laundryService.addLaundry(laundry);
+			} catch (SuException e) {
 				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
 				view.addObject("laundry", laundry);
 				isException = true;
@@ -99,8 +99,8 @@ public class LaundryController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
 		try {
-			backAdminService.deleteLaundrys(Common.getIds(laundryids));
-		} catch (BackException e) {
+			laundryService.deleteLaundrys(SuUtil.getIds(laundryids));
+		} catch (SuException e) {
 			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
 			isException = true;
 		}
@@ -114,7 +114,7 @@ public class LaundryController extends BaseController {
 	@RequestMapping("/showmodify")
 	public ModelAndView showModify(@RequestParam("laundryid") Integer laundryid) {
 		ModelAndView view = new ModelAndView();
-		Laundry laundry = backAdminService.getLaundry(laundryid);
+		Laundry laundry = laundryDao.get(laundryid);
 		view.addObject("laundry", laundry);
 		view.setViewName( WebConst.BACK_PREFIX+"/laundry/modify");
 		return view;
@@ -129,8 +129,8 @@ public class LaundryController extends BaseController {
 		}else if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
-				backAdminService.modifyLaundry(laundry);
-			} catch (BackException e) {
+				laundryService.modifyLaundry(laundry);
+			} catch (SuException e) {
 				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
 				view.addObject("laundry", laundry);
 				isException = true;
@@ -140,6 +140,18 @@ public class LaundryController extends BaseController {
 			}	
 		}
 		view.setViewName( WebConst.BACK_PREFIX+"/laundry/modify");
+		return view;
+	}
+	
+	@RequestMapping("/order")
+	public ModelAndView listOrder(HttpSession session, @RequestParam("laundryid") Integer laundryid) {
+		ModelAndView view = new ModelAndView();
+		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_LAUNDRYID, laundryid.toString());
+		savePageState(session, searchArg);
+		Laundry laundry = laundryDao.get(laundryid);
+		String msg = "名称：" + laundry.getName() + ",手机号：" + laundry.getCellnum() + "。此商家的订单如下：";
+		session.setAttribute(KEY_INFO_MSG, msg);
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html?type=1");
 		return view;
 	}
 }

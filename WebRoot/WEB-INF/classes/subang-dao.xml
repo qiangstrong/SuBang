@@ -16,6 +16,7 @@
 		p:username="sa"
 		p:password="qwerty" >
 		
+		<!-- 避免数据库超时断开连接时，抛出异常 -->
 		<property name="testOnBorrow">
    			<value>true</value>
    		</property>

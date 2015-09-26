@@ -21,8 +21,24 @@ public class AdminDao extends BaseDao<Admin> {
 		}
 		return admin;
 	}
-
-	public Admin findByMatch(Admin admin) {
+	public void save(Admin admin){
+		String sql = "insert into admin_t values(null,?,?)";
+		Object[] args = { admin.getUsername(),admin.getPassword() };
+		jdbcTemplate.update(sql, args);
+	}
+	public void update(Admin admin) {
+		String sql = "update admin_t set username=? ,password=? where id=?";
+		Object[] args = { admin.getUsername(), admin.getPassword(), admin.getId() };
+		jdbcTemplate.update(sql, args);
+	}
+	
+	public void delete(Integer id) {
+		String sql = "delete from admin_t where id=?";
+		Object[] args = { id };
+		jdbcTemplate.update(sql, args);
+	}
+	
+	public Admin findByAdmin(Admin admin) {
 		String sql = "select * from admin_t where username=? and password=?";
 		Object[] args = { admin.getUsername(), admin.getPassword() };
 		admin = null;
@@ -33,11 +49,5 @@ public class AdminDao extends BaseDao<Admin> {
 		} catch (IncorrectResultSizeDataAccessException e) {
 		}
 		return admin;
-	}
-
-	public void update(Admin admin) {
-		String sql = "update admin_t set username=? ,password=? where id=?";
-		Object[] args = { admin.getUsername(), admin.getPassword(), admin.getId() };
-		jdbcTemplate.update(sql, args);
 	}
 }

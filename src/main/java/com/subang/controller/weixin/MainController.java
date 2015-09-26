@@ -9,10 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import weixin.popular.api.UserAPI;
 import weixin.popular.bean.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
-import weixin.popular.support.TokenManager;
 import weixin.popular.util.ExpireSet;
 import weixin.popular.util.XMLConverUtil;
 
@@ -20,9 +18,8 @@ import com.subang.bean.weixin.GetArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Location;
 import com.subang.domain.User;
-import com.subang.util.Common;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
-
 
 @Controller("mainController_weixin")
 @RequestMapping("/weixin")
@@ -42,7 +39,7 @@ public class MainController extends BaseController {
 
 		// 首次请求申请验证,返回echostr
 		if (getArg.getEchostr() != null) {
-			Common.outputStreamWrite(response.getOutputStream(), getArg.getEchostr());
+			SuUtil.outputStreamWrite(response.getOutputStream(), getArg.getEchostr());
 			return;
 		}
 		if (inputStream != null) {
@@ -60,7 +57,7 @@ public class MainController extends BaseController {
 					subscribe(eventMessage, response);
 				} else if (eventMessage.getEvent().equals("unsubscribe")) {
 					unsubscribe(eventMessage, response);
-				} else if (eventMessage.getEvent().equals("LOCATION")){
+				} else if (eventMessage.getEvent().equals("LOCATION")) {
 					location(eventMessage, response);
 				}
 			}
@@ -70,42 +67,27 @@ public class MainController extends BaseController {
 	private void subscribe(EventMessage eventMessage, HttpServletResponse response)
 			throws Exception {
 		XMLTextMessage xmlTextMessage = new XMLTextMessage(eventMessage.getFromUserName(),
-				eventMessage.getToUserName(), Common.getProperty("welcomeMsg"));
+				eventMessage.getToUserName(), SuUtil.getAppProperty("welcomeMsg"));
 		xmlTextMessage.outputStreamWrite(response.getOutputStream());
-		response.flushBuffer();
-
-		weixin.popular.bean.User user_weixin = UserAPI.userInfo(TokenManager.getDefaultToken(),
-				eventMessage.getFromUserName());
-		User user = User.toUser(user_weixin);
-		String headimgurl = user_weixin.getHeadimgurl();
-		if (headimgurl != null && !headimgurl.equals("")) {
-			Common.saveUrl(headimgurl, user.getPhoto());
-		}
-		frontUserService.addUser(user);
 	}
 
 	private void unsubscribe(EventMessage eventMessage, HttpServletResponse response) {
-		User user = frontUserService.getUserByOpenid(eventMessage.getFromUserName());
-		if (user != null) {
-			user.setValid(false);
-			frontUserService.modifyUser(user);
-		}
 	}
-	
+
 	private void location(EventMessage eventMessage, HttpServletResponse response) {
-		User user = frontUserService.getUserByOpenid(eventMessage.getFromUserName());
+		User user = userDao.findByOpenid(eventMessage.getFromUserName());
 		if (user != null) {
-			Location location=frontUserService.getLocationByUserid(user.getId());
-			if (location!=null) {
+			Location location = userService.getLocationByUserid(user.getId());
+			if (location != null) {
 				location.setLatitude(eventMessage.getLatitude());
 				location.setLongitude(eventMessage.getLongitude());
-				frontUserService.modifyLocation(location);
+				userService.modifyLocation(location);
 			} else {
-				location=new Location();
+				location = new Location();
 				location.setLatitude(eventMessage.getLatitude());
 				location.setLongitude(eventMessage.getLongitude());
 				location.setUserid(user.getId());
-				frontUserService.addLocation(location);
+				userService.addLocation(location);
 			}
 		}
 	}

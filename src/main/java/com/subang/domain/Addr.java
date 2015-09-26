@@ -11,27 +11,27 @@ public class Addr implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	protected  Integer id;
-	protected  boolean valid;
+	protected Integer id;
+	protected Boolean valid;
 	@NotNull
 	@Length(min = 1, max = 4)
-	protected  String name;
+	protected String name;
 	@NotNull
 	@Pattern(regexp = "\\d{11}")
-	protected  String cellnum;
+	protected String cellnum;
 	@NotNull
 	@Length(max = 50)
-	protected  String detail;
-	
-	protected  Integer userid;
+	protected String detail;
+
+	protected Integer userid;
 	@NotNull
-	protected  Integer regionid;
+	protected Integer regionid;
 
 	public Addr() {
 	}
 
-	public Addr(Integer id, boolean valid, String name, String cellnum,
-			String detail, Integer userid, Integer regionid) {
+	public Addr(Integer id, Boolean valid, String name, String cellnum, String detail,
+			Integer userid, Integer regionid) {
 		this.id = id;
 		this.valid = valid;
 		this.name = name;
@@ -53,7 +53,7 @@ public class Addr implements Serializable {
 		return valid;
 	}
 
-	public void setValid(boolean valid) {
+	public void setValid(Boolean valid) {
 		this.valid = valid;
 	}
 

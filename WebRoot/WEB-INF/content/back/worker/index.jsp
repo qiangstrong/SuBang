@@ -77,6 +77,7 @@
 						<th>姓名</th>
 						<th>核心</th>
 						<th>手机号</th>
+						<th>地址</th>
 						<th>备注</th>
 						<th>区域</th>
 						<th>修改</th>
@@ -87,7 +88,11 @@
 							<td>${worker.name}</td>
 							<td>${worker.coreDes}</td>
 							<td>${worker.cellnum}</td>
+							<td>${worker.detail}</td>
 							<td>${worker.comment}</td>
+							<td>
+								<a href="<c:url value="back/worker/order.html?workerid=${worker.id}"/>">订单</a>
+							</td>
 							<td>
 								<a href="<c:url value="back/worker/area.html?workerid=${worker.id}"/>">区域</a>
 							</td>

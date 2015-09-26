@@ -75,8 +75,9 @@
 						<th><input type="checkbox" onclick="switchCheckboxs('laundryid')" /></th>
 						<th>商家名称</th>
 						<th>手机号</th>
-						<th>详细地址</th>
+						<th>地址</th>
 						<th>备注</th>
+						<th>订单</th>
 						<th>修改</th>
 					</tr>
 					<c:forEach var="laundry" items="${laundrys}">
@@ -86,6 +87,9 @@
 							<td>${laundry.cellnum}</td>
 							<td>${laundry.detail}</td>
 							<td>${laundry.comment}</td>
+							<td>
+								<a href="<c:url value="back/laundry/order.html?laundryid=${laundry.id}"/>">订单</a>
+							</td>
 							<td>
 								<a href="<c:url value="back/laundry/showmodify.html?laundryid=${laundry.id}"/>">修改</a>
 							</td>

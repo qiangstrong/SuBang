@@ -66,11 +66,11 @@
 							</td>
 							<td>
 								<label for="id10">订单量</label>
-								<input type="radio" name="type1" id="id10" value="0"/>
+								<input type="radio" name="type1" id="id10" value="0" disabled="disabled"/>
 							</td>
 							<td>
 								<label for="id11">消费单价</label>
-								<input type="radio" name="type1" id="id11" value="1"/>
+								<input type="radio" name="type1" id="id11" value="1" disabled="disabled"/>
 							</td>
 							<td></td>
 							<td>

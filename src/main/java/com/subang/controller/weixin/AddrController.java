@@ -18,18 +18,13 @@ import weixin.popular.util.JsonUtil;
 
 import com.subang.bean.AddrData;
 import com.subang.bean.AddrDetail;
-import com.subang.bean.Area;
 import com.subang.controller.BaseController;
-import com.subang.dao.RegionDao;
 import com.subang.domain.Addr;
-import com.subang.domain.City;
 import com.subang.domain.District;
 import com.subang.domain.Region;
 import com.subang.domain.User;
-import com.subang.util.Common;
-import com.subang.util.TimeUtil;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
-import com.subang.util.TimeUtil.Option;
 
 @Controller("addrController_weixin")
 @RequestMapping("/weixin/addr")
@@ -41,8 +36,7 @@ public class AddrController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(getUser(session)
-				.getId());
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(getUser(session).getId());
 		view.addObject("addrDetails", addrDetails);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -66,20 +60,19 @@ public class AddrController extends BaseController {
 		OutputStream outputStream = response.getOutputStream();
 
 		if (cityid != null) {
-			List<District> districts = frontUserService.listDistrictByCityid(cityid);
-			List<Region> regions = frontUserService
-					.listRegionByDistrictid(districts.get(0).getId());
+			List<District> districts = districtDao.findValidByCityid(cityid);
+			List<Region> regions = regionDao.findByDistrictid(districts.get(0).getId());
 			List<List> list = new ArrayList<List>();
 			list.add(districts);
 			list.add(regions);
 			String json = JsonUtil.toJSONString(list);
-			Common.outputStreamWrite(outputStream, json);
+			SuUtil.outputStreamWrite(outputStream, json);
 			return;
 		}
 		if (districtid != null) {
-			List<Region> regions = frontUserService.listRegionByDistrictid(districtid);
+			List<Region> regions = regionDao.findByDistrictid(districtid);
 			String json = JsonUtil.toJSONString(regions);
-			Common.outputStreamWrite(outputStream, json);
+			SuUtil.outputStreamWrite(outputStream, json);
 			return;
 		}
 	}
@@ -94,9 +87,8 @@ public class AddrController extends BaseController {
 			return view;
 		}
 		addr.setUserid(user.getId());
-		frontUserService.addAddr(addr);
-		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(getUser(session)
-				.getId());
+		userService.addAddr(addr);
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(getUser(session).getId());
 		view.addObject("addrDetails", addrDetails);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -105,9 +97,8 @@ public class AddrController extends BaseController {
 	@RequestMapping("/delete")
 	public ModelAndView delete(HttpSession session, @RequestParam("addrid") Integer addrid) {
 		ModelAndView view = new ModelAndView();
-		frontUserService.deleteAddr(addrid);
-		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(getUser(session)
-				.getId());
+		userService.deleteAddr(addrid);
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(getUser(session).getId());
 		view.addObject("addrDetails", addrDetails);
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -116,10 +107,10 @@ public class AddrController extends BaseController {
 	private void prepare(ModelAndView view, User user, Addr addr) {
 		AddrData addrData;
 		if (user != null) {
-			addrData = frontUserService.getAddrData(user);
+			addrData = regionService.getAddrData(user);
 			addr.setDetail(addrData.getDetail());
 		} else {
-			addrData=frontUserService.getAddrData(addr.getRegionid());
+			addrData = regionService.getAddrData(addr.getRegionid());
 		}
 		view.addObject("citys", addrData.getCitys());
 		view.addObject("defaultCityid", addrData.getDefaultCityid());

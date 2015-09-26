@@ -11,12 +11,11 @@ import weixin.popular.bean.SnsToken;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
-import com.subang.util.Common;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 /**
- * @author Qiang 此类经历了很多次调整； 考虑到响应时间，我们不考虑一下几种情况： 1.用户直接通过URL（而非通过点击菜单）访问了网页；
- *         2.速帮服务器未接收到微信服务器发送的关于“用户关注”和“取消关注”的消息。
+ * @author Qiang
  */
 public class WeixinInterceptor extends BaseController implements HandlerInterceptor {
 
@@ -30,16 +29,16 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 		String code = request.getParameter("code");
 		if (code == null) {
 			User user = getUser(request.getSession());
-			if ((user == null || !user.isValid()) && isRestrictedURI(request.getRequestURI())) {
+			if (user == null && isRestrictedURI(request.getRequestURI())) {
 				String redirect_uri = request.getRequestURL() + "?" + request.getQueryString();
-				String url = SnsAPI.connectOauth2Authorize(Common.getProperty("appid"),
+				String url = SnsAPI.connectOauth2Authorize(SuUtil.getAppProperty("appid"),
 						redirect_uri, false, null);
 				response.sendRedirect(url);
 				return false;
 			}
 		} else {
-			SnsToken snsToken = SnsAPI.oauth2AccessToken(Common.getProperty("appid"),
-					Common.getProperty("appsecret"), code);
+			SnsToken snsToken = SnsAPI.oauth2AccessToken(SuUtil.getAppProperty("appid"),
+					SuUtil.getAppProperty("appsecret"), code);
 			if (snsToken.getErrcode() != null) {
 				// 可能的原因是：用户手动输入URL,伪造了code
 				request.getRequestDispatcher("/WEB-INF/content/weixin/common/error.jsp").forward(
@@ -47,10 +46,10 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 				return false;
 			}
 
-			User user = frontUserService.getUserByOpenid(snsToken.getOpenid());
-			if (user == null || !user.isValid()) {
-				// 用户没有关注微信号
-				request.getRequestDispatcher("/WEB-INF/content/weixin/common/prompt.jsp").forward(
+			User user = userDao.findByOpenid(snsToken.getOpenid());
+			if (user == null) {
+				// 用户还未注册
+				request.getRequestDispatcher("/WEB-INF/content/weixin/user/register.jsp").forward(
 						request, response);
 				return false;
 			}

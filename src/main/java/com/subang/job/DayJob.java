@@ -5,13 +5,18 @@ import org.quartz.JobExecutionException;
 
 import com.subang.util.StratUtil;
 
-
-public class DayJob extends BaseJob{
+public class DayJob extends BaseJob {
 
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		LOG.info("调度器执行");
 		StratUtil.reset();
+
+		regionService.check();
+		priceService.check();
+		workerService.check();
+
+		activityService.clear();
 	}
 
 }

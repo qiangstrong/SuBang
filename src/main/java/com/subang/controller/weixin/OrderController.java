@@ -40,8 +40,8 @@ import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
-import com.subang.exception.BackException;
-import com.subang.util.Common;
+import com.subang.exception.SuException;
+import com.subang.util.SuUtil;
 import com.subang.util.TimeUtil;
 import com.subang.util.TimeUtil.Option;
 import com.subang.util.WebConst;
@@ -59,7 +59,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int stateType) {
 		ModelAndView view = new ModelAndView();
-		List<Order> orders = frontUserService.searchOrderByUseridAndState(getUser(session).getId(),
+		List<Order> orders = orderService.searchOrderByUseridAndState(getUser(session).getId(),
 				stateType);
 		view.addObject("orders", orders);
 		view.setViewName(INDEX_PAGE);
@@ -69,9 +69,9 @@ public class OrderController extends BaseController {
 	@RequestMapping("/detail")
 	public ModelAndView detail(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		Order order = frontUserService.getOrder(orderid);
-		List<History> historys = frontUserService.listHistoryByOrderid(orderid);
-		AddrDetail addrDetail = frontUserService.getAddrDetail(order.getAddrid());
+		Order order = orderDao.get(orderid);
+		List<History> historys = historyDao.findByOrderid(orderid);
+		AddrDetail addrDetail = addrDao.getDetail(order.getAddrid());
 		view.addObject("order", order);
 		view.addObject("historys", historys);
 		view.addObject("addrDetail", addrDetail);
@@ -95,7 +95,7 @@ public class OrderController extends BaseController {
 		OutputStream outputStream = response.getOutputStream();
 		List<Option> times = TimeUtil.getTimeOptions(date);
 		String json = JsonUtil.toJSONString(times);
-		Common.outputStreamWrite(outputStream, json);
+		SuUtil.outputStreamWrite(outputStream, json);
 		return;
 	}
 
@@ -109,8 +109,8 @@ public class OrderController extends BaseController {
 			return view;
 		}
 		order.setUserid(user.getId());
-		frontUserService.addOrder(order);
-		Worker worker = frontUserService.getWorker(order.getWorkerid());
+		orderService.addOrder(order);
+		Worker worker = workerDao.get(order.getWorkerid());
 		view.addObject("order", order);
 		view.addObject("worker", worker);
 		view.setViewName(VIEW_PREFIX + "/result");
@@ -120,7 +120,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("/fetch")
 	public ModelAndView fetch(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		frontUserService.fetchOrder(orderid);
+		orderService.fetchOrder(orderid);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
 		return view;
 	}
@@ -128,7 +128,7 @@ public class OrderController extends BaseController {
 	@RequestMapping("/cancel")
 	public ModelAndView cancel(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		frontUserService.cancelOrder(orderid);
+		orderService.cancelOrder(orderid);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
 		return view;
 	}
@@ -138,13 +138,13 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		HttpSession session = request.getSession();
 		User user = getUser(session);
-		Order order = frontUserService.getOrder(orderid);
-		String prepay_id = frontUserService.getPrepay_id(user, order, request);
+		Order order = orderDao.get(orderid);
+		String prepay_id = orderService.getPrepay_id(user, order, request);
 		if (prepay_id == null) {
 			view.addObject(KEY_INFO_MSG, "支付失败。可能是您的余额不足");
 		} else {
 			String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
-					Common.getProperty("appid"), Common.getProperty("apikey"));
+					SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
 			view.addObject("json", json);
 			view.addObject("order", order);
 		}
@@ -166,7 +166,7 @@ public class OrderController extends BaseController {
 		}
 
 		// 签名验证
-		String sign = SignatureUtil.generateSign(map, Common.getProperty("apikey"));
+		String sign = SignatureUtil.generateSign(map, SuUtil.getAppProperty("apikey"));
 		if (!sign.equals(map.get("sign"))) {
 			MchNotifyResult notifyResult = new MchNotifyResult();
 			notifyResult.setReturn_code("FAIL");
@@ -181,12 +181,7 @@ public class OrderController extends BaseController {
 			notifyResult.setReturn_msg("OK");
 			response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
 			
-			try {
-				frontUserService.pay(payNotify.getOut_trade_no());
-			} catch (BackException e) {
-				e.printStackTrace();
-			}
-
+			orderService.payOrder(payNotify.getOut_trade_no());
 		}
 	}
 
@@ -196,7 +191,7 @@ public class OrderController extends BaseController {
 	private void prepare(ModelAndView view, User user) {
 
 		view.addObject("defaultAddrid", user.getAddrid());
-		List<AddrDetail> addrDetails = frontUserService.listAddrDetailByUserid(user.getId());
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(user.getId());
 		view.addObject("addrDetails", addrDetails);
 
 		List<Option> dates = TimeUtil.getDateOptions();
