@@ -75,7 +75,7 @@ public class MainController extends BaseController {
 	}
 
 	private void location(EventMessage eventMessage, HttpServletResponse response) {
-		User user = userDao.findByOpenid(eventMessage.getFromUserName());
+		User user = userDao.getByOpenid(eventMessage.getFromUserName());
 		if (user != null) {
 			Location location = userService.getLocationByUserid(user.getId());
 			if (location != null) {

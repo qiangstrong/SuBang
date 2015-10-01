@@ -53,8 +53,8 @@ public class AddrController extends BaseController {
 	}
 
 	@RequestMapping("/select")
-	public void getRegion(@RequestParam(required = false, value = "cityid") Integer cityid,
-			@RequestParam(required = false, value = "districtid") Integer districtid,
+	public void getRegion(@RequestParam(value = "cityid", required = false) Integer cityid,
+			@RequestParam(value = "districtid", required = false) Integer districtid,
 			HttpServletResponse response) throws Exception {
 		response.setContentType("application/json;charset=UTF-8");
 		OutputStream outputStream = response.getOutputStream();
@@ -107,10 +107,10 @@ public class AddrController extends BaseController {
 	private void prepare(ModelAndView view, User user, Addr addr) {
 		AddrData addrData;
 		if (user != null) {
-			addrData = regionService.getAddrData(user);
+			addrData = regionService.getAddrDataByUserid(user.getId());
 			addr.setDetail(addrData.getDetail());
 		} else {
-			addrData = regionService.getAddrData(addr.getRegionid());
+			addrData = regionService.getAddrDataByRegionid(addr.getRegionid());
 		}
 		view.addObject("citys", addrData.getCitys());
 		view.addObject("defaultCityid", addrData.getDefaultCityid());

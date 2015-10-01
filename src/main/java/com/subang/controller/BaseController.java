@@ -33,11 +33,11 @@ import com.subang.dao.WorkerDao;
 import com.subang.domain.Admin;
 import com.subang.domain.User;
 import com.subang.service.ActivityService;
-import com.subang.service.RegionService;
 import com.subang.service.InfoService;
 import com.subang.service.LaundryService;
 import com.subang.service.OrderService;
 import com.subang.service.PriceService;
+import com.subang.service.RegionService;
 import com.subang.service.RoleService;
 import com.subang.service.StatService;
 import com.subang.service.UserService;
@@ -45,8 +45,8 @@ import com.subang.service.WorkerService;
 
 public class BaseController {
 
-	protected static final Logger LOG = Logger.getLogger ( BaseController.class.getName());
-	
+	protected static final Logger LOG = Logger.getLogger(BaseController.class.getName());
+
 	@Autowired
 	protected AddrDao addrDao;
 	@Autowired
@@ -71,19 +71,19 @@ public class BaseController {
 	protected InfoDao infoDao;
 	@Autowired
 	protected LaundryDao laundryDao;
-	@Autowired 
+	@Autowired
 	protected LocationDao locationDao;
-	@Autowired 
+	@Autowired
 	protected NoticeDao noticeDao;
 	@Autowired
 	protected OrderDao orderDao;
-	@Autowired 
+	@Autowired
 	protected PaymentDao paymentDao;
-	@Autowired 
+	@Autowired
 	protected PriceDao priceDao;
 	@Autowired
 	protected RegionDao regionDao;
-	@Autowired 
+	@Autowired
 	protected ServiceDao serviceDao;
 	@Autowired
 	protected StatDao statDao;
@@ -95,8 +95,7 @@ public class BaseController {
 	protected UserDao userDao;
 	@Autowired
 	protected WorkerDao workerDao;
-	
-	
+
 	@Autowired
 	protected ActivityService activityService;
 	@Autowired
@@ -117,13 +116,14 @@ public class BaseController {
 	protected UserService userService;
 	@Autowired
 	protected WorkerService workerService;
-	
-	
+
 	protected static final String KEY_ADMIN = "admin";
 	protected static final String KEY_USER = "user";
-	protected static final String KEY_DES_MSG = "desMsg";		//显示下一级列表的描述信息，比如：订单历史，用户地址等
-	protected static final String KEY_INFO_MSG = "infoMsg";		//直接显示此类消息
-	protected static final String KEY_ERR_MSG = "errMsg";		//弹出显示此类消息，很少用到此种类型
+	protected static final String KEY_OPENID = "openid";
+
+	protected static final String KEY_DES_MSG = "desMsg"; // 显示下一级列表的描述信息，比如：订单历史，用户地址等
+	protected static final String KEY_INFO_MSG = "infoMsg"; // 直接显示此类消息
+	protected static final String KEY_ERR_MSG = "errMsg"; // 弹出显示此类消息，很少用到此种类型
 	protected static final String KEY_PAGE_STATE = "pageState";
 
 	protected PageState getPageState(HttpSession session) {
@@ -139,25 +139,33 @@ public class BaseController {
 		pageState.setContentArg(contentArg);
 	}
 
-	protected void invalidtePageState(HttpSession session){
+	protected void invalidtePageState(HttpSession session) {
 		session.removeAttribute(KEY_PAGE_STATE);
 	}
-	
+
 	protected Admin getAdmin(HttpSession session) {
-		Integer adminid=(Integer) session.getAttribute(KEY_ADMIN);
+		Integer adminid = (Integer) session.getAttribute(KEY_ADMIN);
 		return adminDao.get(adminid);
 	}
 
 	protected void setAdmin(HttpSession session, Admin admin) {
 		session.setAttribute(KEY_ADMIN, admin.getId());
 	}
-	
+
 	protected User getUser(HttpSession session) {
-		Integer userid=(Integer)session.getAttribute(KEY_USER);
+		Integer userid = (Integer) session.getAttribute(KEY_USER);
 		return userDao.get(userid);
 	}
 
 	protected void setUser(HttpSession session, User user) {
 		session.setAttribute(KEY_USER, user.getId());
+	}
+
+	protected String getOpenid(HttpSession session) {
+		return (String) session.getAttribute(KEY_OPENID);
+	}
+
+	protected void setOpenid(HttpSession session, String openid) {
+		session.setAttribute(KEY_OPENID, openid);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.subang.bean.SearchArg;
 import com.subang.domain.Faq;
+import com.subang.domain.Feedback;
 import com.subang.domain.Info;
 import com.subang.exception.SuException;
 import com.subang.util.WebConst;
@@ -50,7 +51,6 @@ public class InfoService extends BaseService {
 		} catch (DuplicateKeyException e) {
 			throw new SuException("问题不能相同。");
 		}
-
 	}
 
 	public void modifyFaq(Faq faq) throws SuException {
@@ -70,6 +70,12 @@ public class InfoService extends BaseService {
 	/**
 	 * 反馈
 	 */
+	public void addFeedback(String comment) {
+		Feedback feedback = new Feedback();
+		feedback.setComment(comment);
+		feedbackDao.save(feedback);
+	}
+
 	public void deleteFeedbacks(List<Integer> feedbackids) {
 		for (Integer feedbackid : feedbackids) {
 			feedbackDao.delete(feedbackid);

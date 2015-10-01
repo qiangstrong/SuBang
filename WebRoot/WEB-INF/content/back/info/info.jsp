@@ -37,16 +37,8 @@
 			<table border="1" cellpadding="5">
 				<c:forEach var="info" items="${infos}">
 					<tr>
-						<th>关于</th>
-						<td><textarea rows="3" cols="135" disabled="disabled">${info.about}</textarea></td>
-					</tr>
-					<tr>
-						<th>服务条款</th>
-						<td><textarea rows="50" cols="135" disabled="disabled">${info.term}</textarea></td>
-					</tr>
-					<tr>
 						<th>服务电话</th>
-						<td><textarea rows="1" cols="135" disabled="disabled">${info.phone}</textarea></td>
+						<td><textarea rows="1" cols="50" disabled="disabled">${info.phone}</textarea></td>
 					</tr>
 					<tr>
 						<th>修改</th>

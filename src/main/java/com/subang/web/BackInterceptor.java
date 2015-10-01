@@ -18,7 +18,7 @@ public class BackInterceptor extends BaseController implements HandlerIntercepto
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
 		Admin admin = getAdmin(request.getSession());
-		if (admin == null && isRestrictedURI(request.getRequestURI())) {
+		if (admin == null && isResURI(request.getRequestURI())) {
 			response.sendRedirect(URI_PREFIX + "/showlogin.html");
 			return false;
 		}
@@ -33,15 +33,20 @@ public class BackInterceptor extends BaseController implements HandlerIntercepto
 			Exception arg3) throws Exception {
 	}
 
-	private boolean isRestrictedURI(String requestUri) {
-		boolean result = true;
+	private boolean isResURI(String requestUri) {
+		if (!isFreeURI(requestUri)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isFreeURI(String requestUri) {
 		requestUri = requestUri.substring(URI_PREFIX.length());
 		for (String uri : FREE_URIS) {
 			if (requestUri.equals(uri)) {
-				result = false;
-				break;
+				return true;
 			}
 		}
-		return result;
+		return false;
 	}
 }

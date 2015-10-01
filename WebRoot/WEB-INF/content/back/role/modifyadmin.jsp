@@ -15,7 +15,7 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<script type="text/javascript" src="javascript/check.js"></script>
+	<script type="text/javascript" src="js/back/check.js"></script>
 </head>
 <body>
 	<c:if test="${errMsg!=null}">

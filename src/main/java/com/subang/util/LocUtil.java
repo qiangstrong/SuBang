@@ -17,6 +17,9 @@ public class LocUtil extends BaseUtil {
 
 	public static boolean isValid(Location location) {
 		Timestamp timestamp = location.getTime();
+		if (timestamp == null) {
+			return false;
+		}
 		Calendar calendarLoc = Calendar.getInstance();
 		calendarLoc.setTimeInMillis(timestamp.getTime());
 		Calendar calendar = Calendar.getInstance();

@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.bean.Area;
 import com.subang.util.UtilTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,7 +16,7 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		Area area = regionDao.getArea(1);
+		int count = userDao.countCellnum("155");
 		pause();
 	}
 

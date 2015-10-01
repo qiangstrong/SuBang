@@ -21,6 +21,7 @@ public class Payment implements Serializable {
 	private Integer orderid;
 
 	public Payment() {
+		this.moneyTicket = 0.0;
 	}
 
 	public Payment(Integer id, Integer type, Double moneyTicket, String prepay_id, Timestamp time,

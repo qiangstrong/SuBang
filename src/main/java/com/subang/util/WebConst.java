@@ -3,9 +3,9 @@ package com.subang.util;
 public interface WebConst {
 
 	String CONTEXT_PREFIX = "";
-	// String CONTEXT_PREFIX = "/subang";
 	String BACK_PREFIX = "/back";
 	String WEIXIN_PREFIX = "/weixin";
+	String APP_PREFIX = "/app";
 
 	String KEY_ADMIN_AUTHCODE = "admin_authcode";
 	String KEY_USER_AUTHCODE = "user_authcode";

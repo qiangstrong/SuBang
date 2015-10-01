@@ -22,7 +22,7 @@ public class ComUtil extends BaseUtil {
 
 	public static <T> T getFirst(List<T> list) {
 		T t = null;
-		if (!list.isEmpty()) {
+		if (list != null && !list.isEmpty()) {
 			t = list.get(0);
 		}
 		return t;

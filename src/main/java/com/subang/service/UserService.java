@@ -35,9 +35,18 @@ public class UserService extends BaseService {
 			users = userDao.findByCellnum(searchArg.getArg());
 			break;
 		default:
-			users=new ArrayList<User>();
+			users = new ArrayList<User>();
 		}
 		return users;
+	}
+
+	// 检查手机号码是否被注册过
+	public boolean checkCellnum(String cellnum) {
+		int count = userDao.countCellnum(cellnum);
+		if (count == 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 用户注册
@@ -162,10 +171,10 @@ public class UserService extends BaseService {
 		ticketDao.save(ticket);
 		user.setScore(user.getScore() - ticketType.getScore());
 	}
-	
-	//管理员删除用户的卡券。除非特殊情况，管理员不应执行此操作
-	public void deleteTickets(List<Integer> ticketids){
-		for(Integer ticketid:ticketids){
+
+	// 管理员删除用户的卡券。除非特殊情况，管理员不应执行此操作
+	public void deleteTickets(List<Integer> ticketids) {
+		for (Integer ticketid : ticketids) {
 			ticketDao.delete(ticketid);
 		}
 	}

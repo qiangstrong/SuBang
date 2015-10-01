@@ -126,10 +126,12 @@ create table `user_t`(
 #用户位置表，用于为用户提供位置服务
 create table `location_t`(
 	`id` int auto_increment primary key,
-	`latitude` char(15) not null,
-    `longitude` char(15) not null,
-	`time` datetime not null,				#获取位置的时间
+	`latitude` char(15),
+    `longitude` char(15),
+	`time` datetime,				#获取位置的时间
+    `cityid` int,
     `userid` int not null,
+	foreign key (`cityid`) references `city_t`(`id`) on delete set null,
     foreign key(`userid`) references `user_t`(`id`) on delete cascade
 );
 
@@ -222,8 +224,6 @@ create table `admin_t`(
 #信息表
 create table `info_t`(
 	`id` int auto_Increment primary key,
-    `about` varchar(1000) not null,			#公司的简介
-    `term` varchar(1000) not null,			#服务条款
     `phone` char(12) not null				#客服电话
 );
 

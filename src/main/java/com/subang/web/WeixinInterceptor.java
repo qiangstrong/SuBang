@@ -20,16 +20,20 @@ import com.subang.util.WebConst;
 public class WeixinInterceptor extends BaseController implements HandlerInterceptor {
 
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.WEIXIN_PREFIX;
-	private static final String[] FREE_URIS = { "/index.html", "/order/pay.html",
-			"/info/price.html", "/info/scope.html", "/info/about.html", "/misc/activity.html",
-			"/login.html" };
+	private static final String[] FREE_URIS = { "/index.html", "/order/pay.html", "/info/faq.html",
+			"/info/feedback.html", "/info/serviceintro.html", "/info/term.html", "/price/bag.html",
+			"/price/index.html", "/region/scope.html", "/ticket/intro.html" };
+	private static final String[] REG_URIS = { "/user/login.html", "/user/showregcellnum.html",
+			"/user/cellnum.html", "/user/regauthcode.html", "/user/regpassword.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
 		String code = request.getParameter("code");
 		if (code == null) {
 			User user = getUser(request.getSession());
-			if (user == null && isRestrictedURI(request.getRequestURI())) {
+			String openid = getOpenid(request.getSession());
+			if ((user == null && isResURI(request.getRequestURI()))
+					|| (openid == null && isRegURI(request.getRequestURI()))) {
 				String redirect_uri = request.getRequestURL() + "?" + request.getQueryString();
 				String url = SnsAPI.connectOauth2Authorize(SuUtil.getAppProperty("appid"),
 						redirect_uri, false, null);
@@ -45,15 +49,18 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 						request, response);
 				return false;
 			}
-
-			User user = userDao.findByOpenid(snsToken.getOpenid());
-			if (user == null) {
-				// 用户还未注册
-				request.getRequestDispatcher("/WEB-INF/content/weixin/user/register.jsp").forward(
-						request, response);
-				return false;
+			if (isRegURI(request.getRequestURI())) {
+				setOpenid(request.getSession(), snsToken.getOpenid());
+			} else {
+				User user = userDao.getByOpenid(snsToken.getOpenid());
+				if (user == null) {
+					// 用户还未注册
+					request.getRequestDispatcher("/WEB-INF/content/weixin/user/login.jsp").forward(
+							request, response);
+					return false;
+				}
+				setUser(request.getSession(), user);
 			}
-			setUser(request.getSession(), user);
 		}
 		return true;
 	}
@@ -66,15 +73,33 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 			Exception arg3) throws Exception {
 	}
 
-	private boolean isRestrictedURI(String requestUri) {
-		boolean result = true;
+	// 是否是受限uri
+	private boolean isResURI(String requestUri) {
+		if (!isFreeURI(requestUri) && !isRegURI(requestUri)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 是否是与注册或登录相关的uri
+	private boolean isFreeURI(String requestUri) {
 		requestUri = requestUri.substring(URI_PREFIX.length());
 		for (String uri : FREE_URIS) {
 			if (requestUri.equals(uri)) {
-				result = false;
-				break;
+				return true;
 			}
 		}
-		return result;
+		return false;
+	}
+
+	// 是否是与注册或登录相关的uri
+	private boolean isRegURI(String requestUri) {
+		requestUri = requestUri.substring(URI_PREFIX.length());
+		for (String uri : REG_URIS) {
+			if (requestUri.equals(uri)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

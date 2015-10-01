@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import weixin.popular.api.PayMchAPI;
-import weixin.popular.bean.paymch.MchBaseResult;
 import weixin.popular.bean.paymch.MchNotifyResult;
 import weixin.popular.bean.paymch.MchPayNotify;
-import weixin.popular.bean.paymch.Unifiedorder;
-import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.ExpireSet;
 import weixin.popular.util.JsonUtil;
 import weixin.popular.util.MapUtil;
@@ -35,12 +30,13 @@ import weixin.popular.util.StreamUtils;
 import weixin.popular.util.XMLConverUtil;
 
 import com.subang.bean.AddrDetail;
+import com.subang.bean.OrderDetail;
 import com.subang.controller.BaseController;
+import com.subang.domain.Category;
+import com.subang.domain.Clothes;
 import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
-import com.subang.domain.Worker;
-import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.TimeUtil;
 import com.subang.util.TimeUtil.Option;
@@ -59,9 +55,9 @@ public class OrderController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int stateType) {
 		ModelAndView view = new ModelAndView();
-		List<Order> orders = orderService.searchOrderByUseridAndState(getUser(session).getId(),
-				stateType);
-		view.addObject("orders", orders);
+		List<OrderDetail> orderDetails = orderService.searchOrderByUseridAndState(getUser(session)
+				.getId(), stateType);
+		view.addObject("orderDetails", orderDetails);
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
@@ -69,21 +65,22 @@ public class OrderController extends BaseController {
 	@RequestMapping("/detail")
 	public ModelAndView detail(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		Order order = orderDao.get(orderid);
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
 		List<History> historys = historyDao.findByOrderid(orderid);
-		AddrDetail addrDetail = addrDao.getDetail(order.getAddrid());
-		view.addObject("order", order);
+		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
+
+		view.addObject("orderDetail", orderDetail);
 		view.addObject("historys", historys);
-		view.addObject("addrDetail", addrDetail);
+		view.addObject("clothess", clothess);
 		view.setViewName(VIEW_PREFIX + "/detail");
 		return view;
 	}
 
 	@RequestMapping("/showadd")
-	public ModelAndView showAdd(HttpSession session) {
+	public ModelAndView showAdd(HttpSession session, @RequestParam("categoryid") Integer categoryid) {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
-		prepare(view, user);
+		prepare(view, user, categoryid);
 		view.setViewName(VIEW_PREFIX + "/add");
 		return view;
 	}
@@ -104,23 +101,12 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
 		if (result.hasErrors()) {
-			prepare(view, user);
+			prepare(view, user, order.getCategoryid());
 			view.setViewName(VIEW_PREFIX + "/add");
 			return view;
 		}
 		order.setUserid(user.getId());
 		orderService.addOrder(order);
-		Worker worker = workerDao.get(order.getWorkerid());
-		view.addObject("order", order);
-		view.addObject("worker", worker);
-		view.setViewName(VIEW_PREFIX + "/result");
-		return view;
-	}
-
-	@RequestMapping("/fetch")
-	public ModelAndView fetch(@RequestParam("orderid") Integer orderid) {
-		ModelAndView view = new ModelAndView();
-		orderService.fetchOrder(orderid);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
 		return view;
 	}
@@ -130,6 +116,32 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		orderService.cancelOrder(orderid);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
+		return view;
+	}
+
+	@RequestMapping("/deliver")
+	public ModelAndView deliver(@RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		orderService.deliverOrder(orderid);
+		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
+		return view;
+	}
+
+	@RequestMapping("/showremark")
+	public ModelAndView showRemark(@RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		view.addObject("orderid", orderid);
+		view.setViewName(VIEW_PREFIX + "/remark");
+		return view;
+	}
+
+	// 由客户端根据用户填写的信息生成字符串，并检验其长度
+	@RequestMapping("/remark")
+	public ModelAndView remark(@RequestParam("orderid") Integer orderid,
+			@RequestParam("remark") String remark) {
+		ModelAndView view = new ModelAndView();
+		orderService.remarkOrder(orderid, remark);
+		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_DONE);
 		return view;
 	}
 
@@ -180,7 +192,7 @@ public class OrderController extends BaseController {
 			notifyResult.setReturn_code("SUCCESS");
 			notifyResult.setReturn_msg("OK");
 			response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
-			
+
 			orderService.payOrder(payNotify.getOut_trade_no());
 		}
 	}
@@ -188,7 +200,7 @@ public class OrderController extends BaseController {
 	/**
 	 * 为展示层准备相应的数据 默认地址的添加删除逻辑保证：只要用户有地址，默认地址就不为空
 	 */
-	private void prepare(ModelAndView view, User user) {
+	private void prepare(ModelAndView view, User user, Integer categoryid) {
 
 		view.addObject("defaultAddrid", user.getAddrid());
 		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(user.getId());
@@ -199,6 +211,9 @@ public class OrderController extends BaseController {
 
 		List<Option> times = TimeUtil.getTimeOptions(dates.get(0).getValue());
 		view.addObject("times", times);
+
+		Category category = categoryDao.get(categoryid);
+		view.addObject("category", category);
 	}
 
 }

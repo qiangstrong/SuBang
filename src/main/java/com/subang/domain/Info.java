@@ -12,22 +12,14 @@ public class Info implements Serializable {
 
 	private Integer id;
 	@NotNull
-	@Length(max = 1000)
-	private String about;
-	@NotNull
-	@Length(max = 1000)
-	private String term;
-	@NotNull
 	@Length(max = 12)
 	private String phone;
 
 	public Info() {
 	}
 
-	public Info(Integer id, String about, String term, String phone) {
+	public Info(Integer id, String phone) {
 		this.id = id;
-		this.about = about;
-		this.term = term;
 		this.phone = phone;
 	}
 
@@ -37,22 +29,6 @@ public class Info implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getAbout() {
-		return about;
-	}
-
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	public String getTerm() {
-		return term;
-	}
-
-	public void setTerm(String term) {
-		this.term = term;
 	}
 
 	public String getPhone() {

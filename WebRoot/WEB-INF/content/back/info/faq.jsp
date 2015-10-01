@@ -15,7 +15,7 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">   
-	<script type="text/javascript" src="javascript/set.js"></script>
+	<script type="text/javascript" src="js/back/set.js"></script>
 	<script>
 		function deleteFaqs() {
 			var faqids = getCheckedIds("faqid");

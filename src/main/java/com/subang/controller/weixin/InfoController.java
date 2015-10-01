@@ -1,55 +1,54 @@
 package com.subang.controller.weixin;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.controller.BaseController;
-import com.subang.domain.Info;
+import com.subang.domain.Faq;
 import com.subang.util.WebConst;
 
 @Controller("infoController_weixin")
 @RequestMapping("/weixin/info")
-public class InfoController extends BaseController{
-	
+public class InfoController extends BaseController {
+
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/info";
-	
-	@RequestMapping("/price")
-	public ModelAndView getPrice() {
-		ModelAndView view = new ModelAndView();
-		Info info=infoService.getInfo();
-		view.addObject("price_path", info.getPrice_path());
-		view.addObject("price_text", info.getPrice_text());
-		view.setViewName(VIEW_PREFIX+"/price");
-		return view;
-	}
-	
-	@RequestMapping("/scope")
-	public ModelAndView getScope() {
-		ModelAndView view = new ModelAndView();
-		Info info=infoService.getInfo();
-		view.addObject("scope_path", info.getScope_path());
-		view.addObject("scope_text", info.getScope_text());
-		view.setViewName(VIEW_PREFIX+"/scope");
-		return view;
-	}
-	
-	@RequestMapping("/about")
-	public ModelAndView getAbout() {
-		ModelAndView view = new ModelAndView();
-		Info info=infoService.getInfo();
-		view.addObject("about", info.getAbout());
-		view.addObject("phone", info.getPhone());
-		view.setViewName(VIEW_PREFIX+"/about");
-		return view;
-	}
-	
+
 	@RequestMapping("/term")
-	public ModelAndView getTerm() {
+	public String term() {
+		return VIEW_PREFIX + "/term";
+	}
+
+	@RequestMapping("/serviceintro")
+	public String serviceIntro() {
+		return VIEW_PREFIX + "/serviceIntro";
+	}
+
+	@RequestMapping("faq")
+	public ModelAndView listFaq() {
 		ModelAndView view = new ModelAndView();
-		Info info=infoService.getInfo();
-		view.addObject("term", info.getTerm());
-		view.setViewName(VIEW_PREFIX+"/term");
+		List<Faq> faqs = faqDao.findAll();
+		view.addObject("faqs", faqs);
+		view.setViewName(VIEW_PREFIX + "/faq");
+		return view;
+	}
+
+	@RequestMapping("/showfeedback")
+	public ModelAndView showFeedback() {
+		ModelAndView view = new ModelAndView();
+		view.setViewName(VIEW_PREFIX + "/feedback");
+		return view;
+	}
+
+	// 由客户端根据用户填写的信息生成字符串，并检验其长度
+	@RequestMapping("/feedback")
+	public ModelAndView feedback(@RequestParam("comment") String comment) {
+		ModelAndView view = new ModelAndView();
+		infoService.addFeedback(comment);
+		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/user/index.html");
 		return view;
 	}
 }

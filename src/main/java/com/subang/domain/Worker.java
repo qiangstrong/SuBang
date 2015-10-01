@@ -31,6 +31,8 @@ public class Worker implements Serializable {
 	private String comment; // 取衣员的备注
 
 	public Worker() {
+		this.valid = true;
+		this.core = false;
 	}
 
 	public Worker(Integer id, Boolean valid, Boolean core, String name, String password,

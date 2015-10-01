@@ -17,8 +17,8 @@
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">   
 	<link rel="stylesheet" type="text/css" href="css/style.css"/>
-	<script type="text/javascript" src="javascript/user.js"></script> 
-	<script type="text/javascript" src="javascript/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="js/weixin/user.js"></script> 
+	<script type="text/javascript" src="js/weixin/jquery-1.7.1.min.js"></script>
 	<script>
 		function updateDistrict(data){
 			var dataDistrict=data[0];

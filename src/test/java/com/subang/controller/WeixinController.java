@@ -12,29 +12,29 @@ import weixin.popular.util.JsUtil;
 
 import com.subang.domain.User;
 import com.subang.util.SuUtil;
-import com.subang.util.WebConst;
 
 @Controller
 @RequestMapping("/test/weixin")
 public class WeixinController extends BaseController {
-	
+
 	private static final String VIEW_PREFIX = "/test";
 
 	@RequestMapping("/login")
-	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		User user=userDao.get(7);
+	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		User user = userDao.get(1);
 		setUser(request.getSession(), user);
 		SuUtil.outputStreamWrite(response.getOutputStream(), "登录成功。");
 	}
-	
+
 	@RequestMapping("/index")
-	public ModelAndView index(){
+	public ModelAndView index() {
 		ModelAndView view = new ModelAndView();
-		String url="http://202.118.18.56/subang/test/weixin/index.html";
-		String[] jsApiList={"checkJsApi", "onMenuShareTimeline"};
-		String configStr=JsUtil.generateConfigJson(TicketManager.getDefaultTicket(), false, SuUtil.getAppProperty("appid"), url, jsApiList);
+		String url = "http://202.118.18.56/subang/test/weixin/index.html";
+		String[] jsApiList = { "checkJsApi", "onMenuShareTimeline" };
+		String configStr = JsUtil.generateConfigJson(TicketManager.getDefaultTicket(), false,
+				SuUtil.getAppProperty("appid"), url, jsApiList);
 		view.addObject("configStr", configStr);
-		view.setViewName(VIEW_PREFIX+"/index");
+		view.setViewName(VIEW_PREFIX + "/index");
 		return view;
 	}
 }

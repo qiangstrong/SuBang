@@ -10,20 +10,13 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>最新活动</title>
+	<title>Insert title here</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
-	<style type="text/css">
-		img{
-		 	width:100%;
-		}
-	</style>
 </head>
 <body>
-	<img src="image/pic/activity.png"/>
+
 </body>
 </html>

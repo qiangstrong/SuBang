@@ -92,26 +92,26 @@ public class OrderService extends BaseService {
 	}
 
 	// 用户查找订单
-	public List<Order> searchOrderByUseridAndState(Integer userid, int stateType) {
-		List<Order> orders = new ArrayList<Order>();
+	public List<OrderDetail> searchOrderByUseridAndState(Integer userid, int stateType) {
+		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 		switch (stateType) {
 		case WebConst.ORDER_STATE_UNDONE:
-			orders.addAll(orderDao.findByUseridAndState(userid, State.accepted));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.priced));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.paid));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.fetched));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.checked));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.accepted));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.priced));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.paid));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.fetched));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.checked));
 			break;
 		case WebConst.ORDER_STATE_DONE:
-			orders.addAll(orderDao.findByUseridAndState(userid, State.delivered));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.remarked));
-			orders.addAll(orderDao.findByUseridAndState(userid, State.canceled));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.delivered));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.remarked));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.canceled));
 			break;
 		}
-		return orders;
+		return orderDetails;
 	}
 
-	// 用户添加订单,工作人员使用app查询自己的订单
+	// 用户添加订单,工作人员使用app查询自己的订单，下单的时候生成支付信息
 	public void addOrder(Order order) {
 
 		order.setState(State.accepted);
@@ -156,7 +156,7 @@ public class OrderService extends BaseService {
 	public void priceOrder(Integer orderid, double money) {
 		Order order = orderDao.get(orderid);
 		order.setMoney(money);
-		if (money<new Double(SuUtil.getSuProperty("orderMoney"))) {
+		if (money < new Double(SuUtil.getSuProperty("orderMoney"))) {
 			order.setFreight(new Double(SuUtil.getSuProperty("orderFreight")));
 		}
 		order.setState(State.priced);

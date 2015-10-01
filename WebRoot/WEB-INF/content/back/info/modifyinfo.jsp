@@ -40,27 +40,11 @@
 					<table>
 						<tr>
 							<td></td>
-							<td><form:errors path="about" /></td>
-						</tr>
-						<tr>
-							<td>关于：</td>
-							<td><textarea rows="3" cols="135" name="about">${info.about}</textarea></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><form:errors path="term" /></td>
-						</tr>
-						<tr>
-							<td>服务条款：</td>
-							<td><textarea rows="50" cols="135" name="term">${info.term}</textarea></td>
-						</tr>
-						<tr>
-							<td></td>
 							<td><form:errors path="phone" /></td>
 						</tr>
 						<tr>
 							<td>电话：</td>
-							<td><textarea rows="1" cols="135" name="phone">${info.phone}</textarea></td>
+							<td><textarea rows="1" cols="50" name="phone">${info.phone}</textarea></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="right">

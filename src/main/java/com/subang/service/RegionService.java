@@ -10,12 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.subang.bean.AddrData;
 import com.subang.bean.Area;
 import com.subang.bean.GeoLoc;
+import com.subang.domain.Category;
 import com.subang.domain.City;
 import com.subang.domain.District;
 import com.subang.domain.Location;
 import com.subang.domain.Notice.CodeType;
 import com.subang.domain.Region;
-import com.subang.domain.User;
 import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.LocUtil;
@@ -146,10 +146,10 @@ public class RegionService extends BaseService {
 	/**
 	 * 前台关于区域的查询
 	 */
-	public AddrData getAddrData(User user) {
+	public AddrData getAddrDataByUserid(Integer userid) {
 		AddrData addrData = new AddrData();
 
-		List<Location> locations = locationDao.findByUserid(user.getId());
+		List<Location> locations = locationDao.findByUserid(userid);
 		Location location = ComUtil.getFirst(locations);
 		GeoLoc geoLoc = LocUtil.getGeoLoc(location);
 
@@ -192,7 +192,7 @@ public class RegionService extends BaseService {
 		return addrData;
 	}
 
-	public AddrData getAddrData(Integer regionid) {
+	public AddrData getAddrDataByRegionid(Integer regionid) {
 		AddrData addrData = new AddrData();
 		Area area = regionDao.getArea(regionid);
 		addrData.setDefaultCityid(area.getCityid());
@@ -202,6 +202,36 @@ public class RegionService extends BaseService {
 		addrData.setDistricts(districtDao.findValidByCityid(area.getCityid()));
 		addrData.setRegions(regionDao.findByDistrictid(area.getDistrictid()));
 		return addrData;
+	}
+
+	// 前台，获取当前城市的服务,cityid有可能会发生变化
+	public List<Category> listByCityid(Integer userid, Integer cityid) {
+		List<Category> categorys = null;
+		Location location = ComUtil.getFirst(locationDao.findByUserid(userid));
+		if (cityid != null) {
+			if (location == null) {
+				location = new Location();
+				location.setUserid(userid);
+				location.setCityid(cityid);
+				locationDao.save(location);
+			} else {
+				location.setCityid(cityid);
+				locationDao.update(location);
+			}
+		} else {
+			GeoLoc geoLoc = LocUtil.getGeoLoc(location);
+			City city = null;
+			if (geoLoc != null) {
+				city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
+			}
+			if (geoLoc == null || city == null) {
+				city = ComUtil
+						.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
+			}
+			cityid = city.getId();
+		}
+		categorys = categoryDao.findByCityid(cityid);
+		return categorys;
 	}
 
 	/**

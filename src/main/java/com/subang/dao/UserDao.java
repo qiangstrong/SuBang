@@ -26,6 +26,30 @@ public class UserDao extends BaseDao<User> {
 		return user;
 	}
 
+	public User getByOpenid(String openid) {
+		String sql = "select * from user_t where openid=?";
+		Object[] args = { openid };
+		User user = null;
+		try {
+			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
+					User.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return user;
+	}
+
+	public User getByCellnum(String cellnum) {
+		String sql = "select * from user_t where cellnum=?";
+		Object[] args = { cellnum };
+		User user = null;
+		try {
+			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
+					User.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return user;
+	}
+
 	public void save(User user) {
 		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?)";
 		Object[] args = { user.getLogin(), user.getOpenid(), user.getNickname(),
@@ -75,18 +99,6 @@ public class UserDao extends BaseDao<User> {
 		return users;
 	}
 
-	public User findByOpenid(String openid) {
-		String sql = "select * from user_t where openid=?";
-		Object[] args = { openid };
-		User user = null;
-		try {
-			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
-					User.class));
-		} catch (EmptyResultDataAccessException e) {
-		}
-		return user;
-	}
-
 	public List<User> findByNickname(String nickname) {
 		String sql = "select * from user_t where nickname like ?";
 		Object[] args = { ComUtil.getLikeStr(nickname) };
@@ -101,5 +113,12 @@ public class UserDao extends BaseDao<User> {
 		List<User> users = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
+	}
+
+	public int countCellnum(String cellnum) {
+		String sql = "select count(*) from user_t where cellnum=?";
+		Object[] args = { cellnum };
+		int count = jdbcTemplate.queryForInt(sql, args);
+		return count;
 	}
 }

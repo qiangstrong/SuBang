@@ -29,6 +29,7 @@ public class User implements Serializable {
 	private Integer addrid; // 用户的默认地址
 
 	public User() {
+		this.login = false;
 		this.score = 0;
 		this.money = 0.0;
 	}

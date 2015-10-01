@@ -11,16 +11,19 @@ public class Location implements Serializable {
 	private String latitude;
 	private String longitude;
 	private Timestamp time; // 获取经纬度的时间
+	private Integer cityid;
 	private Integer userid;
 
 	public Location() {
 	}
 
-	public Location(Integer id, String latitude, String longitude, Timestamp time, Integer userid) {
+	public Location(Integer id, String latitude, String longitude, Timestamp time, Integer cityid,
+			Integer userid) {
 		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.time = time;
+		this.setCityid(cityid);
 		this.userid = userid;
 	}
 
@@ -50,6 +53,14 @@ public class Location implements Serializable {
 
 	public Timestamp getTime() {
 		return time;
+	}
+
+	public Integer getCityid() {
+		return cityid;
+	}
+
+	public void setCityid(Integer cityid) {
+		this.cityid = cityid;
 	}
 
 	public void setTime(Timestamp time) {

@@ -28,6 +28,7 @@ public class Addr implements Serializable {
 	protected Integer regionid;
 
 	public Addr() {
+		this.valid = true;
 	}
 
 	public Addr(Integer id, Boolean valid, String name, String cellnum, String detail,

@@ -61,7 +61,7 @@ public class TicketDao extends BaseDao<Ticket> {
 		return ticketDetail;
 	}
 	
-	public List<TicketDetail> findValidByUserid(Integer userid) {
+	public List<TicketDetail> findValidDetailByUserid(Integer userid) {
 		String sql = "select * from ticketdetail_v where  userid=? and (now()<deadline or deadline is null);";
 		Object[] args = { userid };
 		List<TicketDetail> ticketDetails = jdbcTemplate.query(sql, args,

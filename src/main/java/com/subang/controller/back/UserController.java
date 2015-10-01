@@ -128,7 +128,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/ticket")
 	public ModelAndView listTicket(HttpSession session, @RequestParam("userid") Integer userid) {
 		ModelAndView view = new ModelAndView();
-		List<TicketDetail> ticketDetails = ticketDao.findValidByUserid(userid);
+		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(userid);
 		view.addObject("ticketDetails", ticketDetails);
 		User user = userDao.get(userid);
 		String desMsg = "手机号：" + user.getCellnum() + "。此用户的卡券如下：";

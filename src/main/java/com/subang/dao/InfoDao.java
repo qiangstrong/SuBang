@@ -24,8 +24,8 @@ public class InfoDao extends BaseDao<Info> {
 	}
 
 	public void update(Info info) {
-		String sql = "update info_t set about=?, term=?, phone=? where id=?";
-		Object[] args = { info.getAbout(), info.getTerm(), info.getPhone(), info.getId() };
+		String sql = "update info_t set phone=? where id=?";
+		Object[] args = { info.getPhone(), info.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

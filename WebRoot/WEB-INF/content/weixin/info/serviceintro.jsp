@@ -10,40 +10,13 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>下单结果</title>
+	<title>Insert title here</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">   
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>   
+	<meta http-equiv="expires" content="0">    
 </head>
 <body>
-	<%@ include file="../common/menu.jsp"%>
-	<table align="left">
-		<tr>
-			<td>
-				<strong>下单成功。</strong>
-			</td>
-		<tr>
-		<tr>
-			<td class="label">订单号：</td>
-		<tr>
-		<tr>
-			<td>${order.orderno }</td>
-		<tr>
-		<tr>
-			<td class="label">取衣员姓名：</td>
-		<tr>
-		<tr>
-			<td>${worker.name }</td>
-		<tr>
-		<tr>
-			<td class="label">取衣员手机号：</td>
-		<tr>
-		<tr>
-			<td>${worker.cellnum }</td>
-		<tr>
-	</table>
+
 </body>
 </html>

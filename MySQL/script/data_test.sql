@@ -1,0 +1,1 @@
+insert into user_t values(null,0,'o6_bmjrPTlm6_2sgVt7hMZOPfL2M',null,'123','15502457990',0,0,null);
