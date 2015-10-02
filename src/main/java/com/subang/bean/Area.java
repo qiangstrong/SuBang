@@ -1,14 +1,15 @@
 package com.subang.bean;
 
+import com.subang.domain.Filter;
 
-public class Area {
+public class Area implements Filter {
 
 	public static Area toArea(String arg) {
-		final int layernum=3;
+		final int layernum = 3;
 		String[] names = new String[layernum];
 		String[] subArgs = arg.split("\\.", -1);
 		int i = 0;
-		for (; i < subArgs.length&&i<layernum; i++) {
+		for (; i < subArgs.length && i < layernum; i++) {
 			names[i] = subArgs[i];
 		}
 		for (; i < layernum; i++) {
@@ -97,5 +98,31 @@ public class Area {
 
 	public void setWorkerid(Integer workerid) {
 		this.workerid = workerid;
+	}
+
+	public void doFilter(Object object) {
+		Area area = (Area) object;
+		if (this.cityid == null) {
+			area.cityid = null;
+		}
+		if (this.cityname == null) {
+			area.cityname = null;
+		}
+		if (this.districtid == null) {
+			area.districtid = null;
+		}
+		if (this.districtname == null) {
+			area.districtname = null;
+		}
+		if (this.regionid == null) {
+			area.regionid = null;
+		}
+		if (this.regionname == null) {
+			area.regionname = null;
+		}
+		if (this.workerid == null) {
+			area.workerid = null;
+		}
+
 	}
 }

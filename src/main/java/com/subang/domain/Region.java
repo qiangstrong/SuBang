@@ -6,10 +6,10 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Region  implements Serializable {
+public class Region implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 	@NotNull
 	@Length(min = 1, max = 10)
@@ -17,7 +17,7 @@ public class Region  implements Serializable {
 	@NotNull
 	private Integer districtid;
 	private Integer workerid;
-	
+
 	public Region() {
 	}
 
@@ -58,6 +58,22 @@ public class Region  implements Serializable {
 
 	public void setWorkerid(Integer workerid) {
 		this.workerid = workerid;
+	}
+
+	public void doFilter(Object object) {
+		Region region = (Region) object;
+		if (this.id == null) {
+			region.id = null;
+		}
+		if (this.name == null) {
+			region.name = null;
+		}
+		if (this.districtid == null) {
+			region.districtid = null;
+		}
+		if (this.workerid == null) {
+			region.workerid = null;
+		}
 	}
 
 }

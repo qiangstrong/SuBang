@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.subang.util.ComUtil;
 
-public class ClothesType implements Serializable {
+public class ClothesType implements Filter, Serializable {
 
 	public static String iconPath = "image/info/clothes_type/";
 
@@ -93,6 +93,28 @@ public class ClothesType implements Serializable {
 
 	public void setMoney(Double money) {
 		this.money = money;
+	}
+
+	public void doFilter(Object object) {
+		ClothesType clothesType = (ClothesType) object;
+		if (this.id == null) {
+			clothesType.id = null;
+		}
+		if (this.name == null) {
+			clothesType.name = null;
+		}
+		if (this.icon == null) {
+			clothesType.icon = null;
+		}
+		if (this.categoryid == null) {
+			clothesType.categoryid = null;
+		}
+		if (this.priceid == null) {
+			clothesType.priceid = null;
+		}
+		if (this.money == null) {
+			clothesType.money = null;
+		}
 	}
 
 }

@@ -3,7 +3,7 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Payment implements Serializable {
+public class Payment implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum PayType {
@@ -88,6 +88,28 @@ public class Payment implements Serializable {
 
 	public void setOrderid(Integer orderid) {
 		this.orderid = orderid;
+	}
+
+	public void doFilter(Object object) {
+		Payment payment = (Payment) object;
+		if (this.id == null) {
+			payment.id = null;
+		}
+		if (this.type == null) {
+			payment.type = null;
+		}
+		if (this.moneyTicket == null) {
+			payment.moneyTicket = null;
+		}
+		if (this.prepay_id == null) {
+			payment.prepay_id = null;
+		}
+		if (this.time == null) {
+			payment.time = null;
+		}
+		if (this.orderid == null) {
+			payment.orderid = null;
+		}
 	}
 
 }

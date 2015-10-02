@@ -14,7 +14,8 @@ public interface WebConst {
 
 	int ORDERNO_RANDOM_LENGTH = 7;
 
-	int AUTHCODE_INTERVAL = 5 * 60 * 1000;// 5分钟
+	int AUTHCODE_INTERVAL = 5 * 60 * 1000;// 验证码过期时间，5分钟，单位毫秒
+	int TIMESTAMP_INTERVAL = 5 * 60 * 1000;// 时间戳过期时间
 
 	int PAGE_SIZE = 10;
 

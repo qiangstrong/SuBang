@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Addr implements Serializable {
+public class Addr implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -96,6 +96,31 @@ public class Addr implements Serializable {
 
 	public void setRegionid(Integer regionid) {
 		this.regionid = regionid;
+	}
+
+	public void doFilter(Object object) {
+		Addr addr = (Addr) object;
+		if (this.id == null) {
+			addr.setId(null);
+		}
+		if (this.valid == null) {
+			addr.setValid(null);
+		}
+		if (this.name == null) {
+			addr.setName(null);
+		}
+		if (this.cellnum == null) {
+			addr.setCellnum(null);
+		}
+		if (this.detail == null) {
+			addr.setDetail(null);
+		}
+		if (this.userid == null) {
+			addr.userid = null;
+		}
+		if (this.regionid == null) {
+			addr.regionid = null;
+		}
 	}
 
 }

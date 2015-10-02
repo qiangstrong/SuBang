@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Price implements Serializable {
+public class Price implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -58,6 +58,22 @@ public class Price implements Serializable {
 
 	public void setCategoryid(Integer categoryid) {
 		this.categoryid = categoryid;
+	}
+
+	public void doFilter(Object object) {
+		Price price = (Price) object;
+		if (this.id == null) {
+			price.id = null;
+		}
+		if (this.money == null) {
+			price.money = null;
+		}
+		if (this.comment == null) {
+			price.comment = null;
+		}
+		if (this.categoryid == null) {
+			price.categoryid = null;
+		}
 	}
 
 }

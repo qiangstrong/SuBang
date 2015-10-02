@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class Ticket implements Serializable {
+public class Ticket implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -59,6 +59,22 @@ public class Ticket implements Serializable {
 
 	public void setTicketTypeid(Integer ticketTypeid) {
 		this.ticketTypeid = ticketTypeid;
+	}
+
+	public void doFilter(Object object) {
+		Ticket ticket = (Ticket) object;
+		if (this.id == null) {
+			ticket.id = null;
+		}
+		if (this.deadline == null) {
+			ticket.deadline = null;
+		}
+		if (this.userid == null) {
+			ticket.userid = null;
+		}
+		if (this.ticketTypeid == null) {
+			ticket.ticketTypeid = null;
+		}
 	}
 
 }

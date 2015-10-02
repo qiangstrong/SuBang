@@ -2,9 +2,10 @@ package com.subang.bean;
 
 import java.sql.Timestamp;
 
+import com.subang.domain.Filter;
 import com.subang.domain.TicketType;
 
-public class TicketDetail extends TicketType {
+public class TicketDetail extends TicketType implements Filter {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +37,17 @@ public class TicketDetail extends TicketType {
 
 	public void setTicketTypeid(Integer ticketTypeid) {
 		this.ticketTypeid = ticketTypeid;
+	}
+
+	public void doFilter(Object object) {
+		super.doFilter(object);
+		TicketDetail ticketDetail = (TicketDetail) object;
+		if (this.userid == null) {
+			ticketDetail.userid = null;
+		}
+		if (this.ticketTypeid == null) {
+			ticketDetail.ticketTypeid = null;
+		}
 	}
 
 }

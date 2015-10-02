@@ -1,7 +1,6 @@
 package com.subang.controller.weixin;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.sql.Date;
 import java.util.List;
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import weixin.popular.bean.paymch.MchNotifyResult;
 import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.util.ExpireSet;
-import weixin.popular.util.JsonUtil;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.PayUtil;
 import weixin.popular.util.SignatureUtil;
@@ -88,11 +86,8 @@ public class OrderController extends BaseController {
 	@RequestMapping("/select")
 	public void getTime(@RequestParam("date") Date date, HttpServletResponse response)
 			throws Exception {
-		response.setContentType("application/json;charset=UTF-8");
-		OutputStream outputStream = response.getOutputStream();
 		List<Option> times = TimeUtil.getTimeOptions(date);
-		String json = JsonUtil.toJSONString(times);
-		SuUtil.outputStreamWrite(outputStream, json);
+		SuUtil.outputJson(response, times);
 		return;
 	}
 

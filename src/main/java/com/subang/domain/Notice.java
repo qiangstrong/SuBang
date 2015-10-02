@@ -3,7 +3,7 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Notice implements Serializable {
+public class Notice implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum CodeType {
@@ -60,6 +60,22 @@ public class Notice implements Serializable {
 
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public void doFilter(Object object) {
+		Notice notice = (Notice) object;
+		if (this.id == null) {
+			notice.id = null;
+		}
+		if (this.time == null) {
+			notice.time = null;
+		}
+		if (this.code == null) {
+			notice.code = null;
+		}
+		if (this.msg == null) {
+			notice.msg = null;
+		}
 	}
 
 }

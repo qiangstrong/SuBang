@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Feedback implements Serializable {
+public class Feedback implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -46,6 +46,19 @@ public class Feedback implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void doFilter(Object object) {
+		Feedback feedback = (Feedback) object;
+		if (this.id == null) {
+			feedback.id = null;
+		}
+		if (this.time == null) {
+			feedback.time = null;
+		}
+		if (this.comment == null) {
+			feedback.comment = null;
+		}
 	}
 
 }

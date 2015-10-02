@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Worker implements Serializable {
+public class Worker implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -117,6 +117,35 @@ public class Worker implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void doFilter(Object object) {
+		Worker worker = (Worker) object;
+		if (this.id == null) {
+			worker.id = null;
+		}
+		if (this.valid == null) {
+			worker.valid = null;
+		}
+		if (this.core == null) {
+			worker.core = null;
+		}
+		if (this.name == null) {
+			worker.name = null;
+		}
+		if (this.password == null) {
+			worker.password = null;
+		}
+		if (this.cellnum == null) {
+			worker.cellnum = null;
+		}
+		if (this.detail == null) {
+			worker.detail = null;
+		}
+		if (this.comment == null) {
+			worker.comment = null;
+		}
+
 	}
 
 }

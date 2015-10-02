@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Laundry implements Serializable {
+public class Laundry implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -73,6 +73,25 @@ public class Laundry implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void doFilter(Object object) {
+		Laundry laundry = (Laundry) object;
+		if (this.id == null) {
+			laundry.id = null;
+		}
+		if (this.name == null) {
+			laundry.name = null;
+		}
+		if (this.cellnum == null) {
+			laundry.cellnum = null;
+		}
+		if (this.detail == null) {
+			laundry.detail = null;
+		}
+		if (this.comment == null) {
+			laundry.comment = null;
+		}
 	}
 
 }

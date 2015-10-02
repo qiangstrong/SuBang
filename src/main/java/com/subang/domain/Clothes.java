@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Clothes implements Serializable {
+public class Clothes implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -69,6 +69,25 @@ public class Clothes implements Serializable {
 
 	public void setOrderid(Integer orderid) {
 		this.orderid = orderid;
+	}
+
+	public void doFilter(Object object) {
+		Clothes clothes = (Clothes) object;
+		if (this.id == null) {
+			clothes.id = null;
+		}
+		if (this.name == null) {
+			clothes.name = null;
+		}
+		if (this.color == null) {
+			clothes.color = null;
+		}
+		if (this.flaw == null) {
+			clothes.flaw = null;
+		}
+		if (this.orderid == null) {
+			clothes.orderid = null;
+		}
 	}
 
 }

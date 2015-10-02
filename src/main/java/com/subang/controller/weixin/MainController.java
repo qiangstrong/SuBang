@@ -14,7 +14,7 @@ import weixin.popular.bean.xmlmessage.XMLTextMessage;
 import weixin.popular.util.ExpireSet;
 import weixin.popular.util.XMLConverUtil;
 
-import com.subang.bean.weixin.GetArg;
+import com.subang.bean.WeixinArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Location;
 import com.subang.domain.User;
@@ -28,7 +28,7 @@ public class MainController extends BaseController {
 	private static ExpireSet<String> expireSet = new ExpireSet<String>(WebConst.EXPIRED_INTERVAL);
 
 	@RequestMapping("/index")
-	protected void service(HttpServletRequest request, HttpServletResponse response, GetArg getArg)
+	protected void service(HttpServletRequest request, HttpServletResponse response, WeixinArg getArg)
 			throws Exception {
 		response.setContentType("text/xml");
 		ServletInputStream inputStream = request.getInputStream();

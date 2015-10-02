@@ -3,12 +3,14 @@ package com.subang.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.AppArg;
+import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 public class AppInterceptor extends BaseController implements HandlerInterceptor {
@@ -18,10 +20,12 @@ public class AppInterceptor extends BaseController implements HandlerInterceptor
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
-		String cellnum = request.getParameter("cellnum");
-		String signature = request.getParameter("signature");
-		if (isResURI(request.getRequestURI()) && !validate(cellnum, signature)) {
-			// TODO: 响应
+		String cellnum = request.getParameter("cellnum_auth");
+		String timestamp = request.getParameter("timestamp_auth");
+		String signature = request.getParameter("signature_auth");
+		if (isResURI(request.getRequestURI()) && !validate(cellnum, timestamp, signature)) {
+			Result result = new Result(Result.ERR, "认证失败。");
+			SuUtil.outputJson(response, result);
 			return false;
 		}
 		return true;
@@ -35,8 +39,8 @@ public class AppInterceptor extends BaseController implements HandlerInterceptor
 			Exception arg3) throws Exception {
 	}
 
-	public boolean validate(String cellnum, String signature) {
-		if (cellnum == null || signature == null) {
+	public boolean validate(String cellnum, String timestamp, String signature) {
+		if (cellnum == null || timestamp == null || signature == null) {
 			return false;
 		}
 		User user = userDao.getByCellnum(cellnum);
@@ -44,7 +48,8 @@ public class AppInterceptor extends BaseController implements HandlerInterceptor
 			return false;
 		}
 		String password = user.getPassword();
-		if (!signature.equals(DigestUtils.shaHex(cellnum + password))) {
+		AppArg appArg = new AppArg(cellnum, password, timestamp, signature);
+		if (!appArg.validate()) {
 			return false;
 		}
 		return true;

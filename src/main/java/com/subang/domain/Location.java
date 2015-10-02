@@ -3,7 +3,7 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Location implements Serializable {
+public class Location implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -73,6 +73,28 @@ public class Location implements Serializable {
 
 	public void setUserid(Integer userid) {
 		this.userid = userid;
+	}
+
+	public void doFilter(Object object) {
+		Location location = (Location) object;
+		if (this.id == null) {
+			location.id = null;
+		}
+		if (this.latitude == null) {
+			location.latitude = null;
+		}
+		if (this.longitude == null) {
+			location.longitude = null;
+		}
+		if (this.time == null) {
+			location.time = null;
+		}
+		if (this.cityid == null) {
+			location.cityid = null;
+		}
+		if (this.userid == null) {
+			location.userid = null;
+		}
 	}
 
 }

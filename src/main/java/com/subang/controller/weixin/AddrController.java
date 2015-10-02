@@ -1,6 +1,5 @@
 package com.subang.controller.weixin;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import weixin.popular.util.JsonUtil;
 
 import com.subang.bean.AddrData;
 import com.subang.bean.AddrDetail;
@@ -55,9 +52,7 @@ public class AddrController extends BaseController {
 	@RequestMapping("/select")
 	public void getRegion(@RequestParam(value = "cityid", required = false) Integer cityid,
 			@RequestParam(value = "districtid", required = false) Integer districtid,
-			HttpServletResponse response) throws Exception {
-		response.setContentType("application/json;charset=UTF-8");
-		OutputStream outputStream = response.getOutputStream();
+			HttpServletResponse response) {
 
 		if (cityid != null) {
 			List<District> districts = districtDao.findValidByCityid(cityid);
@@ -65,14 +60,12 @@ public class AddrController extends BaseController {
 			List<List> list = new ArrayList<List>();
 			list.add(districts);
 			list.add(regions);
-			String json = JsonUtil.toJSONString(list);
-			SuUtil.outputStreamWrite(outputStream, json);
+			SuUtil.outputJson(response, list);
 			return;
 		}
 		if (districtid != null) {
 			List<Region> regions = regionDao.findByDistrictid(districtid);
-			String json = JsonUtil.toJSONString(regions);
-			SuUtil.outputStreamWrite(outputStream, json);
+			SuUtil.outputJson(response, regions);
 			return;
 		}
 	}

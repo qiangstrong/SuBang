@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Category implements Serializable {
+public class Category implements Filter, Serializable {
 
 	public static String iconPath = "image/info/category/";
 
@@ -66,6 +66,22 @@ public class Category implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void doFilter(Object object) {
+		Category category = (Category) object;
+		if (this.id == null) {
+			category.id = null;
+		}
+		if (this.name == null) {
+			category.name = null;
+		}
+		if (this.icon == null) {
+			category.icon = null;
+		}
+		if (this.comment == null) {
+			category.comment = null;
+		}
 	}
 
 }

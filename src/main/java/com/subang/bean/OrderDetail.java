@@ -2,10 +2,11 @@ package com.subang.bean;
 
 import java.sql.Date;
 
+import com.subang.domain.Filter;
 import com.subang.domain.Order;
 import com.subang.domain.Payment.PayType;
 
-public class OrderDetail extends Order {
+public class OrderDetail extends Order implements Filter {
 
 	private static final long serialVersionUID = 1L;
 
@@ -87,9 +88,9 @@ public class OrderDetail extends Order {
 		}
 		return description;
 	}
-	
+
 	public String getPaymentDes() {
-		String description="";
+		String description = "";
 		return description;
 	}
 
@@ -167,5 +168,46 @@ public class OrderDetail extends Order {
 
 	public void setWorkercellnum(String workercellnum) {
 		this.workercellnum = workercellnum;
+	}
+
+	public void doFilter(Object object) {
+		super.doFilter(object);
+		OrderDetail orderDetail = (OrderDetail) object;
+		if (this.categoryname == null) {
+			orderDetail.categoryname = null;
+		}
+		if (this.cellnum == null) {
+			orderDetail.cellnum = null;
+		}
+		if (this.payType == null) {
+			orderDetail.payType = null;
+		}
+		if (this.moneyTicket == null) {
+			orderDetail.moneyTicket = null;
+		}
+		if (this.addrname == null) {
+			orderDetail.addrname = null;
+		}
+		if (this.addrcellnum == null) {
+			orderDetail.addrcellnum = null;
+		}
+		if (this.cityname == null) {
+			orderDetail.cityname = null;
+		}
+		if (this.districtname == null) {
+			orderDetail.districtname = null;
+		}
+		if (this.regionname == null) {
+			orderDetail.regionname = null;
+		}
+		if (this.addrdetail == null) {
+			orderDetail.addrdetail = null;
+		}
+		if (this.workername == null) {
+			orderDetail.workername = null;
+		}
+		if (this.workercellnum == null) {
+			orderDetail.workercellnum = null;
+		}
 	}
 }

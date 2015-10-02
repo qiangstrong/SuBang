@@ -1,7 +1,6 @@
 package com.subang.util;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,7 +57,7 @@ public class TimeUtil extends BaseUtil {
 		Date date = null;
 		for (int i = 0; i < DATE_NUM; i++) {
 			date = new Date(calendar.getTime().getTime());
-			dates.add(new Option(getDateDes(date), date.toString()));
+			dates.add(new Option(ComUtil.getDateDes(date), date.toString()));
 			calendar.add(Calendar.DATE, 1);
 		}
 		return dates;
@@ -82,46 +81,13 @@ public class TimeUtil extends BaseUtil {
 				hour = TIME_START;
 		}
 		for (; hour < TIME_END; hour++) {
-			dates.add(new Option(getTimeDes(hour), Integer.toString(hour)));
+			dates.add(new Option(ComUtil.getTimeDes(hour), Integer.toString(hour)));
 		}
 		return dates;
 	}
 
 	public static List<Option> getTimeOptions(Date date) {
 		return getTimeOptions(date.toString());
-	}
-
-	public static String getDateDes(Date date) {
-		return date.toString();
-	}
-
-	public static String getTimeDes(int time) {
-		String description = "";
-		description = time + ":00-" + (time + 1) + ":00";
-		return description;
-	}
-
-	public static Date toDate(String dateValue) {
-		Date date = null;
-		try {
-			date = new Date(ComUtil.sdf_date.parse(dateValue).getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return date;
-	}
-
-	public static boolean isTaday(Long time) {
-		Calendar calendar_cur = Calendar.getInstance();
-		Calendar calendar_old = Calendar.getInstance();
-		calendar_old.setTimeInMillis(time);
-		int day_cur = calendar_cur.get(Calendar.DAY_OF_YEAR);
-		int day_old = calendar_old.get(Calendar.DAY_OF_YEAR);
-		if (day_cur == day_old) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }

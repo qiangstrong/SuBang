@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class TicketType implements Serializable {
+public class TicketType implements Filter, Serializable {
 
 	public static String iconPath = "image/info/ticket/";
 
@@ -129,5 +129,37 @@ public class TicketType implements Serializable {
 
 	public void setCategoryname(String categoryname) {
 		this.categoryname = categoryname;
+	}
+
+	public void doFilter(Object object) {
+		TicketType ticketType = (TicketType) object;
+		if (this.id == null) {
+			ticketType.id = null;
+		}
+		if (this.name == null) {
+			ticketType.name = null;
+		}
+		if (this.icon == null) {
+			ticketType.icon = null;
+		}
+		if (this.money == null) {
+			ticketType.money = null;
+		}
+		if (this.score == null) {
+			ticketType.score = null;
+		}
+		if (this.deadline == null) {
+			ticketType.deadline = null;
+		}
+		if (this.comment == null) {
+			ticketType.comment = null;
+		}
+		if (this.categoryid == null) {
+			ticketType.categoryid = null;
+		}
+		if (this.categoryname == null) {
+			ticketType.categoryname = null;
+		}
+
 	}
 }

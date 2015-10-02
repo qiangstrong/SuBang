@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
-public class User implements Serializable {
+public class User implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -118,6 +118,37 @@ public class User implements Serializable {
 
 	public void setAddrid(Integer addrid) {
 		this.addrid = addrid;
+	}
+
+	public void doFilter(Object object) {
+		User user = (User) object;
+		if (this.id == null) {
+			user.id = null;
+		}
+		if (this.login == null) {
+			user.login = null;
+		}
+		if (this.openid == null) {
+			user.openid = null;
+		}
+		if (this.nickname == null) {
+			user.nickname = null;
+		}
+		if (this.password == null) {
+			user.password = null;
+		}
+		if (this.cellnum == null) {
+			user.cellnum = null;
+		}
+		if (this.score == null) {
+			user.score = null;
+		}
+		if (this.money == null) {
+			user.money = null;
+		}
+		if (this.addrid == null) {
+			user.addrid = null;
+		}
 	}
 
 }

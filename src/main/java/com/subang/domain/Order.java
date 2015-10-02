@@ -9,9 +9,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.util.ComUtil;
-import com.subang.util.TimeUtil;
 
-public class Order implements Serializable {
+public class Order implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -165,7 +164,7 @@ public class Order implements Serializable {
 	}
 
 	public String getDateDes() {
-		return TimeUtil.getDateDes(date);
+		return ComUtil.getDateDes(date);
 	}
 
 	public void setDate(Date date) {
@@ -177,7 +176,7 @@ public class Order implements Serializable {
 	}
 
 	public String getTimeDes() {
-		return TimeUtil.getTimeDes(time);
+		return ComUtil.getTimeDes(time);
 	}
 
 	public void setTime(Integer time) {
@@ -263,5 +262,57 @@ public class Order implements Serializable {
 			return true;
 		}
 		return false;
+	}
+
+	public void doFilter(Object object) {
+		Order order = (Order) object;
+		if (this.id == null) {
+			order.id = null;
+		}
+		if (this.orderno == null) {
+			order.orderno = null;
+		}
+		if (this.state == null) {
+			order.state = null;
+		}
+		if (this.money == null) {
+			order.money = null;
+		}
+		if (this.freight == null) {
+			order.freight = null;
+		}
+		if (this.date == null) {
+			order.date = null;
+		}
+		if (this.time == null) {
+			order.time = null;
+		}
+		if (this.userComment == null) {
+			order.userComment = null;
+		}
+		if (this.workerComment == null) {
+			order.workerComment = null;
+		}
+		if (this.remark == null) {
+			order.remark = null;
+		}
+		if (this.barcode == null) {
+			order.barcode = null;
+		}
+		if (this.categoryid == null) {
+			order.categoryid = null;
+		}
+		if (this.userid == null) {
+			order.userid = null;
+		}
+		if (this.addrid == null) {
+			order.addrid = null;
+		}
+		if (this.workerid == null) {
+			order.workerid = null;
+		}
+		if (this.laundryid == null) {
+			order.laundryid = null;
+		}
 	}
 }

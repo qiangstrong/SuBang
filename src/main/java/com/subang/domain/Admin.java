@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class Admin implements Serializable {
+public class Admin implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,6 +49,19 @@ public class Admin implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void doFilter(Object object) {
+		Admin admin = (Admin) object;
+		if (this.id == null) {
+			admin.id = null;
+		}
+		if (this.username == null) {
+			admin.username = null;
+		}
+		if (this.password == null) {
+			admin.password = null;
+		}
 	}
 
 }

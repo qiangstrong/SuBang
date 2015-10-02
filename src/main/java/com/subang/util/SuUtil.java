@@ -15,10 +15,14 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import weixin.popular.util.JsonUtil;
+
 import com.subang.dao.NoticeDao;
+import com.subang.domain.Filter;
 import com.subang.domain.Notice;
 import com.subang.domain.Notice.CodeType;
 import com.subang.exception.SuException;
@@ -138,6 +142,29 @@ public class SuUtil extends BaseUtil {
 			return false;
 		}
 		return true;
+	}
+
+	public static boolean outputJson(HttpServletResponse response, Object object) {
+		try {
+			response.setContentType("application/json;charset=UTF-8");
+			OutputStream outputStream = response.getOutputStream();
+			String json = JsonUtil.toJSONString(object);
+			SuUtil.outputStreamWrite(outputStream, json);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public static <T> void doFilter(String filterJson, List<T> list, Class<T> clazz) {
+		if (filterJson == null) {
+			return;
+		}
+		Filter filter = (Filter) JsonUtil.parseObject(filterJson, clazz);
+		for (T t : list) {
+			filter.doFilter(t);
+		}
 	}
 
 	// 用户绑定手机号时，产生验证码

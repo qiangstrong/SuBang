@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class City implements Serializable {
+public class City implements Filter, Serializable {
 
 	public static String scopePath = "image/info/scope/";
 
@@ -66,6 +66,22 @@ public class City implements Serializable {
 
 	public void setScopeText(String scopeText) {
 		this.scopeText = scopeText;
+	}
+
+	public void doFilter(Object object) {
+		City city = (City) object;
+		if (this.id == null) {
+			city.setId(null);
+		}
+		if (this.name == null) {
+			city.setName(null);
+		}
+		if (this.scope == null) {
+			city.setScope(null);
+		}
+		if (this.scopeText == null) {
+			city.setScopeText(null);
+		}
 	}
 
 }

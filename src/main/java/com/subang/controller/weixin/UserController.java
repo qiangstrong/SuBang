@@ -1,7 +1,5 @@
 package com.subang.controller.weixin;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import weixin.popular.util.JsonUtil;
 
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
@@ -80,15 +76,12 @@ public class UserController extends BaseController {
 	// 客户端校验cellnum书写是否正确
 	@RequestMapping("/cellnum")
 	public void getCellnum(final HttpSession session, HttpServletResponse response,
-			@RequestParam("cellnum") String cellnum) throws IOException {
+			@RequestParam("cellnum") String cellnum) {
 		Result result = new Result();
-		response.setContentType("application/json;charset=UTF-8");
-		OutputStream outputStream = response.getOutputStream();
 		if (userService.checkCellnum(cellnum)) {
 			result.setCode(Result.ERR);
 			result.setMsg("该手机号码已经被注册。");
-			String json = JsonUtil.toJSONString(result);
-			SuUtil.outputStreamWrite(outputStream, json);
+			SuUtil.outputJson(response, result);
 			return;
 		}
 
@@ -104,8 +97,7 @@ public class UserController extends BaseController {
 		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toUserContent(authcode))) {
 			result.setCode(Result.ERR);
 			result.setMsg("发送验证码错误。");
-			String json = JsonUtil.toJSONString(result);
-			SuUtil.outputStreamWrite(outputStream, json);
+			SuUtil.outputJson(response, result);
 			return;
 		}
 
@@ -117,8 +109,7 @@ public class UserController extends BaseController {
 		};
 		ComUtil.timer.schedule(task, WebConst.AUTHCODE_INTERVAL);
 		result.setCode(Result.OK);
-		String json = JsonUtil.toJSONString(result);
-		SuUtil.outputStreamWrite(outputStream, json);
+		SuUtil.outputJson(response, result);
 	}
 
 	@RequestMapping("/regauthcode")

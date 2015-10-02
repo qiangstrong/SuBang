@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 import com.subang.domain.Order.State;
 
-public class History implements Serializable {
+public class History implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class History implements Serializable {
 			break;
 		case canceled:
 			description = "取消";
-			break;	
+			break;
 		}
 		return description;
 	}
@@ -93,6 +93,22 @@ public class History implements Serializable {
 
 	public void setOrderid(Integer orderid) {
 		this.orderid = orderid;
+	}
+
+	public void doFilter(Object object) {
+		History history = (History) object;
+		if (this.id == null) {
+			history.id = null;
+		}
+		if (this.operation == null) {
+			history.operation = null;
+		}
+		if (this.time == null) {
+			history.time = null;
+		}
+		if (this.orderid == null) {
+			history.orderid = null;
+		}
 	}
 
 }

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class District implements Serializable {
+public class District implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,6 +48,19 @@ public class District implements Serializable {
 
 	public void setCityid(Integer cityid) {
 		this.cityid = cityid;
+	}
+
+	public void doFilter(Object object) {
+		District district = (District) object;
+		if (this.id == null) {
+			district.id = null;
+		}
+		if (this.name == null) {
+			district.name = null;
+		}
+		if (this.cityid == null) {
+			district.cityid = null;
+		}
 	}
 
 }

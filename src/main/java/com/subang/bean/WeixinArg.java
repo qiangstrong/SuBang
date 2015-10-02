@@ -1,19 +1,19 @@
-package com.subang.bean.weixin;
+package com.subang.bean;
 
 import weixin.popular.util.SignatureUtil;
 
 import com.subang.util.SuUtil;
 
-public class GetArg {
+public class WeixinArg {
 	private String signature;
 	private String timestamp;
 	private String nonce;
 	private String echostr;
 
-	public GetArg() {
+	public WeixinArg() {
 	}
 
-	public GetArg(String signature, String timestamp, String nonce, String echostr) {
+	public WeixinArg(String signature, String timestamp, String nonce, String echostr) {
 		this.signature = signature;
 		this.timestamp = timestamp;
 		this.nonce = nonce;
