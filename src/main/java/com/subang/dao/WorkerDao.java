@@ -25,6 +25,18 @@ public class WorkerDao extends BaseDao<Worker> {
 		return worker;
 	}
 
+	public Worker getByCellnum(String cellnum) {
+		String sql = "select * from worker_t where cellnum=?";
+		Object[] args = { cellnum };
+		Worker worker = null;
+		try {
+			worker = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Worker>(
+					Worker.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return worker;
+	}
+
 	public void save(Worker worker) {
 		String sql = "insert into worker_t values(null,?,?,?,?,?,?,?)";
 		Object[] args = { worker.getValid(), worker.getCore(), worker.getName(),
@@ -72,7 +84,7 @@ public class WorkerDao extends BaseDao<Worker> {
 				Worker.class));
 		return workers;
 	}
-	
+
 	public List<Worker> findByName(String name) {
 		String sql = "select * from worker_t where name like ? and valid=1";
 		Object[] args = { ComUtil.getLikeStr(name) };
@@ -94,5 +106,12 @@ public class WorkerDao extends BaseDao<Worker> {
 		List<Worker> workers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Worker>(
 				Worker.class));
 		return workers;
+	}
+
+	public int countCellnum(String cellnum) {
+		String sql = "select count(*) from worker_t where cellnum=?";
+		Object[] args = { cellnum };
+		int count = jdbcTemplate.queryForInt(sql, args);
+		return count;
 	}
 }

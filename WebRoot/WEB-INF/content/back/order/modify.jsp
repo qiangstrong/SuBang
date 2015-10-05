@@ -36,32 +36,21 @@
 			<td colspan="2">
 				<form:form modelAttribute="order" action="back/order/modify.html" method="post">
 					<form:hidden path="id"/>
-					<form:hidden path="orderno"/>
-					<form:hidden path="category"/>
-					<form:hidden path="state"/>
-					<form:hidden path="date"/>
-					<form:hidden path="time"/>
-					<form:hidden path="comment"/>
-					<form:hidden path="userid"/>
-					<form:hidden path="addrid"/>
-					<form:hidden path="workerid"/>
 					<table>
 						<tr>
 							<td>订单号：</td>
 							<td><form:input path="orderno" disabled="true" size="21"/></td>
 						</tr>
 						<tr>
-							<td></td>
-							<td><form:errors path="price"/></td>
-						</tr>
-						<tr>
-							<td>订单价格：</td>
-							<td><form:input path="price" size="21"/></td>
-						</tr>
-						<tr>
 							<td>商家：</td>
 							<td>    
 								<form:select path="laundryid" items="${laundrys}" itemLabel="name" itemValue="id"></form:select>  
+        					</td>
+						</tr>
+						<tr>
+							<td>取衣员：</td>
+							<td>    
+								<form:select path="workerid" items="${workers}" itemLabel="name" itemValue="id"></form:select>  
         					</td>
 						</tr>
 						<tr>

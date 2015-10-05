@@ -13,14 +13,13 @@ public class User implements Filter, Serializable {
 
 	private Integer id;
 	private Boolean login;
-	@NotNull
 	private String openid;
-	@NotNull
 	@Length(max = 100)
 	private String nickname;
 	@NotNull
 	@Length(min = 1, max = 50)
 	private String password;
+	@NotNull
 	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
 	private Integer score;

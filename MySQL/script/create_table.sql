@@ -168,10 +168,10 @@ create table `order_t`(
     `freight` double,						#运费
     `date` date not null,					#用户指定的取件日期
     `time` tinyint not null,				#用户指定的取件时间
-    `user_comment` varchar(100),				#用户指定的备注
+    `user_comment` varchar(100),			#用户指定的备注
     `worker_comment` varchar(100),			#工作人员对订单的备注，如衣物瑕疵等
     `remark` varchar(100),					#订单完成后，用户的评价
-    `barcode` char(8),						#标志衣物的条形码
+    `barcode` char(13) unique,				#标志衣物的条形码
     `categoryid` int not null,
     `userid` int not null,
     `addrid` int not null,

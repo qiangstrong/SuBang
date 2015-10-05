@@ -146,12 +146,19 @@ public class UserService extends BaseService {
 		return locations.get(0);
 	}
 
-	public void addLocation(Location location) {
-		locationDao.save(location);
-	}
-
-	public void modifyLocation(Location location) {
-		locationDao.update(location);
+	public void updateLocation(Integer userid, Location location_new) {
+		Location location_old = getLocationByUserid(userid);
+		if (location_old != null) {
+			location_old.setLatitude(location_new.getLatitude());
+			location_old.setLongitude(location_new.getLongitude());
+			locationDao.update(location_old);
+		} else {
+			location_old = new Location();
+			location_old.setLatitude(location_new.getLatitude());
+			location_old.setLongitude(location_new.getLongitude());
+			location_old.setUserid(userid);
+			locationDao.save(location_old);
+		}
 	}
 
 	/**

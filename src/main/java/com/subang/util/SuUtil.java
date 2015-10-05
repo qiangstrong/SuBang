@@ -17,10 +17,12 @@ import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import weixin.popular.util.JsonUtil;
 
+import com.subang.bean.Result;
 import com.subang.dao.NoticeDao;
 import com.subang.domain.Filter;
 import com.subang.domain.Notice;
@@ -36,6 +38,12 @@ public class SuUtil extends BaseUtil {
 	private static Properties su_properties = null;
 	private static Properties app_properties = null;
 	private static NoticeDao noticeDao = null;
+
+	private static final String RESULT_OK;
+
+	static {
+		RESULT_OK = JsonUtil.toJSONString(new Result(Result.OK, null));
+	}
 
 	public void setNoticeDao(NoticeDao noticeDao) {
 		SuUtil.noticeDao = noticeDao;
@@ -157,6 +165,19 @@ public class SuUtil extends BaseUtil {
 		return true;
 	}
 
+	public static boolean outputJsonOK(HttpServletResponse response) {
+
+		try {
+			response.setContentType("application/json;charset=UTF-8");
+			OutputStream outputStream = response.getOutputStream();
+			SuUtil.outputStreamWrite(outputStream, RESULT_OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
 	public static <T> void doFilter(String filterJson, List<T> list, Class<T> clazz) {
 		if (filterJson == null) {
 			return;
@@ -165,6 +186,14 @@ public class SuUtil extends BaseUtil {
 		for (T t : list) {
 			filter.doFilter(t);
 		}
+	}
+
+	public static List<Result> getResults(List<FieldError> errors) {
+		List<Result> results = new ArrayList<Result>();
+		for (FieldError error : errors) {
+			results.add(new Result(error.getField(), error.getDefaultMessage()));
+		}
+		return results;
 	}
 
 	// 用户绑定手机号时，产生验证码

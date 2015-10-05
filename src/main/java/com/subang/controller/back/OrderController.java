@@ -74,16 +74,8 @@ public class OrderController extends BaseController {
 	@RequestMapping("/delete")
 	public ModelAndView delete(HttpSession session, @RequestParam("orderids") String orderids) {
 		ModelAndView view = new ModelAndView();
-		boolean isException = false;
-		try {
-			orderService.deleteOrders(SuUtil.getIds(orderids));
-		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
-			isException = true;
-		}
-		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
-		}
+		orderService.deleteOrders(SuUtil.getIds(orderids));
+		session.setAttribute(KEY_INFO_MSG, "删除成功。");
 		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html?type=1");
 		return view;
 	}
@@ -150,9 +142,18 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/check")
-	public ModelAndView check(@RequestParam("orderid") Integer orderid) {
+	public ModelAndView check(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		orderService.checkOrder(orderid);
+		boolean isException = false;
+		try {
+			orderService.checkOrder(orderid);
+		} catch (SuException e) {
+			session.setAttribute(KEY_INFO_MSG, "添加明细失败。" + e.getMessage());
+			isException = true;
+		}
+		if (!isException) {
+			session.setAttribute(KEY_INFO_MSG, "添加明细成功。");
+		}
 		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html?type=1");
 		return view;
 	}

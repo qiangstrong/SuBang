@@ -111,6 +111,26 @@ public class OrderService extends BaseService {
 		return orderDetails;
 	}
 
+	// 取衣员查找订单
+	public List<OrderDetail> searchOrderByWorkeridAndState(Integer workerid, int stateType) {
+		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
+		switch (stateType) {
+		case WebConst.ORDER_STATE_WORKER:
+			orderDetails.addAll(orderDao.findDetailByWorkerid(workerid));
+			break;
+		case WebConst.ORDER_STATE_FETCH:
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.accepted));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.priced));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.paid));
+			break;
+		case WebConst.ORDER_STATE_DELIVER:
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.fetched));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.checked));
+			break;
+		}
+		return orderDetails;
+	}
+
 	// 用户添加订单,工作人员使用app查询自己的订单，下单的时候生成支付信息
 	public void addOrder(Order order) {
 
@@ -153,8 +173,12 @@ public class OrderService extends BaseService {
 	}
 
 	// 取衣员计价
-	public void priceOrder(Integer orderid, double money) {
+	public void priceOrder(Integer orderid, double money) throws SuException {
 		Order order = orderDao.get(orderid);
+		State state = order.getStateEnum();
+		if (state != State.accepted && state != State.priced) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
 		order.setMoney(money);
 		if (money < new Double(SuUtil.getSuProperty("orderMoney"))) {
 			order.setFreight(new Double(SuUtil.getSuProperty("orderFreight")));
@@ -162,15 +186,22 @@ public class OrderService extends BaseService {
 		order.setState(State.priced);
 		orderDao.update(order);
 
-		History history = new History();
-		history.setOperation(State.priced);
-		history.setOrderid(order.getId());
-		historyDao.save(history);
+		if (state == State.accepted) {
+			History history = new History();
+			history.setOperation(State.priced);
+			history.setOrderid(order.getId());
+			historyDao.save(history);
+		} else {
+			historyDao.updateTime(orderid, State.priced);
+		}
 	}
 
 	// 取衣员扫码，订单进入已取走状态
-	public void fetchOrder(Integer orderid, String barcode) {
+	public void fetchOrder(Integer orderid, String barcode) throws SuException {
 		Order order = orderDao.get(orderid);
+		if (order.getStateEnum() != State.priced) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
 		order.setBarcode(barcode);
 		order.setState(State.fetched);
 		orderDao.update(order);
@@ -188,28 +219,40 @@ public class OrderService extends BaseService {
 		orderDao.update(order);
 	}
 
-	// 后台完成订单分配商家，修改价格,手动分配取衣员的功能
+	// 后台完成订单分配商家，手动分配取衣员的功能
 	public void modifyOrder(Order order) {
-		orderDao.update(order);
+		Order order_old = orderDao.get(order.getId());
+		order_old.setLaundryid(order.getLaundryid());
+		order_old.setWorkerid(order.getWorkerid());
+		orderDao.update(order_old);
 	}
 
 	// 管理人员完成对物品明细的添加
-	public void checkOrder(Integer orderid) {
+	public void checkOrder(Integer orderid) throws SuException {
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum().ordinal() >= State.checked.ordinal()) {
-			return;
+		State state = order.getStateEnum();
+		if (state != State.fetched && state != State.checked) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
 		}
 		order.setState(State.checked);
 		orderDao.update(order);
 
-		History history = new History();
-		history.setOperation(State.checked);
-		history.setOrderid(order.getId());
-		historyDao.save(history);
+		if (state == State.fetched) {
+			History history = new History();
+			history.setOperation(State.checked);
+			history.setOrderid(order.getId());
+			historyDao.save(history);
+		} else {
+			historyDao.updateTime(orderid, State.checked);
+		}
+
 	}
 
-	public void deliverOrder(Integer orderid) {
+	public void deliverOrder(Integer orderid) throws SuException {
 		Order order = orderDao.get(orderid);
+		if (order.getStateEnum() != State.checked) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
 		order.setState(State.delivered);
 		orderDao.update(order);
 
@@ -219,8 +262,11 @@ public class OrderService extends BaseService {
 		historyDao.save(history);
 	}
 
-	public void remarkOrder(Integer orderid, String remark) {
+	public void remarkOrder(Integer orderid, String remark) throws SuException {
 		Order order = orderDao.get(orderid);
+		if (order.getStateEnum() != State.delivered) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
 		order.setRemark(remark);
 		order.setState(State.remarked);
 		orderDao.update(order);
@@ -246,43 +292,36 @@ public class OrderService extends BaseService {
 	public boolean cancelOrder(Integer orderid) {
 		History history = null;
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() == State.accepted) {
-			order.setState(State.canceled);
-			orderDao.update(order);
-
-			history = new History();
-			history.setOperation(State.accepted);
-			history.setOrderid(order.getId());
-			historyDao.save(history);
+		State state = order.getStateEnum();
+		if (state == State.canceled) {
 			return true;
 		}
-		return false;
+		if (state != State.accepted && state != State.priced) {
+			return false;
+		}
+		order.setState(State.canceled);
+		orderDao.update(order);
+
+		history = new History();
+		history.setOperation(State.canceled);
+		history.setOrderid(order.getId());
+		historyDao.save(history);
+		return true;
 	}
 
-	public void deleteOrders(List<Integer> orderids) throws SuException {
-		boolean isAll = true;
+	public void deleteOrders(List<Integer> orderids) {
 		for (Integer orderid : orderids) {
-			if (!deleteOrder(orderid)) {
-				isAll = false;
-			}
-		}
-		if (!isAll) {
-			throw new SuException("由于订单状态不符，部分订单没有完成指定操作。");
+			deleteOrder(orderid);
 		}
 	}
 
-	private boolean deleteOrder(Integer orderid) {
+	private void deleteOrder(Integer orderid) {
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() == State.delivered || order.getStateEnum() == State.remarked
-				|| order.getStateEnum() == State.canceled) {
-			orderDao.delete(orderid);
-			Addr addr = addrDao.get(order.getAddrid());
-			if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
-				addrDao.delete(addr.getId());
-			}
-			return true;
+		orderDao.delete(orderid);
+		Addr addr = addrDao.get(order.getAddrid());
+		if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
+			addrDao.delete(addr.getId());
 		}
-		return false;
 	}
 
 	/**

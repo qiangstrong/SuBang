@@ -22,7 +22,6 @@ public class Addr implements Filter, Serializable {
 	@NotNull
 	@Length(max = 50)
 	protected String detail;
-
 	protected Integer userid;
 	@NotNull
 	protected Integer regionid;

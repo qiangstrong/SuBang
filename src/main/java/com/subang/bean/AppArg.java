@@ -5,6 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.subang.util.ComUtil;
 
 public class AppArg {
+	private Integer type;
 	private String cellnum;
 	private String password;
 	private String timestamp;
@@ -13,12 +14,20 @@ public class AppArg {
 	public AppArg() {
 	}
 
-	public AppArg(String cellnum, String password, String timestamp, String signature) {
-		super();
+	public AppArg(Integer type, String cellnum, String password, String timestamp, String signature) {
+		this.type = type;
 		this.cellnum = cellnum;
 		this.password = password;
 		this.timestamp = timestamp;
 		this.signature = signature;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public String getCellnum() {

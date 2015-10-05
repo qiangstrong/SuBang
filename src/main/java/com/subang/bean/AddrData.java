@@ -85,4 +85,18 @@ public class AddrData {
 		this.detail = detail;
 	}
 
+	public void doFilter() {
+		City filterCity = new City(1, "", null, null);
+		for (City city : citys) {
+			filterCity.doFilter(city);
+		}
+		District filterDistrict = new District(1, "", null);
+		for (District district : districts) {
+			filterDistrict.doFilter(district);
+		}
+		Region filterRegion = new Region(1, "", null, null);
+		for (Region region : regions) {
+			filterRegion.doFilter(region);
+		}
+	}
 }

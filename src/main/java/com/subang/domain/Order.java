@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -29,9 +28,7 @@ public class Order implements Filter, Serializable {
 	protected Double money; // 单位元
 	@Digits(integer = 3, fraction = 1)
 	protected Double freight; // 单位元
-	@NotNull
 	protected Date date; // 用户指定的取件日期
-	@NotNull
 	protected Integer time; // 用户指定的取件时间，时间间隔为（time，time+1）
 	@Length(max = 100)
 	protected String userComment;
@@ -42,7 +39,6 @@ public class Order implements Filter, Serializable {
 	protected String barcode;
 	protected Integer categoryid;
 	protected Integer userid;
-	@NotNull
 	protected Integer addrid;
 	protected Integer workerid;
 	protected Integer laundryid;

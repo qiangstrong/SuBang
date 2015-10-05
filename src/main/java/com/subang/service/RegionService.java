@@ -204,7 +204,7 @@ public class RegionService extends BaseService {
 		return addrData;
 	}
 
-	// 前台，获取当前城市的服务,cityid有可能会发生变化
+	// 前台，获取当前城市的服务.当传入的cityid为null时，函数会计算cityid，并返回给调用者
 	public List<Category> listByCityid(Integer userid, Integer cityid) {
 		List<Category> categorys = null;
 		Location location = ComUtil.getFirst(locationDao.findByUserid(userid));
@@ -219,19 +219,22 @@ public class RegionService extends BaseService {
 				locationDao.update(location);
 			}
 		} else {
-			GeoLoc geoLoc = LocUtil.getGeoLoc(location);
-			City city = null;
-			if (geoLoc != null) {
-				city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
-			}
-			if (geoLoc == null || city == null) {
-				city = ComUtil
-						.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
-			}
-			cityid = city.getId();
+			cityid = getCityid(location);
 		}
 		categorys = categoryDao.findByCityid(cityid);
 		return categorys;
+	}
+
+	public Integer getCityid(Location location) {
+		GeoLoc geoLoc = LocUtil.getGeoLoc(location);
+		City city = null;
+		if (geoLoc != null) {
+			city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
+		}
+		if (geoLoc == null || city == null) {
+			city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
+		}
+		return city.getId();
 	}
 
 	/**

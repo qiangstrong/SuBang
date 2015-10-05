@@ -35,6 +35,7 @@ import com.subang.domain.Clothes;
 import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
+import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.TimeUtil;
 import com.subang.util.TimeUtil.Option;
@@ -61,7 +62,7 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/detail")
-	public ModelAndView detail(@RequestParam("orderid") Integer orderid) {
+	public ModelAndView getDetail(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
 		OrderDetail orderDetail = orderDao.getDetail(orderid);
 		List<History> historys = historyDao.findByOrderid(orderid);
@@ -78,7 +79,10 @@ public class OrderController extends BaseController {
 	public ModelAndView showAdd(HttpSession session, @RequestParam("categoryid") Integer categoryid) {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
+		Order order = new Order();
+		order.setCategoryid(categoryid);
 		prepare(view, user, categoryid);
+		view.addObject("order", order);
 		view.setViewName(VIEW_PREFIX + "/add");
 		return view;
 	}
@@ -117,7 +121,11 @@ public class OrderController extends BaseController {
 	@RequestMapping("/deliver")
 	public ModelAndView deliver(@RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		orderService.deliverOrder(orderid);
+		try {
+			orderService.deliverOrder(orderid);
+		} catch (SuException e) {
+			e.printStackTrace();
+		}
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
 		return view;
 	}
@@ -135,7 +143,11 @@ public class OrderController extends BaseController {
 	public ModelAndView remark(@RequestParam("orderid") Integer orderid,
 			@RequestParam("remark") String remark) {
 		ModelAndView view = new ModelAndView();
-		orderService.remarkOrder(orderid, remark);
+		try {
+			orderService.remarkOrder(orderid, remark);
+		} catch (SuException e) {
+			e.printStackTrace();
+		}
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_DONE);
 		return view;
 	}

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.subang.bean.Identity;
 import com.subang.bean.PageState;
 import com.subang.dao.AddrDao;
 import com.subang.dao.AdminDao;
@@ -32,6 +33,7 @@ import com.subang.dao.UserDao;
 import com.subang.dao.WorkerDao;
 import com.subang.domain.Admin;
 import com.subang.domain.User;
+import com.subang.domain.Worker;
 import com.subang.service.ActivityService;
 import com.subang.service.InfoService;
 import com.subang.service.LaundryService;
@@ -167,5 +169,13 @@ public class BaseController {
 
 	protected void setOpenid(HttpSession session, String openid) {
 		session.setAttribute(KEY_OPENID, openid);
+	}
+
+	protected User getUser(Identity identity) {
+		return userDao.getByCellnum(identity.getCellnum());
+	}
+
+	protected Worker getWorker(Identity identity) {
+		return workerDao.getByCellnum(identity.getCellnum());
 	}
 }

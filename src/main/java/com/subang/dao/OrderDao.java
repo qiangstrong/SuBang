@@ -147,6 +147,18 @@ public class OrderDao extends BaseDao<Order> {
 		return orderDetail;
 	}
 
+	public OrderDetail getDetailByBarcode(String barcode) {
+		String sql = "select * from orderdetail_v where barcode=?";
+		Object[] args = { barcode };
+		OrderDetail orderDetail = null;
+		try {
+			orderDetail = jdbcTemplate.queryForObject(sql, args,
+					new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return orderDetail;
+	}
+
 	public List<OrderDetail> findDetailAll() {
 		String sql = "select * from orderdetail_v";
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql,
@@ -197,6 +209,14 @@ public class OrderDao extends BaseDao<Order> {
 	public List<OrderDetail> findDetailByUseridAndState(Integer userid, State state) {
 		String sql = "select * from orderdetail_v where userid=? and state=?";
 		Object[] args = { userid, state.ordinal() };
+		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetails;
+	}
+
+	public List<OrderDetail> findDetailByWorkeridAndState(Integer workerid, State state) {
+		String sql = "select * from orderdetail_v where workerid=? and state=?";
+		Object[] args = { workerid, state.ordinal() };
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
 		return orderDetails;

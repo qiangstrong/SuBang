@@ -53,8 +53,12 @@ public interface WebConst {
 	int AREA_REGION = 2;
 
 	// 前台部分
-	int ORDER_STATE_UNDONE = 1;
-	int ORDER_STATE_DONE = 2;
+	int ORDER_STATE_UNDONE = 2;
+	int ORDER_STATE_DONE = 3;
+
+	int ORDER_STATE_WORKER = 1;
+	int ORDER_STATE_FETCH = 2;
+	int ORDER_STATE_DELIVER = 3;
 
 	int EXPIRED_INTERVAL = 60; // 重复通知过滤 时效60秒
 }

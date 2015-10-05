@@ -23,10 +23,10 @@
 	<table align="center">
 		<tr>
 			<td class="tabsitem">
-				<a href="weixin/order/index.html?type=1">服务中</a>
+				<a href="weixin/order/index.html?type=2">服务中</a>
 			</td>
 			<td class="tabsitem">
-				<a href="weixin/order/index.html?type=2">已完成</a>
+				<a href="weixin/order/index.html?type=3">已完成</a>
 			</td>
 		</tr>
 	</table>

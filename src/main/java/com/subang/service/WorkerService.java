@@ -53,6 +53,15 @@ public class WorkerService extends BaseService {
 		return workers;
 	}
 
+	// 检查手机号码是否被注册过
+	public boolean checkCellnum(String cellnum) {
+		int count = workerDao.countCellnum(cellnum);
+		if (count == 0) {
+			return true;
+		}
+		return false;
+	}
+
 	public void addWorker(Worker worker) throws SuException {
 		try {
 			workerDao.save(worker);

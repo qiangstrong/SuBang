@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.domain.History;
+import com.subang.domain.Order.State;
 
 @Repository
 public class HistoryDao extends BaseDao<History> {
@@ -14,10 +15,10 @@ public class HistoryDao extends BaseDao<History> {
 	public History get(Integer id) {
 		String sql = "select * from history_t where id=?";
 		Object[] args = { id };
-		History history=null;
+		History history = null;
 		try {
-			history = jdbcTemplate.queryForObject(sql, args,
-					new BeanPropertyRowMapper<History>(History.class));
+			history = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<History>(
+					History.class));
 		} catch (EmptyResultDataAccessException e) {
 		}
 		return history;
@@ -31,7 +32,14 @@ public class HistoryDao extends BaseDao<History> {
 
 	public void update(History history) {
 		String sql = "update history_t set operation=? ,time=? ,orderid=? where id=?";
-		Object[] args = { history.getOperation(), history.getTime(), history.getOrderid(),history.getId() };
+		Object[] args = { history.getOperation(), history.getTime(), history.getOrderid(),
+				history.getId() };
+		jdbcTemplate.update(sql, args);
+	}
+
+	public void updateTime(Integer orderid, State state) {
+		String sql = "update history_t set time=now() where orderid=? and operation=?";
+		Object[] args = { orderid, state.ordinal() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -55,4 +63,5 @@ public class HistoryDao extends BaseDao<History> {
 				History.class));
 		return historys;
 	}
+
 }

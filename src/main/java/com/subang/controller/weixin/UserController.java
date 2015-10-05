@@ -78,7 +78,7 @@ public class UserController extends BaseController {
 	public void getCellnum(final HttpSession session, HttpServletResponse response,
 			@RequestParam("cellnum") String cellnum) {
 		Result result = new Result();
-		if (userService.checkCellnum(cellnum)) {
+		if (!userService.checkCellnum(cellnum)) {
 			result.setCode(Result.ERR);
 			result.setMsg("该手机号码已经被注册。");
 			SuUtil.outputJson(response, result);
@@ -207,6 +207,7 @@ public class UserController extends BaseController {
 		return view;
 	}
 
+	// 客户端校验密码的长度
 	@RequestMapping("/chgpassword")
 	public ModelAndView chgPassword(HttpSession session, @RequestParam("password") String password) {
 		ModelAndView view = new ModelAndView();

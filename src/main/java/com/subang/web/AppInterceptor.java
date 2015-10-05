@@ -7,25 +7,23 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.AppArg;
-import com.subang.bean.Result;
+import com.subang.bean.Identity;
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
+import com.subang.domain.Worker;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 public class AppInterceptor extends BaseController implements HandlerInterceptor {
 
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.APP_PREFIX;
-	private static final String[] FREE_URIS = {};
+	private static final String[] FREE_URIS = { "/user/login.html", "/user/add.html",
+			"/worker/login.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
-		String cellnum = request.getParameter("cellnum_auth");
-		String timestamp = request.getParameter("timestamp_auth");
-		String signature = request.getParameter("signature_auth");
-		if (isResURI(request.getRequestURI()) && !validate(cellnum, timestamp, signature)) {
-			Result result = new Result(Result.ERR, "认证失败。");
-			SuUtil.outputJson(response, result);
+		if (isResURI(request.getRequestURI()) && !validate(request)) {
+			SuUtil.outputJson(response, null);
 			return false;
 		}
 		return true;
@@ -39,16 +37,43 @@ public class AppInterceptor extends BaseController implements HandlerInterceptor
 			Exception arg3) throws Exception {
 	}
 
-	public boolean validate(String cellnum, String timestamp, String signature) {
-		if (cellnum == null || timestamp == null || signature == null) {
+	public boolean validate(HttpServletRequest request) {
+		Integer type = null;
+		try {
+			type = new Integer(request.getParameter("type_auth"));
+		} catch (Exception e) {
+		}
+
+		// 为分拣人员提供的认证方式，以后再修改这一部分
+		if (type == Identity.OTHER) {
+			return true;
+		}
+
+		String cellnum = request.getParameter("cellnum_auth");
+		String timestamp = request.getParameter("timestamp_auth");
+		String signature = request.getParameter("signature_auth");
+
+		if (type == null || cellnum == null || timestamp == null || signature == null) {
 			return false;
 		}
-		User user = userDao.getByCellnum(cellnum);
-		if (user == null) {
+		String password = null;
+		if (type == Identity.USER) {
+			User user = userDao.getByCellnum(cellnum);
+			if (user == null) {
+				return false;
+			}
+			password = user.getPassword();
+		} else if (type == Identity.WORKER) {
+			Worker worker = workerDao.getByCellnum(cellnum);
+			if (worker == null) {
+				return false;
+			}
+			password = worker.getPassword();
+		} else {
 			return false;
 		}
-		String password = user.getPassword();
-		AppArg appArg = new AppArg(cellnum, password, timestamp, signature);
+
+		AppArg appArg = new AppArg(type, cellnum, password, timestamp, signature);
 		if (!appArg.validate()) {
 			return false;
 		}
