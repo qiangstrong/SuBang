@@ -5,32 +5,59 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_5_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_CORE"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_Persistence"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_WEB"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.spring31.MYECLIPSE_SPRING31_Test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/MyEclipse/Common/plugins/com.genuitec.eclipse.j2eedt.core_10.5.0.me201207171805/data/libraryset/EE_6/javax.servlet.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://java.sun.com/javaee/6/docs/api/"/>
-			<attribute name="deploy-excludes" value=""/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/baidumap-1.0.0.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/bean-validator-1.1.10.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/commons-io-2.4.jar" sourcepath="C:/Users/lenovo/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4-sources.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/mysql-connector-java-5.1.35-bin.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin-popular-2.4.0.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/fastjson-1.2.0.jar" sourcepath="C:/Users/lenovo/.m2/repository/com/alibaba/fastjson/1.2.0/fastjson-1.2.0-sources.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpclient-4.3.5.jar" sourcepath="C:/Users/lenovo/.m2/repository/org/apache/httpcomponents/httpclient/4.3.5/httpclient-4.3.5-sources.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/fastjson-1.2.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpclient-4.3.5.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin/httpmime-4.3.4.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/com.springsource.org.quartz-1.6.2.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/baidumap-1.0.0.jar"/>
-	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/weixin-popular-2.4.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/aspectjweaver-1.6.9.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/c3p0-0.9.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/cglib-nodep-2.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/com.springsource.org.quartz-1.6.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-fileupload-1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/commons-pool-1.5.3.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/jsf-api.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/jsf-impl.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/junit.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.aop-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.asm-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.aspects-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.beans-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.context.support-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.context-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.core-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.expression-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.instrument.tomcat-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.instrument-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.jdbc-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.jms-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.orm-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.oxm-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.test-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.transaction-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.web.portlet-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.web.servlet-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.web.struts-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/org.springframework.web-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Documents/Workspaces/SuBang/lib/myeclipse/testng-5.10-jdk15.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.subang.bean.Identity;
 import com.subang.controller.BaseController;
 import com.subang.domain.Category;
+import com.subang.domain.Price;
 import com.subang.domain.User;
 import com.subang.util.SuUtil;
 
@@ -33,6 +34,15 @@ public class PriceController extends BaseController {
 			HttpServletResponse response) {
 		Category category = categoryDao.get(categoryid);
 		SuUtil.outputJson(response, category);
+	}
+
+	@RequestMapping("listprice")
+	public void listPrice(@RequestParam("categoryid") Integer categoryid,
+			@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		List<Price> prices = priceDao.findByCategoryid(categoryid);
+		SuUtil.doFilter(filter, prices, Price.class);
+		SuUtil.outputJson(response, prices);
 	}
 
 }
