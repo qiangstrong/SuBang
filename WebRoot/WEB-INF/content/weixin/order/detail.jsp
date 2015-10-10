@@ -71,7 +71,7 @@
 				<strong>订单追踪：</strong>
 			</td>
 		</tr>
-		<c:forEach var="history" items="${historys}">
+		<c:forEach var="history" items="${historys}" >
 		<tr>
 			<td class="label">${history.operationDes }：</td>
 			<td>${history.time }</td>

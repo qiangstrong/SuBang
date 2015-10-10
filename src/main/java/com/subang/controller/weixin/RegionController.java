@@ -26,6 +26,9 @@ public class RegionController extends BaseController {
 			@RequestParam(value = "cityid", required = false) Integer cityid) {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
+		if (cityid == null) {
+			cityid = regionService.getCityid(user.getId());
+		}
 		List<Category> categorys = regionService.listByCityid(user.getId(), cityid);
 		view.addObject("categorys", categorys);
 		City city = cityDao.get(cityid);

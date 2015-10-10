@@ -3,12 +3,7 @@
 		{
 			"type":"view",
 			"name":"我要下单",
-			"url":"http://202.118.18.56/weixin/order/showadd.html"
-		},
-		{
-			"type":"view",
-			"name":"最新活动",
-			"url":"http://202.118.18.56/weixin/misc/activity.html"
+			"url":"http://202.118.18.56/weixin/region/index.html"
 		},
 		{
 			"name":"服务中心",
@@ -20,20 +15,25 @@
 				},					
 				{
 					"type":"view",
-					"name":"价目表",
-					"url":"http://202.118.18.56/weixin/info/price.html"
-				},
-				{
-					"type":"view",
-					"name":"服务范围",
-					"url":"http://202.118.18.56/weixin/info/scope.html"					
-				},
-				{
-					"type":"view",
-					"name":"关于",
-					"url":"http://202.118.18.56/weixin/info/about.html"					
+					"name":"我的订单",
+					"url":"http://202.118.18.56/weixin/order/index.html?type=2"
 				}
 			]
-		}		
+		},
+		{
+			"name":"在线客服",
+			"sub_button":[
+				{
+					"type":"view",
+					"name":"联系客服",
+					"url":"http://202.118.18.56/weixin/region/index.html"					
+				},					
+				{
+					"type":"view",
+					"name":"我要吐槽",
+					"url":"http://202.118.18.56/weixin/region/index.html"
+				}
+			]
+		}	
 	]
 }

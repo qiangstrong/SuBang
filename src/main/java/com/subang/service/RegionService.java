@@ -204,37 +204,44 @@ public class RegionService extends BaseService {
 		return addrData;
 	}
 
-	// 前台，获取当前城市的服务.当传入的cityid为null时，函数会计算cityid，并返回给调用者
+	// 前台，获取当前城市的服务,cityid不能为null
 	public List<Category> listByCityid(Integer userid, Integer cityid) {
 		List<Category> categorys = null;
 		Location location = ComUtil.getFirst(locationDao.findByUserid(userid));
-		if (cityid != null) {
-			if (location == null) {
-				location = new Location();
-				location.setUserid(userid);
-				location.setCityid(cityid);
-				locationDao.save(location);
-			} else {
-				location.setCityid(cityid);
-				locationDao.update(location);
-			}
+		if (location == null) {
+			location = new Location();
+			location.setUserid(userid);
+			location.setCityid(cityid);
+			locationDao.save(location);
 		} else {
-			cityid = getCityid(location);
+			location.setCityid(cityid);
+			locationDao.update(location);
 		}
 		categorys = categoryDao.findByCityid(cityid);
 		return categorys;
 	}
 
 	public Integer getCityid(Location location) {
-		GeoLoc geoLoc = LocUtil.getGeoLoc(location);
 		City city = null;
-		if (geoLoc != null) {
-			city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
+		if (location != null) {
+			GeoLoc geoLoc = LocUtil.getGeoLoc(location);
+			if (geoLoc != null) {
+				city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
+			}
+			if (city != null) {
+				return city.getId();
+			}
+			if (location.getCityid() != null) {
+				return location.getCityid();
+			}
 		}
-		if (geoLoc == null || city == null) {
-			city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
-		}
+		city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
 		return city.getId();
+	}
+
+	public Integer getCityid(Integer userid) {
+		Location location = ComUtil.getFirst(locationDao.findByUserid(userid));
+		return getCityid(location);
 	}
 
 	/**

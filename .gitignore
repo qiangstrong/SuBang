@@ -1,6 +1,7 @@
 *.class
 *.classpath
 *.mymetadata
+WebRoot/WEB-INF/classes
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
