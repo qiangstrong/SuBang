@@ -32,7 +32,7 @@ public class PriceController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("bag")
+	@RequestMapping("/bag")
 	public String bag() {
 		return VIEW_PREFIX + "/bag";
 	}

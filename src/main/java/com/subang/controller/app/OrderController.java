@@ -26,7 +26,7 @@ import com.subang.util.SuUtil;
 @RequestMapping("/app/order")
 public class OrderController extends BaseController {
 
-	@RequestMapping("userlist")
+	@RequestMapping("/userlist")
 	public void userList(Identity identity, @RequestParam("type") Integer stateType,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -37,7 +37,7 @@ public class OrderController extends BaseController {
 		SuUtil.outputJson(response, orderDetails);
 	}
 
-	@RequestMapping("workerlist")
+	@RequestMapping("/workerlist")
 	public void workerList(Identity identity, @RequestParam("type") Integer stateType,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -48,13 +48,13 @@ public class OrderController extends BaseController {
 		SuUtil.outputJson(response, orderDetails);
 	}
 
-	@RequestMapping("get")
+	@RequestMapping("/get")
 	public void get(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		OrderDetail orderDetail = orderDao.getDetail(orderid);
 		SuUtil.outputJson(response, orderDetail);
 	}
 
-	@RequestMapping("add")
+	@RequestMapping("/add")
 	public void add(Identity identity, @Valid Order order, BindingResult result,
 			HttpServletResponse response) {
 		List<Result> results = SuUtil.getResults(result.getFieldErrors());
@@ -66,7 +66,7 @@ public class OrderController extends BaseController {
 		SuUtil.outputJson(response, results);
 	}
 
-	@RequestMapping("price")
+	@RequestMapping("/price")
 	public void price(@RequestParam("orderid") Integer orderid,
 			@RequestParam("money") Double money, HttpServletResponse response) {
 		try {
@@ -77,7 +77,7 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("fetch")
+	@RequestMapping("/fetch")
 	public void fetch(@RequestParam("orderid") Integer orderid,
 			@RequestParam("barcode") String barcode, HttpServletResponse response) {
 		try {
@@ -88,26 +88,26 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("scan")
+	@RequestMapping("/scan")
 	public void scan(@RequestParam("barcode") String barcode, HttpServletResponse response) {
 		OrderDetail orderDetail = orderDao.getDetailByBarcode(barcode);
 		SuUtil.outputJson(response, orderDetail);
 	}
 
-	@RequestMapping("comment")
+	@RequestMapping("/comment")
 	public void comment(@RequestParam("orderid") Integer orderid,
 			@RequestParam("comment") String comment, HttpServletResponse response) {
 		orderService.commentOrder(orderid, comment);
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("cancel")
+	@RequestMapping("/cancel")
 	public void cancel(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		orderService.cancelOrder(orderid);
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("deliver")
+	@RequestMapping("/deliver")
 	public void deliver(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		try {
 			orderService.deliverOrder(orderid);
@@ -117,7 +117,7 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("remark")
+	@RequestMapping("/remark")
 	public void remark(@RequestParam("orderid") Integer orderid,
 			@RequestParam("remark") String remark, HttpServletResponse response) {
 		try {
@@ -128,13 +128,13 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("listhistory")
+	@RequestMapping("/listhistory")
 	public void listHistory(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		List<History> historys = historyDao.findByOrderid(orderid);
 		SuUtil.outputJson(response, historys);
 	}
 
-	@RequestMapping("listclothes")
+	@RequestMapping("/listclothes")
 	public void listClothes(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
 		SuUtil.outputJson(response, clothess);

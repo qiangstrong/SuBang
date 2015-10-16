@@ -42,7 +42,7 @@ public class UserController extends BaseController {
 	/**
 	 * 用户登录
 	 */
-	@RequestMapping("login")
+	@RequestMapping("/login")
 	public ModelAndView login(HttpSession session, User user) {
 		ModelAndView view = new ModelAndView();
 

@@ -28,7 +28,7 @@ public class TicketController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("intro")
+	@RequestMapping("/intro")
 	public String bag() {
 		return VIEW_PREFIX + "/intro";
 	}

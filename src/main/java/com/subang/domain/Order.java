@@ -207,6 +207,10 @@ public class Order implements Filter, Serializable {
 		return barcode;
 	}
 
+	public String getBarcodeDes() {
+		return ComUtil.getDes(barcode);
+	}
+
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}

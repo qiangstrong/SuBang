@@ -19,7 +19,7 @@ import com.subang.util.SuUtil;
 @RequestMapping("/app/price")
 public class PriceController extends BaseController {
 
-	@RequestMapping("listcategory")
+	@RequestMapping("/listcategory")
 	public void listCategory(Identity identity, @RequestParam("cityid") Integer cityid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -29,14 +29,14 @@ public class PriceController extends BaseController {
 		SuUtil.outputJson(response, categorys);
 	}
 
-	@RequestMapping("getcategory")
+	@RequestMapping("/getcategory")
 	public void getCategory(@RequestParam("categoryid") Integer categoryid,
 			HttpServletResponse response) {
 		Category category = categoryDao.get(categoryid);
 		SuUtil.outputJson(response, category);
 	}
 
-	@RequestMapping("listprice")
+	@RequestMapping("/listprice")
 	public void listPrice(@RequestParam("categoryid") Integer categoryid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {

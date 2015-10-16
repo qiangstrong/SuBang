@@ -25,13 +25,13 @@ import com.subang.util.SuUtil;
 @RequestMapping("/app/user")
 public class UserController extends BaseController {
 
-	@RequestMapping("get")
+	@RequestMapping("/get")
 	public void getUser(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
 		SuUtil.outputJson(response, user);
 	}
 
-	@RequestMapping("login")
+	@RequestMapping("/login")
 	public void login(User user, HttpServletResponse response) {
 		User matchUser = userDao.findByUser(user);
 		Result result = new Result();
@@ -44,7 +44,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
-	@RequestMapping("add")
+	@RequestMapping("/add")
 	public void add(@Valid User user, BindingResult result, HttpServletResponse response) {
 		List<Result> results = SuUtil.getResults(result.getFieldErrors());
 		if (!result.hasErrors()) {
@@ -57,7 +57,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, results);
 	}
 
-	@RequestMapping("chgcellnum")
+	@RequestMapping("/chgcellnum")
 	public void chgCellnum(Identity identity, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
 		Result result = new Result();
@@ -89,7 +89,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("listaddr")
+	@RequestMapping("/listaddr")
 	public void listAddr(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -99,7 +99,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, addrDetails);
 	}
 
-	@RequestMapping("getaddrdata")
+	@RequestMapping("/getaddrdata")
 	public void getAddrData(Identity identity,
 			@RequestParam(value = "regionid", required = false) Integer regionid,
 			HttpServletResponse response) {
@@ -113,7 +113,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, addrData);
 	}
 
-	@RequestMapping("addaddr")
+	@RequestMapping("/addaddr")
 	public void addAddr(Identity identity, @Valid Addr addr, BindingResult result,
 			HttpServletResponse response) {
 		List<Result> results = SuUtil.getResults(result.getFieldErrors());
@@ -125,13 +125,13 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, results);
 	}
 
-	@RequestMapping("deleteaddr")
+	@RequestMapping("/deleteaddr")
 	public void deleteAddr(@RequestParam("addrid") Integer addrid, HttpServletResponse response) {
 		userService.deleteAddr(addrid);
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("listticket")
+	@RequestMapping("/listticket")
 	public void listTicket(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {

@@ -134,7 +134,7 @@
 							<td>${orderDetail.freightDes}</td>
 							<td>${orderDetail.dateDes}</td>
 							<td>${orderDetail.timeDes}</td>
-							<td>${orderDetail.barcode}</td>							
+							<td>${orderDetail.barcodeDes}</td>							
 							<td>${orderDetail.cellnum}</td>
 							<td>${orderDetail.payTypeDes}</td>
 							<td>${orderDetail.moneyTicket}</td>

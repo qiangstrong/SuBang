@@ -52,11 +52,12 @@ public class OrderController extends BaseController {
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
 
 	@RequestMapping("/index")
-	public ModelAndView index(HttpSession session, @RequestParam("type") int stateType) {
+	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
 		List<OrderDetail> orderDetails = orderService.searchOrderByUseridAndState(getUser(session)
-				.getId(), stateType);
+				.getId(), type);
 		view.addObject("orderDetails", orderDetails);
+		view.addObject("type", type);
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}

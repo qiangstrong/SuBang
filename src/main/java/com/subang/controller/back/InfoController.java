@@ -97,7 +97,7 @@ public class InfoController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletefaq")
+	@RequestMapping("/deletefaq")
 	public ModelAndView deleteFaq(HttpSession session, @RequestParam("faqids") String faqids) {
 		ModelAndView view = new ModelAndView();
 		infoService.deleteFaqs(SuUtil.getIds(faqids));
@@ -151,7 +151,7 @@ public class InfoController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletefeedback")
+	@RequestMapping("/deletefeedback")
 	public ModelAndView deleteFeedback(HttpSession session,
 			@RequestParam("feedbackids") String feedbackids) {
 		ModelAndView view = new ModelAndView();
@@ -175,7 +175,7 @@ public class InfoController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletenotice")
+	@RequestMapping("/deletenotice")
 	public ModelAndView deleteNotice(HttpSession session,
 			@RequestParam("noticeids") String noticeids) {
 		ModelAndView view = new ModelAndView();

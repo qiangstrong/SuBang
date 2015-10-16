@@ -70,10 +70,16 @@ public class OrderDetail extends Order implements Filter {
 	}
 
 	public PayType getPayTypeEnum() {
+		if (payType == null) {
+			return null;
+		}
 		return PayType.values()[payType];
 	}
 
 	public String getPayTypeDes() {
+		if (payType == null) {
+			return "未支付";
+		}
 		String description = null;
 		switch (getPayTypeEnum()) {
 		case balance:
@@ -91,6 +97,9 @@ public class OrderDetail extends Order implements Filter {
 
 	public String getPaymentDes() {
 		String description = "";
+		description += "订单￥" + getMoneyDes() + "+";
+		description += "运费￥" + getFreightDes() + "-";
+		description += "优惠券￥" + getMoneyTicket();
 		return description;
 	}
 

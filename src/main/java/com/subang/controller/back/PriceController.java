@@ -74,7 +74,7 @@ public class PriceController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletecategory")
+	@RequestMapping("/deletecategory")
 	public ModelAndView deleteCategory(HttpSession session,
 			@RequestParam("categoryids") String categoryids) {
 		ModelAndView view = new ModelAndView();
@@ -178,7 +178,7 @@ public class PriceController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deleteprice")
+	@RequestMapping("/deleteprice")
 	public ModelAndView deletePrice(HttpSession session, @RequestParam("priceids") String priceids) {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;

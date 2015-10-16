@@ -156,7 +156,7 @@ public class WorkerController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("area")
+	@RequestMapping("/area")
 	public ModelAndView listArea(Integer workerid) {
 		ModelAndView view = new ModelAndView();
 		List<Area> areas = regionDao.findAreaByWorkerid(workerid);

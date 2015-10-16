@@ -164,7 +164,6 @@ public class OrderService extends BaseService {
 
 		Payment payment = new Payment();
 		payment.setOrderid(order.getId());
-		payment.setMoneyTicket(0.0);
 		paymentDao.save(payment);
 
 		User user = userDao.get(order.getUserid());

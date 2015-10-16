@@ -45,7 +45,7 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("incomplete")
+	@RequestMapping("/incomplete")
 	public ModelAndView listIncomplete() {
 		ModelAndView view = new ModelAndView();
 		List<Area> areas = regionDao.findIncomplete();
@@ -86,7 +86,7 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletecity")
+	@RequestMapping("/deletecity")
 	public ModelAndView deleteCity(HttpSession session, @RequestParam("cityids") String cityids) {
 		ModelAndView view = new ModelAndView();
 		boolean isException = false;
@@ -188,7 +188,7 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletedistrict")
+	@RequestMapping("/deletedistrict")
 	public ModelAndView deleteDistrict(HttpSession session,
 			@RequestParam("districtids") String districtids) {
 		ModelAndView view = new ModelAndView();
@@ -301,7 +301,7 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deleteregion")
+	@RequestMapping("/deleteregion")
 	public ModelAndView deleteRegion(HttpSession session,
 			@RequestParam("regionids") String regionids) {
 		ModelAndView view = new ModelAndView();
@@ -420,7 +420,7 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deleteservice")
+	@RequestMapping("/deleteservice")
 	public ModelAndView deleteService(HttpSession session,
 			@RequestParam("serviceids") String serviceids) {
 		ModelAndView view = new ModelAndView();

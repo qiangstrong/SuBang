@@ -17,13 +17,13 @@ import com.subang.util.SuUtil;
 @RequestMapping("/app/worker")
 public class WorkerController extends BaseController {
 
-	@RequestMapping("get")
+	@RequestMapping("/get")
 	public void getWorker(Identity identity, HttpServletResponse response) {
 		Worker worker = getWorker(identity);
 		SuUtil.outputJson(response, worker);
 	}
 
-	@RequestMapping("login")
+	@RequestMapping("/login")
 	public void login(Worker worker, HttpServletResponse response) {
 		Worker matchWorker = workerDao.findByWorker(worker);
 		Result result = new Result();
@@ -36,7 +36,7 @@ public class WorkerController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
-	@RequestMapping("chgcellnum")
+	@RequestMapping("/chgcellnum")
 	public void chgCellnum(Identity identity, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
 		Result result = new Result();

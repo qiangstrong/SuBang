@@ -187,10 +187,10 @@ create table `order_t`(
 #支付表，记录订单的支付信息和特定于api的参数
 create table `payment_t`(
 	`id` int auto_Increment primary key,
-	`type` tinyint not null,				#支付类型，支付宝，微信支付，余额支付
-    `money_ticket` double default 0,		#使用优惠券支付的金额
-    `prepay_id` char(64),					#特定于微信支付的参数
-    `time` tinyint not null,				#获取prepay_id的时间
+	`type` tinyint,								#支付类型，支付宝，微信支付，余额支付
+    `money_ticket` double not null default 0,	#使用优惠券支付的金额
+    `prepay_id` char(64),						#特定于微信支付的参数
+    `time` tinyint,								#获取prepay_id的时间
 	`orderid` int not null,
     foreign key(`orderid`) references `order_t`(`id`) on delete cascade
 );

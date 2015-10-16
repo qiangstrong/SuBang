@@ -27,7 +27,7 @@ public class InfoController extends BaseController {
 		return VIEW_PREFIX + "/serviceIntro";
 	}
 
-	@RequestMapping("faq")
+	@RequestMapping("/faq")
 	public ModelAndView listFaq() {
 		ModelAndView view = new ModelAndView();
 		List<Faq> faqs = faqDao.findAll();

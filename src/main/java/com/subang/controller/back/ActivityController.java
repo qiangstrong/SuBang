@@ -78,7 +78,7 @@ public class ActivityController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("deletetickettype")
+	@RequestMapping("/deletetickettype")
 	public ModelAndView deleteTicketType(HttpSession session,
 			@RequestParam("ticketTypeids") String ticketTypeids) {
 		ModelAndView view = new ModelAndView();
