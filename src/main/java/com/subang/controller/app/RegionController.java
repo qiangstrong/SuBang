@@ -16,17 +16,18 @@ import com.subang.domain.District;
 import com.subang.domain.Location;
 import com.subang.domain.Region;
 import com.subang.domain.User;
+import com.subang.util.ComUtil;
 import com.subang.util.SuUtil;
 
 @Controller("regionController_app")
 @RequestMapping("/app/region")
 public class RegionController extends BaseController {
 
-	// app启动时，提交坐标，获取当前城市的id
-	@RequestMapping("/setlocation")
-	public void setLocation(Identity identity, Location location, HttpServletResponse response) {
+	// 获取用户使用那个城市的服务
+	@RequestMapping("/getcityid")
+	public void setLocation(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
-		userService.updateLocation(user.getId(), location);
+		Location location = ComUtil.getFirst(locationDao.findByUserid(user.getId()));
 		Integer cityid = regionService.getCityid(location);
 		SuUtil.outputJson(response, cityid);
 	}

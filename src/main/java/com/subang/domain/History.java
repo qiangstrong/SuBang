@@ -71,7 +71,7 @@ public class History implements Filter, Serializable {
 		return description;
 	}
 
-	public void setOperation(int operation) {
+	public void setOperation(Integer operation) {
 		this.operation = operation;
 	}
 

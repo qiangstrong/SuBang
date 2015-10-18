@@ -17,6 +17,7 @@ import com.subang.bean.Result;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
 import com.subang.domain.Addr;
+import com.subang.domain.Location;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
@@ -110,6 +111,7 @@ public class UserController extends BaseController {
 		} else {
 			addrData = regionService.getAddrDataByRegionid(regionid);
 		}
+		addrData.doFilter();
 		SuUtil.outputJson(response, addrData);
 	}
 
@@ -139,5 +141,12 @@ public class UserController extends BaseController {
 		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(user.getId());
 		SuUtil.doFilter(filter, ticketDetails, TicketDetail.class);
 		SuUtil.outputJson(response, ticketDetails);
+	}
+
+	@RequestMapping("/addlocation")
+	public void addLocation(Identity identity, Location location, HttpServletResponse response) {
+		User user = getUser(identity);
+		userService.updateLocation(user.getId(), location);
+		SuUtil.outputJsonOK(response);
 	}
 }
