@@ -26,6 +26,14 @@ public class WeixinController extends BaseController {
 		SuUtil.outputStreamWrite(response.getOutputStream(), "登录成功。");
 	}
 
+	@RequestMapping("/setopenid")
+	public void setopenid(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = userDao.get(1);
+		setOpenid(request.getSession(), user.getOpenid());
+		SuUtil.outputStreamWrite(response.getOutputStream(), "openid登录成功。");
+	}
+
 	@RequestMapping("/index")
 	public ModelAndView index() {
 		ModelAndView view = new ModelAndView();

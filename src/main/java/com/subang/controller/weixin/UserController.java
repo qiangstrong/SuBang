@@ -113,23 +113,30 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/regauthcode")
-	public ModelAndView regAuthcode(HttpSession session,
+	public void regAuthcode(HttpSession session, HttpServletResponse response,
 			@RequestParam("authcode") String authcodeFront) {
-		ModelAndView view = new ModelAndView();
+		Result result = new Result();
 		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
 		if (authcodeBack == null) {
-			view.addObject(KEY_INFO_MSG, "验证码已失效，请重新获取验证码。");
-			view.addObject(KEY_CELLNUM, (String) session.getAttribute(KEY_CELLNUM));
-			view.setViewName(VIEW_PREFIX + "/regcellnum");
-			return view;
+			result.setCode(Result.ERR);
+			result.setMsg("验证码已失效，请重新获取验证码。");
+			SuUtil.outputJson(response, result);
+			return;
 		}
 		if (!authcodeBack.equalsIgnoreCase(authcodeFront.trim())) {
-			view.addObject(KEY_INFO_MSG, "验证码输入错误，请重新输入。");
-			view.addObject(KEY_CELLNUM, (String) session.getAttribute(KEY_CELLNUM));
-			view.setViewName(VIEW_PREFIX + "/regcellnum");
-			return view;
+			result.setCode(Result.ERR);
+			result.setMsg("验证码输入错误，请重新输入。");
+			SuUtil.outputJson(response, result);
+			return;
 		}
 		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
+		result.setCode(Result.OK);
+		SuUtil.outputJson(response, result);
+	}
+
+	@RequestMapping("/showregpassword")
+	public ModelAndView showRegPassword() {
+		ModelAndView view = new ModelAndView();
 		view.setViewName(VIEW_PREFIX + "/regpassword");
 		return view;
 	}

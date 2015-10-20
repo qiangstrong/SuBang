@@ -1,15 +1,12 @@
 package com.subang.util;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -118,24 +115,6 @@ public class SuUtil extends BaseUtil {
 		if (path != null) {
 			File file = new File(servletContext.getRealPath(path));
 			file.delete();
-		}
-	}
-
-	public static void saveUrl(String url, String desPath) {
-		try {
-			BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(
-					servletContext.getRealPath(desPath))));
-			byte[] buf = new byte[2048];
-			int length = in.read(buf);
-			while (length != -1) {
-				out.write(buf, 0, length);
-				length = in.read(buf);
-			}
-			in.close();
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

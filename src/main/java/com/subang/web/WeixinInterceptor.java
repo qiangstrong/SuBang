@@ -25,7 +25,8 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 			"/info/term.html", "/price/bag.html", "/price/index.html", "/region/scope.html",
 			"/ticket/intro.html" };
 	private static final String[] REG_URIS = { "/user/login.html", "/user/showregcellnum.html",
-			"/user/cellnum.html", "/user/regauthcode.html", "/user/regpassword.html" };
+			"/user/cellnum.html", "/user/regauthcode.html", "/user/showregpassword.html",
+			"/user/regpassword.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
