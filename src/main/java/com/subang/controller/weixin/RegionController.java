@@ -37,8 +37,8 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/list")
-	public ModelAndView list() {
+	@RequestMapping("/city")
+	public ModelAndView listCity() {
 		ModelAndView view = new ModelAndView();
 		List<City> citys = cityDao.findAll();
 		view.addObject("citys", citys);
@@ -47,7 +47,7 @@ public class RegionController extends BaseController {
 	}
 
 	@RequestMapping("/scope")
-	public ModelAndView scope(@RequestParam("cityid") Integer cityid) {
+	public ModelAndView getScope(@RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
 		City city = cityDao.get(cityid);
 		view.addObject("city", city);

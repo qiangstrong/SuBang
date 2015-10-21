@@ -27,7 +27,7 @@ import com.subang.util.SuUtil;
 public class UserController extends BaseController {
 
 	@RequestMapping("/get")
-	public void getUser(Identity identity, HttpServletResponse response) {
+	public void get(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
 		SuUtil.outputJson(response, user);
 	}
@@ -90,7 +90,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("/listaddr")
+	@RequestMapping("/addr")
 	public void listAddr(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -133,7 +133,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("/listticket")
+	@RequestMapping("/ticket")
 	public void listTicket(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -143,8 +143,8 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, ticketDetails);
 	}
 
-	@RequestMapping("/addlocation")
-	public void addLocation(Identity identity, Location location, HttpServletResponse response) {
+	@RequestMapping("/setlocation")
+	public void setLocation(Identity identity, Location location, HttpServletResponse response) {
 		User user = getUser(identity);
 		userService.updateLocation(user.getId(), location);
 		SuUtil.outputJsonOK(response);

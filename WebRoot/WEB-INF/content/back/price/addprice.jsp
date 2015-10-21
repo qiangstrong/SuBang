@@ -42,7 +42,7 @@
 							<td><form:errors path="money" /></td>
 						</tr>
 						<tr>
-							<td>名称：</td>
+							<td>金额：</td>
 							<td><form:input path="money" /></td>
 						</tr>
 						<tr>

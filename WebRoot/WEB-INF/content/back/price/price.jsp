@@ -39,7 +39,7 @@
 			<td align="right"></td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="<c:url value="back/price/showaddprice.html?categoryid=${categoryid}"/>">添加区</a></td>
+			<td align="right" colspan="2"><a href="<c:url value="back/price/showaddprice.html?categoryid=${categoryid}"/>">添加价格</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deletePrices()"/></td>

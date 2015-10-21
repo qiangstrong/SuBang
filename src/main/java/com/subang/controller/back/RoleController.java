@@ -18,7 +18,7 @@ import com.subang.util.WebConst;
 public class RoleController extends BaseController {
 
 	@RequestMapping("/admin")
-	public ModelAndView index(HttpSession session) {
+	public ModelAndView getAdmin1(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		invalidtePageState(session);
 		Admin admin = getAdmin(session);

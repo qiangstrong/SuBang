@@ -128,13 +128,13 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
-	@RequestMapping("/listhistory")
+	@RequestMapping("/history")
 	public void listHistory(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		List<History> historys = historyDao.findByOrderid(orderid);
 		SuUtil.outputJson(response, historys);
 	}
 
-	@RequestMapping("/listclothes")
+	@RequestMapping("/clothes")
 	public void listClothes(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
 		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
 		SuUtil.outputJson(response, clothess);

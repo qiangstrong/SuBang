@@ -33,7 +33,7 @@ public class PriceController extends BaseController {
 	}
 
 	@RequestMapping("/bag")
-	public String bag() {
+	public String getBag() {
 		return VIEW_PREFIX + "/bag";
 	}
 }

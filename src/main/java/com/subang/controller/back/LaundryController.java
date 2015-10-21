@@ -23,18 +23,18 @@ import com.subang.util.WebConst;
 @RequestMapping("/back/laundry")
 public class LaundryController extends BaseController {
 
-	private static final String INDEX_PAGE = WebConst.BACK_PREFIX+"/laundry/index";
+	private static final String INDEX_PAGE = WebConst.BACK_PREFIX + "/laundry/index";
 	private static final String KEY_DATA = "laundrys";
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session, @RequestParam("type") int type) {
 		ModelAndView view = new ModelAndView();
-		
-		if (type==WebConst.INDEX_BREAK) {
+
+		if (type == WebConst.INDEX_BREAK) {
 			savePageState(session, new SearchArg(WebConst.SEARCH_NULL, null));
 		}
-		PageState pageState=getPageState(session);
-		
+		PageState pageState = getPageState(session);
+
 		List<Laundry> laundrys = laundryService.searchLaundry(pageState.getSearchArg());
 		view.addObject(KEY_DATA, laundrys);
 		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
@@ -70,7 +70,7 @@ public class LaundryController extends BaseController {
 	public ModelAndView showAdd() {
 		ModelAndView view = new ModelAndView();
 		view.addObject("laundry", new Laundry());
-		view.setViewName( WebConst.BACK_PREFIX+"/laundry/add");
+		view.setViewName(WebConst.BACK_PREFIX + "/laundry/add");
 		return view;
 	}
 
@@ -90,7 +90,7 @@ public class LaundryController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		view.setViewName( WebConst.BACK_PREFIX+"/laundry/add");
+		view.setViewName(WebConst.BACK_PREFIX + "/laundry/add");
 		return view;
 	}
 
@@ -107,7 +107,7 @@ public class LaundryController extends BaseController {
 		if (!isException) {
 			session.setAttribute(KEY_INFO_MSG, "删除成功。");
 		}
-		view.setViewName("redirect:"+ WebConst.BACK_PREFIX+"/laundry/index.html?type=1");
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/laundry/index.html?type=1");
 		return view;
 	}
 
@@ -116,17 +116,17 @@ public class LaundryController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		Laundry laundry = laundryDao.get(laundryid);
 		view.addObject("laundry", laundry);
-		view.setViewName( WebConst.BACK_PREFIX+"/laundry/modify");
+		view.setViewName(WebConst.BACK_PREFIX + "/laundry/modify");
 		return view;
 	}
 
 	@RequestMapping("/modify")
 	public ModelAndView modify(@Valid Laundry laundry, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		if(laundry.getId()==null){
+		if (laundry.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 			view.addObject("laundry", laundry);
-		}else if (!result.hasErrors()) {
+		} else if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
 				laundryService.modifyLaundry(laundry);
@@ -137,12 +137,12 @@ public class LaundryController extends BaseController {
 			}
 			if (!isException) {
 				view.addObject(KEY_INFO_MSG, "修改成功。");
-			}	
+			}
 		}
-		view.setViewName( WebConst.BACK_PREFIX+"/laundry/modify");
+		view.setViewName(WebConst.BACK_PREFIX + "/laundry/modify");
 		return view;
 	}
-	
+
 	@RequestMapping("/order")
 	public ModelAndView listOrder(HttpSession session, @RequestParam("laundryid") Integer laundryid) {
 		ModelAndView view = new ModelAndView();

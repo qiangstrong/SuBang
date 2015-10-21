@@ -19,7 +19,7 @@ import com.subang.util.SuUtil;
 @RequestMapping("/app/price")
 public class PriceController extends BaseController {
 
-	@RequestMapping("/listcategory")
+	@RequestMapping("/category")
 	public void listCategory(Identity identity, @RequestParam("cityid") Integer cityid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -36,7 +36,7 @@ public class PriceController extends BaseController {
 		SuUtil.outputJson(response, category);
 	}
 
-	@RequestMapping("/listprice")
+	@RequestMapping("/price.html")
 	public void listPrice(@RequestParam("categoryid") Integer categoryid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {

@@ -25,7 +25,7 @@ import com.subang.util.WebConst;
 public class InfoController extends BaseController {
 
 	@RequestMapping("/info.html")
-	public ModelAndView index(HttpSession session) {
+	public ModelAndView listInfo(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		invalidtePageState(session);
 		List<Info> infos = infoDao.findALL();

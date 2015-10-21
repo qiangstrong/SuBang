@@ -14,7 +14,7 @@ import com.subang.util.SuUtil;
 public class InfoController extends BaseController {
 
 	@RequestMapping("/get")
-	public void getInfo(HttpServletResponse response) {
+	public void get(HttpServletResponse response) {
 		Info info = infoService.getInfo();
 		SuUtil.outputJson(response, info);
 	}

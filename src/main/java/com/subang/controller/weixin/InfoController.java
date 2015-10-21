@@ -18,12 +18,12 @@ public class InfoController extends BaseController {
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/info";
 
 	@RequestMapping("/term")
-	public String term() {
+	public String getTerm() {
 		return VIEW_PREFIX + "/term";
 	}
 
 	@RequestMapping("/serviceintro")
-	public String serviceIntro() {
+	public String getServiceIntro() {
 		return VIEW_PREFIX + "/serviceIntro";
 	}
 
@@ -36,16 +36,16 @@ public class InfoController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/showfeedback")
-	public ModelAndView showFeedback() {
+	@RequestMapping("/showaddfeedback")
+	public ModelAndView showAddFeedback() {
 		ModelAndView view = new ModelAndView();
 		view.setViewName(VIEW_PREFIX + "/feedback");
 		return view;
 	}
 
 	// 由客户端根据用户填写的信息生成字符串，并检验其长度
-	@RequestMapping("/feedback")
-	public ModelAndView feedback(@RequestParam("comment") String comment) {
+	@RequestMapping("/addfeedback")
+	public ModelAndView addFeedback(@RequestParam("comment") String comment) {
 		ModelAndView view = new ModelAndView();
 		infoService.addFeedback(comment);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/user/index.html");

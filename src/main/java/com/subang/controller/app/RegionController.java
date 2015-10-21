@@ -25,14 +25,14 @@ public class RegionController extends BaseController {
 
 	// 获取用户使用那个城市的服务
 	@RequestMapping("/getcityid")
-	public void setLocation(Identity identity, HttpServletResponse response) {
+	public void getCityid(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
 		Location location = ComUtil.getFirst(locationDao.findByUserid(user.getId()));
 		Integer cityid = regionService.getCityid(location);
 		SuUtil.outputJson(response, cityid);
 	}
 
-	@RequestMapping("/listcity")
+	@RequestMapping("/city")
 	public void listCity(@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
 		List<City> citys = cityDao.findAll();
@@ -40,7 +40,7 @@ public class RegionController extends BaseController {
 		SuUtil.outputJson(response, citys);
 	}
 
-	@RequestMapping("/listdistrict")
+	@RequestMapping("/district")
 	public void listDistrict(@RequestParam("cityid") Integer cityid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
@@ -49,7 +49,7 @@ public class RegionController extends BaseController {
 		SuUtil.outputJson(response, districts);
 	}
 
-	@RequestMapping("/listregion")
+	@RequestMapping("/region")
 	public void listRegion(@RequestParam("districtid") Integer districtid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {

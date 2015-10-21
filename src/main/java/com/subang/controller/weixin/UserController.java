@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
-import com.subang.domain.Addr;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
@@ -58,6 +57,7 @@ public class UserController extends BaseController {
 		try {
 			userService.modifyUser(matchUser);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		setUser(session, matchUser);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
@@ -75,9 +75,9 @@ public class UserController extends BaseController {
 	}
 
 	// 客户端校验cellnum书写是否正确
-	@RequestMapping("/cellnum")
-	public void getCellnum(final HttpSession session, HttpServletResponse response,
-			@RequestParam("cellnum") String cellnum) {
+	@RequestMapping("/setcellnum")
+	public void setCellnum(final HttpSession session, @RequestParam("cellnum") String cellnum,
+			HttpServletResponse response) {
 		Result result = new Result();
 		if (!userService.checkCellnum(cellnum)) {
 			result.setCode(Result.ERR);
@@ -114,8 +114,8 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/regauthcode")
-	public void regAuthcode(HttpSession session, HttpServletResponse response,
-			@RequestParam("authcode") String authcodeFront) {
+	public void regAuthcode(HttpSession session, @RequestParam("authcode") String authcodeFront,
+			HttpServletResponse response) {
 		Result result = new Result();
 		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
 		if (authcodeBack == null) {
@@ -149,6 +149,7 @@ public class UserController extends BaseController {
 		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
 		if (cellnum == null) {
 			view.addObject(KEY_INFO_MSG, "系统出错，请您重新注册。");
+			view.addObject("password", password);
 			view.setViewName(VIEW_PREFIX + "/regcellnum");
 			return view;
 		}
@@ -160,11 +161,11 @@ public class UserController extends BaseController {
 		try {
 			userService.addUser(user);
 		} catch (SuException e) {
+			e.printStackTrace();
 		}
 		session.removeAttribute(KEY_CELLNUM);
 		user = userDao.getByOpenid(user.getOpenid());
 		setUser(session, user);
-		addAddr_test(user);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
 		return view;
 	}
@@ -180,33 +181,34 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/chgauthcode")
-	public ModelAndView chgAuthcode(HttpSession session,
-			@RequestParam("authcode") String authcodeFront) {
-		ModelAndView view = new ModelAndView();
+	public void chgAuthcode(HttpSession session, @RequestParam("authcode") String authcodeFront,
+			HttpServletResponse response) {
+		Result result = new Result();
 		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
 		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
 		if (authcodeBack == null) {
-			view.addObject(KEY_INFO_MSG, "验证码已失效，请重新获取验证码。");
-			view.addObject(KEY_CELLNUM, (String) session.getAttribute(KEY_CELLNUM));
-			view.setViewName(VIEW_PREFIX + "/chgcellnum");
-			return view;
+			result.setCode(Result.ERR);
+			result.setMsg("验证码已失效，请重新获取验证码。");
+			SuUtil.outputJson(response, result);
+			return;
 		}
 		if (!authcodeBack.equalsIgnoreCase(authcodeFront.trim())) {
-			view.addObject(KEY_INFO_MSG, "验证码输入错误，请重新输入。");
-			view.addObject(KEY_CELLNUM, (String) session.getAttribute(KEY_CELLNUM));
-			view.setViewName(VIEW_PREFIX + "/chgcellnum");
-			return view;
+			result.setCode(Result.ERR);
+			result.setMsg("验证码输入错误，请重新输入。");
+			SuUtil.outputJson(response, result);
+			return;
 		}
 		User user = getUser(session);
 		user.setCellnum(cellnum);
 		try {
 			userService.modifyUser(user);
 		} catch (SuException e) {
+			e.printStackTrace();
 		}
 		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 		session.removeAttribute(KEY_CELLNUM);
-		view.setViewName(VIEW_PREFIX + "/index");
-		return view;
+		result.setCode(Result.OK);
+		SuUtil.outputJson(response, result);
 	}
 
 	@RequestMapping("/showchgpassword")
@@ -225,18 +227,9 @@ public class UserController extends BaseController {
 		try {
 			userService.modifyUser(user);
 		} catch (SuException e) {
+			e.printStackTrace();
 		}
-		view.setViewName(VIEW_PREFIX + "/index");
+		view.setViewName("redirect:" + VIEW_PREFIX + "/index.html");
 		return view;
-	}
-
-	private void addAddr_test(User user) {
-		Addr addr = new Addr();
-		addr.setName("小明");
-		addr.setCellnum("15502457990");
-		addr.setDetail("辽宁省沈阳市和平区文化路3号巷11号");
-		addr.setUserid(user.getId());
-		addr.setRegionid(1);
-		userService.addAddr(addr);
 	}
 }

@@ -18,7 +18,7 @@ import com.subang.util.SuUtil;
 public class WorkerController extends BaseController {
 
 	@RequestMapping("/get")
-	public void getWorker(Identity identity, HttpServletResponse response) {
+	public void get(Identity identity, HttpServletResponse response) {
 		Worker worker = getWorker(identity);
 		SuUtil.outputJson(response, worker);
 	}

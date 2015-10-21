@@ -14,6 +14,10 @@ public class ControllerTest extends BaseController  {
 	
 	@RequestMapping("/index")
 	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		throw new Exception("测试。");
+		try {
+			throw new Exception("测试。");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
