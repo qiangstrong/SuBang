@@ -1,56 +1,151 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-			+ request.getServerPort() + path + "/";
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>">
-	<title>个人中心</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="<%=basePath%>">
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<meta content="" name="pgv">
+<title>个人中心</title>
+<link rel="stylesheet" type="text/css"
+	href="css/weixin/ccsjsp/user/index/card.css" media="all">
+<!-- <script src="css/weixin/ccsjsp/user/index/hm.js"></script><script type="text/javascript" src="css/weixin/ccsjsp/user/index/jquery-1.8.2.min.js"></script> -->
 </head>
-<body>
-	<%@ include file="../common/menu.jsp"%>
-	<table>
-		<tr>
-			<td><img height="50px" src="${user.photo}" /></td>
-			<td>
-				<table>
-					<tr>
-						<td>${user.nickname }</td>						
-					</tr>
-					<tr>
-						<td>积分：${user.score }</td>
-					</tr>
-					<tr>
-						<c:if test="${user.cellnum!=null }">
-						<td>${user.cellnum }</td>
-						</c:if>
-						<c:if test="${user.cellnum==null }">
-						<td class="operation">
-							<a href="weixin/user/showvalidate.html">绑定手机号</a>
-						</td>
-						</c:if>
-					</tr>
+
+<body id="card" ondragstart="return false;"
+	onselectstart="return false;" class="white_bg"
+	style="padding-bottom: 54px; zoom: 1;">
+	<div class="card" id="icard">
+		<img src="css/weixin/ccsjsp/user/index/center_banner.png"
+			class="card-bg-card">
+		<div class="loginInfo">
+			${user.cellnum}
+			<a href="weixin/region/充值.html" class="link-chongzhi" style="padding:5px 0;"> 充值 <img
+				alt=" " src="css/weixin/ccsjsp/user/index/chongzhi_jt.png"> </a>
+			<p>洗衣就用速帮 幸福生活每一天</p>
+		</div>
+	</div>
+	<nav class="main-nav white-bg">
+		<div class="subnav">
+			<a
+				href="weixin/ticket/index.html?userid=${user.id}">
+				<div class="icon-block">
+					<img alt=" " src="css/weixin/ccsjsp/user/index/coupon_title.png">
+				</div>
+				<div class="yue_font">0张</div> </a>
+		</div>
+		<div class="subnav" style="border-left:1px solid #eee;">
+			<a
+				href="weixin/ticket/index.html?userid=${user.id}">
+				<div class="icon-block">
+					<img alt=" " src="css/weixin/ccsjsp/user/index/yue_title.png">
+				</div>
+				<div class="yue_font">${user.money}</div> </a>
+		</div>
+	</nav>
+	<div class="clear"></div>
+	<div class="borderD2"></div>
+	<div style="height:14px"></div>
+	<div class="cardexplain">
+		<ul class="round operate navlist">
+			<li class="mobile-font">
+				<table class="icardTable">
+					<tbody>
+						<tr>
+							<td style="border:0;width:42px;"><img alt=""
+								src="css/weixin/ccsjsp/user/index/changyong_add.png">
+							</td>
+							<td><a href="weixin/addr/index.html">
+									<div class="list-titel no-img">
+										常用地址 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+								<div class="borderD"></div>
+							</td>
+						</tr>
+						<tr>
+							<td style="border:0;width:42px;"><img alt=""
+								src="css/weixin/ccsjsp/user/index/jifen_shc.png">
+							</td>
+							<td style="position:relative"><a href="weixin/ticket/index.html?userid=${user.id} ">
+									<div class="list-titel no-img">
+										积分商城 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a> 
+									<a class="my_jifen">
+									<div>
+										<img alt="" src="css/weixin/ccsjsp/user/index/jifen_icon2.png">
+										我的积分:${user.score}
+									</div> </a>
+								<div class="borderD" style=" margin-bottom: -4px;"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table></li>
+			<div class="borderD2"></div>
+		</ul>
+	</div>
+	<div class="cardexplain">
+		<ul class="round operate navlist"
+			style="border-radius:0 0 10px 10px;border-top:0">
+			<li class="mobile-font">
+				<table class="icardTable">
+					<tbody>
+						<tr>
+							<td style="border:0;width:42px;"><img alt=" "
+								src="css/weixin/ccsjsp/user/index/yijian_fank.png">
+							</td>
+							<td><a href="weixin/info/feedback.html?userid=${user.id} " target="_black">
+									<div class="list-titel no-img">
+										意见反馈 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+								<div class="borderD"></div>
+							</td>
+						</tr>
+						<tr>
+							<td><img alt=""
+								src="css/weixin/ccsjsp/user/index/more_set.png">
+							</td>
+							<td><a href="weixin/info/index.html">
+									<div class="list-titel no-img">
+										更多 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+							</td>
+						</tr>
+					</tbody>
 				</table>
-			</td>
-		</tr>
-	</table>
-	
-	<ul class="list">
-        <li><a href="weixin/order/index.html?type=1">我的订单</a></li>
-        <li><a href="weixin/addr/index.html">我的地址</a></li>
-        <li><a href="weixin/info/term.html">服务条款</a></li>
-    </ul>
-    
+				<div class="borderD2"></div></li>
+			<div style="height:14px;background:#f0f0f0"></div>
+			<li class="tel-text">
+				<div>客服 ${phone}</div></li>
+		</ul>
+		<div class="borderD2"></div>
+	</div>
+	<!-- ／我的订单 -->
+
+	<!-- 页脚导航-->
+	<%@ include file="../common/menu2.jsp"%>
 </body>
 </html>

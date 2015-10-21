@@ -1,56 +1,117 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-			+ request.getServerPort() + path + "/";
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>">
-	<title>速帮</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="<%=basePath%>">
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<meta content="" name="pgv">
+<title>速帮</title>
+<link href="css/weixin/ccsjsp/region/index/index.css" rel="stylesheet"
+	type="text/css">
+<link href="css/weixin/ccsjsp/region/index/animation.css"
+	rel="stylesheet" type="text/css">
+<link href="css/weixin/ccsjsp/region/index/base.css" rel="stylesheet"
+	type="text/css">
+<link rel="stylesheet" type="text/css"
+	href="css/weixin/ccsjsp/region/index/swipe.css">
+	<link rel="stylesheet" type="text/css"
+	href="css/weixin/ccsjsp/region/index/footer.css">
 </head>
-<body>
-	<%@ include file="../common/menu.jsp"%>
-	<table align="left">
-		<tr>
-			<td>
-				${city.name }
-			</td>
-		</tr>
-		<c:forEach var="category" items="${categorys }">
-		<tr>
-			<td>				
-				<table>
-					<tr>
-						<td colspan="2">
-							<img height="50px" src="${category.icon}" />
-						</td>
-					</tr>
-					<tr>
-						<td>名称：</td>
-						<td>${category.name }</td>
-					</tr>
-					<tr>
-						<td>备注：</td>
-						<td>${category.comment }</td>
-					</tr>
-					<tr>
-						<td colspan="2" align="right">
-							<a href="weixin/order/showadd.html?categoryid=${category.id}">下单</a>
-						</td>
-					<tr>
-				</table>				
-			</td>
-		</tr>
-		</c:forEach>
-	</table>
+<body style="zoom: 1;">
+
+	<!-- 首页城市 start -->
+	<div class="address_tab">
+		<a class="cityName" href="weixin/region/list.html">
+			<!-- 从此跳转到城市选择列表 --> <span>${city.name }</span> <em
+			class="arrow-left"></em> </a>
+		<!--<img class="homeSlogan" src="css/weixin/ccsjsp/region/index/homeSlogan.png">-->
+		<!-- 网页右上角可以放置的图片-->
+	</div>
+	<div class="borderD"></div>
+	<!-- 首页城市 end -->
+	<div class="gloalbackground"></div>
+	<div id="wrap" class="wrap-home">
+		<!-- 头部：轮转广告 start-->
+		<%@ include file="swipe_Ad.jsp"%>
+		<!-- 头部：轮转广告 end-->
+
+		<div class="menu-home">
+			<!-- 主体：品类 start -->
+			<!-- 一般品类 -->
+			<div class="commonWashing">
+
+				<c:forEach var="category" items="${categorys }">
+					<a href="weixin/order/showadd.html?categoryid=${category.id}">
+					<div class="menu-list">
+						<img class="img-icon" src="${category.icon}" />
+						<div class="list-right">
+							<p class="list-type">${category.name }</p>
+							<p class="list-price">${category.comment }</p>
+						</div>
+					</div>
+					</a>
+				</c:forEach>
+			</div>
+			<div class="clearBoth"></div>
+
+			<!-- 主体：品类 end -->
+
+			<!-- 页底：功能按钮 start -->
+			<div class="borderLinear">
+				<img src="css/weixin/ccsjsp/region/index/dividingLine.png"> <span>了解速帮</span>
+			</div>
+			<div class="menu-service">
+				<div class="service-list" align="center">
+					<a href="weixin/info/serviceintro.html">
+						<p class="ser-font">服务介绍</p> </a>
+				</div>
+				<div class="service-list" align="center">
+					<!--<a href="weixin/region/scope.html?cityid=${city.id}">-->
+					<a href="weixin/region/scope.html?cityid=${city.id}">
+						<p class="ser-font">服务范围</p> </a>
+				</div>
+				<div class="service-list" align="center">
+					<a href="weixin/price/index.html">
+						<p class="ser-font">价目指引</p> </a>
+				</div>
+				<div class="clearBoth"></div>
+				<!-- 页底：功能按钮 end -->
+			</div>
+		</div>
+		<!-- 页脚导航-->
+<!-- 
+		<footer id="footer">
+<div class="borderD3"></div>
+  <div class="fix-bottom"></div>
+    <div class="bottomBox">
+        <div class="indexMsg">
+            <div class="indexMenu">
+                	<a href="weixin/region/index.html"><span class="home-index-active">首页</span></a>
+                	<a href="weixin/order/index.html?type=2"><span class="Order-index">订单</span></a>
+                	<a href="weixin/user/index.html"><span class="card-index">我的</span></a>
+              </div>
+        </div>
+    </div>
+   </footer>
+   -->
+		<%@ include file="../common/menu.jsp"%>
+	</div>
 </body>
 </html>

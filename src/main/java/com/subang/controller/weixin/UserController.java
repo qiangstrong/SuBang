@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
+import com.subang.domain.Addr;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
@@ -163,6 +164,7 @@ public class UserController extends BaseController {
 		session.removeAttribute(KEY_CELLNUM);
 		user = userDao.getByOpenid(user.getOpenid());
 		setUser(session, user);
+		addAddr_test(user);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
 		return view;
 	}
@@ -226,5 +228,15 @@ public class UserController extends BaseController {
 		}
 		view.setViewName(VIEW_PREFIX + "/index");
 		return view;
+	}
+
+	private void addAddr_test(User user) {
+		Addr addr = new Addr();
+		addr.setName("小明");
+		addr.setCellnum("15502457990");
+		addr.setDetail("辽宁省沈阳市和平区文化路3号巷11号");
+		addr.setUserid(user.getId());
+		addr.setRegionid(1);
+		userService.addAddr(addr);
 	}
 }
