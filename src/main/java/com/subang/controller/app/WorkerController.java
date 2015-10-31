@@ -29,7 +29,7 @@ public class WorkerController extends BaseController {
 		Result result = new Result();
 		if (matchWorker == null) {
 			result.setCode(Result.ERR);
-			result.setMsg("登录失败。手机号或密码错误。");
+			result.setMsg("手机号或密码错误。");
 		} else {
 			result.setCode(Result.OK);
 		}

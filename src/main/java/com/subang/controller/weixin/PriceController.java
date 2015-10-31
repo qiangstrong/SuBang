@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.controller.BaseController;
-import com.subang.domain.Clothes;
+import com.subang.domain.ClothesType;
 import com.subang.domain.Price;
 import com.subang.util.WebConst;
 
@@ -22,12 +22,13 @@ public class PriceController extends BaseController {
 	public ModelAndView index(@RequestParam("categoryid") Integer categoryid) {
 		ModelAndView view = new ModelAndView();
 		List<Price> prices = priceDao.findByCategoryid(categoryid);
-		List<List<Clothes>> clothessList = new ArrayList<List<Clothes>>();
+		List<List<ClothesType>> clothesTypesList = new ArrayList<List<ClothesType>>();
 		for (Price price : prices) {
-			clothessList.add(clothesDao.findByOrderid(price.getId()));
+			clothesTypesList.add(clothesTypeDao.findByPriceid(price.getId()));
 		}
+		view.addObject("categoryid", categoryid);
 		view.addObject("prices", prices);
-		view.addObject("clothessList", clothessList);
+		view.addObject("clothesTypesList", clothesTypesList);
 		view.setViewName(VIEW_PREFIX + "/index");
 		return view;
 	}

@@ -75,7 +75,7 @@ public class UserController extends BaseController {
 	}
 
 	// 客户端校验cellnum书写是否正确
-	@RequestMapping("/setcellnum")
+	@RequestMapping("/cellnum")
 	public void setCellnum(final HttpSession session, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
 		Result result = new Result();
@@ -214,7 +214,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/showchgpassword")
 	public ModelAndView showChgPassword() {
 		ModelAndView view = new ModelAndView();
-		view.setViewName(VIEW_PREFIX + "/chgpasswor");
+		view.setViewName(VIEW_PREFIX + "/chgpassword");
 		return view;
 	}
 
