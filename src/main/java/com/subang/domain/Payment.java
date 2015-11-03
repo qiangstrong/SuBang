@@ -3,6 +3,8 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import com.subang.domain.face.Filter;
+
 public class Payment implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,6 +49,9 @@ public class Payment implements Filter, Serializable {
 	}
 
 	public PayType getTypeEnum() {
+		if (type == null) {
+			return null;
+		}
 		return PayType.values()[type];
 	}
 

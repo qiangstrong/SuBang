@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.subang.domain.face.Filter;
 import com.subang.util.ComUtil;
 
 public class ClothesType implements Filter, Serializable {

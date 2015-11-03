@@ -2,9 +2,10 @@ package com.subang.bean;
 
 import java.sql.Date;
 
-import com.subang.domain.Filter;
 import com.subang.domain.Order;
 import com.subang.domain.Payment.PayType;
+import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
 
 public class OrderDetail extends Order implements Filter {
 
@@ -101,6 +102,16 @@ public class OrderDetail extends Order implements Filter {
 		description += "运费￥" + getFreightDes() + "-";
 		description += "优惠券￥" + getMoneyTicket();
 		return description;
+	}
+
+	public String getTotalMoneyDes() {
+		Double totalMoney;
+		if (money == null || freight == null) {
+			totalMoney = null;
+		} else {
+			totalMoney = money + freight;
+		}
+		return ComUtil.getDes(totalMoney);
 	}
 
 	public void setPayType(Integer payType) {

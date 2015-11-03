@@ -21,9 +21,9 @@ import weixin.popular.util.JsonUtil;
 
 import com.subang.bean.Result;
 import com.subang.dao.NoticeDao;
-import com.subang.domain.Filter;
 import com.subang.domain.Notice;
 import com.subang.domain.Notice.CodeType;
+import com.subang.domain.face.Filter;
 import com.subang.exception.SuException;
 
 /**

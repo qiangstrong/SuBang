@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.subang.domain.face.Filter;
+
 public class Region implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;

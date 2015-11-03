@@ -3,6 +3,8 @@ package com.subang.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import com.subang.domain.face.Filter;
+
 public class Location implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;

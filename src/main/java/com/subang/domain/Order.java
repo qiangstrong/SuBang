@@ -7,6 +7,7 @@ import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.subang.domain.face.Filter;
 import com.subang.util.ComUtil;
 
 public class Order implements Filter, Serializable {
@@ -89,11 +90,17 @@ public class Order implements Filter, Serializable {
 	}
 
 	public State getStateEnum() {
+		if (state == null) {
+			return null;
+		}
 		return State.values()[state];
 	}
 
 	public String getStateDes() {
 		String description = null;
+		if (state == null) {
+			return null;
+		}
 		switch (getStateEnum()) {
 		case accepted:
 			description = "已接受";

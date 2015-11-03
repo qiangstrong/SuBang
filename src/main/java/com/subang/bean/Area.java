@@ -1,6 +1,6 @@
 package com.subang.bean;
 
-import com.subang.domain.Filter;
+import com.subang.domain.face.Filter;
 
 public class Area implements Filter {
 

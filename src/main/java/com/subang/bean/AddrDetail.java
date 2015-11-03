@@ -1,7 +1,7 @@
 package com.subang.bean;
 
 import com.subang.domain.Addr;
-import com.subang.domain.Filter;
+import com.subang.domain.face.Filter;
 
 public class AddrDetail extends Addr implements Filter {
 

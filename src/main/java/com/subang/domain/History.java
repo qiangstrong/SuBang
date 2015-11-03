@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import com.subang.domain.Order.State;
+import com.subang.domain.face.Filter;
 
 public class History implements Filter, Serializable {
 
@@ -37,11 +38,17 @@ public class History implements Filter, Serializable {
 	}
 
 	public State getOperationEnum() {
+		if (operation == null) {
+			return null;
+		}
 		return State.values()[operation];
 	}
 
 	public String getOperationDes() {
 		String description = null;
+		if (operation == null) {
+			return null;
+		}
 		switch (getOperationEnum()) {
 		case accepted:
 			description = "下单";

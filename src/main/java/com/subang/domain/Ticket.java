@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import com.subang.domain.face.Filter;
+
 public class Ticket implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 

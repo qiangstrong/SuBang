@@ -2,8 +2,8 @@ package com.subang.bean;
 
 import java.sql.Timestamp;
 
-import com.subang.domain.Filter;
 import com.subang.domain.TicketType;
+import com.subang.domain.face.Filter;
 
 public class TicketDetail extends TicketType implements Filter {
 

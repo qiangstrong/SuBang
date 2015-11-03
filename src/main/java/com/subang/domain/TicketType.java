@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.subang.domain.face.Filter;
+
 public class TicketType implements Filter, Serializable {
 
 	public static String iconPath = "image/info/ticket/";
