@@ -49,7 +49,8 @@
 <body class="Bg-gray" style="zoom: 1;">
 	<div>
 		<div class="tip_bar">
-			<span class="color_8a8a8a">预约成功后请等待速帮上门取件<em class="priceColor">${category.name}</em></span>
+			<span class="color_8a8a8a">预约成功后请等待速帮上门取件<em
+				class="priceColor">${category.name}</em> </span>
 		</div>
 
 		<form:form id="oderform" modelAttribute="order"
@@ -57,39 +58,54 @@
 			<input type="hidden" name="categoryid" id="categoryid"
 				value="${order.categoryid}">
 
-
-			<!-- 有常用地址 -->
-			<div class="add_bg"></div>
-			<section class="section" id="select_address">
-				<div class="wrap_filter" style="display:none"></div>
-				<span class="arrow-left" style="top:44%"></span>
-				<form:errors path="addrid" />
-				<c:if test="${fn:length(addrDetails) == 0 }">
-					<div class="address_icon icon_gray"></div>
-					<a href="weixin/addr/showadd.html"><span class="m_input">
-							添加地址</span> </a>
-					<span class="arrow-left" style="top:44%"></span>
-				</c:if>
-				<c:if test="${fn:length(addrDetails) != 0 }">
-					<div class="selectBox  selectcont y_hover">
-						<select class="select01 range J_shippingDateSelect select_J_ytag"
-							id="addrid" name="addrid"
-							onfocus="this.style.color=&#39;#3e3e3e&#39;;">
-							<!--弹出  -->
-							<c:forEach var="addrDetail" items="${addrDetails}">
-								<option value="${addrDetail.id }"
-									<c:if test="${addrDetail.id==defaultAddrid }">selected="selected"</c:if>>
-									${addrDetail}</option>
-							</c:forEach>
-						</select>
-						<div class="Selected  selectBx" id="washing_time_div">请选择详细地址</div>
-					</div>
-				</c:if>
-			</section>
-
-
-
 			<div class="wrap_index">
+				<!-- 有常用地址 -->
+				<div class="add_bg"></div>
+				<section class="section" id="select_address">
+					<div class="wrap_filter" style="display:none"></div>
+					<span class="arrow-left" style="top:44%"></span>
+					<form:errors path="addrid" />
+					<c:if test="${fn:length(addrDetails) == 0 }">
+						<div class="address_icon icon_gray"></div>
+						<a href="weixin/addr/showadd.html"><span class="m_input">
+								添加地址</span> </a>
+						<span class="arrow-left" style="top:44%"></span>
+					</c:if>
+					<c:if test="${fn:length(addrDetails) != 0 }">
+						<div class="selectBox  selectcont y_hover">
+							<select class="select01 range J_shippingDateSelect select_J_ytag"
+								id="addrid" name="addrid"
+								onfocus="this.style.color=&#39;#3e3e3e&#39;;">
+								<!--弹出  -->
+								<c:forEach var="addrDetail" items="${addrDetails}">
+									<option value="${addrDetail.id }"
+										<c:if test="${addrDetail.id==defaultAddrid }">selected="selected"</c:if>>
+										${addrDetail}</option>
+								</c:forEach>
+							</select>
+							<div class="Selected  selectBx" id="washing_time_div">请选择详细地址</div>
+							<span class="arrow-left" style="top:36%"></span>
+						</div>
+					</c:if>
+					<div class="borderD2" style="padding-top:9px;margin-left:10px"></div>
+				</section>
+
+				<section>
+					<textarea class="textarea" id="addridtxt" name="addridtxt"
+						readonly="readonly" onfocus="this.style.color=&#39;#3e3e3e&#39;;"
+						placeholder="选择后在这里显示详细地址"></textarea>
+				</section>
+
+				<script type="text/javascript">
+                        document.getElementById("addrid").onchange=function(){
+                        document.getElementById("addridtxt").value=this.options[this.options.selectedIndex].text;
+                        }
+                        </script>
+
+
+
+
+				<!--  <div class="wrap_index">-->
 				<!-- 服务日期 start -->
 				<div class="borderD2"></div>
 				<section class="section">
@@ -105,7 +121,7 @@
 									onchange="getData('date','weixin/order/select.html',updateTime)"
 									onfocus="this.style.color=&#39;#3e3e3e&#39;;"
 									style="color: rgb(62, 62, 62);">
-									
+
 									<c:forEach var="date" items="${dates}">
 										<option value="${date.value }">${date.text }</option>
 									</c:forEach>
@@ -153,6 +169,9 @@
 
 				<div class="borderD2"></div>
 				<section>
+				<span class="show_erro">
+					<form:errors path="userComment" /><!-- 字符超过一百报错 -->
+				</span>
 					<textarea class="textarea" id="userComment" name="userComment"
 						onfocus="this.style.color=&#39;#3e3e3e&#39;;"
 						style="color: #c1c1c1;" placeholder="请填写备注（选填）">${order.userComment}</textarea>
@@ -189,7 +208,7 @@
 			</div>
 			-->
 			<div class="service-list" align="center">
-				<a href="weixin/price/index.html">
+				<a href="weixin/price/index.html?categoryid=${category.id}">
 					<p class="ser-font">价目指引</p> </a>
 			</div>
 			<div class="clearBoth"></div>

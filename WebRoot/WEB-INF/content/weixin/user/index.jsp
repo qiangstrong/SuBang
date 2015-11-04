@@ -98,6 +98,32 @@
 								<div class="borderD" style=" margin-bottom: -4px;"></div>
 							</td>
 						</tr>
+						<tr>
+							<td style="border:0;width:42px;"><img alt=""
+								src="css/weixin/ccsjsp/user/index/user_xieyi2.png">
+							</td>
+							<td><a href="weixin/user/showchgcellnum.html">
+									<div class="list-titel no-img">
+										修改注册手机号 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+								<div class="borderD"></div>
+							</td>
+						</tr>
+						<tr>
+							<td style="border:0;width:42px;"><img alt=""
+								src="css/weixin/ccsjsp/user/index/user_xieyi2.png">
+							</td>
+							<td><a href="weixin/user/showchgpassword.html">
+									<div class="list-titel no-img">
+										修改密码 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+								<div class="borderD"></div>
+							</td>
+						</tr>
 					</tbody>
 				</table></li>
 			<div class="borderD2"></div>
@@ -124,11 +150,24 @@
 						</tr>
 						<tr>
 							<td><img alt=""
-								src="css/weixin/ccsjsp/user/index/more_set.png">
+								src="css/weixin/ccsjsp/user/index/question_icon2.png">
 							</td>
-							<td><a href="weixin/info/index.html">
+							<td><a href="weixin/info/faq.html">
 									<div class="list-titel no-img">
-										更多 <img alt=""
+										常见问题 <img alt=""
+											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
+											class="icon-right-card">
+									</div> </a>
+									<div class="borderD"></div>
+							</td>
+						</tr>
+						<tr>
+							<td><img alt=""
+								src="css/weixin/ccsjsp/user/index/user_xieyi2.png">
+							</td>
+							<td><a href="weixin/info/term.html">
+									<div class="list-titel no-img">
+										用户协议 <img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
 											class="icon-right-card">
 									</div> </a>
@@ -139,7 +178,7 @@
 				<div class="borderD2"></div></li>
 			<div style="height:14px;background:#f0f0f0"></div>
 			<li class="tel-text">
-				<div>客服 ${phone}</div></li>
+				<div>速帮到家客服热线: <a href="tel:${phone}">${phone}</a></div></li>
 		</ul>
 		<div class="borderD2"></div>
 	</div>

@@ -71,30 +71,90 @@
 			<!-- 1号未完成 -->
 
 			<c:forEach var="orderDetail" items="${orderDetails}">
-				<li><a href="weixin/order/detail.html?orderid=${orderDetail.id}"> <!-- 此链接到此订单详情 -->
+				<li><a
+					href="weixin/order/detail.html?orderid=${orderDetail.id}"> <!-- 此链接到此订单详情 -->
 						<div class="category_block">
 							<!--洗衣 -->
+							
+							<c:choose>
+							<c:when test="${orderDetail.categoryid==2}">
 							<div class="category_cloth">
-								${orderDetail.categoryname}
-							</div>
-
+							<img class="icon-washing" src="css/weixin/ccsjsp/order/index/xi_shoes.png" style="position:relative;">
+							${orderDetail.categoryname}</div>
+							</c:when>
+							<c:otherwise>
+							<div class="category_cloth">
+							<img class="icon-washing" src="css/weixin/ccsjsp/order/index/xi_cloth.png" style="position:relative;">
+							${orderDetail.categoryname}</div>
+							</c:otherwise>
+							</c:choose>
+														
 							<div class="order_status_div">
-						     <span class="text-info">${orderDetail.stateDes}</span><!-- 使用getStateDes()， xxx。stateDes，去掉get后首字母小写 -->
-								
+								<span class="text-info">${orderDetail.stateDes}</span>
+								<!-- 使用getStateDes()， xxx。stateDes，去掉get后首字母小写 -->
+
 							</div>
-						</div> </a>
-				</li>
+						</div> </a></li>
 				<div class="borderD" style="border-color:#eee"></div>
-				<li class="order_item mobile-font"><a href="weixin/order/detail.html?orderid=${orderDetail.id}"> <!-- 此链接到此订单详情 -->
+				<li class="order_item mobile-font"><a
+					href="weixin/order/detail.html?orderid=${orderDetail.id}"> <!-- 此链接到此订单详情 -->
 						<div class="order_box">
 							<div class="item_list_box">订单编号：${orderDetail.orderno }</div>
 							<div class="item_list_box">取件时间：${orderDetail.dateDes}
 								${orderDetail.timeDes}</div>
 							<div class="item_list_box">订单金额：${orderDetail.moneyDes}</div>
 						</div> </a>
-					<div class="clearBoth"></div></li>
+					<div class="clearBoth"></div> <c:if test="${orderDetail.state==0}">
+						<div class="item_list_money navlist">
+							<!-- 已接受 -->
+							<div class="item_list_box">
+								<div class="borderD"></div>
+								<a class="order_link order_blue" id="order_link"
+									href="weixin/order/cancel.html?orderid=${orderDetail.id}">取消订单</a>
+								<div class="clearBoth"></div>
+							</div>
+						</div>
+					</c:if> <c:if test="${orderDetail.state==1}">
+						<!-- 已计价 -->
+						<div class="item_list_box">
+							<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
+								class="order_link order_blue">取消订单</a> <a
+								href="weixin/region/ .html" id="order_link"
+								class="order_link order_blue">支付</a>
+							<div class="clearBoth"></div>
+						</div>
+					</c:if> <c:if test="${orderDetail.state==4}">
+						<!-- 已分拣 -->
+						<div class="item_list_box">
+							<a href="weixin/order/deliver.html?orderid=${orderDetail.id}" id="order_link"
+								class="order_link order_blue">送达</a>
+							<div class="clearBoth"></div>
+						</div>
+					</c:if> <c:if test="${orderDetail.state==5}">
+						<!-- 已返还 -->
+						<div class="item_list_box">
+							<a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
+								id="order_link" class="order_link order_blue">评价</a>
+							<div class="clearBoth"></div>
+						</div>
+					</c:if> <!-- 取消订单/分享领券/投诉 按钮 end -->
+
+					<div class="clearBoth"></div>
+					<div class="clearBoth"></div>
+				</li>
+
+				<!-- 取消订单等 按钮 start -->
+
+
+
+
+
+
 				<!-- 1号未完成end -->
 			</c:forEach>
+
+
+
 			<div id="prompt"
 				style="text-align:center;line-height:40px;color:#999;">无更多订单</div>
 		</ul>

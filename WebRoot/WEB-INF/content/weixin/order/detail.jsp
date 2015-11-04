@@ -168,9 +168,13 @@
 						${orderDetail.timeDes}</div>
 					<div class="item_list_box">服务项目：${orderDetail.categoryname}</div>
 					<div class="item_list_box">备注信息：${orderDetail.userComment}</div>
+					<c:if test="${orderDetail.state==6}">
+					<div class="item_list_box">用户评价：${orderDetail.remark}</div>
+					</c:if>
 				</div>
 				<div class="borderD2"></div>
 			</li>
+			
 			<!-- 订单信息 end -->
 
 
@@ -178,9 +182,9 @@
 			<c:if test="${orderDetail.state==0}">
 				<div class="white_bg cancel_detail">
 					<!-- 已接受 -->
-					<a href="weixin/region/ .html" id="order_link"
+					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 						class="public_order borderF">取消订单</a> <a
-						href="weixin/region/ .html" id="complain_btn"
+						href="weixin/order/ .html" id="complain_btn"
 						class="public_order borderB">催单</a>
 					<div class="clearBoth"></div>
 				</div>
@@ -189,9 +193,9 @@
 			<c:if test="${orderDetail.state==1}">
 				<!-- 已计价 -->
 				<div class="white_bg cancel_detail">
-					<a href="weixin/region/ .html" id="order_link"
+					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 						class="public_order borderF">取消订单</a> <a
-						href="weixin/region/ .html" id="complain_btn"
+						href="weixin/order/ .html" id="complain_btn"
 						class="public_order borderB">支付</a>
 					<div class="clearBoth"></div>
 				</div>
@@ -199,7 +203,7 @@
 			<c:if test="${orderDetail.state==4}">
 				<!-- 已分拣 -->
 				<div class="white_bg cancel_detail">
-					<a href="weixin/region/ .html " id="complain_btn"
+					<a href="weixin/order/deliver.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderB">送达</a>
 					<div class="clearBoth"></div>
 				</div>
@@ -207,7 +211,7 @@
 			<c:if test="${orderDetail.state==5}">
 				<!-- 已返还 -->
 				<div class="white_bg cancel_detail">
-					<a href="weixin/region/ .html" id="complain_btn"
+					<a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderB">评价</a>
 					<div class="clearBoth"></div>
 				</div>

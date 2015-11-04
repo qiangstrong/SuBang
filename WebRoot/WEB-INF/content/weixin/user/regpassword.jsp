@@ -39,23 +39,30 @@
 				<tbody>
 					<tr>
 						<td width="65%"><label class="input_wrap" for="tel">
-								<img src="css/weixin/ccsjsp/user/index/welcome_pas.png">
-								<input name="password" id="password" type="password"
-								maxlength="20" placeholder="请输入密码"> </label>
-						</td>
+								<img src="css/weixin/ccsjsp/user/index/welcome_pas.png"> <input
+								name="password" id="password" type="password"
+								value="${password}" maxlength="20" placeholder="请输入密码">
+						</label></td>
 					</tr>
 					<tr>
 						<td><label class="input_wrap" for="code"> <img
 								src="css/weixin/ccsjsp/user/index/welcome_pas.png"> <input
-								name="passwordd" id="passwordd" type="password" maxlength="20"
-								placeholder="请重新输入密码"> </label>
-						</td>
+								name="passwordd" id="passwordd" type="password"
+								value="${password}" maxlength="20" placeholder="请重新输入密码">
+						</label></td>
 					</tr>
+
+
+					<c:if test="${infoMsg!=null}">
+						<tr>
+							<td class="p10"><span id="erro" class="show-erro"
+								style="opacity:0.8">${infoMsg}</span></td>
+						</tr>
+					</c:if>
 					<tr>
-						<td class="p10">
-								<input id="determine" class="btn-public" style="opacity:0.8" 
-								type ="submit" value ="确定" onclick ="return checkvalue();"> 
-						</td>
+						<td class="p10"><input id="determine" class="btn-public"
+							style="opacity:0.8" type="submit" value="确定"
+							onclick="return checkvalue();"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -66,7 +73,7 @@
 			if (document.form1.password.value != document.form1.passwordd.value) {
 				alert("密码与验证密码不一致！");
 				return false;
-			} 
+			}
 			return true;
 		}
 	</script>

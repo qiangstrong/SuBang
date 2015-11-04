@@ -1,25 +1,39 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-			+ request.getServerPort() + path + "/";
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>">
-	<title>添加地址</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">   
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
-	<script type="text/javascript" src="js/weixin/user.js"></script> 
-	<script type="text/javascript" src="js/weixin/jquery-1.7.1.min.js"></script>
-	<script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="/css/weixin/ccsjsp/addr/style1.3.8.5.css">
+<meta charset="utf-8">
+<meta
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+	name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<meta content="" name="pgv">
+<title>添加地址</title>
+<base href="<%=basePath%>">
+<link href="/css/weixin/ccsjsp/addr/base.css" rel="stylesheet"
+	type="text/css">
+<link href="/css/weixin/ccsjsp/addr/order.css" rel="stylesheet"
+	type="text/css">
+<script src="/css/weixin/ccsjsp/addr/hm.js"></script>
+<script type="text/javascript" src="js/weixin/user.js"></script>
+<!-- <script type="text/javascript" src="/css/weixin/ccsjsp/addr/jquery-1.7.2.min.js"></script> -->
+<script type="text/javascript" src="js/weixin/jquery-1.7.1.min.js"></script>
+<script>
 		function updateDistrict(data){
 			var dataDistrict=data[0];
 			var objectDistrict=document.getElementById('districtid'); 
@@ -42,93 +56,99 @@
 				object.add(new Option(data[i].name,data[i].id));
 			}			 
 		}	
-	</script>  
+	</script>
 </head>
-<body>
-	<%@ include file="../common/menu.jsp" %>
-	<table align="left">
-		<tr>
-		<td>
-			<form:form modelAttribute="addr" action="weixin/addr/add.html" method="post">
-				<table>					
-					<tr>
-						<td class="label"><span class="required">*</span>名称：</td>
-					</tr>
-					<tr>
-						<td class="error"><form:errors path="name" /></td>
-					</tr>
-					<tr>
-						<td><form:input class="inputtext" path="name" /></td>
-					</tr>				
-					<tr>
-						<td class="label"><span class="required">*</span>手机号：</td>
-					</tr>
-					<tr>
-						<td class="error"><form:errors path="cellnum" /></td>
-					</tr>
-					<tr>
-						<td><form:input class="inputtext" path="cellnum" /></td>
-					</tr>
-					<tr>
-						<td class="label">城市：</td>
-					</tr>
-					<tr>
-						<td>    
-							<select id="cityid" name="cityid" onchange="getData('cityid','weixin/addr/select.html',updateDistrict)">
-								<c:forEach var="city" items="${citys}">
-								<option value="${city.id }" <c:if test="${city.id==defaultCityid }">selected="selected"</c:if> >
+
+<body style="zoom: 1;">
+	<div id="mainWin" style="padding: 0">
+		<div class="space-split10"></div>
+		<form:form modelAttribute="addr" action="weixin/addr/add.html" method="post">
+
+			<!-- 地址信息 start -->
+			<div class="white-bg">
+				<div class="m_input select y_hover" id="select_wrap">
+					<div id="cmbArea_wrap" class="select y_hover">
+							<select class="city_select" id="cityid" name="cityid" onchange="getData('cityid','weixin/addr/select.html',updateDistrict)">
+						<c:forEach var="city" items="${citys}">
+								<option value="${city.id}" <c:if test="${city.id==defaultCityid }">selected="selected"</c:if> >
 									${city.name }
 								</option>
 								</c:forEach>
-							</select>           					
-        				</td>
-					</tr>
-					<tr>
-						<td class="label">区：</td>
-					</tr>
-					<tr>
-						<td>    
-							<select id="districtid" name="districtid" onchange="getData('districtid','weixin/addr/select.html',updateRegion)">
+						</select>
+					</div>
+					</div>
+				
+			<div class="borderD2"></div>
+				<div class="m_input select y_hover" id="select_wrap">
+					<div id="cmbArea_wrap" class="select y_hover">
+							<select class="J_area select_J_ytag" id="districtid" name="districtid" onchange="getData('districtid','weixin/addr/select.html',updateRegion)">
 								<c:forEach var="district" items="${districts}">
 								<option value="${district.id }" <c:if test="${district.id==defaultDistrictid }">selected="selected"</c:if> >
 									${district.name }
 								</option>
 								</c:forEach>
-							</select>           					
-        				</td>
-					</tr>
-					<tr>
-						<td class="label">小区：</td>
-					</tr>
-					<tr>
-						<td>      
-							<select id="regionid" name="regionid">
+					</select>    
+					</div>
+					</div>
+				<div class="borderD2"></div>
+			  <div class="m_input select y_hover" id="select_wrap">
+					<div id="cmbArea_wrap" class="select y_hover">
+								<select class="J_area select_J_ytag" id="regionid" name="regionid">
 								<c:forEach var="region" items="${regions}">
 								<option value="${region.id }" <c:if test="${region.id==defaultRegionid }">selected="selected"</c:if> >
 									${region.name }
 								</option>
 								</c:forEach>
-							</select>              					
-        				</td>
-					</tr>
-					<tr>
-						<td class="error"><form:errors path="detail" /></td>
-					</tr>
-					<tr>
-						<td class="label">详细地址：</td>
-					</tr>
-					<tr>
-						<td><form:input class="inputtext" path="detail"/></td>
-					</tr>
-					<tr>
-						<td>
-							<input class="submit" type="submit" value="添加地址" />
-						</td>
-					</tr>
-				</table>
-			</form:form>
-		</td>
-		</tr>
-	</table>
+							</select>     
+					</div>
+					<div class="clearBoth"></div>
+				</div>
+				<div class="borderD"></div>
+				<div class="m_input m_input_5" style="margin-bottom: 0">
+					<div class="input">
+					<span style="color:#8a8a8a"><form:errors path="detail"/><!-- 长度需要在1和50之间 --></span>
+						<textarea placeholder="请输入门牌号等详细地址" id="detail"
+							name="detail" class="textarea-address"> ${addr.detail}</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="borderD2"></div>
+			<!-- 地址信息 end -->
+
+			<div style="height: 10px; background: #f0f0f0"></div>
+
+			<!-- 个人基本信息 start -->
+			<div class="borderD2"></div>
+			<section class="section_4" style="padding: 1px">
+				<div class="m_input m_input_5">
+					<div class="input" style="margin-top: 10px">
+					<span style="color:#8a8a8a"><form:errors path="name"/><!-- 1到4 --></span>
+						<input placeholder="您的姓名" value="${addr.name}" maxlength="30" id="name"
+							name="name" class="address_input">
+					</div>
+				</div>
+			<div class="borderD2"></div>
+				<div class="m_input m_input_5">
+					<div class="input" style="margin-top: 10px">
+					<span style="color:#8a8a8a"><form:errors path="cellnum"/><!-- 11位 --></span>
+						<input placeholder="手机号码" value="${addr.cellnum}" id="cellnum" name="cellnum" type="tel"
+							maxlength="11" name="cellnum"
+							class="cleartet need_clear"> 
+					</div>
+				</div>
+			</section>
+			<!-- 个人基本信息 end -->
+
+			<!-- 保存 start -->
+			<sectoin class="true-btn">
+			<div class="">
+				 <input type="submit"
+					class="btn_order y_hover J_ytag" value="保存">
+			</div>
+			</sectoin>
+			<!-- 保存 end -->
+		</form:form>
+	</div>
+	
 </body>
 </html>

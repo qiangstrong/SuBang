@@ -173,7 +173,17 @@ section{display: block;padding:8px 0;position: relative;width: 100%;z-index: 1; 
 
 #CssGaga{content:"131022151205,clu,294"}
 
+.show_erro {
+  line-height: 24px;
+  text-align: left;
+  overflow: hidden;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  color: #8a8a8a;
 
+}
 
 
 

@@ -31,14 +31,12 @@
 	type="text/css">
 <link rel="stylesheet" type="text/css"
 	href="css/weixin/ccsjsp/region/index/swipe.css">
-	<link rel="stylesheet" type="text/css"
-	href="css/weixin/ccsjsp/region/index/footer.css">
 </head>
 <body style="zoom: 1;">
 
 	<!-- 首页城市 start -->
 	<div class="address_tab">
-		<a class="cityName" href="weixin/region/list.html">
+		<a class="cityName" href="weixin/region/city.html">
 			<!-- 从此跳转到城市选择列表 --> <span>${city.name }</span> <em
 			class="arrow-left"></em> </a>
 		<!--<img class="homeSlogan" src="css/weixin/ccsjsp/region/index/homeSlogan.png">-->
@@ -88,7 +86,7 @@
 						<p class="ser-font">服务范围</p> </a>
 				</div>
 				<div class="service-list" align="center">
-					<a href="weixin/price/index.html">
+					<a href="weixin/price/index.html?categoryid=1">
 						<p class="ser-font">价目指引</p> </a>
 				</div>
 				<div class="clearBoth"></div>
@@ -96,21 +94,6 @@
 			</div>
 		</div>
 		<!-- 页脚导航-->
-<!-- 
-		<footer id="footer">
-<div class="borderD3"></div>
-  <div class="fix-bottom"></div>
-    <div class="bottomBox">
-        <div class="indexMsg">
-            <div class="indexMenu">
-                	<a href="weixin/region/index.html"><span class="home-index-active">首页</span></a>
-                	<a href="weixin/order/index.html?type=2"><span class="Order-index">订单</span></a>
-                	<a href="weixin/user/index.html"><span class="card-index">我的</span></a>
-              </div>
-        </div>
-    </div>
-   </footer>
-   -->
 		<%@ include file="../common/menu.jsp"%>
 	</div>
 </body>

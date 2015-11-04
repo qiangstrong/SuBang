@@ -32,7 +32,7 @@
 <link href="css/weixin/ccsjsp/user/index/base.css" rel="stylesheet"
 	type="text/css">
 </head>
-<body>
+<body>			
 	<div class="welcome-index" id="wx_mask">
 		<form modelAttribute="user" action="weixin/user/login.html"
 			method="post">
@@ -42,7 +42,7 @@
 						<td width="65%"><label class="input_wrap" for="tel">
 								<img src="css/weixin/ccsjsp/user/index/welcome_phone.png">
 								<input name="cellnum" id="cellnum" type="tel" maxlength="11"
-								placeholder="请输入手机号" value=""
+								placeholder="请输入手机号" value="${user.cellnum}"
 								onkeyup="value=value.replace(/[^\d]/g,&#39;&#39;)"
 								onbeforepaste="clipboardData.setData(&#39;text&#39;,clipboardData.getData(&#39;text&#39;).replace(/[^\d]/g,&#39;&#39;))">
 						</label>
@@ -51,10 +51,18 @@
 					<tr>
 						<td><label class="input_wrap" for="code"> <img
 								src="css/weixin/ccsjsp/user/index/welcome_pas.png"> <input
-								name="password" id="password" type="password" maxlength="20"
+								name="password" id="password" type="password" value="${user.password}" maxlength="20"
 								placeholder="密码"> </label>
 						</td>
 					</tr>
+					<c:if test="${infoMsg!=null}">
+					
+					<tr>
+						<td class="p10"><span id="erro" class="show-erro"
+								style="opacity:0.8">${infoMsg}</span>
+						</td>
+					</tr>
+					</c:if><!--  登录失败。手机号或密码错误。-->
 					<tr>
 						<td class="p10"><button id="binding" class="btn-public"
 								style="opacity:0.8" onclick="this.form.submit()">登录</button>
@@ -76,7 +84,5 @@
 			</tbody>
 		</table>
 	</div>
-
-
 </body>
 </html>
