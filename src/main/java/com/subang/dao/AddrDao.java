@@ -15,7 +15,7 @@ public class AddrDao extends BaseDao<Addr> {
 	public Addr get(Integer id) {
 		String sql = "select * from addr_t where id=?";
 		Object[] args = { id };
-		Addr addr=null;
+		Addr addr = null;
 		try {
 			addr = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Addr>(
 					Addr.class));
@@ -26,14 +26,14 @@ public class AddrDao extends BaseDao<Addr> {
 
 	public void save(Addr addr) {
 		String sql = "insert into addr_t values(null,?,?,?,?,?,?)";
-		Object[] args = { addr.isValid(), addr.getName(), addr.getCellnum(), addr.getDetail(),
+		Object[] args = { addr.getValid(), addr.getName(), addr.getCellnum(), addr.getDetail(),
 				addr.getUserid(), addr.getRegionid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Addr addr) {
 		String sql = "update addr_t set valid=?,name=?,cellnum=?,detail=?,userid=?,regionid=? where id=?";
-		Object[] args = { addr.isValid(), addr.getName(), addr.getCellnum(), addr.getDetail(),
+		Object[] args = { addr.getValid(), addr.getName(), addr.getCellnum(), addr.getDetail(),
 				addr.getUserid(), addr.getRegionid(), addr.getId() };
 		jdbcTemplate.update(sql, args);
 	}

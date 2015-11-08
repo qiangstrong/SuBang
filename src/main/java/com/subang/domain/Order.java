@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -40,6 +41,7 @@ public class Order implements Filter, Serializable {
 	protected String barcode;
 	protected Integer categoryid;
 	protected Integer userid;
+	@NotNull
 	protected Integer addrid;
 	protected Integer workerid;
 	protected Integer laundryid;

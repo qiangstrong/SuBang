@@ -318,7 +318,7 @@ public class OrderService extends BaseService {
 		Order order = orderDao.get(orderid);
 		orderDao.delete(orderid);
 		Addr addr = addrDao.get(order.getAddrid());
-		if (!addr.isValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
+		if (!addr.getValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
 			addrDao.delete(addr.getId());
 		}
 	}

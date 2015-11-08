@@ -100,6 +100,13 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, addrDetails);
 	}
 
+	@RequestMapping("/getdefaultaddr")
+	public void getDefaultAddr(Identity identity, HttpServletResponse response) {
+		Integer addrid = getUser(identity).getAddrid();
+		AddrDetail addrDetail = addrDao.getDetail(addrid);
+		SuUtil.outputJson(response, addrDetail);
+	}
+
 	@RequestMapping("/getaddrdata")
 	public void getAddrData(Identity identity,
 			@RequestParam(value = "regionid", required = false) Integer regionid,

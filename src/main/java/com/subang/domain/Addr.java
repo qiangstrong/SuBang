@@ -51,7 +51,7 @@ public class Addr implements Filter, Serializable {
 		this.id = id;
 	}
 
-	public boolean isValid() {
+	public Boolean getValid() {
 		return valid;
 	}
 
