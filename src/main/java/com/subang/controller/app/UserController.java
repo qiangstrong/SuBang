@@ -108,16 +108,9 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/getaddrdata")
-	public void getAddrData(Identity identity,
-			@RequestParam(value = "regionid", required = false) Integer regionid,
-			HttpServletResponse response) {
-		AddrData addrData = null;
-		if (regionid == null) {
-			User user = getUser(identity);
-			addrData = regionService.getAddrDataByUserid(user.getId());
-		} else {
-			addrData = regionService.getAddrDataByRegionid(regionid);
-		}
+	public void getAddrData(Identity identity, HttpServletResponse response) {
+		User user = getUser(identity);
+		AddrData addrData = regionService.getAddrDataByUserid(user.getId());
 		addrData.doFilter();
 		SuUtil.outputJson(response, addrData);
 	}

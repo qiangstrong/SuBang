@@ -85,8 +85,11 @@ public class UserService extends BaseService {
 		addrDao.save(addr);
 		User user = userDao.get(addr.getUserid());
 		if (user.getAddrid() == null) {
-			user.setAddrid(addr.getId());
-			userDao.update(user);
+			List<Addr> addrs = addrDao.findByUserid(user.getId());
+			if (!addrs.isEmpty()) {
+				user.setAddrid(addrs.get(0).getId());
+				userDao.update(user);
+			}
 		}
 	}
 
@@ -130,8 +133,10 @@ public class UserService extends BaseService {
 			List<Addr> addrs = addrDao.findByUserid(user.getId());
 			if (!addrs.isEmpty()) {
 				user.setAddrid(addrs.get(0).getId());
-				userDao.update(user);
+			} else {
+				user.setAddrid(null);
 			}
+			userDao.update(user);
 		}
 	}
 

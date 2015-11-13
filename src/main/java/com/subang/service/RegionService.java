@@ -144,7 +144,7 @@ public class RegionService extends BaseService {
 	}
 
 	/**
-	 * 前台关于区域的查询
+	 * 前台关于区域的查询。addrData.detail可能为null，其余都不为null
 	 */
 	public AddrData getAddrDataByUserid(Integer userid) {
 		AddrData addrData = new AddrData();
@@ -153,42 +153,46 @@ public class RegionService extends BaseService {
 		Location location = ComUtil.getFirst(locations);
 		GeoLoc geoLoc = LocUtil.getGeoLoc(location);
 
+		City defaultCity = null;
+		District defaultDistrict = null;
+		Region defaultRegion = null;
+
 		addrData.setCitys(cityDao.findAllValid());
-		addrData.setDefaultRegionid(null);
 
-		if (geoLoc == null) {
-			addrData.setDefaultCityid(null);
-			addrData.setDistricts(districtDao.findValidByCityid(addrData.getCitys().get(0).getId()));
-			addrData.setDefaultDistrictid(null);
-			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
-			addrData.setDetail(null);
-			return addrData;
+		// 城市信息
+		if (geoLoc != null) {
+			defaultCity = ComUtil.getFirst(cityDao.findValidByName(geoLoc.getCity()));
 		}
-
-		City defaultCity = ComUtil.getFirst(cityDao.findValidByName(geoLoc.getCity()));
 		if (defaultCity == null) {
-			addrData.setDefaultCityid(null);
-			addrData.setDistricts(districtDao.findValidByCityid(addrData.getCitys().get(0).getId()));
-			addrData.setDefaultDistrictid(null);
-			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
-			addrData.setDetail(geoLoc.getDetail());
-			return addrData;
+			defaultCity = addrData.getCitys().get(0);
 		}
-
 		addrData.setDefaultCityid(defaultCity.getId());
-		addrData.setDistricts(districtDao.findValidByCityid(addrData.getDefaultCityid()));
-		District defaultDistrict = ComUtil.getFirst(districtDao.findValidByCityidAndName(
-				addrData.getDefaultCityid(), geoLoc.getDistrict()));
-		if (defaultDistrict == null) {
-			addrData.setDefaultDistrictid(null);
-			addrData.setRegions(regionDao.findByDistrictid(addrData.getDistricts().get(0).getId()));
-			addrData.setDetail(geoLoc.getDetail());
-			return addrData;
-		}
+		addrData.setDefaultCityname(defaultCity.getName());
+		addrData.setDistricts(districtDao.findValidByCityid(defaultCity.getId()));
 
+		// 区信息
+		if (geoLoc != null) {
+			defaultDistrict = ComUtil.getFirst(districtDao.findValidByCityidAndName(
+					defaultCity.getId(), geoLoc.getDistrict()));
+		}
+		if (defaultDistrict == null) {
+			defaultDistrict = addrData.getDistricts().get(0);
+		}
 		addrData.setDefaultDistrictid(defaultDistrict.getId());
-		addrData.setRegions(regionDao.findByDistrictid(addrData.getDefaultDistrictid()));
-		addrData.setDetail(geoLoc.getDetail());
+		addrData.setDefaultDistrictname(defaultDistrict.getName());
+		addrData.setRegions(regionDao.findByDistrictid(defaultDistrict.getId()));
+
+		// 小区信息
+		defaultRegion = addrData.getRegions().get(0);
+		addrData.setDefaultRegionid(defaultRegion.getId());
+		addrData.setDefaultRegionname(defaultRegion.getName());
+
+		// 地址详情
+		if (geoLoc != null) {
+			addrData.setDetail(geoLoc.getDetail());
+		} else {
+			addrData.setDetail(null);
+		}
 		return addrData;
 	}
 
@@ -196,8 +200,11 @@ public class RegionService extends BaseService {
 		AddrData addrData = new AddrData();
 		Area area = regionDao.getArea(regionid);
 		addrData.setDefaultCityid(area.getCityid());
+		addrData.setDefaultCityname(area.getCityname());
 		addrData.setDefaultDistrictid(area.getDistrictid());
+		addrData.setDefaultDistrictname(area.getDistrictname());
 		addrData.setDefaultRegionid(area.getRegionid());
+		addrData.setDefaultRegionname(area.getRegionname());
 		addrData.setCitys(cityDao.findAllValid());
 		addrData.setDistricts(districtDao.findValidByCityid(area.getCityid()));
 		addrData.setRegions(regionDao.findByDistrictid(area.getDistrictid()));

@@ -91,6 +91,9 @@
 	</bean>
 	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobFactory">
+            <bean class="com.subang.job.SpringBeanJobFactory" />
+        </property>
 		<property name="triggers">
 			<list>
 				<ref local="cronTriggerDay" />

@@ -1,7 +1,18 @@
 insert into worker_t values(null,1,1,'李华','worker','15502457990','辽宁省沈阳市和平区文化路3号巷11号','第一个取衣员');
 insert into city_t values(null,'葫芦岛市','image/info/scope/葫芦岛.jpg','葫芦岛市，包括连山区、南票区、龙港区。');
+insert into city_t values(null,'沈阳市','image/info/scope/葫芦岛.jpg','沈阳市，包括和平区，大东区，铁西区。');
 insert into district_t values (null,'连山区',1);
-insert into region_t values(null,'新世界花园',1,1);
+insert into district_t values (null,'南票区',1);
+insert into district_t values (null,'和平区',2);
+insert into district_t values (null,'大东区',2);
+insert into region_t values(null,'小区1',1,1);
+insert into region_t values(null,'小区2',1,1);
+insert into region_t values(null,'小区3',2,1);
+insert into region_t values(null,'小区4',2,1);
+insert into region_t values(null,'小区5',3,1);
+insert into region_t values(null,'小区6',3,1);
+insert into region_t values(null,'小区7',4,1);
+insert into region_t values(null,'小区8',4,1);
 insert into category_t values(null,'洗衣','image/info/category/洗衣.png','9元/件起');
 insert into category_t values(null,'洗鞋','image/info/category/洗鞋.png','19元/双起');
 insert into category_t values(null,'家纺','image/info/category/家纺.png','9元/件起');
@@ -57,6 +68,8 @@ insert into clothes_type_t values(null,'夏凉被','image/info/clothes_type/夏�
 insert into clothes_type_t values(null,'春秋被','image/info/clothes_type/春秋被.jpg',3,10);
 insert into service_t values(null,1,1);
 insert into service_t values(null,1,2);
+insert into service_t values(null,2,1);
+insert into service_t values(null,2,2);
 insert into ticket_type_t values(null,'速帮洗衣券',null,10,20,null,'使用积分购买，无使用期限。不兑换，不找零。',1);
 insert into ticket_type_t values(null,'速帮洗鞋券',null,19,38,null,'使用积分购买，无使用期限。不兑换，不找零。',2);
 insert into laundry_t values(null,'洗衣店1号','15502457990','辽宁省沈阳市和平区文化路3号巷11号','第一个洗衣店');
