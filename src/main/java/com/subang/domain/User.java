@@ -26,7 +26,6 @@ public class User implements Filter, Serializable {
 	private String cellnum;
 	private Integer score;
 	private Double money;
-	@Length(max = 100)
 	private Integer addrid; // 用户的默认地址
 
 	public User() {

@@ -18,7 +18,7 @@ public class AppInterceptor extends BaseController implements HandlerInterceptor
 
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.APP_PREFIX;
 	private static final String[] FREE_URIS = { "/user/login.html", "/user/add.html",
-			"/worker/login.html" };
+			"/user/chkcellnum.html", "/worker/login.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {

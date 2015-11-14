@@ -36,6 +36,20 @@ public class WorkerController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
+	// 工作人员不需要注册，访问这个url需要认证信息
+	@RequestMapping("/chkcellnum")
+	public void chkCellnum(@RequestParam("cellnum") String cellnum, HttpServletResponse response) {
+		Result result = new Result();
+		if (!workerService.checkCellnum(cellnum)) {
+			result.setCode(Result.ERR);
+			result.setMsg("该手机号码已经被注册。");
+			SuUtil.outputJson(response, result);
+		} else {
+			result.setCode(Result.OK);
+			SuUtil.outputJson(response, result);
+		}
+	}
+
 	@RequestMapping("/chgcellnum")
 	public void chgCellnum(Identity identity, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
