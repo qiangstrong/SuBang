@@ -13,10 +13,8 @@ import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.City;
 import com.subang.domain.District;
-import com.subang.domain.Location;
 import com.subang.domain.Region;
 import com.subang.domain.User;
-import com.subang.util.ComUtil;
 import com.subang.util.SuUtil;
 
 @Controller("regionController_app")
@@ -27,8 +25,7 @@ public class RegionController extends BaseController {
 	@RequestMapping("/getcityid")
 	public void getCityid(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
-		Location location = ComUtil.getFirst(locationDao.findByUserid(user.getId()));
-		Integer cityid = regionService.getCityid(location);
+		Integer cityid = regionService.getCityid(user.getId());
 		SuUtil.outputJson(response, cityid);
 	}
 

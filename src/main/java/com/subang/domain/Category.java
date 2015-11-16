@@ -19,7 +19,7 @@ public class Category implements Filter, Serializable {
 	@Length(min = 1, max = 10)
 	private String name;
 	@Length(max = 100)
-	private String icon;
+	private String icon; // 由后台生成，不用@NotNull校验
 	@Length(max = 100)
 	private String comment;
 

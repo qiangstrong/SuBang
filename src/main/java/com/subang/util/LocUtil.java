@@ -34,6 +34,10 @@ public class LocUtil extends BaseUtil {
 		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 		RenderReverseResult result = GeocodingAPI.renderReverse(SuUtil.getAppProperty("ak_map"),
 				CoordType.wgs84ll, latLng);
+		if (result == null) {
+			LOG.error("错误码:" + WebConst.LOG_TAG + "; 错误信息:网络错误。");
+			return null;
+		}
 		if (!result.getStatus().equals(STATUS_SUCC)) {
 			LOG.error("错误码:" + result.getStatus() + "; 错误信息:用户位置解析失败。");
 			return null;

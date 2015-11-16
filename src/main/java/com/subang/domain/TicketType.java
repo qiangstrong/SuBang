@@ -31,6 +31,7 @@ public class TicketType implements Filter, Serializable {
 	protected Timestamp deadline;
 	@Length(max = 1000)
 	private String comment;
+	@NotNull
 	protected Integer categoryid;
 
 	protected String categoryname;

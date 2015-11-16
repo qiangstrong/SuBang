@@ -18,6 +18,7 @@ public class Price implements Filter, Serializable {
 	private Double money;
 	@Length(max = 100)
 	private String comment;
+	@NotNull
 	private Integer categoryid;
 
 	public Price() {

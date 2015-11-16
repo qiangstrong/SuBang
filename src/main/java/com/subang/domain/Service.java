@@ -2,13 +2,17 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import com.subang.domain.face.Filter;
 
 public class Service implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	@NotNull
 	private Integer cityid;
+	@NotNull
 	private Integer categoryid;
 
 	private String categoryname;

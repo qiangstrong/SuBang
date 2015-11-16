@@ -30,7 +30,9 @@ public class Order implements Filter, Serializable {
 	protected Double money; // 单位元
 	@Digits(integer = 3, fraction = 1)
 	protected Double freight; // 单位元
+	@NotNull
 	protected Date date; // 用户指定的取件日期
+	@NotNull
 	protected Integer time; // 用户指定的取件时间，时间间隔为（time，time+1）
 	@Length(max = 100)
 	protected String userComment;
@@ -39,6 +41,7 @@ public class Order implements Filter, Serializable {
 	@Length(max = 100)
 	protected String remark;
 	protected String barcode;
+	@NotNull
 	protected Integer categoryid;
 	protected Integer userid;
 	@NotNull
@@ -264,7 +267,30 @@ public class Order implements Filter, Serializable {
 		this.laundryid = laundryid;
 	}
 
-	public boolean isDone() {
+	public Boolean isPaid() { // 由于要使用网络传输order，boolean类型是基本类型，无法为null
+		if (state == null) {
+			return null;
+		}
+		if (state >= State.paid.ordinal() && getStateEnum() != State.canceled) {
+			return true;
+		}
+		return false;
+	}
+
+	public Boolean isChecked() {
+		if (state == null) {
+			return null;
+		}
+		if (state >= State.checked.ordinal() && getStateEnum() != State.canceled) {
+			return true;
+		}
+		return false;
+	}
+
+	public Boolean isDone() {
+		if (state == null) {
+			return null;
+		}
 		State stateEnum = getStateEnum();
 		if (stateEnum == State.delivered || stateEnum == State.remarked
 				|| stateEnum == State.canceled) {

@@ -21,6 +21,7 @@ public class ClothesType implements Filter, Serializable {
 	private String name;
 	@Length(max = 100)
 	private String icon;
+	@NotNull
 	private Integer categoryid;
 	private Integer priceid;
 

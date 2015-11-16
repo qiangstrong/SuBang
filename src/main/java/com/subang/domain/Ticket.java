@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotNull;
+
 import com.subang.domain.face.Filter;
 
 public class Ticket implements Filter, Serializable {
@@ -12,6 +14,7 @@ public class Ticket implements Filter, Serializable {
 	private Integer id;
 	private Timestamp deadline;
 	private Integer userid;
+	@NotNull
 	private Integer ticketTypeid;
 
 	public Ticket() {
