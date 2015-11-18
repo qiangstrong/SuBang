@@ -7,6 +7,7 @@ import com.subang.domain.Payment.PayType;
 import com.subang.domain.face.Filter;
 import com.subang.util.ComUtil;
 
+//使用json在网络中传输时，所有没有返回null的getter方法都会被传输
 public class OrderDetail extends Order implements Filter {
 
 	private static final long serialVersionUID = 1L;
@@ -111,7 +112,7 @@ public class OrderDetail extends Order implements Filter {
 		} else {
 			totalMoney = money + freight;
 		}
-		return ComUtil.getDes(totalMoney);
+		return ComUtil.getDes(ComUtil.round(totalMoney));
 	}
 
 	public String getActualMoneyDes() {
@@ -121,7 +122,7 @@ public class OrderDetail extends Order implements Filter {
 		} else {
 			actualMoney = money + freight - moneyTicket;
 		}
-		return ComUtil.getDes(actualMoney);
+		return ComUtil.getDes(ComUtil.round(actualMoney));
 	}
 
 	public void setPayType(Integer payType) {

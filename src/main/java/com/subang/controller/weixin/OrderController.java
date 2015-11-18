@@ -77,14 +77,26 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/showadd")
-	public ModelAndView showAdd(HttpSession session, @RequestParam("categoryid") Integer categoryid) {
+	public ModelAndView showAdd(HttpSession session,
+			@RequestParam("categoryid") Integer categoryid,
+			@RequestParam(value = "addrid", required = false) Integer addrid) {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
 		Order order = new Order();
 		order.setCategoryid(categoryid);
-		prepare(view, user, categoryid);
+		prepare(view, user, categoryid, addrid);
 		view.addObject("order", order);
 		view.setViewName(VIEW_PREFIX + "/add");
+		return view;
+	}
+
+	@RequestMapping("/addr")
+	public ModelAndView listAddr(HttpSession session, @RequestParam("categoryid") Integer categoryid) {
+		ModelAndView view = new ModelAndView();
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(getUser(session).getId());
+		view.addObject("categoryid", categoryid);
+		view.addObject("addrDetails", addrDetails);
+		view.setViewName(VIEW_PREFIX + "/addr");
 		return view;
 	}
 
@@ -101,7 +113,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
 		if (result.hasErrors()) {
-			prepare(view, user, order.getCategoryid());
+			prepare(view, user, order.getCategoryid(), order.getAddrid());
 			view.setViewName(VIEW_PREFIX + "/add");
 			return view;
 		}
@@ -208,11 +220,14 @@ public class OrderController extends BaseController {
 	/**
 	 * 为展示层准备相应的数据 默认地址的添加删除逻辑保证：只要用户有地址，默认地址就不为空
 	 */
-	private void prepare(ModelAndView view, User user, Integer categoryid) {
+	private void prepare(ModelAndView view, User user, Integer categoryid, Integer addrid) {
 
-		view.addObject("defaultAddrid", user.getAddrid());
-		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(user.getId());
-		view.addObject("addrDetails", addrDetails);
+		if (addrid == null) {
+			addrid = user.getAddrid();
+		}
+		if (addrid != null) {
+			view.addObject("addrDetail", addrDao.getDetail(addrid));
+		}
 
 		List<Option> dates = TimeUtil.getDateOptions();
 		view.addObject("dates", dates);

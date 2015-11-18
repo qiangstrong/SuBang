@@ -175,8 +175,8 @@ public class SuUtil extends BaseUtil {
 		return results;
 	}
 
-	// 用户绑定手机号时，产生验证码
-	public static String getUserAuthcode() {
+	// 用户、取衣员改绑手机号时，产生验证码
+	public static String getAuthcode() {
 		StringBuffer authcode = new StringBuffer();
 		for (int i = 0; i < WebConst.AUTHCODE_LENGTH; i++) {
 			authcode.append(ComUtil.random.nextInt(10));

@@ -58,9 +58,9 @@ public interface WebConst {
 	int ORDER_STATE_UNDONE = 2;
 	int ORDER_STATE_DONE = 3;
 
-	int ORDER_STATE_WORKER = 1;
 	int ORDER_STATE_FETCH = 2;
 	int ORDER_STATE_DELIVER = 3;
+	int ORDER_STATE_FINISH = 4;
 
 	int EXPIRED_INTERVAL = 60; // 重复通知过滤 时效60秒
 }

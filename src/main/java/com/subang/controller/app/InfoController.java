@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.Info;
@@ -17,5 +18,11 @@ public class InfoController extends BaseController {
 	public void get(HttpServletResponse response) {
 		Info info = infoService.getInfo();
 		SuUtil.outputJson(response, info);
+	}
+
+	@RequestMapping("/addfeedback")
+	public void addFeedback(@RequestParam("comment") String comment, HttpServletResponse response) {
+		infoService.addFeedback(comment);
+		SuUtil.outputJsonOK(response);
 	}
 }

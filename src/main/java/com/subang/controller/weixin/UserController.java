@@ -92,10 +92,10 @@ public class UserController extends BaseController {
 			session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
 		}
 
-		String authcode = SuUtil.getUserAuthcode();
+		String authcode = SuUtil.getAuthcode();
 		session.setAttribute(KEY_CELLNUM, cellnum);
 		session.setAttribute(WebConst.KEY_USER_AUTHCODE, authcode);
-		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toUserContent(authcode))) {
+		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toAuthcodeContent(authcode))) {
 			result.setCode(Result.ERR);
 			result.setMsg("发送验证码错误。");
 			SuUtil.outputJson(response, result);

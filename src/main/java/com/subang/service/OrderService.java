@@ -115,9 +115,6 @@ public class OrderService extends BaseService {
 	public List<OrderDetail> searchOrderByWorkeridAndState(Integer workerid, int stateType) {
 		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 		switch (stateType) {
-		case WebConst.ORDER_STATE_WORKER:
-			orderDetails.addAll(orderDao.findDetailByWorkerid(workerid));
-			break;
 		case WebConst.ORDER_STATE_FETCH:
 			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.accepted));
 			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.priced));
@@ -126,6 +123,10 @@ public class OrderService extends BaseService {
 		case WebConst.ORDER_STATE_DELIVER:
 			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.fetched));
 			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.checked));
+			break;
+		case WebConst.ORDER_STATE_FINISH:
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.delivered));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.remarked));
 			break;
 		}
 		return orderDetails;
@@ -178,9 +179,12 @@ public class OrderService extends BaseService {
 		if (state != State.accepted && state != State.priced) {
 			throw new SuException("由于订单状态不符，没有完成指定操作。");
 		}
+		money = ComUtil.round(money);
 		order.setMoney(money);
 		if (money < new Double(SuUtil.getSuProperty("orderMoney"))) {
 			order.setFreight(new Double(SuUtil.getSuProperty("orderFreight")));
+		} else {
+			order.setFreight(0.0);
 		}
 		order.setState(State.priced);
 		orderDao.update(order);

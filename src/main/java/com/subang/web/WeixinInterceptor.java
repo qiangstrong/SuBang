@@ -57,6 +57,7 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 				User user = userDao.getByOpenid(snsToken.getOpenid());
 				if (user == null) {
 					// 用户还未注册
+					setOpenid(request.getSession(), snsToken.getOpenid());
 					request.getRequestDispatcher("/WEB-INF/content/weixin/user/login.jsp").forward(
 							request, response);
 					return false;
