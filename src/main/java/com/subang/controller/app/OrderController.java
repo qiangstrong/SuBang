@@ -21,6 +21,7 @@ import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
+import com.subang.util.WebConst;
 
 @Controller("orderController_app")
 @RequestMapping("/app/order")
@@ -49,8 +50,16 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/get")
-	public void get(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
-		OrderDetail orderDetail = orderDao.getDetail(orderid);
+	public void get(@RequestParam("type") Integer getType, @RequestParam("arg") String arg,
+			HttpServletResponse response) {
+		OrderDetail orderDetail = null;
+		if (getType == WebConst.ORDER_GET_ID) {
+			Integer orderid = Integer.decode(arg);
+			orderDetail = orderDao.getDetail(orderid);
+		} else {
+			String barcode = arg;
+			orderDetail = orderDao.getDetailByBarcode(barcode);
+		}
 		SuUtil.outputJson(response, orderDetail);
 	}
 
@@ -86,12 +95,6 @@ public class OrderController extends BaseController {
 			e.printStackTrace();
 		}
 		SuUtil.outputJsonOK(response);
-	}
-
-	@RequestMapping("/scan")
-	public void scan(@RequestParam("barcode") String barcode, HttpServletResponse response) {
-		OrderDetail orderDetail = orderDao.getDetailByBarcode(barcode);
-		SuUtil.outputJson(response, orderDetail);
 	}
 
 	@RequestMapping("/comment")
