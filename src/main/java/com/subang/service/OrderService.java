@@ -202,7 +202,7 @@ public class OrderService extends BaseService {
 	// 取衣员扫码，订单进入已取走状态
 	public void fetchOrder(Integer orderid, String barcode) throws SuException {
 		Order order = orderDao.get(orderid);
-		if (order.getStateEnum() != State.priced) {
+		if (order.getStateEnum() != State.paid) {
 			throw new SuException("由于订单状态不符，没有完成指定操作。");
 		}
 		order.setBarcode(barcode);
@@ -351,21 +351,21 @@ public class OrderService extends BaseService {
 	}
 
 	// 生成预支付id，管理员已经为订单指定价格。这点由前端保证。
-	public String getPrepay_id(User user, Order order, HttpServletRequest request) {
-		Payment payment = paymentDao.getByOrderid(order.getId());
+	public String getPrepay_id(User user, OrderDetail orderDetail, HttpServletRequest request) {
+		Payment payment = paymentDao.getByOrderid(orderDetail.getId());
 		String prepay_id = payment.getPrepay_id();
 		if (prepay_id != null) {
 			return prepay_id;
 		}
 
-		double money = order.getMoney() + order.getFreight() - payment.getMoneyTicket();
+		Double money = orderDetail.getActualMoney();
 
 		Unifiedorder unifiedorder = new Unifiedorder();
 		unifiedorder.setAppid(SuUtil.getAppProperty("appid"));
 		unifiedorder.setMch_id(SuUtil.getAppProperty("mch_id"));
 		unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
 		unifiedorder.setBody("订单付款");
-		unifiedorder.setOut_trade_no(order.getOrderno());
+		unifiedorder.setOut_trade_no(orderDetail.getOrderno());
 		Integer price = (int) (money * 100);
 		unifiedorder.setTotal_fee(price.toString());
 		unifiedorder.setSpbill_create_ip(request.getRemoteAddr());

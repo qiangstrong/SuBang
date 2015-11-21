@@ -26,7 +26,7 @@ public class PriceController extends BaseController {
 		for (Price price : prices) {
 			clothesTypesList.add(clothesTypeDao.findByPriceid(price.getId()));
 		}
-		view.addObject("categoryid", categoryid);
+		view.addObject("category", categoryDao.get(categoryid));
 		view.addObject("prices", prices);
 		view.addObject("clothesTypesList", clothesTypesList);
 		view.setViewName(VIEW_PREFIX + "/index");

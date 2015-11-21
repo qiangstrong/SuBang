@@ -70,6 +70,14 @@
 	</div>
 	<script type="text/javascript">
 		function checkvalue() {
+		    if(document.form1.password.value.length>50){
+             alert("请将密码长度控制在1到50之间！");
+             return false;
+             }
+             if(document.form1.password.value.length<1){
+             alert("请将密码长度控制在1到50之间！");
+             return false;
+             }
 			if (document.form1.password.value != document.form1.passwordd.value) {
 				alert("密码与验证密码不一致！");
 				return false;

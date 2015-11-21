@@ -10,63 +10,67 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>支付</title>
+	<title>绑定手机号</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<link rel="stylesheet" type="text/css" href="css/style.css"/>
-	<script type="text/javascript">
-		function pay(){
-			WeixinJSBridge.invoke('getBrandWCPayRequest',${json},function(res){
-				if(res.err_msg == 'get_brand_wcpay_request:ok'){
-					window.location.href = "weixin/order/index.html?type=1";
-				}else if(res.err_msg == 'get_brand_wcpay_request:fail'){					
-					alert(res.err_msg);
-				}
-			});
-		}
-	</script>
 </head>
 <body>
-<c:if test="${infoMsg!=null}">
+	<%@ include file="../common/menu.jsp"%>
 	<table align="left">
 		<tr>
 			<td>
-				<strong>支付失败</strong>
+				<c:if test="${infoMsg!=null}">
+					${infoMsg}
+				</c:if>
 			</td>
-		<tr>
-		<tr>
-			<td>${infoMsg }</td>
-		<tr>
-	</table>	
-</c:if>
-<c:if test="${infoMsg ==null}">
-	<table align="left">
+		</tr>
 		<tr>
 			<td>
-				<strong>支付详情</strong>
-			</td>
-		<tr>
-		<tr>
-			<td class="label">订单号：</td>
-		<tr>
-		<tr>
-			<td>${order.orderno }</td>
-		<tr>
-		<tr>
-			<td class="label">金额：</td>
-		<tr>
-		<tr>
-			<td>${order.price }</td>
-		<tr>
-		<tr>
-			<td>
-				<input class="submit" type="button" value="微信支付" onclick="pay()"/>
+				<c:if test="${state==0 }">
+				<form action="weixin/user/cellnum.html" method="post">
+					<table>
+						<tr>
+							<td class="label">手机号:</td>
+						</tr>
+						<tr>
+							<td>
+								<input class="inputtext" id="cellnum" type="text" name="cellnum" value="${cellnum }"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input class="submit"  type="submit" value="确定" />
+							</td>
+						</tr>
+					</table>
+				</form>			
+				</c:if>
+				
+				<c:if test="${state==1 }">
+				<form action="weixin/user/authcode.html" method="post">
+					<table>
+						<tr>
+							<td class="label">验证码:</td>
+						</tr>
+						<tr>
+							<td>
+								<input class="inputtext" id="authcode" type="text" name="authcode"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input class="submit" type="submit" value="确定" />
+							</td>
+						</tr>
+					</table>
+				</form>	
+				</c:if>
 			</td>
 		</tr>
 	</table>
-</c:if>
 </body>
 </html>

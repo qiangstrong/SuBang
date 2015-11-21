@@ -108,14 +108,14 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/modify")
-	public ModelAndView modify(@Valid Order order, BindingResult result) {
+	public ModelAndView modify(Order order) {
 		ModelAndView view = new ModelAndView();
 		if (order.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
-			view.addObject("order", order);
-		} else if (!result.hasErrors()) {
+		} else {
 			orderService.modifyOrder(order);
 		}
+		view.addObject("order", order);
 		prepare(view);
 		view.setViewName(WebConst.BACK_PREFIX + "/order/modify");
 		return view;
@@ -183,7 +183,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		Clothes clothes = new Clothes();
 		clothes.setOrderid(orderid);
-		view.addObject("clothes", new Clothes());
+		view.addObject("clothes", clothes);
 		view.setViewName(WebConst.BACK_PREFIX + "/order/addclothes");
 		return view;
 	}

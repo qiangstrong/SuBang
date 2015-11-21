@@ -65,15 +65,16 @@
 								<tr id="address_list_2478947" class="address_list">
 									<td style="width:20px;background:#fff"></td>
 									<td style="padding:0 0px">
-										<div class="ui-btn ui-icon-carat-r">
+										<div class="ui-btn ui-icon-carat-r" style="height: 74px">
 											<div>
 												<span ontouchstart="" class="bigf address_text">${addrDetail.name
 													}</span> <span>${addrDetail.cellnum }</span><span>${addrDetail.cityname
 													}</span><span>${addrDetail.districtname }</span>
 
 											</div>
-											<p ontouchstart="" class="address_text p_address">
-												${addrDetail.regionname } ${addrDetail.detail }</p>
+											<p ontouchstart="" class="address_text p_address"
+												style="top: 48px">${addrDetail.regionname }
+												${addrDetail.detail }</p>
 
 
 											<img src="/css/weixin/ccsjsp/addr/order_arrow.png"
@@ -81,11 +82,12 @@
 										</div> <!-- 删除按钮 -->
 										<div class="behind">
 											<a class="delete-btn ui-btn "
-												onclick="show_tip(&#39;2478947&#39;)"> <img
+												onclick="show_tip('${addrDetail.id}')"> <img
 												src="/css/weixin/ccsjsp/addr/address_delete.png"> </a>
 										</div> <input type="hidden" value="" id="order_address_id">
 										<input type="hidden" value="" id="delete_id">
-										<div class="borderD"></div></td>
+										<div class="borderD"></div>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -115,9 +117,7 @@
 				<div class="borderD"></div>
 				<div class="wx_confirm_btns" style="position:relative">
 					<button type="cancel" onclick="close_tip();" id="codGoPay">取消</button>
-					<button type="submit"
-						onclick="javascript:window.location.href='weixin/addr/delete.html?addrid=${addrDetail.id}'"
-						id="gotodelete">确定</button>
+					<button type="submit" onclick="toDeleteAddress();" id="gotodelete">确定</button>
 					<div class="borderL"></div>
 				</div>
 			</div>
@@ -190,26 +190,22 @@
 	  function enable_scroll() {
 	      $(document).unbind('touchmove', prevent_default)
 	  }
-	 /*
-	  function toDeleteAddress(){
-	      $("#confirm_win").hide();
-		  var delete_id = $("#delete_id").val();
-		  var sign = "delete";
-		  var url = "mobile.php?m=wap&act=address&do=manage_address&city_id=1&mark=66d5e0da-65b8-11e5-a990-5cb901892a54";
-	      var submit_data = {address_id:delete_id,sign:sign};
-          $.post(url, submit_data, function(data){
-        	    var len = $('#addr_wrap tr.address_list:visible').length;
-        		if(len <= 1){
-                	// alter_to_url('地址删除成功', "mobile.php?m=wap&act=address&do=address_list&city_id=1&mark=66d5e0da-65b8-11e5-a990-5cb901892a54");
-                  window.location = "mobile.php?m=wap&act=address&do=address_list&city_id=1&mark=66d5e0da-65b8-11e5-a990-5cb901892a54";
-            	}else{
-                 	$('#address_list_' + delete_id).fadeOut(500, function(){
-                   		$(this).remove();
-                	});
-            	}
-          });
-	   }
-	   */
+	 function toDeleteAddress() {
+	   var form = document.createElement("form");
+
+	   var input = document.createElement("input");
+	   input.setAttribute("name", "addrid");
+	  input.setAttribute("type", "hidden");
+	  input.setAttribute("value", $("#delete_id").val());
+
+	  form.appendChild(input);
+	  form.method = "GET";
+	  form.action = "weixin/addr/delete.html";
+
+	  document.body.appendChild(form);
+	  form.submit();
+	};
+	 
 	   
 	   function show_tip($delete_id){
 			$("#confirm_win").show();

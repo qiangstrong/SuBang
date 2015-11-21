@@ -1604,7 +1604,7 @@ ul li.mobile-font a, ul li.mobile-font a:visited, ul li.mobile-font a:hover, ul 
 	padding: 6px 0;
 	margin: 10px;
 }
-.edaixi_logo {
+.subang_logo {
 	position: absolute;
 	top: 18%;
 	left: 2%;
@@ -1631,17 +1631,17 @@ ul li.mobile-font a, ul li.mobile-font a:visited, ul li.mobile-font a:hover, ul 
 	color: #666;
 }
 @media screen and (max-width:720px) {
-.edaixi_logo {
+.subang_logo {
 	height: 80px;
 }
 }
 @media screen and (max-width:414px) {
-.edaixi_logo {
+.subang_logo {
 	height: 68px;
 }
 }
 @media screen and (max-width:375px) {
-.edaixi_logo {
+.subang_logo {
 	height: 68px;
 }
 .validity_time p {
@@ -1652,7 +1652,7 @@ ul li.mobile-font a, ul li.mobile-font a:visited, ul li.mobile-font a:hover, ul 
 .loginInfo {
 	top: 22%;
 }
-.edaixi_logo {
+.subang_logo {
 	height: 60px;
 }
 .validity_time p {

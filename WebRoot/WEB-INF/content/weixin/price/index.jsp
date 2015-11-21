@@ -28,7 +28,7 @@
 	src="css/weixin/ccsjsp/price/price_helper-5e11375e718f8a3eebfc752fa7666b1b.js"></script>
 <link href="css/weixin/ccsjsp/price/price.css" rel="stylesheet"
 	type="text/css">
-<title>洗衣家纺</title>
+<title>${category.name}价目表</title>
 <meta content="authenticity_token" name="csrf-param">
 <meta content="HyiiKD/E88uHBVBldzvyW7Z8BEneh5YgAhuLXSQMNiE="
 	name="csrf-token">
@@ -55,35 +55,12 @@ function isWeiXin(){
 <body class="gray_bg price-navbar" id="price_navbar" onmousewheel=""
 	scroll="no" style="zoom: 1;">
 	
-	<div class="order_weixin" id="orderurl">
-		<c:if test="${categoryid==1}">
-		<a class="nav_a active_nav"
-			href="weixin/price/index.html?categoryid=1" id="by_cloth_wx">洗衣计价</a><a
-			class="nav_a " href="weixin/price/index.html?categoryid=2"
-			id="by_home_textile_wx">洗鞋计价</a> <a class="nav_a "
-			href="weixin/price/index.html?categoryid=3" id="by_home_textile_wx">家纺计价</a>
-		<a class="nav_right " href="weixin/price/bag.html" id="by_bag_wx">按袋计价</a>
-		</c:if>
-		<c:if test="${categoryid==2}">
-		<a class="nav_a"
-			href="weixin/price/index.html?categoryid=1" id="by_cloth_wx">洗衣计价</a><a
-			class="nav_a active_nav" href="weixin/price/index.html?categoryid=2"
-			id="by_home_textile_wx">洗鞋计价</a> <a class="nav_a "
-			href="weixin/price/index.html?categoryid=3" id="by_home_textile_wx">家纺计价</a>
-		<a class="nav_right " href="weixin/price/bag.html" id="by_bag_wx">按袋计价</a>
-		</c:if>
-		<c:if test="${categoryid==3}">
-		<a class="nav_a"
-			href="weixin/price/index.html?categoryid=1" id="by_cloth_wx">洗衣计价</a><a
-			class="nav_a " href="weixin/price/index.html?categoryid=2"
-			id="by_home_textile_wx">洗鞋计价</a> <a class="nav_a active_nav"
-			href="weixin/price/index.html?categoryid=3" id="by_home_textile_wx">家纺计价</a>
-		<a class="nav_right " href="weixin/price/bag.html" id="by_bag_wx">按袋计价</a>
-		</c:if>
-	</div>
 	
 	<div id="container">
 		<div class="washing_cloth" style="margin-bottom: 80px;">
+			<div class="title">
+				<div class="text-center">${category.name}价目表</div>
+			</div>
 			<div class="title">
 				<div class="text-center">专业洗衣服务，72小时内送回</div>
 			</div>

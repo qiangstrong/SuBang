@@ -55,7 +55,7 @@
 			<!-- 一般品类 -->
 			<div class="commonWashing">
 
-				<c:forEach var="category" items="${categorys }">
+				<c:forEach var="category" items="${categorys}">
 					<a href="weixin/order/showadd.html?categoryid=${category.id}">
 					<div class="menu-list">
 						<img class="img-icon" src="${category.icon}" />
@@ -66,6 +66,15 @@
 					</div>
 					</a>
 				</c:forEach>
+					<!--  <a href="weixin/order/showadd.html?categoryid=3">
+					<div class="menu-list">
+						<img class="img-icon" src="image/info/category/家纺.png" />
+						<div class="list-right">
+							<p class="list-type">家纺</p>
+							<p class="list-price">0000000</p>
+						</div>
+					</div>
+					</a>-->
 			</div>
 			<div class="clearBoth"></div>
 
@@ -84,10 +93,6 @@
 					<!--<a href="weixin/region/scope.html?cityid=${city.id}">-->
 					<a href="weixin/region/scope.html?cityid=${city.id}">
 						<p class="ser-font">服务范围</p> </a>
-				</div>
-				<div class="service-list" align="center">
-					<a href="weixin/price/index.html?categoryid=1">
-						<p class="ser-font">价目指引</p> </a>
 				</div>
 				<div class="clearBoth"></div>
 				<!-- 页底：功能按钮 end -->

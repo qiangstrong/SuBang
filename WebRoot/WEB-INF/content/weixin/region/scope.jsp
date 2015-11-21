@@ -58,10 +58,6 @@ function isWeiXin(){
 			</div>
 		</div>
 	</div>
-	
-	<div>
-		<a href="weixin/region/index.html"><FONT color=blue size=5>返回</FONT></a>
-   </div>
 </body>
 
 </html>

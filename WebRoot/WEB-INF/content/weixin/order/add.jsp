@@ -26,13 +26,12 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <base href="<%=basePath%>">
-<title>下单</title>
-<link href="css/weixin/ccsjsp/order/index/order.css" rel="stylesheet"
+<title>${category.name}下单</title>
+<link href="css/weixin/ccsjsp/order/index/order1.css" rel="stylesheet"
 	type="text/css">
-<link href="css/weixin/ccsjsp/order/index/base.css" rel="stylesheet"
+<link href="css/weixin/ccsjsp/order/index/base1.css" rel="stylesheet"
 	type="text/css">
-<link href="css/weixin/ccsjsp/order/index/index.css" rel="stylesheet"
-	type="text/css">
+
 <!--  <link rel="stylesheet" type="text/css" href="css/style.css"/>  -->
 <script type="text/javascript" src="js/weixin/user.js"></script>
 <script type="text/javascript" src="js/weixin/jquery-1.7.1.min.js"></script>
@@ -57,59 +56,50 @@
 			action="weixin/order/add.html" method="post">
 			<input type="hidden" name="categoryid" id="categoryid"
 				value="${order.categoryid}">
-
+			<input type="hidden" name="addrid" id="addrid"
+				value="${addrDetail.id}">
 			<div class="wrap_index">
-				<!-- 有常用地址 -->
 				<div class="add_bg"></div>
-				<section class="section" id="select_address">
-					<div class="wrap_filter" style="display:none"></div>
+				<form:errors path="addrid" />
+				<section class="address-handle section" id="address-handle">
 					<span class="arrow-left" style="top:44%"></span>
-					<form:errors path="addrid" />
-					<c:if test="${fn:length(addrDetails) == 0 }">
-						<div class="address_icon icon_gray"></div>
-						<a href="weixin/addr/showadd.html"><span class="m_input">
-								添加地址</span> </a>
-						<span class="arrow-left" style="top:44%"></span>
+					
+					<!-- 没有常用地址 -->
+					<c:if test="${addrDetail == null }">
+						<a href="weixin/addr/index.html"><div>
+								<font size="4px">请您添加地址</font>
+							</div> </a>
 					</c:if>
-					<c:if test="${fn:length(addrDetails) != 0 }">
-						<div class="selectBox  selectcont y_hover">
-							<select class="select01 range J_shippingDateSelect select_J_ytag"
-								id="addrid" name="addrid"
-								onfocus="this.style.color=&#39;#3e3e3e&#39;;">
-								<!--弹出  -->
-								<c:forEach var="addrDetail" items="${addrDetails}">
-									<option value="${addrDetail.id }"
-										<c:if test="${addrDetail.id==defaultAddrid }">selected="selected"</c:if>>
-										${addrDetail}</option>
-								</c:forEach>
-							</select>
-							<div class="Selected  selectBx" id="washing_time_div">请选择详细地址</div>
-							<span class="arrow-left" style="top:36%"></span>
-						</div>
+
+					<!-- 有常用地址 -->
+					<c:if test="${addrDetail != null }">
+						<a href="weixin/order/addr.html?categoryid=${category.id}">
+							<div class=" wuliu-div">
+								<img src="css/weixin/ccsjsp/order/index/icon_name.png">${addrDetail.name}
+							</div>
+							<div class=" wuliu-div">
+								<img src="css/weixin/ccsjsp/order/index/icon_phone.png">${addrDetail.cellnum}
+							</div>
+							<div class="clearBoth"></div>
+							<div class="address_detail">
+								<div class=" wuliu-div textOverflow2">
+									<img src="css/weixin/ccsjsp/order/index/icon_location.png">${addrDetail.detail}
+								</div>
+							</div>
+						</a>
 					</c:if>
-					<div class="borderD2" style="padding-top:9px;margin-left:10px"></div>
 				</section>
-
-				<section>
-					<textarea class="textarea" id="addridtxt" name="addridtxt"
-						readonly="readonly" onfocus="this.style.color=&#39;#3e3e3e&#39;;"
-						placeholder="选择后在这里显示详细地址"></textarea>
-				</section>
-
-				<script type="text/javascript">
-                        document.getElementById("addrid").onchange=function(){
-                        document.getElementById("addridtxt").value=this.options[this.options.selectedIndex].text;
-                        }
-                        </script>
-
-
-
+				<div class="add_bg"></div>
+				<div class="p5"></div>
 
 				<!--  <div class="wrap_index">-->
 				<!-- 服务日期 start -->
 				<div class="borderD2"></div>
+				<section class="section" style="height: 15px">
+
+					<font color="#000000">上门取件日期及时间：</font>
+				</section>
 				<section class="section">
-					<div class="date_icon icon_gray"></div>
 					<div id="J_shipDateTemplateWrapper">
 						<div class="m_input J_shipTimeContainer">
 							<div class="selectBox  selectcont y_hover">
@@ -169,9 +159,8 @@
 
 				<div class="borderD2"></div>
 				<section>
-				<span class="show_erro">
-					<form:errors path="userComment" /><!-- 字符超过一百报错 -->
-				</span>
+					<span class="show_erro"> <form:errors path="userComment" />
+						<!-- 字符超过一百报错 --> </span>
 					<textarea class="textarea" id="userComment" name="userComment"
 						onfocus="this.style.color=&#39;#3e3e3e&#39;;"
 						style="color: #c1c1c1;" placeholder="请填写备注（选填）">${order.userComment}</textarea>
@@ -209,7 +198,7 @@
 			-->
 			<div class="service-list" align="center">
 				<a href="weixin/price/index.html?categoryid=${category.id}">
-					<p class="ser-font">价目指引</p> </a>
+					<p class="ser-font">${category.name}价目指引</p> </a>
 			</div>
 			<div class="clearBoth"></div>
 			<!-- 页底：功能按钮 end -->

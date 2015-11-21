@@ -170,15 +170,15 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		HttpSession session = request.getSession();
 		User user = getUser(session);
-		Order order = orderDao.get(orderid);
-		String prepay_id = orderService.getPrepay_id(user, order, request);
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		String prepay_id = orderService.getPrepay_id(user, orderDetail, request);
 		if (prepay_id == null) {
 			view.addObject(KEY_INFO_MSG, "支付失败。可能是您的余额不足");
 		} else {
 			String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
 					SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
 			view.addObject("json", json);
-			view.addObject("order", order);
+			view.addObject("orderDetail", orderDetail);
 		}
 		view.setViewName(VIEW_PREFIX + "/prepay");
 		return view;

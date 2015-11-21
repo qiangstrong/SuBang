@@ -105,24 +105,32 @@ public class OrderDetail extends Order implements Filter {
 		return description;
 	}
 
-	public String getTotalMoneyDes() {
+	public Double getTotalMoney() {
 		Double totalMoney;
 		if (money == null || freight == null) {
 			totalMoney = null;
 		} else {
 			totalMoney = money + freight;
 		}
-		return ComUtil.getDes(ComUtil.round(totalMoney));
+		return ComUtil.round(totalMoney);
 	}
 
-	public String getActualMoneyDes() {
+	public String getTotalMoneyDes() {
+		return ComUtil.getDes(getTotalMoney());
+	}
+
+	public Double getActualMoney() {
 		Double actualMoney;
 		if (money == null || freight == null || moneyTicket == null) {
 			actualMoney = null;
 		} else {
 			actualMoney = money + freight - moneyTicket;
 		}
-		return ComUtil.getDes(ComUtil.round(actualMoney));
+		return ComUtil.round(actualMoney);
+	}
+
+	public String getActualMoneyDes() {
+		return ComUtil.getDes(getActualMoney());
 	}
 
 	public void setPayType(Integer payType) {

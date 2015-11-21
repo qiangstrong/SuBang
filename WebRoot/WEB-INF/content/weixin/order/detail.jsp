@@ -176,16 +176,34 @@
 			</li>
 			
 			<!-- 订单信息 end -->
+			
+			<!-- 取衣员信息 start -->
+			<li class="order_item ">
+				<div class="item_list_box">
+					<div class="item_list_title">
+						<img src="css/weixin/ccsjsp/order/index/order_detail_worker.png">
+						取衣员信息
+					</div>
+					<div class="borderD" style="margin-top:4px;margin-left:14px"></div>
+				</div>
+				<div class="item_list_box item_list_con p5">
+					<div class="item_list_box">
+						姓名：<b class="blackFont">${orderDetail.workername} </b>
+					</div>
+					<div class="item_list_box"><a href="tel:${orderDetail.workercellnum}">手机：${orderDetail.workercellnum}</a></div>
+					<div class="item_list_box">备注信息：${orderDetail.workerComment}</div>
+				</div>
+				<div class="borderD2"></div>
+			</li>
+			<!-- 取衣员信息  end -->
 
 
-			<!-- 取消订单/催单等 按钮 start -->
+			<!-- 取消订单等 按钮 start -->
 			<c:if test="${orderDetail.state==0}">
 				<div class="white_bg cancel_detail">
 					<!-- 已接受 -->
 					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
-						class="public_order borderF">取消订单</a> <a
-						href="weixin/order/ .html" id="complain_btn"
-						class="public_order borderB">催单</a>
+						class="public_order borderF">取消订单</a> 
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>
@@ -195,7 +213,7 @@
 				<div class="white_bg cancel_detail">
 					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 						class="public_order borderF">取消订单</a> <a
-						href="weixin/order/ .html" id="complain_btn"
+						href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderB">支付</a>
 					<div class="clearBoth"></div>
 				</div>
@@ -211,18 +229,20 @@
 			<c:if test="${orderDetail.state==5}">
 				<!-- 已返还 -->
 				<div class="white_bg cancel_detail">
-					<a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
+					<!-- <a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
+						class="public_order borderB"> -->
+					<a href="javascript:void(0)" id="complain_btn"
 						class="public_order borderB">评价</a>
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>
-			<!-- 取消订单/催单/分享领券/投诉 按钮 end -->
+			<!-- 取消订单/分享领券/投诉 按钮 end -->
 		</ul>
 	</div>
 	<ul>
 
 
-		<div class="item_list_box p15" style="padding-top:0">物流信息</div>
+		<div class="item_list_box p15" style="padding-top:0"><img src="css/weixin/ccsjsp/order/index/order_detail_history.png" style="height: 18px">物流信息</div>
 		<li class="order_item">
 			<div class="myOrder_list order-detail-con">
 				<div class="order-logictics">

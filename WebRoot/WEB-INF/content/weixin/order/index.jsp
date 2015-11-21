@@ -119,7 +119,7 @@
 						<div class="item_list_box">
 							<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 								class="order_link order_blue">取消订单</a> <a
-								href="weixin/region/ .html" id="order_link"
+								href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="order_link"
 								class="order_link order_blue">支付</a>
 							<div class="clearBoth"></div>
 						</div>
@@ -133,8 +133,10 @@
 					</c:if> <c:if test="${orderDetail.state==5}">
 						<!-- 已返还 -->
 						<div class="item_list_box">
-							<a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
-								id="order_link" class="order_link order_blue">评价</a>
+							<a href="javascript:void(0)">
+							<!--  <a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
+								id="order_link" class="order_link order_blue">-->
+								评价</a>
 							<div class="clearBoth"></div>
 						</div>
 					</c:if> <!-- 取消订单/分享领券/投诉 按钮 end -->
