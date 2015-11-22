@@ -36,6 +36,7 @@
 			<td colspan="2">
 				<form:form modelAttribute="order" action="back/order/modify.html" method="post">
 					<form:hidden path="id"/>
+					<form:hidden path="orderno"/>
 					<table>
 						<tr>
 							<td>订单号：</td>

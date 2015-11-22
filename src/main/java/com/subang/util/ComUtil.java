@@ -21,7 +21,8 @@ public class ComUtil extends BaseUtil {
 	public static NumberFormat nf = NumberFormat.getInstance();
 	public static DecimalFormat df = new DecimalFormat("#.0");
 	public static SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
-	public static SimpleDateFormat sdf_datetime = new SimpleDateFormat("yyyyMMddHHmmss");
+	public static SimpleDateFormat sdf_datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static SimpleDateFormat sdf_timestamp = new SimpleDateFormat("yyyyMMddHHmmss"); // 用于对app的请求签名
 
 	public static String getLikeStr(String str) {
 		return "%" + str + "%";
@@ -87,14 +88,14 @@ public class ComUtil extends BaseUtil {
 
 	public static String getTimestamp() {
 		java.util.Date date = new java.util.Date();
-		return sdf_datetime.format(date);
+		return sdf_timestamp.format(date);
 	}
 
 	// 时间戳是否过期
 	public static boolean isTimestampValid(String timestamp) {
 		java.util.Date date_old = null;
 		try {
-			date_old = sdf_datetime.parse(timestamp);
+			date_old = sdf_timestamp.parse(timestamp);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

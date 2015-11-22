@@ -28,7 +28,8 @@ import com.subang.util.WebConst;
 @RequestMapping("/back/order")
 public class OrderController extends BaseController {
 
-	private static final String INDEX_PAGE = WebConst.BACK_PREFIX + "/order/index";
+	private static final String VIEW_PREFIX = WebConst.BACK_PREFIX + "/order";
+	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
 	private static final String KEY_DATA = "orderDetails";
 
 	@RequestMapping("/index")
@@ -68,6 +69,15 @@ public class OrderController extends BaseController {
 		List<OrderDetail> orderDetails = orderService.searchOrder(searchArg);
 		view.addObject(KEY_DATA, orderDetails);
 		view.setViewName(INDEX_PAGE);
+		return view;
+	}
+
+	@RequestMapping("/detail")
+	public ModelAndView getDetail(@RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		view.addObject("orderDetail", orderDetail);
+		view.setViewName(VIEW_PREFIX + "/detail");
 		return view;
 	}
 
@@ -115,8 +125,8 @@ public class OrderController extends BaseController {
 		} else {
 			orderService.modifyOrder(order);
 		}
-		view.addObject("order", order);
 		prepare(view);
+		view.addObject("order", order);
 		view.setViewName(WebConst.BACK_PREFIX + "/order/modify");
 		return view;
 	}

@@ -40,7 +40,7 @@
 					<c:forEach var="history" items="${historys}">
 						<tr>
 							<td>${history.operationDes}</td>
-							<td>${history.time}</td>
+							<td>${history.timeDes}</td>
 						</tr>
 					</c:forEach>
 				</table>

@@ -96,33 +96,13 @@
 						<th><input type="checkbox" onclick="switchCheckboxs('orderid')" /></th>
 						<th>订单号</th>
 						<th>类别</th>
-						<th>状态</th>
-						<th>金额</th>
-						<th>运费</th>						
-						<th>取件日期</th>
+						<th>状态</th>					
 						<th>取件时间</th>						
 						<th>条形码</th>
-						<th>手机号</th>
-						<th>支付类型</th>
-						<th>优惠券</th>
-						<th>明细</th>
-						<th>历史</th>
-						<th>修改</th>	
-					</tr>
-					<tr>	
-						<th>地址姓名</th>
-						<th>地址手机号</th>
-						<th>城市名称</th>
-						<th>区名称</th>
-						<th>小区名称</th>
-						<th>详细地址</th>
-						<th>取衣员姓名</th>
-						<th>取衣员手机号</th>
-					</tr>
-					<tr>	
-						<th>用户备注</th>
-						<th>取衣员备注</th>
-						<th>用户评价</th>											
+						<th>详情</th>
+						<th>明细</th>					
+						<th>历史</th>						
+						<th>修改</th>
 					</tr>
 					<c:forEach var="orderDetail" items="${orderDetails}">
 						<tr>
@@ -130,14 +110,11 @@
 							<td>${orderDetail.orderno}</td>
 							<td>${orderDetail.categoryname}</td>
 							<td>${orderDetail.stateDes}</td>
-							<td>${orderDetail.moneyDes}</td>
-							<td>${orderDetail.freightDes}</td>
-							<td>${orderDetail.dateDes}</td>
-							<td>${orderDetail.timeDes}</td>
-							<td>${orderDetail.barcodeDes}</td>							
-							<td>${orderDetail.cellnum}</td>
-							<td>${orderDetail.payTypeDes}</td>
-							<td>${orderDetail.moneyTicket}</td>
+							<td>${orderDetail.dateDes} ${orderDetail.timeDes}</td>
+							<td>${orderDetail.barcodeDes}</td>		
+							<td>
+							 	<a href="<c:url value="back/order/detail.html?orderid=${orderDetail.id}"/>">详情</a>
+							</td>					
 							<td>
 							 	<a href="<c:url value="back/order/clothes.html?orderid=${orderDetail.id}"/>">明细</a>
 							</td>
@@ -147,21 +124,6 @@
 							<td>
 							 	<a href="<c:url value="back/order/showmodify.html?orderid=${orderDetail.id}"/>">修改</a>
 							</td>
-						</tr>
-						<tr>	
-							<td>${orderDetail.addrname}</td>
-							<td>${orderDetail.addrcellnum}</td>
-							<td>${orderDetail.cityname}</td>
-							<td>${orderDetail.districtname}</td>
-							<td>${orderDetail.regionname}</td>
-							<td>${orderDetail.addrdetail}</td>
-							<td>${orderDetail.workername}</td>
-							<td>${orderDetail.workercellnum}</td>
-						</tr>
-						<tr>	
-							<td>${orderDetail.userComment}</td>
-							<td>${orderDetail.workerComment}</td>
-							<td>${orderDetail.remark}</td>
 						</tr>
 					</c:forEach>
 				</table>

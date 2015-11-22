@@ -98,6 +98,9 @@ public class OrderDetail extends Order implements Filter {
 	}
 
 	public String getPaymentDes() {
+		if (money == null || freight == null) {
+			return "未确定";
+		}
 		String description = "";
 		description += "订单￥" + getMoneyDes() + "+";
 		description += "运费￥" + getFreightDes() + "-";

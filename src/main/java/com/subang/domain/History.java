@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import com.subang.domain.Order.State;
 import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
 
 public class History implements Filter, Serializable {
 
@@ -88,6 +89,13 @@ public class History implements Filter, Serializable {
 
 	public Timestamp getTime() {
 		return time;
+	}
+
+	public String getTimeDes() {
+		if (time == null) {
+			return null;
+		}
+		return ComUtil.sdf_datetime.format(time);
 	}
 
 	public void setTime(Timestamp time) {
