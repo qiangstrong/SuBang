@@ -4,14 +4,36 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
 
 public class Payment implements Filter, Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	public enum PayType {
 		balance, weixin, alipay;
+
 		public static PayType toPayType(String arg) {
 			return PayType.values()[new Integer(arg)];
+		}
+
+		public static String toPayTypeDes(PayType payType) {
+			if (payType == null) {
+				return "未支付";
+			}
+			String description = null;
+			switch (payType) {
+			case balance:
+				description = "余额";
+				break;
+			case weixin:
+				description = "微信";
+				break;
+			case alipay:
+				description = "支付宝";
+				break;
+			}
+			return description;
 		}
 	}
 
@@ -20,20 +42,20 @@ public class Payment implements Filter, Serializable {
 	private Double moneyTicket;
 	private String prepay_id; // 微信预支付id
 	private Timestamp time;
-	private Integer orderid;
+	private String orderno;
 
 	public Payment() {
 		this.moneyTicket = 0.0;
 	}
 
 	public Payment(Integer id, Integer type, Double moneyTicket, String prepay_id, Timestamp time,
-			Integer orderid) {
+			String orderno) {
 		this.id = id;
 		this.type = type;
 		this.moneyTicket = moneyTicket;
 		this.prepay_id = prepay_id;
 		this.time = time;
-		this.orderid = orderid;
+		this.orderno = orderno;
 	}
 
 	public Integer getId() {
@@ -68,7 +90,7 @@ public class Payment implements Filter, Serializable {
 	}
 
 	public void setMoneyTicket(Double moneyTicket) {
-		this.moneyTicket = moneyTicket;
+		this.moneyTicket = ComUtil.round(moneyTicket);
 	}
 
 	public String getPrepay_id() {
@@ -87,12 +109,12 @@ public class Payment implements Filter, Serializable {
 		this.time = time;
 	}
 
-	public Integer getOrderid() {
-		return orderid;
+	public String getOrderno() {
+		return orderno;
 	}
 
-	public void setOrderid(Integer orderid) {
-		this.orderid = orderid;
+	public void setOrderno(String orderno) {
+		this.orderno = orderno;
 	}
 
 	public void doFilter(Object object) {
@@ -112,8 +134,8 @@ public class Payment implements Filter, Serializable {
 		if (this.time == null) {
 			payment.time = null;
 		}
-		if (this.orderid == null) {
-			payment.orderid = null;
+		if (this.orderno == null) {
+			payment.orderno = null;
 		}
 	}
 

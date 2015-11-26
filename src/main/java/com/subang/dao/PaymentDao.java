@@ -22,9 +22,9 @@ public class PaymentDao extends BaseDao<Payment> {
 		return payment;
 	}
 
-	public Payment getByOrderid(Integer orderid) {
-		String sql = "select * from payment_t where orderid=?";
-		Object[] args = { orderid };
+	public Payment getByOrderno(String orderno) {
+		String sql = "select * from payment_t where orderno=?";
+		Object[] args = { orderno };
 		Payment payment = null;
 		try {
 			payment = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<Payment>(
@@ -37,14 +37,14 @@ public class PaymentDao extends BaseDao<Payment> {
 	public void save(Payment payment) {
 		String sql = "insert into payment_t values(null,?,?,?,?,?)";
 		Object[] args = { payment.getType(), payment.getMoneyTicket(), payment.getPrepay_id(),
-				payment.getTime(), payment.getOrderid() };
+				payment.getTime(), payment.getOrderno() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Payment payment) {
-		String sql = "update payment_t set type=?,money_ticket=?,prepay_id=?,time=?,orderid=? where id=?";
+		String sql = "update payment_t set type=?,money_ticket=?,prepay_id=?,time=?,orderno=? where id=?";
 		Object[] args = { payment.getType(), payment.getMoneyTicket(), payment.getPrepay_id(),
-				payment.getTime(), payment.getOrderid(), payment.getId() };
+				payment.getTime(), payment.getOrderno(), payment.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

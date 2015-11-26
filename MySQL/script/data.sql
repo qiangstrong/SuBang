@@ -72,6 +72,9 @@ insert into service_t values(null,2,1);
 insert into service_t values(null,2,2);
 insert into ticket_type_t values(null,'速帮洗衣券',null,10,20,null,'使用积分购买，无使用期限。不兑换，不找零。',1);
 insert into ticket_type_t values(null,'速帮洗鞋券',null,19,38,null,'使用积分购买，无使用期限。不兑换，不找零。',2);
+insert into banner_t values(null,null,'image/info/banner/banner_1.png',null);
+insert into banner_t values(null,null,'image/info/banner/banner_2.png',null);
+insert into banner_t values(null,null,'image/info/banner/banner_3.png',null);
 insert into laundry_t values(null,'洗衣店1号','15502457990','辽宁省沈阳市和平区文化路3号巷11号','第一个洗衣店');
 
 insert into admin_t values(null,'admin','admin');

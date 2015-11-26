@@ -10,65 +10,64 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>绑定手机号</title>
+	<title>修改横幅</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-	<%@ include file="../common/menu.jsp"%>
-	<table align="left">
+	<c:if test="${errMsg!=null}">
+		<script>
+			alert('${errMsg}');
+		</script>
+	</c:if>
+	<%@ include file="../common/header.jsp"%>
+	<%@ include file="activityheader.jsp"%>
+	<table align="center">
 		<tr>
 			<td>
 				<c:if test="${infoMsg!=null}">
 					${infoMsg}
 				</c:if>
 			</td>
+			<td align="right"></td>
 		</tr>
 		<tr>
-			<td>
-				<c:if test="${state==0 }">
-				<form action="weixin/user/cellnum.html" method="post">
+			<td colspan="2">
+				<form:form modelAttribute="banner" action="back/activity/modifybanner.html" method="post" enctype="multipart/form-data">
+					<form:hidden path="id"/>					
 					<table>
 						<tr>
-							<td class="label">手机号:</td>
+							<td></td>
+							<td><form:errors path="link" /></td>
 						</tr>
 						<tr>
-							<td>
-								<input class="inputtext" id="cellnum" type="text" name="cellnum" value="${cellnum }"/>
-							</td>
+							<td>链接：</td>
+							<td><form:input path="link" /></td>
 						</tr>
 						<tr>
-							<td>
-								<input class="submit"  type="submit" value="确定" />
-							</td>
+							<td>图标：</td>
+							<td><img  src="${banner.icon}" /></td>
+						</tr>
+						<tr>
+							<td>图标：</td>
+							<td><input type="file" name="iconImg"/></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="comment" /></td>
+						</tr>
+						<tr>
+							<th>备注：</th>
+							<td><textarea rows="5" cols="135" name="comment">${banner.comment}</textarea></td>
+						</tr>	
+						<tr >
+							<td><input type="submit" value="修改" /></td>
+							<td><input type="reset" value="重置" /></td>
 						</tr>
 					</table>
-				</form>			
-				</c:if>
-				
-				<c:if test="${state==1 }">
-				<form action="weixin/user/authcode.html" method="post">
-					<table>
-						<tr>
-							<td class="label">验证码:</td>
-						</tr>
-						<tr>
-							<td>
-								<input class="inputtext" id="authcode" type="text" name="authcode"/>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input class="submit" type="submit" value="确定" />
-							</td>
-						</tr>
-					</table>
-				</form>	
-				</c:if>
+				</form:form>
 			</td>
 		</tr>
 	</table>

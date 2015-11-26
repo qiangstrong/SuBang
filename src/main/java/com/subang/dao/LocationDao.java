@@ -24,16 +24,16 @@ public class LocationDao extends BaseDao<Location> {
 	}
 
 	public void save(Location location) {
-		String sql = "insert into location_t values(null,?,?,now(),?,?)";
-		Object[] args = { location.getLatitude(), location.getLongitude(), location.getCityid(),
-				location.getUserid() };
+		String sql = "insert into location_t values(null,?,?,?,?,?)";
+		Object[] args = { location.getLatitude(), location.getLongitude(), location.getTime(),
+				location.getCityid(), location.getUserid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Location location) {
-		String sql = "update location_t set latitude=? ,longitude=? ,time=now(), cityid=?, userid=? where id=?";
-		Object[] args = { location.getLatitude(), location.getLongitude(), location.getCityid(),
-				location.getUserid(), location.getId() };
+		String sql = "update location_t set latitude=? ,longitude=? ,time=?, cityid=?, userid=? where id=?";
+		Object[] args = { location.getLatitude(), location.getLongitude(), location.getTime(),
+				location.getCityid(), location.getUserid(), location.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

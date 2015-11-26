@@ -133,8 +133,8 @@
 								src="css/weixin/ccsjsp/user/index/yijian_fank.png">
 							</td>
 							<td>
-							<a href="javascript:void(0)">
-							<!--<a href="weixin/info/feedback.html?userid=${user.id} " target="_black"> -->
+							<!-- <a href="javascript:void(0)">-->
+							<a href="weixin/info/showaddfeedback.html">
 									<div class="list-titel no-img">
 										意见反馈 <img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"

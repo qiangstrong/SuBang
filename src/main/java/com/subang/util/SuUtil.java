@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.FieldError;
@@ -72,6 +73,12 @@ public class SuUtil extends BaseUtil {
 
 	public static String getRealPath(String path) {
 		return servletContext.getRealPath(path);
+	}
+
+	public static String getBasePath(HttpServletRequest request) {
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":"
+				+ request.getServerPort() + request.getContextPath() + "/";
+		return basePath;
 	}
 
 	// 获取与app相关的配置

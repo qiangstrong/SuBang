@@ -1,5 +1,6 @@
 delimiter $$
 
+drop procedure if exists stat $$
 create procedure `stat` (`type0` int, `type1` int, `type2` int)
 begin
 	case type0
@@ -36,8 +37,8 @@ end
 $$
 
 #统计完整的，不完整的区域
-#只统计处于已完成状态的订单
-#只统计曾经下过订单（无论订单是完成还是取消）的用户
+#统计处于各种状态的订单
+drop procedure if exists statOrderNumByCity $$
 create procedure `statOrderNumByCity` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 
@@ -48,12 +49,12 @@ from (
 	select city_t.id 'cityid', order_t.id 'orderid'
     from city_t, district_t, region_t, addr_t, order_t
     where city_t.id=district_t.cityid and district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.id=order_t.addrid 
-    and order_t.state=2
 ) as second_t on first_t.cityid=second_t.cityid
 group by first_t.cityid;
 end
 $$
 
+drop procedure if exists statOrderNumByDistrict $$
 create procedure `statOrderNumByDistrict` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 
@@ -65,12 +66,12 @@ from (
 	select district_t.id 'districtid', order_t.id 'orderid'
     from district_t, region_t, addr_t, order_t
     where district_t.id=region_t.districtid and region_t.id=addr_t.regionid and addr_t.id=order_t.addrid 
-    and order_t.state=2
 ) as second_t on first_t.districtid=second_t.districtid
 group by first_t.districtid;
 end
 $$
 
+drop procedure if exists statOrderNumByRegion $$
 create procedure `statOrderNumByRegion` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 
@@ -82,7 +83,6 @@ from (
 	select region_t.id 'regionid', order_t.id 'orderid'
     from region_t, addr_t, order_t
     where region_t.id=addr_t.regionid and addr_t.id=order_t.addrid 
-    and order_t.state=2
 ) as second_t on first_t.regionid=second_t.regionid
 group by first_t.regionid;
 end
@@ -90,6 +90,7 @@ $$
 
 #用户没有区域之分,实际统计的是地址的数量
 #统计valid=1的地址
+drop procedure if exists statUserNumByCity $$
 create procedure `statUserNumByCity` ()
 begin
 select first_t.name 'name', count(second_t.addrid) 'quantity' 
@@ -105,6 +106,7 @@ group by first_t.cityid;
 end
 $$
 
+drop procedure if exists statUserNumByDistrict $$
 create procedure `statUserNumByDistrict` ()
 begin
 select first_t.name 'name', count(second_t.addrid) 'quantity' 
@@ -121,6 +123,7 @@ group by first_t.districtid;
 end
 $$
 
+drop procedure if exists statUserNumByRegion $$
 create procedure `statUserNumByRegion` ()
 begin
 select first_t.name 'name', count(second_t.addrid) 'quantity' 
@@ -137,33 +140,34 @@ group by first_t.regionid;
 end
 $$
 
-#统计处于关注和取消关注状态的用户
-#统计处于完成状态的订单
+
+drop procedure if exists statOrderNumByUser $$
 create procedure `statOrderNumByUser` ()
 begin
 select first_t.name 'name', count(second_t.orderid) 'quantity' 
 from (
-	select user_t.nickname 'name', user_t.id 'userid'
+	select user_t.cellnum 'name', user_t.id 'userid'
     from user_t
 ) as first_t left join (
 	select user_t.id 'userid', order_t.id 'orderid'
     from user_t, order_t 
-	where user_t.id=order_t.userid and order_t.state=2
+	where user_t.id=order_t.userid
 ) as second_t on first_t.userid=second_t.userid
 group by first_t.userid;
 end
 $$
 
+drop procedure if exists statPriceAvgByUser $$
 create procedure `statPriceAvgByUser` ()
 begin
 select first_t.name 'name', avg(second_t.money) 'quantity' 
 from (
-	select user_t.nickname 'name', user_t.id 'userid'
+	select user_t.cellnum 'name', user_t.id 'userid'
     from user_t
 ) as first_t left join (
-	select user_t.id 'userid', order_t.money 'money'
+	select user_t.id 'userid', order_t.money+order_t.freight 'money'
     from user_t, order_t 
-	where user_t.id=order_t.userid and order_t.money is not null 
+	where user_t.id=order_t.userid and order_t.money is not null and order_t.freight is not null
 ) as second_t on first_t.userid=second_t.userid
 group by first_t.userid;
 end

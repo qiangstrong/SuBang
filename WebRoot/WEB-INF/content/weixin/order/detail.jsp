@@ -123,8 +123,8 @@
 						</div>
 						<div class="borderD"></div>
 						<div class="p5">
-							订单￥${orderDetail.money}+运费￥${orderDetail.freight}-优惠券￥${orderDetail.moneyTicket}
-							<div>实付款：￥${orderDetail.money+orderDetail.freight-orderDetail.moneyTicket}</div>
+							${orderDetail.paymentDes}
+							<div>实付款：${orderDetail.actualMoneyDes}</div>
 						</div>
 					</div>
 					<div class="borderD2"></div>
@@ -168,9 +168,9 @@
 						${orderDetail.timeDes}</div>
 					<div class="item_list_box">服务项目：${orderDetail.categoryname}</div>
 					<div class="item_list_box">备注信息：${orderDetail.userComment}</div>
-					<c:if test="${orderDetail.state==6}">
+					<!--<c:if test="${orderDetail.state==6}">
 					<div class="item_list_box">用户评价：${orderDetail.remark}</div>
-					</c:if>
+					</c:if>-->
 				</div>
 				<div class="borderD2"></div>
 			</li>
@@ -203,7 +203,7 @@
 				<div class="white_bg cancel_detail">
 					<!-- 已接受 -->
 					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
-						class="public_order borderF">取消订单</a> 
+						class="public_order borderF">取消</a> 
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>
@@ -212,9 +212,9 @@
 				<!-- 已计价 -->
 				<div class="white_bg cancel_detail">
 					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
-						class="public_order borderF">取消订单</a> <a
+						class="public_order borderF">取消</a> <a
 						href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="complain_btn"
-						class="public_order borderB">支付</a>
+						class="public_order borderF"><font color="#f86005">支付</font></a>
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>
@@ -222,7 +222,7 @@
 				<!-- 已分拣 -->
 				<div class="white_bg cancel_detail">
 					<a href="weixin/order/deliver.html?orderid=${orderDetail.id}" id="complain_btn"
-						class="public_order borderB">送达</a>
+						class="public_order borderF"><font color="#f86005">送达</font></a>
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>
@@ -231,8 +231,8 @@
 				<div class="white_bg cancel_detail">
 					<!-- <a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderB"> -->
-					<a href="javascript:void(0)" id="complain_btn"
-						class="public_order borderB">评价</a>
+					<a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
+						class="public_order borderF"><font color="#f86005">评价</font></a>
 					<div class="clearBoth"></div>
 				</div>
 			</c:if>

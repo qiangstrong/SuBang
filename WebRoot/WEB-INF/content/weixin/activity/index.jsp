@@ -10,20 +10,13 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>404-速帮到家</title>
+	<title>Insert title here</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 </head>
 <body>
-	<table align="center">
-		<tr>
-		<td>
-			<strong>Error 404：</strong>抱歉，您要访问的页面不存在。<br>
-			有可能我们的网页正在维护或者您输入的网址不正确
-		</td>
-		</tr>
-	</table>
+
 </body>
 </html>

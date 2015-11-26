@@ -12,7 +12,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <meta charset="utf-8">
 <meta
 	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
@@ -34,7 +33,7 @@
 				if(res.err_msg == 'get_brand_wcpay_request:ok'){
 					window.location.href = "weixin/order/index.html?type=2";
 				}else if(res.err_msg == 'get_brand_wcpay_request:fail'){					
-					alert(res.err_msg);
+					alert("支付失败。");
 				}
 			});
 		}
@@ -66,10 +65,7 @@
 	</div>
 	<div class="pay_manner white_bg">
 			<div class="item_list_box">
-				<img src="css/weixin/ccsjsp/order/index/weixinzhifu.png"> 微信支付 <span
-					class="pull-right orange_color"> <input id="ali_pay"
-					type="radio" name="paytype" value="6" checked="checked"> <label
-					for="ali_pay"><b></b> </label> </span>
+				<img src="css/weixin/ccsjsp/order/index/weixinzhifu.png"> 微信支付 
 			</div>
 			<div class="borderD"></div>
 			<div class="clear"></div>
@@ -84,7 +80,7 @@
 				<div class="item_list_btn">
 					<div class="chongzhi_btns" style="padding-right:0">
 						<button id="erro" class="pay_btn link-btn-all"
-							style="background: rgb(169,169,169)" onclick="pay()">支付失败
+							style="background: rgb(169,169,169)" onclick="pay()">
 							${infoMsg }</button>
 					</div>
 				</div>

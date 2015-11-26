@@ -12,6 +12,7 @@ public class DayJob extends BaseJob {
 		LOG.info("调度器执行");
 		StratUtil.reset();
 
+		userService.reset();
 		regionService.check();
 		priceService.check();
 		workerService.check();

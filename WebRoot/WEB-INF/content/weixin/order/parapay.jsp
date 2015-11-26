@@ -10,20 +10,13 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>400-速帮到家</title>
+	<title>Insert title here</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 </head>
 <body>
-	<table align="center">
-		<tr>
-		<td>
-			<strong>Error 400：</strong>抱歉，请求参数不正确。<br>
-			请检查您输入的网址是否正确。
-		</td>
-		</tr>
-	</table>
+
 </body>
 </html>

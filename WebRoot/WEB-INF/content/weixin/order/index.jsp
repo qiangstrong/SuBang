@@ -102,7 +102,7 @@
 							<div class="item_list_box">订单编号：${orderDetail.orderno }</div>
 							<div class="item_list_box">取件时间：${orderDetail.dateDes}
 								${orderDetail.timeDes}</div>
-							<div class="item_list_box">订单金额：${orderDetail.moneyDes}</div>
+							<div class="item_list_box">订单金额：${orderDetail.totalMoneyDes}</div>
 						</div> </a>
 					<div class="clearBoth"></div> <c:if test="${orderDetail.state==0}">
 						<div class="item_list_money navlist">
@@ -110,7 +110,7 @@
 							<div class="item_list_box">
 								<div class="borderD"></div>
 								<a class="order_link order_blue" id="order_link"
-									href="weixin/order/cancel.html?orderid=${orderDetail.id}">取消订单</a>
+									href="weixin/order/cancel.html?orderid=${orderDetail.id}">取消</a>
 								<div class="clearBoth"></div>
 							</div>
 						</div>
@@ -118,7 +118,7 @@
 						<!-- 已计价 -->
 						<div class="item_list_box">
 							<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
-								class="order_link order_blue">取消订单</a> <a
+								class="order_link order_blue">取消</a> <a
 								href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="order_link"
 								class="order_link order_blue">支付</a>
 							<div class="clearBoth"></div>
@@ -133,7 +133,8 @@
 					</c:if> <c:if test="${orderDetail.state==5}">
 						<!-- 已返还 -->
 						<div class="item_list_box">
-							<a href="javascript:void(0)">
+							<a href="javascript:void(0)"
+								id="order_link" class="order_link order_blue">
 							<!--  <a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
 								id="order_link" class="order_link order_blue">-->
 								评价</a>

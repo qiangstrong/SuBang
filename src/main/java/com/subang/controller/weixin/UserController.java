@@ -17,6 +17,8 @@ import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
+import com.subang.util.StratUtil;
+import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -59,6 +61,7 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
 		setUser(session, matchUser);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
 		return view;
@@ -165,6 +168,7 @@ public class UserController extends BaseController {
 		}
 		session.removeAttribute(KEY_CELLNUM);
 		user = userDao.getByOpenid(user.getOpenid());
+		StratUtil.updateScore(user.getId(), ScoreType.login, null);
 		setUser(session, user);
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
 		return view;

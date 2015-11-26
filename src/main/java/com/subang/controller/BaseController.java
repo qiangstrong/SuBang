@@ -9,6 +9,8 @@ import com.subang.bean.Identity;
 import com.subang.bean.PageState;
 import com.subang.dao.AddrDao;
 import com.subang.dao.AdminDao;
+import com.subang.dao.BalanceDao;
+import com.subang.dao.BannerDao;
 import com.subang.dao.CategoryDao;
 import com.subang.dao.CityDao;
 import com.subang.dao.ClothesDao;
@@ -53,6 +55,10 @@ public class BaseController {
 	protected AddrDao addrDao;
 	@Autowired
 	protected AdminDao adminDao;
+	@Autowired
+	protected BalanceDao balanceDao;
+	@Autowired
+	protected BannerDao bannerDao;
 	@Autowired
 	protected CategoryDao categoryDao;
 	@Autowired

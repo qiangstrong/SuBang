@@ -23,6 +23,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="activityheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>

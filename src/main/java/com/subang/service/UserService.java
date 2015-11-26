@@ -1,18 +1,36 @@
 package com.subang.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.paymch.Unifiedorder;
+import weixin.popular.bean.paymch.UnifiedorderResult;
+import weixin.popular.util.PayUtil;
+import weixin.popular.util.StringUtils;
+
+import com.subang.bean.PayArg;
+import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
+import com.subang.domain.Balance;
 import com.subang.domain.Location;
+import com.subang.domain.Order;
+import com.subang.domain.Order.OrderType;
+import com.subang.domain.Payment;
+import com.subang.domain.Payment.PayType;
 import com.subang.domain.Ticket;
 import com.subang.domain.TicketType;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
+import com.subang.util.StratUtil;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 @Service
@@ -156,11 +174,13 @@ public class UserService extends BaseService {
 		if (location_old != null) {
 			location_old.setLatitude(location_new.getLatitude());
 			location_old.setLongitude(location_new.getLongitude());
+			location_old.setTime(new Timestamp(System.currentTimeMillis()));
 			locationDao.update(location_old);
 		} else {
 			location_old = new Location();
 			location_old.setLatitude(location_new.getLatitude());
 			location_old.setLongitude(location_new.getLongitude());
+			location_old.setTime(new Timestamp(System.currentTimeMillis()));
 			location_old.setUserid(userid);
 			locationDao.save(location_old);
 		}
@@ -191,4 +211,115 @@ public class UserService extends BaseService {
 		}
 	}
 
+	/**
+	 * 余额
+	 */
+	// 由上层传递money和userid
+	private Balance addBalance(Balance balance) {
+		balance.setState(Order.State.accepted);
+		boolean flag;
+		do {
+			try {
+				balance.setOrderno(StratUtil.getOrderno(OrderType.balance));
+				flag = false;
+			} catch (DuplicateKeyException e) {
+				flag = true;
+			}
+		} while (flag);
+		balance = balanceDao.getByOrderno(balance.getOrderno());
+		return balance;
+	}
+
+	private PrepayResult payByWeixin(Integer orderid, HttpServletRequest request) {
+		PrepayResult result = new PrepayResult();
+		Balance balance = balanceDao.getDetail(orderid);
+		User user = userDao.get(balance.getUserid());
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		String prepay_id = payment.getPrepay_id();
+		if (prepay_id == null) {
+			Double money = balance.getMoney();
+
+			Unifiedorder unifiedorder = new Unifiedorder();
+			unifiedorder.setAppid(SuUtil.getAppProperty("appid"));
+			unifiedorder.setMch_id(SuUtil.getAppProperty("mch_id"));
+			unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
+			unifiedorder.setBody("用户充值");
+			unifiedorder.setOut_trade_no(balance.getOrderno());
+			Integer price = (int) (money * 100);
+			unifiedorder.setTotal_fee(price.toString());
+			unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
+			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/balance/pay.html");
+			unifiedorder.setTrade_type("JSAPI");
+			unifiedorder.setOpenid(user.getOpenid());
+
+			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder,
+					SuUtil.getAppProperty("apikey"));
+			if (!unifiedorderResult.getReturn_code().equals("SUCCESS")) {
+				LOG.error("错误码:" + unifiedorderResult.getReturn_code() + "; 错误信息:"
+						+ unifiedorderResult.getReturn_msg());
+				result.setCode(PrepayResult.Code.fail);
+				result.setMsg("可能是余额不足。");
+				return result;
+			}
+
+			if (!unifiedorderResult.getResult_code().equals("SUCCESS")) {
+				LOG.error("错误码:" + unifiedorderResult.getErr_code() + "; 错误信息:"
+						+ unifiedorderResult.getErr_code_des());
+				result.setCode(PrepayResult.Code.fail);
+				result.setMsg("可能是余额不足。");
+				return result;
+			}
+
+			payment.setType(PayType.weixin);
+			payment.setPrepay_id(unifiedorderResult.getPrepay_id());
+			paymentDao.update(payment);
+			prepay_id = payment.getPrepay_id();
+		}
+		String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
+				SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
+		result.setCode(PrepayResult.Code.conti);
+		result.setArg(json);
+		return result;
+	}
+
+	public PrepayResult prepay(PayArg payArg, Integer userid, HttpServletRequest request) {
+
+		// 生成本地订单
+		Balance balance = new Balance();
+		balance.setUserid(userid);
+		balance.setMoney(payArg.getMoney());
+		balance = addBalance(balance);
+		payArg.setOrderid(balance.getId());
+
+		PrepayResult result;
+		switch (payArg.getPayTypeEnum()) {
+		case weixin: {
+			result = payByWeixin(payArg.getOrderid(), request);
+			break;
+		}
+		default: {
+			result = new PrepayResult();
+			result.setCode(PrepayResult.Code.succ);
+		}
+		}
+		return result;
+	}
+
+	public void payBalance(String orderno) {
+		Balance balance = balanceDao.getByOrderno(orderno);
+		balance.setState(Order.State.paid);
+		balance.setTime(new Timestamp(System.currentTimeMillis()));
+		balanceDao.update(balance);
+
+		User user = userDao.get(balance.getUserid());
+		user.setMoney(user.getMoney() + balance.getMoney());
+		userDao.update(user);
+	}
+
+	/**
+	 * 自动执行
+	 */
+	public void reset() {
+		userDao.resetLogin();
+	}
 }

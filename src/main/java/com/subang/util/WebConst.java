@@ -65,5 +65,6 @@ public interface WebConst {
 	int ORDER_GET_ID = 1;
 	int ORDER_GET_BARCODE = 2;
 
-	int EXPIRED_INTERVAL = 60; // 重复通知过滤 时效60秒
+	int EXPIRED_INTERVAL = 60; // 重复通知（微信服务器发送的消息，不包括支付通知）过滤 时效60秒
+	int EXPIRED_PAY_INTERVAL = 200; // 支付通知过滤 时效200秒
 }

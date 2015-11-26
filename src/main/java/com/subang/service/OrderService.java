@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
+import weixin.popular.util.PayUtil;
 import weixin.popular.util.StringUtils;
 
 import com.subang.bean.OrderDetail;
+import com.subang.bean.PayArg;
+import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
 import com.subang.bean.TicketDetail;
 import com.subang.domain.Addr;
@@ -21,6 +24,7 @@ import com.subang.domain.Clothes;
 import com.subang.domain.History;
 import com.subang.domain.Laundry;
 import com.subang.domain.Order;
+import com.subang.domain.Order.OrderType;
 import com.subang.domain.Order.State;
 import com.subang.domain.Payment;
 import com.subang.domain.Payment.PayType;
@@ -30,6 +34,7 @@ import com.subang.domain.Worker;
 import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.StratUtil;
+import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -132,7 +137,7 @@ public class OrderService extends BaseService {
 		return orderDetails;
 	}
 
-	// 用户添加订单,工作人员使用app查询自己的订单，下单的时候生成支付信息
+	// 用户添加订单。 工作人员使用app查询自己的订单，不在给工作人员发送短信。 下单的时候生成支付信息（由数据库触发器保证）
 	public void addOrder(Order order) {
 
 		order.setState(State.accepted);
@@ -148,7 +153,7 @@ public class OrderService extends BaseService {
 		boolean flag;
 		do {
 			try {
-				order.setOrderno(StratUtil.getOrderno());
+				order.setOrderno(StratUtil.getOrderno(OrderType.order));
 				orderDao.save(order);
 				flag = false;
 			} catch (DuplicateKeyException e) {
@@ -162,10 +167,6 @@ public class OrderService extends BaseService {
 		history.setOperation(State.accepted);
 		history.setOrderid(order.getId());
 		historyDao.save(history);
-
-		Payment payment = new Payment();
-		payment.setOrderid(order.getId());
-		paymentDao.save(payment);
 
 		User user = userDao.get(order.getUserid());
 		user.setAddrid(order.getAddrid());
@@ -278,6 +279,8 @@ public class OrderService extends BaseService {
 		history.setOperation(State.remarked);
 		history.setOrderid(order.getId());
 		historyDao.save(history);
+
+		StratUtil.updateScore(order.getUserid(), ScoreType.remark, null);
 	}
 
 	public void cancelOrders(List<Integer> orderids) throws SuException {
@@ -332,63 +335,121 @@ public class OrderService extends BaseService {
 	 */
 
 	// 使用优惠券支付。true：完成支付。false：由于优惠券的金额不足，还需继续支付
-	public boolean payByTicket(Integer orderid, Integer ticketid) {
-		Order order = orderDao.get(orderid);
-		Payment payment = paymentDao.getByOrderid(orderid);
+	private PrepayResult payByTicket(Integer orderid, Integer ticketid) {
+		PrepayResult result = new PrepayResult();
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
 		TicketDetail ticketDetail = ticketDao.getDetail(ticketid);
 		ticketDao.delete(ticketid);
-		double totalMoney = order.getMoney() + order.getFreight();
-		if (totalMoney <= ticketDetail.getMoney()) {
-			payment.setType(PayType.balance);
-			payment.setMoneyTicket(totalMoney);
+		if (orderDetail.getActualMoney() > ticketDetail.getMoney()) {
+			payment.setMoneyTicket(ticketDetail.getMoney());
 			paymentDao.update(payment);
-			payOrder(order.getOrderno());
-			return true;
+			result.setCode(PrepayResult.Code.conti);
+			return result;
 		}
-		payment.setMoneyTicket(ticketDetail.getMoney());
+		payment.setType(PayType.balance);
+		payment.setMoneyTicket(orderDetail.getActualMoney());
 		paymentDao.update(payment);
-		return false;
+		payOrder(orderDetail.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
+		return result;
 	}
 
-	// 生成预支付id，管理员已经为订单指定价格。这点由前端保证。
-	public String getPrepay_id(User user, OrderDetail orderDetail, HttpServletRequest request) {
-		Payment payment = paymentDao.getByOrderid(orderDetail.getId());
-		String prepay_id = payment.getPrepay_id();
-		if (prepay_id != null) {
-			return prepay_id;
+	private PrepayResult payByBalance(Integer orderid) {
+		PrepayResult result = new PrepayResult();
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		User user = userDao.get(orderDetail.getUserid());
+		if (orderDetail.getActualMoney() > user.getMoney()) {
+			result.setCode(PrepayResult.Code.fail);
+			result.setMsg("余额不足。");
+			return result;
 		}
-
-		Double money = orderDetail.getActualMoney();
-
-		Unifiedorder unifiedorder = new Unifiedorder();
-		unifiedorder.setAppid(SuUtil.getAppProperty("appid"));
-		unifiedorder.setMch_id(SuUtil.getAppProperty("mch_id"));
-		unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
-		unifiedorder.setBody("订单付款");
-		unifiedorder.setOut_trade_no(orderDetail.getOrderno());
-		Integer price = (int) (money * 100);
-		unifiedorder.setTotal_fee(price.toString());
-		unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
-		unifiedorder.setNotify_url(SuUtil.getAppProperty("notify_url"));
-		unifiedorder.setTrade_type("JSAPI");
-		unifiedorder.setOpenid(user.getOpenid());
-
-		UnifiedorderResult result = PayMchAPI.payUnifiedorder(unifiedorder,
-				SuUtil.getAppProperty("apikey"));
-		if (!result.getReturn_code().equals("SUCCESS")) {
-			LOG.error("错误码:" + result.getReturn_code() + "; 错误信息:" + result.getReturn_msg());
-			return null;
-		}
-
-		if (!result.getResult_code().equals("SUCCESS")) {
-			LOG.error("错误码:" + result.getErr_code() + "; 错误信息:" + result.getErr_code_des());
-			return null;
-		}
-
-		payment.setType(PayType.weixin);
-		payment.setPrepay_id(result.getPrepay_id());
+		user.setMoney(user.getMoney() - orderDetail.getActualMoney());
+		userDao.update(user);
+		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
+		payment.setType(PayType.balance);
 		paymentDao.update(payment);
-		return result.getPrepay_id();
+		payOrder(orderDetail.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
+		return result;
+	}
+
+	private PrepayResult payByWeixin(Integer orderid, HttpServletRequest request) {
+		PrepayResult result = new PrepayResult();
+		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		User user = userDao.get(orderDetail.getUserid());
+		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
+		String prepay_id = payment.getPrepay_id();
+		if (prepay_id == null) {
+			Double money = orderDetail.getActualMoney();
+
+			Unifiedorder unifiedorder = new Unifiedorder();
+			unifiedorder.setAppid(SuUtil.getAppProperty("appid"));
+			unifiedorder.setMch_id(SuUtil.getAppProperty("mch_id"));
+			unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
+			unifiedorder.setBody("订单付款");
+			unifiedorder.setOut_trade_no(orderDetail.getOrderno());
+			Integer price = (int) (money * 100);
+			unifiedorder.setTotal_fee(price.toString());
+			unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
+			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/order/pay.html");
+			unifiedorder.setTrade_type("JSAPI");
+			unifiedorder.setOpenid(user.getOpenid());
+
+			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder,
+					SuUtil.getAppProperty("apikey"));
+			if (!unifiedorderResult.getReturn_code().equals("SUCCESS")) {
+				LOG.error("错误码:" + unifiedorderResult.getReturn_code() + "; 错误信息:"
+						+ unifiedorderResult.getReturn_msg());
+				result.setCode(PrepayResult.Code.fail);
+				result.setMsg("可能是余额不足。");
+				return result;
+			}
+
+			if (!unifiedorderResult.getResult_code().equals("SUCCESS")) {
+				LOG.error("错误码:" + unifiedorderResult.getErr_code() + "; 错误信息:"
+						+ unifiedorderResult.getErr_code_des());
+				result.setCode(PrepayResult.Code.fail);
+				result.setMsg("可能是余额不足。");
+				return result;
+			}
+
+			payment.setType(PayType.weixin);
+			payment.setPrepay_id(unifiedorderResult.getPrepay_id());
+			paymentDao.update(payment);
+			prepay_id = payment.getPrepay_id();
+		}
+		String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
+				SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
+		result.setCode(PrepayResult.Code.conti);
+		result.setArg(json);
+		return result;
+	}
+
+	public PrepayResult prepay(PayArg payArg, HttpServletRequest request) {
+		PrepayResult result;
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+		if (!orderDetail.isTicket() && payArg.getTicketid() != null) {
+			result = payByTicket(payArg.getOrderid(), payArg.getTicketid());
+			if (result.getCode() == PrepayResult.Code.succ) {
+				return result;
+			}
+		}
+		switch (payArg.getPayTypeEnum()) {
+		case balance: {
+			result = payByBalance(payArg.getOrderid());
+			break;
+		}
+		case weixin: {
+			result = payByWeixin(payArg.getOrderid(), request);
+			break;
+		}
+		default: {
+			result = new PrepayResult();
+			result.setCode(PrepayResult.Code.succ);
+		}
+		}
+		return result;
 	}
 
 	public void payOrder(String orderno) {
@@ -401,6 +462,16 @@ public class OrderService extends BaseService {
 		history.setOrderid(order.getId());
 		history.setOperation(State.paid);
 		historyDao.save(history);
+
+		// 积分
+		OrderDetail orderDetail = orderDao.getDetail(order.getId());
+		ScoreType scoreType;
+		if (orderDetail.getPayTypeEnum() == PayType.balance) {
+			scoreType = ScoreType.balance;
+		} else {
+			scoreType = ScoreType.nobalance;
+		}
+		StratUtil.updateScore(orderDetail.getUserid(), scoreType, orderDetail.getActualMoney());
 	}
 
 	/**

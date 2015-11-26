@@ -86,11 +86,11 @@
 							<td>${user.score}</td>
 							<td>${user.money}</td>
 							<td>
-								<a href="<c:url value="back/user/ticket.html?userid=${user.id}"/>">卡券</a>
-							</td>
-							<td>
 								<a href="<c:url value="back/user/addr.html?userid=${user.id}"/>">地址</a>
 							</td>
+							<td>
+								<a href="<c:url value="back/user/ticket.html?userid=${user.id}"/>">卡券</a>
+							</td>						
 							<td>
 								<a href="<c:url value="back/user/order.html?userid=${user.id}"/>">订单</a>
 							</td>

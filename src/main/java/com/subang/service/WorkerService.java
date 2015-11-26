@@ -125,7 +125,7 @@ public class WorkerService extends BaseService {
 	 */
 	public void check() {
 		List<Worker> workers = workerDao.findByCore();
-		if (!workers.isEmpty()) {
+		if (workers.isEmpty()) {
 			SuUtil.notice(CodeType.incomplete, "系统中没有核心取衣员");
 		}
 	}

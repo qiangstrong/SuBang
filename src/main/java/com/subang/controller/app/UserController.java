@@ -20,6 +20,8 @@ import com.subang.domain.Addr;
 import com.subang.domain.Location;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
+import com.subang.util.StratUtil;
+import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
 
 @Controller("userController_app")
@@ -40,6 +42,7 @@ public class UserController extends BaseController {
 			result.setCode(Result.ERR);
 			result.setMsg("手机号或密码错误。");
 		} else {
+			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
 			result.setCode(Result.OK);
 		}
 		SuUtil.outputJson(response, result);
@@ -54,6 +57,10 @@ public class UserController extends BaseController {
 			} catch (Exception e) {
 				results.add(new Result(Result.ERR, "该手机号码已经被注册。"));
 			}
+		}
+		if (results.isEmpty()) {
+			User matchUser = userDao.getByCellnum(user.getCellnum());
+			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
 		}
 		SuUtil.outputJson(response, results);
 	}

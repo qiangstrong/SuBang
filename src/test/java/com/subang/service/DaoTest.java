@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.domain.City;
 import com.subang.util.UtilTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,12 +16,6 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		City city = cityDao.get(null);
-		pause();
-	}
-
-	public void test1() {
-		System.out.println("qiang");
 		pause();
 	}
 

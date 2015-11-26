@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.controller.BaseController;
+import com.subang.domain.Banner;
 import com.subang.domain.Category;
 import com.subang.domain.City;
 import com.subang.domain.User;
@@ -29,6 +30,8 @@ public class RegionController extends BaseController {
 		if (cityid == null) {
 			cityid = regionService.getCityid(user.getId());
 		}
+		List<Banner> banners = bannerDao.findAll();
+		view.addObject("banners", banners);
 		List<Category> categorys = regionService.listByCityid(user.getId(), cityid);
 		view.addObject("categorys", categorys);
 		City city = cityDao.get(cityid);

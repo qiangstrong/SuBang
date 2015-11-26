@@ -83,7 +83,7 @@ public class UserController extends BaseController {
 		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_USERID, userid.toString());
 		savePageState(session, searchArg);
 		User user = userDao.get(userid);
-		String msg = "用户昵称：" + user.getNickname() + ",手机号：" + user.getCellnum() + "。此用户的订单如下：";
+		String msg = "手机号：" + user.getCellnum() + "。此用户的订单如下：";
 		session.setAttribute(KEY_INFO_MSG, msg);
 		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html?type=1");
 		return view;
@@ -95,7 +95,7 @@ public class UserController extends BaseController {
 		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(userid);
 		view.addObject("addrDetails", addrDetails);
 		User user = userDao.get(userid);
-		String desMsg = "用户昵称：" + user.getNickname() + ",手机号：" + user.getCellnum() + "。此用户的地址如下：";
+		String desMsg = "手机号：" + user.getCellnum() + "。此用户的地址如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
 		session.removeAttribute(KEY_ERR_MSG);

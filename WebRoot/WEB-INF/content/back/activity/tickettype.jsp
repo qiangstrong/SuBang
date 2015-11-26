@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>卡券类别管理</title>
+	<title>卡券类型管理</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -33,10 +33,11 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="activityheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td align="right" colspan="2">
-				<a href="back/activity/showaddtickettype.html">添加类别</a>				
+				<a href="back/activity/showaddtickettype.html">添加类型</a>				
 			</td>
 		</tr>
 		<tr>

@@ -17,16 +17,6 @@ public class InfoController extends BaseController {
 
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/info";
 
-	@RequestMapping("/term")
-	public String getTerm() {
-		return VIEW_PREFIX + "/term";
-	}
-
-	@RequestMapping("/serviceintro")
-	public String getServiceIntro() {
-		return VIEW_PREFIX + "/serviceIntro";
-	}
-
 	@RequestMapping("/faq")
 	public ModelAndView listFaq() {
 		ModelAndView view = new ModelAndView();

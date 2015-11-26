@@ -28,4 +28,7 @@
 	<bean  class="com.subang.util.SuUtil">
     	<property name="noticeDao" ref="noticeDao"/>
 	</bean>
+	<bean  class="com.subang.util.StratUtil">
+    	<property name="userDao" ref="userDao"/>
+	</bean>
 </beans>

@@ -11,6 +11,8 @@ import weixin.popular.bean.SnsToken;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
+import com.subang.util.StratUtil;
+import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -21,9 +23,8 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.WEIXIN_PREFIX;
 	private static final String[] FREE_URIS = { "/index.html", "/order/pay.html", "/info/faq.html",
-			"/info/showfeedback.html", "/info/feedback.html", "/info/serviceintro.html",
-			"/info/term.html", "/price/bag.html", "/price/index.html", "/region/scope.html",
-			"/ticket/intro.html" };
+			"/info/showfeedback.html", "/info/feedback.html", "/price/index.html",
+			"/region/scope.html", "/acticity/detail.html" };
 	private static final String[] REG_URIS = { "/user/login.html", "/user/showregcellnum.html",
 			"/user/cellnum.html", "/user/regauthcode.html", "/user/showregpassword.html",
 			"/user/regpassword.html" };
@@ -47,8 +48,8 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 					SuUtil.getAppProperty("appsecret"), code);
 			if (snsToken.getErrcode() != null) {
 				// 可能的原因是：用户手动输入URL,伪造了code
-				request.getRequestDispatcher("/WEB-INF/content/weixin/common/error.jsp").forward(
-						request, response);
+				request.getRequestDispatcher("/content/weixin/common/error.htm").forward(request,
+						response);
 				return false;
 			}
 			if (isRegURI(request.getRequestURI())) {
@@ -62,6 +63,7 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 							request, response);
 					return false;
 				}
+				StratUtil.updateScore(user.getId(), ScoreType.login, null);
 				setUser(request.getSession(), user);
 			}
 		}

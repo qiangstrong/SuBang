@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
 
 public class User implements Filter, Serializable {
 
@@ -109,7 +110,7 @@ public class User implements Filter, Serializable {
 	}
 
 	public void setMoney(Double money) {
-		this.money = money;
+		this.money = ComUtil.round(money);
 	}
 
 	public Integer getAddrid() {

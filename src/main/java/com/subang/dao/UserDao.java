@@ -121,4 +121,9 @@ public class UserDao extends BaseDao<User> {
 		int count = jdbcTemplate.queryForInt(sql, args);
 		return count;
 	}
+
+	public void resetLogin() {
+		String sql = "update user_t set login=0";
+		jdbcTemplate.update(sql);
+	}
 }

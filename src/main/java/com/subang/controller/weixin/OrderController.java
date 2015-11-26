@@ -22,13 +22,15 @@ import weixin.popular.bean.paymch.MchNotifyResult;
 import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.util.ExpireSet;
 import weixin.popular.util.MapUtil;
-import weixin.popular.util.PayUtil;
 import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.StreamUtils;
 import weixin.popular.util.XMLConverUtil;
 
 import com.subang.bean.AddrDetail;
 import com.subang.bean.OrderDetail;
+import com.subang.bean.PayArg;
+import com.subang.bean.PrepayResult;
+import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
 import com.subang.domain.Category;
 import com.subang.domain.Clothes;
@@ -45,8 +47,8 @@ import com.subang.util.WebConst;
 @RequestMapping("/weixin/order")
 public class OrderController extends BaseController {
 
-	// 重复通知过滤 时效60秒
-	private static ExpireSet<String> expireSet = new ExpireSet<String>(60);
+	private static ExpireSet<String> expireSet = new ExpireSet<String>(
+			WebConst.EXPIRED_PAY_INTERVAL);
 
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/order";
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
@@ -165,22 +167,53 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/prepay")
-	public ModelAndView prepay(HttpServletRequest request, @RequestParam("orderid") Integer orderid) {
+	// 如果orderDetail.isTicket为false,用户可以选择一张优惠券；否则，用户不能选择。这由前端保证。
+	@RequestMapping("parapay")
+	public ModelAndView parapay(@RequestParam("orderid") Integer orderid,
+			@RequestParam(value = "ticketid", required = false) Integer ticketid) {
 		ModelAndView view = new ModelAndView();
-		HttpSession session = request.getSession();
-		User user = getUser(session);
 		OrderDetail orderDetail = orderDao.getDetail(orderid);
-		String prepay_id = orderService.getPrepay_id(user, orderDetail, request);
-		if (prepay_id == null) {
-			view.addObject(KEY_INFO_MSG, "支付失败。可能是您的余额不足");
+		view.addObject("orderDetail", orderDetail);
+		PayArg payArg = new PayArg();
+		payArg.setOrderid(orderid);
+		view.addObject("payArg", payArg);
+		view.setViewName(VIEW_PREFIX + "/parapay");
+		return view;
+	}
+
+	@RequestMapping("ticket")
+	public ModelAndView listTicket(HttpSession session, @RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		view.addObject("orderid", orderid);
+		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(getUser(session)
+				.getId());
+		view.addObject("ticketDetails", ticketDetails);
+		view.setViewName(VIEW_PREFIX + "/ticket");
+		return view;
+	}
+
+	@RequestMapping("/prepay")
+	public ModelAndView prepay(HttpServletRequest request, PayArg payArg) {
+		ModelAndView view = new ModelAndView();
+		PrepayResult result = orderService.prepay(payArg, request);
+
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+		view.addObject("orderDetail", orderDetail);
+		if (result.getCode() == PrepayResult.Code.succ) {
+			view.addObject(KEY_INFO_MSG, "支付成功。");
+			view.setViewName(VIEW_PREFIX + "/payresult");
+		} else if (result.getCode() == PrepayResult.Code.fail) {
+			view.addObject(KEY_INFO_MSG, "支付失败。" + result.getMsg());
+			view.setViewName(VIEW_PREFIX + "/payresult");
 		} else {
-			String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
-					SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
-			view.addObject("json", json);
-			view.addObject("orderDetail", orderDetail);
+			switch (payArg.getPayTypeEnum()) {
+			case weixin: {
+				view.addObject("json", result.getArg());
+				view.setViewName(VIEW_PREFIX + "/prepay");
+				break;
+			}
+			}
 		}
-		view.setViewName(VIEW_PREFIX + "/prepay");
 		return view;
 	}
 

@@ -2,15 +2,15 @@ use `subang`;
 
 set foreign_key_checks=0;
 drop table if exists `worker_t`, `city_t`, `district_t`, `region_t`, `category_t`, `price_t`, `clothes_type_t`, 
-`service_t`, `ticket_type_t`, `laundry_t`, `user_t`, `location_t`, `ticket_t`, `addr_t`, `order_t`, `payment_t`, 
-`clothes_t`, `history_t`, `admin_t`, `info_t`, `faq_t`, `feedback_t`, `notice_t`;
+`service_t`, `ticket_type_t`, `laundry_t`, `user_t`, `location_t`, `ticket_t`, `addr_t`, `order_t`, `balance_t`,
+`payment_t`, `clothes_t`, `history_t`, `admin_t`, `info_t`, `faq_t`, `feedback_t`, `notice_t`;
 set foreign_key_checks=1;
 
 #工作人员（取衣员）表
 create table `worker_t`(
 	`id` int auto_increment primary key,
     `valid` tinyint not null default 1,		#工作人员是否离职。1：未离职
-    `core` tinyint not null default 0,		#是否是核心取衣员，与取衣员的分配有关
+    `core` tinyint not null default 0,		#是否是核心取衣员，与取衣员的分配有关。1：是核心取衣员
     `name` char(4) not null,				#真实姓名
 	`password` char(50) not null,			#工作人员密码
 	`cellnum` char(11) not null unique,		#手机号
@@ -89,13 +89,21 @@ create table `service_t`(
 create table `ticket_type_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
-    `icon` char(100),
+    `icon` char(100) not null,
     `money` double not null,				#卡券的金额
     `score` int not null,					#兑换这张卡券所需的积分
     `deadline` datetime,					#过期时间，过期后的卡券作废
     `comment` varchar(1000),				#备注（卡券的使用规则等）
 	`categoryid` int not null,				#卡券所属的类别
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
+);
+
+#横幅表
+create table `banner_t`(
+	`id` int auto_increment primary key,
+    `link` char(100),
+    `icon` char(100) not null,
+    `comment` varchar(100)					
 );
 
 #商家（洗衣店）表
@@ -162,7 +170,7 @@ SET foreign_key_checks=1;
 #订单表
 create table `order_t`(
 	`id` int auto_Increment primary key,	
-    `orderno` char(13) not null unique,		#订单号
+    `orderno` char(14) not null unique,		#订单号
     `state` tinyint not null,				#订单状态
     `money` double,							#订单金额
     `freight` double,						#运费
@@ -184,6 +192,16 @@ create table `order_t`(
     foreign key(`laundryid`) references `laundry_t`(`id`) on delete restrict
 );
 
+create table `balance_t`(
+	`id` int auto_Increment primary key,	
+    `orderno` char(14) not null unique,		#订单号
+    `state` tinyint not null,				#订单状态
+    `money` double not null,				#订单金额
+    `time` datetime,						#订单完成支付的时间
+    `userid` int not null,
+    foreign key(`userid`) references `user_t`(`id`) on delete cascade
+);
+
 #支付表，记录订单的支付信息和特定于api的参数
 create table `payment_t`(
 	`id` int auto_Increment primary key,
@@ -191,8 +209,7 @@ create table `payment_t`(
     `money_ticket` double not null default 0,	#使用优惠券支付的金额
     `prepay_id` char(64),						#特定于微信支付的参数
     `time` tinyint,								#获取prepay_id的时间
-	`orderid` int not null,
-    foreign key(`orderid`) references `order_t`(`id`) on delete cascade
+	`orderno` char(14) not null unique
 );
 
 #物品信息表，订单中衣物明细
