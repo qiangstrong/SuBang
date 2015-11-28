@@ -202,6 +202,7 @@ public class UserService extends BaseService {
 		ticket.setTicketTypeid(ticketTypeid);
 		ticketDao.save(ticket);
 		user.setScore(user.getScore() - ticketType.getScore());
+		userDao.update(user);
 	}
 
 	// 管理员删除用户的卡券。除非特殊情况，管理员不应执行此操作

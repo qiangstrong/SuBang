@@ -47,11 +47,13 @@ public class ActivityController extends BaseController {
 	@RequestMapping("/showaddtickettype")
 	public ModelAndView showAddTicketType() {
 		ModelAndView view = new ModelAndView();
-		view.addObject("ticketType", new TicketType());
+		TicketType ticketType = new TicketType();
+		view.addObject("ticketType", ticketType);
 
 		List<Category> categorys = categoryDao.findAll();
 		view.addObject("categorys", categorys);
 
+		afterTicketType(categorys, ticketType);
 		view.setViewName(VIEW_PREFIX + "/addtickettype");
 		return view;
 	}
@@ -60,6 +62,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView addTicketType(HttpServletRequest request, @Valid TicketType ticketType,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		preTicketType(ticketType);
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -77,6 +80,7 @@ public class ActivityController extends BaseController {
 		List<Category> categorys = categoryDao.findAll();
 		view.addObject("categorys", categorys);
 
+		afterTicketType(categorys, ticketType);
 		view.setViewName(VIEW_PREFIX + "/addtickettype");
 		return view;
 	}
@@ -106,8 +110,10 @@ public class ActivityController extends BaseController {
 		view.addObject("ticketType", ticketType);
 
 		List<Category> categorys = categoryDao.findAll();
+		categorys.add(new Category(0, "通用", null, null));
 		view.addObject("categorys", categorys);
 
+		afterTicketType(categorys, ticketType);
 		view.setViewName(VIEW_PREFIX + "/modifytickettype");
 		return view;
 	}
@@ -116,6 +122,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView modifyTicketType(HttpServletRequest request, @Valid TicketType ticketType,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		preTicketType(ticketType);
 		if (ticketType.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 		} else if (!result.hasErrors()) {
@@ -135,8 +142,22 @@ public class ActivityController extends BaseController {
 		List<Category> categorys = categoryDao.findAll();
 		view.addObject("categorys", categorys);
 
+		afterTicketType(categorys, ticketType);
 		view.setViewName(VIEW_PREFIX + "/modifytickettype");
 		return view;
+	}
+
+	private void preTicketType(TicketType ticketType) {
+		if (ticketType.getCategoryid() == 0) {
+			ticketType.setCategoryid(null);
+		}
+	}
+
+	private void afterTicketType(List<Category> categorys, TicketType ticketType) {
+		categorys.add(new Category(0, "通用", null, null));
+		if (ticketType.getCategoryid() == null) {
+			ticketType.setCategoryid(0);
+		}
 	}
 
 	@RequestMapping("/banner")

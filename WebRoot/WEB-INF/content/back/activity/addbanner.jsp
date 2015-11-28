@@ -43,7 +43,7 @@
 						</tr>
 						<tr>
 							<td>链接：</td>
-							<td><form:input path="link" /></td>
+							<td><form:input path="link" size="100"/></td>
 						</tr>
 						<tr>
 							<td>图标：</td>

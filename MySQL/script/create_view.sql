@@ -21,11 +21,20 @@ from order_t, user_t, addrdetail_v, worker_t, category_t, payment_t
 where order_t.userid=user_t.id and order_t.addrid=addrdetail_v.id and order_t.workerid=worker_t.id and order_t.categoryid=category_t.id and payment_t.orderno=order_t.orderno
 );
 
+drop view if exists ticket_typedetail_v;
+create view ticket_typedetail_v
+as(select ticket_type_t.*, category_t.name `categoryname` 
+ from ticket_type_t left join category_t 
+ on ticket_type_t.categoryid=category_t.id
+);
+
 drop view if exists ticketdetail_v;
 create view ticketdetail_v
-as ( select ticket_t.id, category_t.name `categoryname`, ticket_type_t.name, ticket_type_t.icon, ticket_type_t.money, ticket_type_t.score, ticket_t.deadline, ticket_t.userid, ticket_t.ticket_typeid
-from ticket_t,ticket_type_t,category_t 
-where ticket_t.ticket_typeid=ticket_type_t.id and  ticket_type_t.categoryid=category_t.id
+as ( select ticket_t.id, ticket_typedetail_v.name, ticket_typedetail_v.icon, ticket_typedetail_v.money, ticket_typedetail_v.score, ticket_t.deadline, ticket_t.userid, ticket_t.ticket_typeid,ticket_typedetail_v.categoryid, ticket_typedetail_v.categoryname
+from ticket_t,ticket_typedetail_v 
+where ticket_t.ticket_typeid=ticket_typedetail_v.id
 );
+
+
 
 

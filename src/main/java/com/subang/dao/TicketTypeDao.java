@@ -57,8 +57,7 @@ public class TicketTypeDao extends BaseDao<TicketType> {
 	}
 
 	public TicketType getDetail(Integer ticketTypeid) {
-		String sql = "select ticket_type_t.*, category_t.name `categoryname` from ticket_type_t,category_t "
-				+ "where ticket_type_t.categoryid=category_t.id and id=?";
+		String sql = "select * from ticket_typedetail_v where id=?";
 		Object[] args = { ticketTypeid };
 		TicketType ticketType = null;
 		try {
@@ -70,16 +69,14 @@ public class TicketTypeDao extends BaseDao<TicketType> {
 	}
 
 	public List<TicketType> findDetailAll() {
-		String sql = "select ticket_type_t.*, category_t.name `categoryname` from ticket_type_t,category_t "
-				+ "where ticket_type_t.categoryid=category_t.id";
+		String sql = "select * from ticket_typedetail_v";
 		List<TicketType> ticketTypes = jdbcTemplate.query(sql,
 				new BeanPropertyRowMapper<TicketType>(TicketType.class));
 		return ticketTypes;
 	}
 
 	public List<TicketType> findDetailValidAll() {
-		String sql = "select ticket_type_t.*, category_t.name `categoryname` from ticket_type_t,category_t "
-				+ "where ticket_type_t.categoryid=category_t.id and (now()<deadline or deadline is null)";
+		String sql = "select * from ticket_typedetail_v where (now()<deadline or deadline is null)";
 		List<TicketType> ticketTypes = jdbcTemplate.query(sql,
 				new BeanPropertyRowMapper<TicketType>(TicketType.class));
 		return ticketTypes;

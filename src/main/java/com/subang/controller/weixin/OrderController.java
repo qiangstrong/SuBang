@@ -184,10 +184,13 @@ public class OrderController extends BaseController {
 	@RequestMapping("ticket")
 	public ModelAndView listTicket(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
-		view.addObject("orderid", orderid);
-		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(getUser(session)
-				.getId());
+
+		Order order = orderDao.get(orderid);
+		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUseridAndCategoryid(
+				getUser(session).getId(), order.getCategoryid());
 		view.addObject("ticketDetails", ticketDetails);
+
+		view.addObject("orderid", orderid);
 		view.setViewName(VIEW_PREFIX + "/ticket");
 		return view;
 	}

@@ -17,7 +17,9 @@ import com.subang.bean.Result;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
 import com.subang.domain.Addr;
+import com.subang.domain.Balance;
 import com.subang.domain.Location;
+import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
 import com.subang.util.StratUtil;
@@ -156,12 +158,44 @@ public class UserController extends BaseController {
 
 	@RequestMapping("/ticket")
 	public void listTicket(Identity identity,
+			@RequestParam(value = "categoryid", required = false) Integer categoryid,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
 		User user = getUser(identity);
-		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(user.getId());
+		List<TicketDetail> ticketDetails;
+		if (categoryid == null) {
+			ticketDetails = ticketDao.findValidDetailByUserid(user.getId());
+		} else {
+			ticketDetails = ticketDao
+					.findValidDetailByUseridAndCategoryid(user.getId(), categoryid);
+		}
 		SuUtil.doFilter(filter, ticketDetails, TicketDetail.class);
 		SuUtil.outputJson(response, ticketDetails);
+	}
+
+	@RequestMapping("addticket")
+	public void addTicket(Identity identity, @RequestParam("tickettypeid") Integer ticketTypeid,
+			HttpServletResponse response) {
+		Result result = new Result();
+		result.setCode(Result.OK);
+		try {
+			userService.addTicket(getUser(identity).getId(), ticketTypeid);
+		} catch (SuException e) {
+			result.setCode(Result.ERR);
+			result.setMsg(e.getMessage());
+		}
+		SuUtil.outputJson(response, result);
+	}
+
+	@RequestMapping("/balance")
+	public void listBalance(Identity identity,
+			@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		User user = getUser(identity);
+		List<Balance> balances = balanceDao.findDetailByUseridAndState(user.getId(),
+				Order.State.paid);
+		SuUtil.doFilter(filter, balances, Balance.class);
+		SuUtil.outputJson(response, balances);
 	}
 
 	@RequestMapping("/setlocation")

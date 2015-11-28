@@ -58,6 +58,14 @@
 						</tr>
 						<tr>
 							<td></td>
+							<td><form:errors path="password" /></td>
+						</tr>
+						<tr>
+							<td>默认密码：</td>
+							<td><form:input path="password" /></td>
+						</tr>
+						<tr>
+							<td></td>
 							<td><form:errors path="detail" /></td>
 						</tr>
 						<tr>

@@ -94,7 +94,7 @@ create table `ticket_type_t`(
     `score` int not null,					#兑换这张卡券所需的积分
     `deadline` datetime,					#过期时间，过期后的卡券作废
     `comment` varchar(1000),				#备注（卡券的使用规则等）
-	`categoryid` int not null,				#卡券所属的类别
+	`categoryid` int,						#卡券所属的类别
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
 );
 

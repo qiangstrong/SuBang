@@ -340,6 +340,13 @@ public class OrderService extends BaseService {
 		OrderDetail orderDetail = orderDao.getDetail(orderid);
 		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
 		TicketDetail ticketDetail = ticketDao.getDetail(ticketid);
+		if (ticketDetail.getCategoryid() != null) {
+			if (ticketDetail.getCategoryid() != orderDetail.getCategoryid()) {
+				result.setCode(PrepayResult.Code.fail);
+				result.setMsg("优惠券类型不符。");
+				return result;
+			}
+		}
 		ticketDao.delete(ticketid);
 		if (orderDetail.getActualMoney() > ticketDetail.getMoney()) {
 			payment.setMoneyTicket(ticketDetail.getMoney());
@@ -431,7 +438,8 @@ public class OrderService extends BaseService {
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		if (!orderDetail.isTicket() && payArg.getTicketid() != null) {
 			result = payByTicket(payArg.getOrderid(), payArg.getTicketid());
-			if (result.getCode() == PrepayResult.Code.succ) {
+			if (result.getCode() == PrepayResult.Code.succ
+					|| result.getCode() == PrepayResult.Code.fail) {
 				return result;
 			}
 		}

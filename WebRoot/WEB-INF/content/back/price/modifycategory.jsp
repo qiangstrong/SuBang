@@ -45,6 +45,7 @@
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
+						<form:hidden path="icon"/>
 						<tr>
 							<td>图标：</td>
 							<td><img src="${category.icon}" /></td>

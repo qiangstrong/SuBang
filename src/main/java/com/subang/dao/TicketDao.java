@@ -48,8 +48,8 @@ public class TicketDao extends BaseDao<Ticket> {
 				Ticket.class));
 		return tickets;
 	}
-	
-	public TicketDetail getDetail(Integer ticketid){
+
+	public TicketDetail getDetail(Integer ticketid) {
 		String sql = "select * from ticketdetail_v where id=?";
 		Object[] args = { ticketid };
 		TicketDetail ticketDetail = null;
@@ -60,7 +60,7 @@ public class TicketDao extends BaseDao<Ticket> {
 		}
 		return ticketDetail;
 	}
-	
+
 	public List<TicketDetail> findValidDetailByUserid(Integer userid) {
 		String sql = "select * from ticketdetail_v where  userid=? and (now()<deadline or deadline is null);";
 		Object[] args = { userid };
@@ -68,8 +68,17 @@ public class TicketDao extends BaseDao<Ticket> {
 				new BeanPropertyRowMapper<TicketDetail>(TicketDetail.class));
 		return ticketDetails;
 	}
-	
-	public void deleteInvalid(){
+
+	public List<TicketDetail> findValidDetailByUseridAndCategoryid(Integer userid,
+			Integer categoryid) {
+		String sql = "select * from ticketdetail_v where  userid=? and (categoryid=? or categoryid is null) and (now()<deadline or deadline is null);";
+		Object[] args = { userid, categoryid };
+		List<TicketDetail> ticketDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<TicketDetail>(TicketDetail.class));
+		return ticketDetails;
+	}
+
+	public void deleteInvalid() {
 		String sql = "delete from ticket_t where now()>=deadline";
 		jdbcTemplate.update(sql);
 	}

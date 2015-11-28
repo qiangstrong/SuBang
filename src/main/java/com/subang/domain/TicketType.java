@@ -31,7 +31,6 @@ public class TicketType implements Filter, Serializable {
 	protected Timestamp deadline;
 	@Length(max = 1000)
 	private String comment;
-	@NotNull
 	protected Integer categoryid;
 
 	protected String categoryname;
@@ -127,6 +126,9 @@ public class TicketType implements Filter, Serializable {
 	}
 
 	public String getCategoryname() {
+		if (categoryname == null) {
+			return "通用";
+		}
 		return categoryname;
 	}
 

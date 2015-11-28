@@ -45,6 +45,7 @@
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
+						<form:hidden path="scope"/>
 						<tr>
 							<td>服务范围：</td>
 							<td><img width="500" src="${city.scope}" /></td>
