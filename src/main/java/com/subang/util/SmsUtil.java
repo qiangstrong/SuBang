@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.subang.bean.OrderDetail;
-import com.subang.domain.Notice.CodeType;
+import com.subang.domain.Notice.Code;
 
 public class SmsUtil extends BaseUtil {
 
@@ -31,7 +31,7 @@ public class SmsUtil extends BaseUtil {
 		if (result.get("statusCode").equals(STATUS_SUCC)) {
 			return true;
 		}
-		SuUtil.notice(CodeType.sms, "向用户发送短信失败。号码："+cellnum);
+		SuUtil.notice(Code.sms, "向用户发送短信失败。号码："+cellnum);
 		LOG.error("错误码:" + result.get("statusCode") + "; 错误信息:" + result.get("statusMsg"));
 		return false;
 	}

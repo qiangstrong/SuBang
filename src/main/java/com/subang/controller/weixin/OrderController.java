@@ -29,6 +29,7 @@ import weixin.popular.util.XMLConverUtil;
 import com.subang.bean.AddrDetail;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
+import com.subang.bean.PayArg.Client;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
@@ -198,14 +199,15 @@ public class OrderController extends BaseController {
 	@RequestMapping("/prepay")
 	public ModelAndView prepay(HttpServletRequest request, PayArg payArg) {
 		ModelAndView view = new ModelAndView();
+		payArg.setClient(Client.weixin);
 		PrepayResult result = orderService.prepay(payArg, request);
 
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		view.addObject("orderDetail", orderDetail);
-		if (result.getCode() == PrepayResult.Code.succ) {
+		if (result.getCodeEnum() == PrepayResult.Code.succ) {
 			view.addObject(KEY_INFO_MSG, "支付成功。");
 			view.setViewName(VIEW_PREFIX + "/payresult");
-		} else if (result.getCode() == PrepayResult.Code.fail) {
+		} else if (result.getCodeEnum() == PrepayResult.Code.fail) {
 			view.addObject(KEY_INFO_MSG, "支付失败。" + result.getMsg());
 			view.setViewName(VIEW_PREFIX + "/payresult");
 		} else {

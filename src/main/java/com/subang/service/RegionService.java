@@ -14,7 +14,7 @@ import com.subang.domain.Category;
 import com.subang.domain.City;
 import com.subang.domain.District;
 import com.subang.domain.Location;
-import com.subang.domain.Notice.CodeType;
+import com.subang.domain.Notice.Code;
 import com.subang.domain.Region;
 import com.subang.exception.SuException;
 import com.subang.util.ComUtil;
@@ -257,7 +257,7 @@ public class RegionService extends BaseService {
 	public void check() {
 		List<Area> areas = regionDao.findIncomplete();
 		if (!areas.isEmpty()) {
-			SuUtil.notice(CodeType.incomplete, "存在区域没有分配工作人员。");
+			SuUtil.notice(Code.incomplete, "存在区域没有分配工作人员。");
 		}
 	}
 }

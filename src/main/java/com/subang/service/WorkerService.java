@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.subang.bean.Area;
 import com.subang.bean.SearchArg;
-import com.subang.domain.Notice.CodeType;
+import com.subang.domain.Notice.Code;
 import com.subang.domain.Order;
 import com.subang.domain.Region;
 import com.subang.domain.Worker;
@@ -126,7 +126,7 @@ public class WorkerService extends BaseService {
 	public void check() {
 		List<Worker> workers = workerDao.findByCore();
 		if (workers.isEmpty()) {
-			SuUtil.notice(CodeType.incomplete, "系统中没有核心取衣员");
+			SuUtil.notice(Code.incomplete, "系统中没有核心取衣员");
 		}
 	}
 }

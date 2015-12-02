@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.subang.domain.Category;
 import com.subang.domain.ClothesType;
-import com.subang.domain.Notice.CodeType;
+import com.subang.domain.Notice.Code;
 import com.subang.domain.Price;
 import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
@@ -138,7 +138,7 @@ public class PriceService extends BaseService {
 			for (String name : categorynames) {
 				names.append(name);
 			}
-			SuUtil.notice(CodeType.incomplete, "存在衣物类型没有指定价格。类别名称：" + names.toString());
+			SuUtil.notice(Code.incomplete, "存在衣物类型没有指定价格。类别名称：" + names.toString());
 		}
 	}
 }

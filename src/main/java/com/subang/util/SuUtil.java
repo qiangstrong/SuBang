@@ -23,7 +23,7 @@ import weixin.popular.util.JsonUtil;
 import com.subang.bean.Result;
 import com.subang.dao.NoticeDao;
 import com.subang.domain.Notice;
-import com.subang.domain.Notice.CodeType;
+import com.subang.domain.Notice.Code;
 import com.subang.domain.face.Filter;
 import com.subang.exception.SuException;
 
@@ -195,7 +195,7 @@ public class SuUtil extends BaseUtil {
 		return "image/photo/" + openid + ".jpg";
 	}
 
-	public static void notice(CodeType type, String msg) {
-		noticeDao.save(new Notice(type.ordinal(), msg));
+	public static void notice(Code code, String msg) {
+		noticeDao.save(new Notice(code.ordinal(), msg));
 	}
 }

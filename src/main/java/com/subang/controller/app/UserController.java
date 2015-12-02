@@ -2,6 +2,7 @@ package com.subang.controller.app;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.subang.bean.AddrData;
 import com.subang.bean.AddrDetail;
 import com.subang.bean.Identity;
+import com.subang.bean.PayArg;
+import com.subang.bean.PrepayResult;
 import com.subang.bean.Result;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
@@ -196,6 +199,12 @@ public class UserController extends BaseController {
 				Order.State.paid);
 		SuUtil.doFilter(filter, balances, Balance.class);
 		SuUtil.outputJson(response, balances);
+	}
+
+	@RequestMapping("/prepay")
+	public void prepay(HttpServletRequest request, PayArg payArg, HttpServletResponse response) {
+		PrepayResult result = orderService.prepay(payArg, request);
+		SuUtil.outputJson(response, result);
 	}
 
 	@RequestMapping("/setlocation")

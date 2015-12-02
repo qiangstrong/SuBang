@@ -6,26 +6,34 @@ public class PrepayResult {
 		succ, fail, conti
 	};
 
-	private Code code;
-	private String msg; // 本步骤处理失败的原因
-	private Object arg; // 特定于支付的参数，如prepay_id
+	private Integer code;// 如果code为succ，只传code即可
+	private String msg; // 如果code为fail，给出原因
+	private Object arg; // 如果code为continue，给出参数
 
 	public PrepayResult() {
 	}
 
-	public PrepayResult(Code code, String msg, Object arg) {
+	public PrepayResult(Integer code, String msg, Object arg) {
 		super();
 		this.code = code;
 		this.msg = msg;
 		this.arg = arg;
 	}
 
-	public Code getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(Code code) {
+	public Code getCodeEnum() {
+		return Code.values()[code];
+	}
+
+	public void setCode(Integer code) {
 		this.code = code;
+	}
+
+	public void setCode(Code code) {
+		this.code = code.ordinal();
 	}
 
 	public String getMsg() {

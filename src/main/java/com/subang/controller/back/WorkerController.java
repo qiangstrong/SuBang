@@ -150,7 +150,7 @@ public class WorkerController extends BaseController {
 		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_WORKERID, workerid.toString());
 		savePageState(session, searchArg);
 		Worker worker = workerDao.get(workerid);
-		String msg = "姓名：" + worker.getName() + ",手机号：" + worker.getCellnum() + "。此工作人员负责的订单如下：";
+		String msg = "姓名：" + worker.getName() + "。此工作人员负责的订单如下：";
 		session.setAttribute(KEY_INFO_MSG, msg);
 		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html?type=1");
 		return view;

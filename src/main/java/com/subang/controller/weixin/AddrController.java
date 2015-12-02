@@ -75,7 +75,7 @@ public class AddrController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
 		if (result.hasErrors()) {
-			prepare(view, null, addr);
+			prepare(view, getUser(session), addr);
 			view.setViewName(VIEW_PREFIX + "/add");
 			return view;
 		}
@@ -99,7 +99,7 @@ public class AddrController extends BaseController {
 
 	private void prepare(ModelAndView view, User user, Addr addr) {
 		AddrData addrData;
-		if (user != null) {
+		if (addr.getRegionid() == null) {
 			addrData = regionService.getAddrDataByUserid(user.getId());
 			addr.setDetail(addrData.getDetail());
 		} else {

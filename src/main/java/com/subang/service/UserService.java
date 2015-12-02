@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.pay.PayAppRequest;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.PayUtil;
@@ -231,35 +232,56 @@ public class UserService extends BaseService {
 		return balance;
 	}
 
-	private PrepayResult payByWeixin(Integer orderid, HttpServletRequest request) {
+	private PrepayResult payByWeixin(PayArg payArg, HttpServletRequest request) {
 		PrepayResult result = new PrepayResult();
-		Balance balance = balanceDao.getDetail(orderid);
+
+		Balance balance = balanceDao.getDetail(payArg.getOrderid());
 		User user = userDao.get(balance.getUserid());
 		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
 		String prepay_id = payment.getPrepay_id();
+
+		String apikey = null, appid = null, mch_id = null;
+
 		if (prepay_id == null) {
-			Double money = balance.getMoney();
 
 			Unifiedorder unifiedorder = new Unifiedorder();
-			unifiedorder.setAppid(SuUtil.getAppProperty("appid"));
-			unifiedorder.setMch_id(SuUtil.getAppProperty("mch_id"));
+			switch (payArg.getClientEnum()) {
+			case weixin: {
+				appid = SuUtil.getAppProperty("appid");
+				mch_id = SuUtil.getAppProperty("mch_id");
+				apikey = SuUtil.getAppProperty("apikey");
+
+				unifiedorder.setTrade_type("JSAPI");
+				unifiedorder.setOpenid(user.getOpenid());
+				break;
+			}
+			case user: {
+				appid = SuUtil.getAppProperty("appid_user");
+				mch_id = SuUtil.getAppProperty("mch_id_user");
+				apikey = SuUtil.getAppProperty("apikey_user");
+
+				unifiedorder.setTrade_type("APP");
+				break;
+			}
+			}
+
+			unifiedorder.setAppid(appid);
+			unifiedorder.setMch_id(mch_id);
 			unifiedorder.setNonce_str(StringUtils.getRandomStringByLength(32));
 			unifiedorder.setBody("用户充值");
 			unifiedorder.setOut_trade_no(balance.getOrderno());
-			Integer price = (int) (money * 100);
-			unifiedorder.setTotal_fee(price.toString());
+			Integer money = (int) (balance.getMoney() * 100);
+			unifiedorder.setTotal_fee(money.toString());
 			unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
 			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/balance/pay.html");
-			unifiedorder.setTrade_type("JSAPI");
-			unifiedorder.setOpenid(user.getOpenid());
 
-			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder,
-					SuUtil.getAppProperty("apikey"));
+			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder, apikey);
+
 			if (!unifiedorderResult.getReturn_code().equals("SUCCESS")) {
 				LOG.error("错误码:" + unifiedorderResult.getReturn_code() + "; 错误信息:"
 						+ unifiedorderResult.getReturn_msg());
 				result.setCode(PrepayResult.Code.fail);
-				result.setMsg("可能是余额不足。");
+				result.setMsg(unifiedorderResult.getReturn_msg());
 				return result;
 			}
 
@@ -267,7 +289,7 @@ public class UserService extends BaseService {
 				LOG.error("错误码:" + unifiedorderResult.getErr_code() + "; 错误信息:"
 						+ unifiedorderResult.getErr_code_des());
 				result.setCode(PrepayResult.Code.fail);
-				result.setMsg("可能是余额不足。");
+				result.setMsg(unifiedorderResult.getErr_code_des());
 				return result;
 			}
 
@@ -275,11 +297,27 @@ public class UserService extends BaseService {
 			payment.setPrepay_id(unifiedorderResult.getPrepay_id());
 			paymentDao.update(payment);
 			prepay_id = payment.getPrepay_id();
+
 		}
-		String json = PayUtil.generateMchPayJsRequestJson(prepay_id,
-				SuUtil.getAppProperty("appid"), SuUtil.getAppProperty("apikey"));
+
+		Object arg = null;
+		switch (payArg.getClientEnum()) {
+		case weixin: {
+			arg = PayUtil.generateMchPayJsRequestJson(prepay_id, appid, apikey);
+			break;
+		}
+		case user: {
+			PayAppRequest payApprequest = new PayAppRequest();
+			payApprequest.setAppId(appid);
+			payApprequest.setPartnerId(mch_id);
+			payApprequest.setPrepayId(prepay_id);
+			arg = PayUtil.generateMchPayAppRequest(payApprequest, apikey);
+			break;
+		}
+		}
+
 		result.setCode(PrepayResult.Code.conti);
-		result.setArg(json);
+		result.setArg(arg);
 		return result;
 	}
 
@@ -295,7 +333,7 @@ public class UserService extends BaseService {
 		PrepayResult result;
 		switch (payArg.getPayTypeEnum()) {
 		case weixin: {
-			result = payByWeixin(payArg.getOrderid(), request);
+			result = payByWeixin(payArg, request);
 			break;
 		}
 		default: {

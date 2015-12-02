@@ -80,7 +80,7 @@ public class BalanceController extends BaseController {
 		PrepayResult prepayResult = userService.prepay(payArg, user.getId(), request);
 
 		view.addObject("user", user);
-		if (prepayResult.getCode() == PrepayResult.Code.fail) {
+		if (prepayResult.getCodeEnum() == PrepayResult.Code.fail) {
 			view.addObject(KEY_INFO_MSG, "支付失败。" + prepayResult.getMsg());
 			view.setViewName(VIEW_PREFIX + "/payresult");
 		} else {
