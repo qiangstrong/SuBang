@@ -26,10 +26,12 @@ import com.subang.domain.Order;
 import com.subang.domain.Order.OrderType;
 import com.subang.domain.Payment;
 import com.subang.domain.Payment.PayType;
+import com.subang.domain.Rebate;
 import com.subang.domain.Ticket;
 import com.subang.domain.TicketType;
 import com.subang.domain.User;
 import com.subang.exception.SuException;
+import com.subang.util.ComUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
@@ -350,8 +352,18 @@ public class UserService extends BaseService {
 		balance.setTime(new Timestamp(System.currentTimeMillis()));
 		balanceDao.update(balance);
 
+		// 计算折扣
+		double benefit = 0.0;
+		List<Rebate> rebates = rebateDao.findAll();
+		for (Rebate rebate : rebates) {
+			if (ComUtil.equal(balance.getMoney(), rebate.getMoney())) {
+				benefit = rebate.getBenefit();
+				break;
+			}
+		}
+
 		User user = userDao.get(balance.getUserid());
-		user.setMoney(user.getMoney() + balance.getMoney());
+		user.setMoney(user.getMoney() + balance.getMoney() + benefit);
 		userDao.update(user);
 	}
 

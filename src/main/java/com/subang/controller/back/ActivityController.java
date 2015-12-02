@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.subang.controller.BaseController;
 import com.subang.domain.Banner;
 import com.subang.domain.Category;
+import com.subang.domain.Rebate;
 import com.subang.domain.TicketType;
 import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
@@ -249,6 +250,88 @@ public class ActivityController extends BaseController {
 			}
 		}
 		view.setViewName(VIEW_PREFIX + "/modifybanner");
+		return view;
+	}
+
+	@RequestMapping("/rebate")
+	public ModelAndView listRebate(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		invalidtePageState(session);
+		List<Rebate> rebates = rebateDao.findAll();
+		view.addObject("rebates", rebates);
+		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
+		session.removeAttribute(KEY_ERR_MSG);
+		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
+		session.removeAttribute(KEY_INFO_MSG);
+		view.setViewName(WebConst.BACK_PREFIX + "/activity/rebate");
+		return view;
+	}
+
+	@RequestMapping("/showaddrebate")
+	public ModelAndView showAddRebate() {
+		ModelAndView view = new ModelAndView();
+		view.addObject("rebate", new Rebate());
+		view.setViewName(WebConst.BACK_PREFIX + "/activity/addrebate");
+		return view;
+	}
+
+	@RequestMapping("/addrebate")
+	public ModelAndView addRebate(@Valid Rebate rebate, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				activityService.addRebate(rebate);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
+		}
+		view.setViewName(WebConst.BACK_PREFIX + "/activity/addrebate");
+		return view;
+	}
+
+	@RequestMapping("/deleterebate")
+	public ModelAndView deleteRebate(HttpSession session,
+			@RequestParam("rebateids") String rebateids) {
+		ModelAndView view = new ModelAndView();
+		activityService.deleteRebates(SuUtil.getIds(rebateids));
+		session.setAttribute(KEY_INFO_MSG, "删除成功。");
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/activity/rebate.html");
+		return view;
+	}
+
+	@RequestMapping("/showmodifyrebate")
+	public ModelAndView showModifyRebate(@RequestParam("rebateid") Integer rebateid) {
+		ModelAndView view = new ModelAndView();
+		Rebate rebate = rebateDao.get(rebateid);
+		view.addObject("rebate", rebate);
+		view.setViewName(WebConst.BACK_PREFIX + "/activity/modifyrebate");
+		return view;
+	}
+
+	@RequestMapping("/modifyrebate")
+	public ModelAndView modifyRebate(@Valid Rebate rebate, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		if (rebate.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+		} else if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				activityService.modifyRebate(rebate);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("rebate", rebate);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
+		}
+		view.setViewName(WebConst.BACK_PREFIX + "/activity/modifyrebate");
 		return view;
 	}
 }

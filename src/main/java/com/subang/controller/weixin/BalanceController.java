@@ -29,6 +29,7 @@ import com.subang.bean.PrepayResult;
 import com.subang.controller.BaseController;
 import com.subang.domain.Balance;
 import com.subang.domain.Order;
+import com.subang.domain.Rebate;
 import com.subang.domain.User;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
@@ -62,6 +63,8 @@ public class BalanceController extends BaseController {
 		view.addObject("user", user);
 		PayArg payArg = new PayArg();
 		view.addObject("payArg", payArg);
+		List<Rebate> rebates = rebateDao.findAll();
+		view.addObject("rebates", rebates);
 		view.setViewName(VIEW_PREFIX + "/parapay");
 		return view;
 	}
@@ -74,6 +77,8 @@ public class BalanceController extends BaseController {
 		if (result.hasErrors()) {
 			view.addObject("user", user);
 			view.addObject("payArg", payArg);
+			List<Rebate> rebates = rebateDao.findAll();
+			view.addObject("rebates", rebates);
 			view.setViewName(VIEW_PREFIX + "/parapay");
 			return view;
 		}

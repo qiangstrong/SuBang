@@ -75,6 +75,9 @@ insert into ticket_type_t values(null,'速帮洗鞋券','image/info/ticket/ticke
 insert into banner_t values(null,null,'image/info/banner/banner_1.png',null);
 insert into banner_t values(null,null,'image/info/banner/banner_2.png',null);
 insert into banner_t values(null,null,'image/info/banner/banner_3.png',null);
+insert into rebate_t values(null,300,50);
+insert into rebate_t values(null,500,100);
+insert into rebate_t values(null,1000,300);
 insert into laundry_t values(null,'洗衣店1号','15502457990','辽宁省沈阳市和平区文化路3号巷11号','第一个洗衣店');
 
 insert into admin_t values(null,'admin','admin');

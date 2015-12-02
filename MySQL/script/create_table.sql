@@ -98,14 +98,6 @@ create table `ticket_type_t`(
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
 );
 
-#横幅表
-create table `banner_t`(
-	`id` int auto_increment primary key,
-    `link` char(100),
-    `icon` char(100) not null,
-    `comment` varchar(100)					
-);
-
 #商家（洗衣店）表
 create table `laundry_t`(
 	`id` int auto_increment primary key,
@@ -264,4 +256,19 @@ create table `notice_t`(
     `time` datetime not null,				#时间戳
     `code` int not null,					#异常代码
     `msg` char(100) 						#异常信息
+);
+
+#横幅表
+create table `banner_t`(
+	`id` int auto_increment primary key,
+    `link` char(100),
+    `icon` char(100) not null,
+    `comment` varchar(100)					
+);
+
+#折扣表
+create table `rebate_t`(
+	`id` int auto_increment primary key,
+    `money` double not null unique,			#充值的金额
+    `benefit` double not null				#赠送的金额
 );

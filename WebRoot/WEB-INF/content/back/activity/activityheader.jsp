@@ -3,5 +3,6 @@
 		<tr>
 			<td align="center"><a href="back/activity/tickettype.html">优惠券类型</a></td>
 			<td align="center"><a href="back/activity/banner.html">横幅</a></td>
+			<td align="center"><a href="back/activity/rebate.html">折扣</a></td>
 		</tr>
 	</table>

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
 
 public class Price implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +45,7 @@ public class Price implements Filter, Serializable {
 	}
 
 	public void setMoney(Double money) {
-		this.money = money;
+		this.money = ComUtil.round(money);
 	}
 
 	public String getComment() {

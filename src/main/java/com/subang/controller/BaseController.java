@@ -26,6 +26,7 @@ import com.subang.dao.NoticeDao;
 import com.subang.dao.OrderDao;
 import com.subang.dao.PaymentDao;
 import com.subang.dao.PriceDao;
+import com.subang.dao.RebateDao;
 import com.subang.dao.RegionDao;
 import com.subang.dao.ServiceDao;
 import com.subang.dao.StatDao;
@@ -59,6 +60,8 @@ public class BaseController {
 	protected BalanceDao balanceDao;
 	@Autowired
 	protected BannerDao bannerDao;
+	@Autowired
+	protected RebateDao rebateDao;
 	@Autowired
 	protected CategoryDao categoryDao;
 	@Autowired

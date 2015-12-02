@@ -117,6 +117,13 @@ public class ComUtil extends BaseUtil {
 		return BigDecimal.valueOf(d).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
+	public static boolean equal(double d1, double d2) {
+		if (Math.abs(d1 - d2) < 0.1) {
+			return true;
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 
 	}

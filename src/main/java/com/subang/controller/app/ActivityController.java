@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.Banner;
+import com.subang.domain.Rebate;
 import com.subang.domain.TicketType;
 import com.subang.util.SuUtil;
 
@@ -38,5 +39,13 @@ public class ActivityController extends BaseController {
 		List<Banner> banners = bannerDao.findAll();
 		SuUtil.doFilter(filter, banners, Banner.class);
 		SuUtil.outputJson(response, banners);
+	}
+
+	@RequestMapping("/rebate")
+	public void listRebate(@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		List<Rebate> rebates = rebateDao.findAll();
+		SuUtil.doFilter(filter, rebates, Rebate.class);
+		SuUtil.outputJson(response, rebates);
 	}
 }

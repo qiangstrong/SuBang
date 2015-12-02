@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.subang.domain.Banner;
+import com.subang.domain.Rebate;
 import com.subang.domain.TicketType;
 import com.subang.exception.SuException;
 import com.subang.util.SuUtil;
@@ -83,6 +84,31 @@ public class ActivityService extends BaseService {
 		for (Integer bannerid : bannerids) {
 			SuUtil.deleteFile(bannerDao.get(bannerid).getIcon());
 			bannerDao.delete(bannerid);
+		}
+	}
+
+	/**
+	 * 折扣
+	 */
+	public void addRebate(Rebate rebate) throws SuException {
+		try {
+			rebateDao.save(rebate);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("金额不能相同。");
+		}
+	}
+
+	public void modifyRebate(Rebate rebate) throws SuException {
+		try {
+			rebateDao.update(rebate);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("金额不能相同。");
+		}
+	}
+
+	public void deleteRebates(List<Integer> rebateids) {
+		for (Integer rebateid : rebateids) {
+			rebateDao.delete(rebateid);
 		}
 	}
 
