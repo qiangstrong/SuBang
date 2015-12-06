@@ -392,23 +392,30 @@ public class OrderService extends BaseService {
 
 		String apikey = null, appid = null, mch_id = null;
 
+		switch (payArg.getClientEnum()) {
+		case weixin: {
+			appid = SuUtil.getAppProperty("appid");
+			mch_id = SuUtil.getAppProperty("mch_id");
+			apikey = SuUtil.getAppProperty("apikey");
+			break;
+		}
+		case user: {
+			appid = SuUtil.getAppProperty("appid_user");
+			mch_id = SuUtil.getAppProperty("mch_id_user");
+			apikey = SuUtil.getAppProperty("apikey_user");
+			break;
+		}
+		}
+
 		if (prepay_id == null) {
 			Unifiedorder unifiedorder = new Unifiedorder();
 			switch (payArg.getClientEnum()) {
 			case weixin: {
-				appid = SuUtil.getAppProperty("appid");
-				mch_id = SuUtil.getAppProperty("mch_id");
-				apikey = SuUtil.getAppProperty("apikey");
-
 				unifiedorder.setTrade_type("JSAPI");
 				unifiedorder.setOpenid(user.getOpenid());
 				break;
 			}
 			case user: {
-				appid = SuUtil.getAppProperty("appid_user");
-				mch_id = SuUtil.getAppProperty("mch_id_user");
-				apikey = SuUtil.getAppProperty("apikey_user");
-
 				unifiedorder.setTrade_type("APP");
 				break;
 			}
@@ -456,9 +463,9 @@ public class OrderService extends BaseService {
 		}
 		case user: {
 			PayAppRequest payApprequest = new PayAppRequest();
-			payApprequest.setAppId(appid);
-			payApprequest.setPartnerId(mch_id);
-			payApprequest.setPrepayId(prepay_id);
+			payApprequest.setAppid(appid);
+			payApprequest.setPartnerid(mch_id);
+			payApprequest.setPrepayid(prepay_id);
 			arg = PayUtil.generateMchPayAppRequest(payApprequest, apikey);
 			break;
 		}

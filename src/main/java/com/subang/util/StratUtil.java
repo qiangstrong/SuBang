@@ -46,7 +46,7 @@ public class StratUtil extends BaseUtil {
 
 	public static void updateScore(Integer userid, ScoreType type, Object arg) {
 		User user = userDao.get(userid);
-		int deltaScore = 0;
+		long deltaScore = 0;
 		switch (type) {
 		case login: {
 			if (!user.getLogin()) {
@@ -56,11 +56,11 @@ public class StratUtil extends BaseUtil {
 			break;
 		}
 		case balance: {
-			deltaScore = ((Integer) arg) * 2;
+			deltaScore = Math.round((Double) arg) * 2;
 			break;
 		}
 		case nobalance: {
-			deltaScore = (Integer) arg;
+			deltaScore = Math.round((Double) arg);
 			break;
 		}
 		case remark: {
@@ -68,7 +68,7 @@ public class StratUtil extends BaseUtil {
 			break;
 		}
 		}
-		user.setScore(user.getScore() + deltaScore);
+		user.setScore(user.getScore() + (int) deltaScore);
 		userDao.update(user);
 	}
 

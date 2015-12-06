@@ -30,7 +30,7 @@ public class BannerDao extends BaseDao<Banner> {
 	}
 
 	public void update(Banner banner) {
-		String sql = "update banner_t set name=?,icon=?,comment=? where id=?";
+		String sql = "update banner_t set link=?,icon=?,comment=? where id=?";
 		Object[] args = { banner.getLink(), banner.getIcon(), banner.getComment(), banner.getId() };
 		jdbcTemplate.update(sql, args);
 	}

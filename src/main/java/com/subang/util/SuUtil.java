@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -18,7 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
+import weixin.popular.bean.paymch.MchNotifyResult;
 import weixin.popular.util.JsonUtil;
+import weixin.popular.util.SignatureUtil;
+import weixin.popular.util.XMLConverUtil;
 
 import com.subang.bean.Result;
 import com.subang.dao.NoticeDao;
@@ -197,5 +201,34 @@ public class SuUtil extends BaseUtil {
 
 	public static void notice(Code code, String msg) {
 		noticeDao.save(new Notice(code.ordinal(), msg));
+	}
+
+	public static boolean validate(Map<String, String> map) {
+		String appid = map.get("appid");
+		String apikey = null;
+		if (appid.equals(SuUtil.getAppProperty("appid"))) {
+			apikey = SuUtil.getAppProperty("apikey");
+		} else if (appid.equals(SuUtil.getAppProperty("appid_user"))) {
+			apikey = SuUtil.getAppProperty("apikey_user");
+		}
+		String sign = SignatureUtil.generateSign(map, apikey);
+		if (!sign.equals(map.get("sign"))) {
+			return false;
+		}
+		return true;
+	}
+
+	public static void payError(HttpServletResponse response) throws Exception {
+		MchNotifyResult notifyResult = new MchNotifyResult();
+		notifyResult.setReturn_code("FAIL");
+		notifyResult.setReturn_msg("ERROR");
+		response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
+	}
+
+	public static void paySucc(HttpServletResponse response) throws Exception {
+		MchNotifyResult notifyResult = new MchNotifyResult();
+		notifyResult.setReturn_code("SUCCESS");
+		notifyResult.setReturn_msg("OK");
+		response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
 	}
 }

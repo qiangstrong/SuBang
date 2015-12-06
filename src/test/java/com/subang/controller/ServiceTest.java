@@ -11,7 +11,7 @@ public class ServiceTest extends BaseController {
 
 	@Test
 	public void test() {
-
+		userService.payBalance("15120617983604");
 		pause();
 	}
 

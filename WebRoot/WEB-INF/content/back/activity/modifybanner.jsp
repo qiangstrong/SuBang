@@ -60,7 +60,7 @@
 							<td><form:errors path="comment" /></td>
 						</tr>
 						<tr>
-							<th>备注：</th>
+							<td>备注：</td>
 							<td><textarea rows="5" cols="135" name="comment">${banner.comment}</textarea></td>
 						</tr>	
 						<tr >

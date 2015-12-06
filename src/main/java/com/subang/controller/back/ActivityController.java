@@ -111,7 +111,6 @@ public class ActivityController extends BaseController {
 		view.addObject("ticketType", ticketType);
 
 		List<Category> categorys = categoryDao.findAll();
-		categorys.add(new Category(0, "通用", null, null));
 		view.addObject("categorys", categorys);
 
 		afterTicketType(categorys, ticketType);

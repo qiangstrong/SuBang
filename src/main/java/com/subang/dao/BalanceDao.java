@@ -43,7 +43,7 @@ public class BalanceDao extends BaseDao<Balance> {
 	}
 
 	public void update(Balance balance) {
-		String sql = "update balance_t set orderno=?, state=?, money=?, time=?, userid=?, where id=?";
+		String sql = "update balance_t set orderno=?, state=?, money=?, time=?, userid=? where id=?";
 		Object[] args = { balance.getOrderno(), balance.getState(), balance.getMoney(),
 				balance.getTime(), balance.getUserid(), balance.getId() };
 		jdbcTemplate.update(sql, args);

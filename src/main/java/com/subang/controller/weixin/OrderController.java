@@ -1,12 +1,10 @@
 package com.subang.controller.weixin;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import weixin.popular.bean.paymch.MchNotifyResult;
 import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.util.ExpireSet;
 import weixin.popular.util.MapUtil;
-import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.StreamUtils;
 import weixin.popular.util.XMLConverUtil;
 
@@ -178,6 +174,12 @@ public class OrderController extends BaseController {
 		PayArg payArg = new PayArg();
 		payArg.setOrderid(orderid);
 		view.addObject("payArg", payArg);
+
+		if (ticketid != null) {
+			TicketDetail ticketDetail = ticketDao.getDetail(ticketid);
+			view.addObject("ticketDetail", ticketDetail);
+		}
+
 		view.setViewName(VIEW_PREFIX + "/parapay");
 		return view;
 	}
@@ -197,23 +199,41 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/prepay")
-	public ModelAndView prepay(HttpServletRequest request, PayArg payArg) {
+	public ModelAndView prepay(HttpServletRequest request, @Valid PayArg payArg,
+			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		if (payArg.getOrderid() == null) {
+			view.addObject(KEY_INFO_MSG, "订单id不能为空");
+			view.setViewName(VIEW_PREFIX + "/parapay");
+			return view;
+		}
+		if (result.hasErrors()) {
+			OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+			view.addObject("orderDetail", orderDetail);
+			view.addObject("payArg", payArg);
+			if (payArg.getTicketid() != null) {
+				TicketDetail ticketDetail = ticketDao.getDetail(payArg.getTicketid());
+				view.addObject("ticketDetail", ticketDetail);
+			}
+			view.setViewName(VIEW_PREFIX + "/parapay");
+			return view;
+		}
+
 		payArg.setClient(Client.weixin);
-		PrepayResult result = orderService.prepay(payArg, request);
+		PrepayResult prepayResult = orderService.prepay(payArg, request);
 
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		view.addObject("orderDetail", orderDetail);
-		if (result.getCodeEnum() == PrepayResult.Code.succ) {
+		if (prepayResult.getCodeEnum() == PrepayResult.Code.succ) {
 			view.addObject(KEY_INFO_MSG, "支付成功。");
 			view.setViewName(VIEW_PREFIX + "/payresult");
-		} else if (result.getCodeEnum() == PrepayResult.Code.fail) {
-			view.addObject(KEY_INFO_MSG, "支付失败。" + result.getMsg());
+		} else if (prepayResult.getCodeEnum() == PrepayResult.Code.fail) {
+			view.addObject(KEY_INFO_MSG, "支付失败。" + prepayResult.getMsg());
 			view.setViewName(VIEW_PREFIX + "/payresult");
 		} else {
 			switch (payArg.getPayTypeEnum()) {
 			case weixin: {
-				view.addObject("json", result.getArg());
+				view.addObject("json", prepayResult.getArg());
 				view.setViewName(VIEW_PREFIX + "/prepay");
 				break;
 			}
@@ -223,8 +243,8 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/pay")
-	public void pay(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void pay(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/xml;charset=UTF-8");
 
 		// 获取请求数据
 		String xml = StreamUtils.copyToString(request.getInputStream(), Charset.forName("utf-8"));
@@ -232,27 +252,34 @@ public class OrderController extends BaseController {
 
 		// 已处理 去重
 		if (expireSet.contains(map.get("transaction_id"))) {
+			SuUtil.paySucc(response);
 			return;
 		}
 
-		// 签名验证
-		String sign = SignatureUtil.generateSign(map, SuUtil.getAppProperty("apikey"));
-		if (!sign.equals(map.get("sign"))) {
-			MchNotifyResult notifyResult = new MchNotifyResult();
-			notifyResult.setReturn_code("FAIL");
-			notifyResult.setReturn_msg("ERROR");
-			response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
-		} else {
-			// 对象转换
-			MchPayNotify payNotify = XMLConverUtil.convertToObject(MchPayNotify.class, xml);
-			expireSet.add(payNotify.getTransaction_id());
-			MchNotifyResult notifyResult = new MchNotifyResult();
-			notifyResult.setReturn_code("SUCCESS");
-			notifyResult.setReturn_msg("OK");
-			response.getOutputStream().write(XMLConverUtil.convertToXML(notifyResult).getBytes());
-
-			orderService.payOrder(payNotify.getOut_trade_no());
+		if (!map.get("return_code").equals("SUCCESS")) {
+			LOG.error("错误码:" + map.get("return_code") + "; 错误信息:" + map.get("return_msg"));
+			SuUtil.payError(response);
+			return;
 		}
+
+		if (!map.get("result_code").equals("SUCCESS")) {
+			LOG.error("错误码:" + map.get("err_code") + "; 错误信息:" + map.get("err_code_des"));
+			SuUtil.payError(response);
+			return;
+		}
+
+		if (!SuUtil.validate(map)) {
+			LOG.error("错误码:" + WebConst.LOG_TAG + "; 错误信息:" + "签名校验失败。");
+			SuUtil.payError(response);
+			return;
+		}
+
+		MchPayNotify payNotify = XMLConverUtil.convertToObject(MchPayNotify.class, xml);
+		expireSet.add(payNotify.getTransaction_id());
+		SuUtil.paySucc(response);
+		response.flushBuffer();
+		orderService.payOrder(payNotify.getOut_trade_no());
+
 	}
 
 	/**

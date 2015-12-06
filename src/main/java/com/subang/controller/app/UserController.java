@@ -16,6 +16,7 @@ import com.subang.bean.AddrDetail;
 import com.subang.bean.Identity;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
+import com.subang.bean.PrepayResult.Code;
 import com.subang.bean.Result;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
@@ -202,9 +203,18 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/prepay")
-	public void prepay(HttpServletRequest request, PayArg payArg, HttpServletResponse response) {
-		PrepayResult result = orderService.prepay(payArg, request);
-		SuUtil.outputJson(response, result);
+	public void prepay(HttpServletRequest request, Identity identity, PayArg payArg,
+			BindingResult result, HttpServletResponse response) {
+		PrepayResult prepayResult = null;
+		if (result.hasErrors() || payArg.getMoney() == null || payArg.getMoney() == 0.0) {
+			prepayResult = new PrepayResult();
+			prepayResult.setCode(Code.fail);
+			prepayResult.setMsg("参数错误");
+		} else {
+			User user = getUser(identity);
+			prepayResult = userService.prepay(payArg, user.getId(), request);
+		}
+		SuUtil.outputJson(response, prepayResult);
 	}
 
 	@RequestMapping("/setlocation")

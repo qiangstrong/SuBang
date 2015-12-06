@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -30,9 +31,11 @@ public class Order implements Filter, Serializable {
 	protected Integer id;
 	protected String orderno; // 订单号
 	protected Integer state;
-	@Digits(integer = 3, fraction = 1)
+	@Min(0)
+	@Digits(integer = 4, fraction = 1)
 	protected Double money; // 单位元
-	@Digits(integer = 3, fraction = 1)
+	@Min(0)
+	@Digits(integer = 4, fraction = 1)
 	protected Double freight; // 单位元
 	@NotNull
 	protected Date date; // 用户指定的取件日期

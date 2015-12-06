@@ -10,10 +10,14 @@ public class TimestampConverter implements Converter<String, Timestamp> {
 
 	public Timestamp convert(String arg0) {
 		Timestamp ts = null;
+		if (arg0.length() == 0) {
+			return ts;
+		}
 		try {
 			Date date = ComUtil.sdf_date.parse(arg0);
 			ts = new Timestamp(date.getTime());
 		} catch (ParseException e) {
+			throw new IllegalArgumentException();
 		}
 		return ts;
 	}

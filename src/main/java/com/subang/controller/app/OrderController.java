@@ -15,6 +15,7 @@ import com.subang.bean.Identity;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
+import com.subang.bean.PrepayResult.Code;
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.Clothes;
@@ -134,10 +135,19 @@ public class OrderController extends BaseController {
 		SuUtil.outputJsonOK(response);
 	}
 
+	// app应该做充分的校验，确保参数正确
 	@RequestMapping("/prepay")
-	public void prepay(HttpServletRequest request, PayArg payArg, HttpServletResponse response) {
-		PrepayResult result = orderService.prepay(payArg, request);
-		SuUtil.outputJson(response, result);
+	public void prepay(HttpServletRequest request, PayArg payArg, BindingResult result,
+			HttpServletResponse response) {
+		PrepayResult prepayResult = null;
+		if (result.hasErrors() || payArg.getOrderid() == null) {
+			prepayResult = new PrepayResult();
+			prepayResult.setCode(Code.fail);
+			prepayResult.setMsg("参数错误");
+		} else {
+			prepayResult = orderService.prepay(payArg, request);
+		}
+		SuUtil.outputJson(response, prepayResult);
 	}
 
 	@RequestMapping("/history")

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 
 import com.subang.domain.Order.State;
 import com.subang.domain.Payment.PayType;
@@ -17,7 +18,8 @@ public class Balance implements Filter, Serializable {
 	private Integer id;
 	private String orderno; // 订单号
 	private Integer state;
-	@Digits(integer = 3, fraction = 1)
+	@Min(0)
+	@Digits(integer = 4, fraction = 1)
 	private Double money; // 单位元,注意使用ComUtil.round函数取一位小数。
 	private Timestamp time; // 支付完成发生的日期和时间
 	private Integer userid;

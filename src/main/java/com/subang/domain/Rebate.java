@@ -3,6 +3,7 @@ package com.subang.domain;
 import java.io.Serializable;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.subang.domain.face.Filter;
@@ -14,9 +15,11 @@ public class Rebate implements Filter, Serializable {
 
 	private Integer id;
 	@NotNull
+	@Min(0)
 	@Digits(integer = 4, fraction = 1)
 	private Double money; // 单位元,注意使用ComUtil.round函数取一位小数。
 	@NotNull
+	@Min(0)
 	@Digits(integer = 4, fraction = 1)
 	private Double benefit; // 单位元,注意使用ComUtil.round函数取一位小数。
 
@@ -52,6 +55,13 @@ public class Rebate implements Filter, Serializable {
 
 	public void setBenefit(Double benefit) {
 		this.benefit = ComUtil.round(benefit);
+	}
+
+	public String toString() {
+		if (money == null || benefit == null) {
+			return null;
+		}
+		return "充" + Math.round(money) + "送" + Math.round(benefit);
 	}
 
 	public void doFilter(Object object) {

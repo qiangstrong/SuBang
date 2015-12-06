@@ -3,6 +3,7 @@ package com.subang.domain;
 import java.io.Serializable;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -15,7 +16,8 @@ public class Price implements Filter, Serializable {
 
 	private Integer id;
 	@NotNull
-	@Digits(integer = 3, fraction = 1)
+	@Min(0)
+	@Digits(integer = 4, fraction = 1)
 	private Double money;
 	@Length(max = 100)
 	private String comment;

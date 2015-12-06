@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -24,9 +25,11 @@ public class TicketType implements Filter, Serializable {
 	@Length(max = 100)
 	protected String icon;
 	@NotNull
-	@Digits(integer = 3, fraction = 1)
+	@Min(0)
+	@Digits(integer = 4, fraction = 1)
 	protected Double money;
 	@NotNull
+	@Min(0)
 	protected Integer score;
 	protected Timestamp deadline;
 	@Length(max = 1000)
