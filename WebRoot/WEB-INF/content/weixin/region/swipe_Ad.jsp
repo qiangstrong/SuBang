@@ -21,15 +21,29 @@
   <div class="addWrap">
   <div class="swipe" id="mySwipe">
     <div class="swipe-wrap">
-      <div><a href="javascript:;"><img class="img-responsive" src="css/weixin/ccsjsp/region/index/710x240.png"/></a></div>
-      <div><a href="javascript:;"><img class="img-responsive" src="css/weixin/ccsjsp/region/index/710x240.png"/></a></div>
-      <div><a href="javascript:;"><img class="img-responsive" src="css/weixin/ccsjsp/region/index/710x240.png"/></a></div>
+    <c:forEach var="banner" items="${banners}">
+     <c:if test="${banner.link == null}">
+      <div><a href="javascript:void(0)"><img class="img-responsive" src="${banner.icon}"/></a></div>
+     </c:if> 
+     <c:if test="${banner.link.length() <= 3}">
+      <div><a href="javascript:void(0)"><img class="img-responsive" src="${banner.icon}"/></a></div>
+     </c:if> 
+     <c:if test="${banner.link.length() > 3}">
+      <div><a href="${banner.link}"><img class="img-responsive" src="${banner.icon}"/></a></div>
+     </c:if>
+    </c:forEach>
     </div>
   </div>
-  <ul id="position">
-    <li class="cur"></li>
+  <ul id="position" style="background-color:transparent">
+     <li class="cur">
+     <c:forEach begin="2" end="${banners.size()}">
+     <li class="">
+     </c:forEach>
+    
+    
+    <!-- <li class="cur"></li>
     <li class=""></li>
-    <li class=""></li>
+    <li class=""></li> -->
   </ul>
 </div>
   <!-- 头部：轮转广告 end-->

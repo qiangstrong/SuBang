@@ -26,13 +26,13 @@ public class SmsUtil extends BaseUtil {
 	}
 
 	public static boolean send(String cellnum, String type, String[] content) {
-		HashMap<String, Object> result = restAPI.sendTemplateSMS(cellnum, SuUtil.getAppProperty(type),
-				content);
+		HashMap<String, Object> result = restAPI.sendTemplateSMS(cellnum,
+				SuUtil.getAppProperty(type), content);
 		if (result.get("statusCode").equals(STATUS_SUCC)) {
 			return true;
 		}
-		SuUtil.notice(Code.sms, "向用户发送短信失败。号码："+cellnum);
 		LOG.error("错误码:" + result.get("statusCode") + "; 错误信息:" + result.get("statusMsg"));
+		SuUtil.notice(Code.sms, "向用户发送短信失败。号码：" + cellnum);
 		return false;
 	}
 

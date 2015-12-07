@@ -188,7 +188,7 @@
 		<!-- 立即预约 end -->
 		<div class="menu-service">
 			<div class="service-list" align="center">
-				<a href="weixin/info/serviceintro.html">
+				<a href="/content/weixin/info/serviceintro.htm">
 					<p class="ser-font">服务介绍</p> </a>
 			</div>
 			<!--  <div class="service-list" align="center">

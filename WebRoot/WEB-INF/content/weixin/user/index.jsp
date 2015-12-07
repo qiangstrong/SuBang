@@ -37,27 +37,28 @@
 		 <img src="css/weixin/ccsjsp/user/index/avatar.png" class="subang_logo">
 		<div class="loginInfo">
 			${user.cellnum}
-			<!-- <a href="weixin/region/充值.html" class="link-chongzhi" style="padding:5px 0;"> 充值 <img
-				alt=" " src="css/weixin/ccsjsp/user/index/chongzhi_jt.png"> </a> -->
+			<a href="weixin/balance/parapay.html" class="link-chongzhi" style="padding:5px 0;"> 充值 <img
+				alt=" " src="css/weixin/ccsjsp/user/index/chongzhi_jt.png"> </a>
 			<p>我们只做最专业的品质服务</p>
 		</div>
 	</div>
 	<nav class="main-nav white-bg">
 		<div class="subnav" style="border-left:1px solid #eee;">
-			<!-- <a href="weixin/ticket/index.html?userid=${user.id}"> -->
-			<a href="javascript:void(0)">
-				<div class="icon-block">
-					<img alt=" " src="css/weixin/ccsjsp/user/index/mine_money_icon.png">余额
-				</div>
-				<div class="yue_font">${user.money}元</div> </a>
-		</div>
-		<div class="subnav">
-			<!--  <a href="weixin/ticket/index.html?userid=${user.id}">-->
-			<a href="javascript:void(0)">
+			<a href="content/weixin/user/scoreintro.htm">
+			<!--  <a href="javascript:void(0)"> -->
 				<div class="icon-block">
 					<img alt=" " src="css/weixin/ccsjsp/user/index/mine_score_icon.png">积分
 				</div>
 				<div class="yue_font">${user.score}分</div> </a>
+		</div>
+		<div class="subnav">
+		<a href="weixin/balance/index.html">
+			<!-- <a href="javascript:void(0)"> -->
+				<div class="icon-block">
+					<img alt=" " src="css/weixin/ccsjsp/user/index/mine_money_icon.png">余额
+				</div>
+				<div class="yue_font">${user.money}元</div> </a>
+			
 		</div>
 	</nav>
 	<div class="clear"></div>
@@ -87,7 +88,7 @@
 							</td>
 							<td>
 							<a href="javascript:void(0)">
-							<!-- <a href="weixin/ticket/index.html?userid=${user.id} ">-->
+						    <a href="weixin/ticket/index.html">
 									<div class="list-titel no-img">
 										优惠券<img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
@@ -101,8 +102,8 @@
 								src="css/weixin/ccsjsp/user/index/jifen_shc.png">
 							</td>
 							<td style="position:relative">
-							<!-- <a href="weixin/ticket/index.html?userid=${user.id} "> -->
-								<a href="javascript:void(0)">
+							<a href="weixin/activity/index.html">
+								
 									<div class="list-titel no-img">
 										积分商城 <img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
@@ -160,7 +161,7 @@
 							<td><img alt=""
 								src="css/weixin/ccsjsp/user/index/user_xieyi2.png">
 							</td>
-							<td><a href="weixin/info/term.html">
+							<td><a href="/content/weixin/info/term.html">
 									<div class="list-titel no-img">
 										用户协议 <img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"
@@ -201,7 +202,8 @@
 				<div class="borderD2"></div></li>
 			<div style="height:14px;background:#f0f0f0"></div>
 			<li class="tel-text">
-				<div>速帮到家客服热线: <a href="tel:${phone}">${phone}</a></div></li>
+				<div><a href="tel:${phone}" style="color: #000; font-size: 18px;"><img alt=""
+											src="css/weixin/ccsjsp/user/index/phone.png" style="height: 18px;"> 客服热线：  ${phone}</a></div></li>
 		</ul>
 		<div class="borderD2"></div>
 	</div>

@@ -1,0 +1,233 @@
+@charset "utf-8";
+html{min-height:100%; font-size: 1em;}
+*{margin:0;padding:0}
+body {
+  background: #fff;
+  font-family: arial;
+}
+header,footer,section,article,nav,figure,aside,canvas{display:block}
+ul,li{list-style:none}
+img{border:none}
+em {
+  font-style: normal;
+}
+.borderD{border-bottom:1px solid #dcdcdc;transform: scaleY(0.5);-webkit-transform: scaleY(0.5)}
+a,input{text-decoration:none;color:#4a4a4a;-webkit-appearance:none;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+.p15 {
+  padding: 10px 15px;
+}
+.font16 {
+  font-size: 1.2em;
+}
+.green_color {
+  color: #51bd6d !important;
+}
+.white-bg {
+  background: #fff;
+}
+.borderD2 {
+  border-bottom:1px solid #d2d2d2;
+  transform: scaleY(0.5);
+  -webkit-transform: scaleY(0.5)
+}
+.my_jifen {
+  text-align: center;
+
+}
+.chongzhi_shc {
+  width: 24% !important;
+  display: inline-block !important; 
+  padding: 1px 8px !important;
+}
+.chongzhi_shc a,.chongzhi_shc a:hover,.chongzhi_shc a:active{
+  color: #8a8a8a;
+}
+.jifen_shc,.chongzhi_shc {
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  font-size: 0.9em;
+  line-height: 28px;
+  padding: 1px 0 1px 0px;
+  width: 32%;
+  margin: 10px auto;
+  color: #8a8a8a;
+  -webkit-outline: none;
+
+}
+.time2{
+  text-align: left;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.jifen_shc img {
+  height: 14px;
+  margin-right: 4px;
+  margin-top: 6px;
+}
+.radius_block a.huoqu_jifen,.radius_block a.huoqu_jifen:hover,.radius_block a.huoqu_jifen:active{
+  color: #8a8a8a;
+}
+
+.radius_block {
+  padding: 20px 10px 0 10px;
+  /*border-radius: 6px;*/
+}
+.radius_block a {
+  -webkit-appearance:none;
+}
+
+.jifen_box {
+  
+  margin: 0 auto;
+  width: 100px;
+  height: 80px;
+  
+  line-height: 30px;
+  text-align: center;
+  background: #ff9900;
+  border-radius: 100%;
+  padding-top: 20px;
+  color: #fff;
+  font-size: 1em;
+}
+.jifen_list ul  {
+  margin: 0 15px;
+}
+.jifen_list ul li:nth-last-child(2) div {
+  display: none;
+}
+.jifen_list .jifen_itle,.jifen_list .jifen_itle2{
+  position: relative;
+
+}
+.jifen_list .feature_block .add_jifen {
+  position: absolute;
+  right: 34px;
+  text-align: right;
+  top: 16px;
+}
+.jifen_list .feature_block .chongzhi_yue {
+  right: 15px;
+} 
+.jifen_list .feature_block .add_jifen .time {
+  color: #c1c1c1;
+  font-size: 12px;
+  padding-top: 4px;
+}
+.jifen_list ul li {
+  color: #c1c1c1;
+  line-height: 42px;
+  font-size: 0.9em;
+  text-indent: 10px;
+  position: relative;
+}
+.jifen_itle {
+  padding: 20px 20px 20px 15px;
+  color: #8a8a8a;
+}
+.add_jifen {
+  color: #ff9901;
+  position: absolute;
+  right: 10px;
+  top: 0px;
+}
+.jifen_itle2 {
+  padding: 10px 10px 10px 15px;
+  color: #8a8a8a;
+}
+.jifen_itle em {
+  position: absolute;
+  right: 15px;
+  top: 24px;
+  border-right: 2px solid #c1c1c1;
+  border-bottom: 2px solid #c1c1c1;
+  float: left;
+  width: 6px;
+  height: 6px;
+}
+.jifen_itle em.toggle_down {
+  
+  -webkit-transform:rotate(225deg);
+  transform:rotate(225deg);
+
+}
+.jifen_itle em.toggle_up {
+
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+  
+}
+.jifen_mingxi {
+  position: relative;
+  
+  padding: 20px 0 5px 0;
+}
+.jifen_mingxi span {
+  background: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 80px;
+  text-align: center;
+  color: #c1c1c1;
+  margin: 0 auto;
+  top: 12px;
+  font-size: 14px;
+}
+ul.ruler_list {
+  margin: 0 15px 0 20px;
+}
+ul.ruler_list li {
+  padding: 10px 0;
+  line-height: 30px;
+  color: #8a8a8a;
+  font-size: 1em;
+}
+p.title_ruler{
+  color: #ff9901;
+}
+ul.ruler_list li em {
+  background: #ff9901;
+  border-radius: 100%;
+  width: 16px;
+  line-height: 16px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  height: 16px;
+  display: block;
+  float: left;
+  margin-top: 6px;
+  margin-right: 10px;
+}
+.space-split {
+  height: 10px;
+  background: #f0f0f0;
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+ .huoqu_jifen, .balance_mall {
+  text-align: right;
+  margin-bottom: 5px;
+ }
+
+.huoqu_jifen a, .balance_mall a{
+  color: #8a8a8a;
+  font-size: 14px;
+}
+.huoqu_jifen img, .balance_mall img{
+  width: 16px;
+  margin-right: 5px;
+  margin-bottom: -1px;
+}
+.huoqu_jifen img{
+  margin-bottom: -2px;
+}
+/**/
+.detail_prompt {
+  text-align: center;
+  color: #8a8a8a;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}

@@ -19,7 +19,7 @@ public class PayArg {
 	private Integer orderid;
 	private Integer ticketid; // 若没有使用优惠券，不传参数即可。后台得到的为null
 	@Min(0)
-	@Digits(integer = 3, fraction = 1)
+	@Digits(integer = 4, fraction = 1)
 	private Double money; // 对于订单支付，不传此参数
 
 	public PayArg() {

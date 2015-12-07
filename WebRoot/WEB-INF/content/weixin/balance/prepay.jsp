@@ -22,7 +22,7 @@
 <meta content="email=no" name="format-detection">
 <meta content="" name="pgv">
 <base href="<%=basePath%>">
-<title>支付</title>
+<title>充值</title>
 <link href="css/weixin/ccsjsp/order/index/base.css" rel="stylesheet"
 	type="text/css">
 <link href="css/weixin/ccsjsp/order/index/buy.css" rel="stylesheet"
@@ -31,7 +31,7 @@
 		function pay(){
 			WeixinJSBridge.invoke('getBrandWCPayRequest',${json},function(res){
 				if(res.err_msg == 'get_brand_wcpay_request:ok'){
-					window.location.href = "weixin/order/index.html?type=2";
+					window.location.href = "weixin/user/index.html";
 				}else if(res.err_msg == 'get_brand_wcpay_request:fail'){					
 					alert("支付失败。");
 				}
@@ -41,7 +41,7 @@
 </head>
 <body style="zoom: 1;">
 	<div class="pay_font">
-		<span>支付详情</span>
+		<span>充值详情</span>
 		<div class="clearBoth"></div>
 	</div>
 	<!-- <div class="recharge_list">
@@ -51,36 +51,35 @@
 	</div> -->
 	<div class="pay_manner white_bg">
 	<div class="item_list_box">
-				订单号： ${orderDetail.orderno} <span
+				手机号： ${user.cellnum} <span
 					class="pull-right orange_color"></span>
 	</div>
 	<div class="item_list_box">
-				支付金额： ${orderDetail.actualMoney}<span
+				支付金额： ${payArg.money}<span
 					class="pull-right orange_color"></span>
 	</div>
 	</div> 
 	<div class="pay_font">
-		<span>支付方式</span>
+		<span>收款方</span>
 		<div class="clearBoth"></div>
 	</div>
 	<div class="pay_manner white_bg">
 			<div class="item_list_box">
-				<img src="css/weixin/ccsjsp/order/index/weixinzhifu.png"> 微信支付 
+				 葫芦岛速帮网络技术有限公司 
 			</div>
 			<div class="borderD"></div>
 			<div class="clear"></div>
 			<div class="item_list_btn">
 				<div class="chongzhi_btns" style="padding-right:0">
-
 					<button type="submit" id="submit_pay" class="pay_btn link-btn-all"
-						onclick="pay()">支付</button>
+						onclick="pay()">立即支付</button>
 				</div>
 			</div>
 			<c:if test="${infoMsg!=null}">
 				<div class="item_list_btn">
-					<div class="chongzhi_btns" style="padding-right:0">
+					<div class="chongzhi_btns" style="padding-right:0; margin-top: 80px">
 						<button id="erro" class="pay_btn link-btn-all"
-							style="background: rgb(169,169,169)" onclick="pay()">
+							style="background: rgb(169,169,169)">
 							${infoMsg }</button>
 					</div>
 				</div>

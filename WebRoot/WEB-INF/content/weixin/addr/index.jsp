@@ -65,15 +65,17 @@
 								<tr id="address_list_2478947" class="address_list">
 									<td style="width:20px;background:#fff"></td>
 									<td style="padding:0 0px">
-										<div class="ui-btn ui-icon-carat-r" style="height: 74px">
+										<div class="ui-btn ui-icon-carat-r" style="height: 62px">
 											<div>
 												<span ontouchstart="" class="bigf address_text">${addrDetail.name
-													}</span> <span>${addrDetail.cellnum }</span><span>${addrDetail.cityname
-													}</span><span>${addrDetail.districtname }</span>
+													}</span> <span>${addrDetail.cellnum }</span>
 
 											</div>
+											<p ontouchstart="" class="address_text p_address" style="margin-top: 1px;">${addrDetail.cityname
+													}  ${addrDetail.districtname }  ${addrDetail.regionname}</p>
+											
 											<p ontouchstart="" class="address_text p_address"
-												style="top: 48px">${addrDetail.regionname }
+												style="margin-top: 1px; top: 52px;">
 												${addrDetail.detail }</p>
 
 

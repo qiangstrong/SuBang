@@ -119,7 +119,7 @@
 						<div class="item_list_box">
 							<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 								class="order_link order_blue">取消</a> <a
-								href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="order_link"
+								href="weixin/order/parapay.html?orderid=${orderDetail.id}" id="order_link"
 								class="order_link order_blue">支付</a>
 							<div class="clearBoth"></div>
 						</div>

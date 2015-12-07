@@ -60,12 +60,12 @@
 	</div>
 	</div> 
 	<div class="pay_font">
-		<span>支付方式</span>
+		<span>收款方</span>
 		<div class="clearBoth"></div>
 	</div>
 	<div class="pay_manner white_bg">
 			<div class="item_list_box">
-				<img src="css/weixin/ccsjsp/order/index/weixinzhifu.png"> 微信支付 
+				葫芦岛速帮网络技术有限公司  
 			</div>
 			<div class="borderD"></div>
 			<div class="clear"></div>
@@ -73,14 +73,14 @@
 				<div class="chongzhi_btns" style="padding-right:0">
 
 					<button type="submit" id="submit_pay" class="pay_btn link-btn-all"
-						onclick="pay()">支付</button>
+						onclick="pay()">立即支付</button>
 				</div>
 			</div>
 			<c:if test="${infoMsg!=null}">
 				<div class="item_list_btn">
-					<div class="chongzhi_btns" style="padding-right:0">
+					<div class="chongzhi_btns" style="padding-right:0; margin-top: 80px">
 						<button id="erro" class="pay_btn link-btn-all"
-							style="background: rgb(169,169,169)" onclick="pay()">
+							style="background: rgb(169,169,169)" >
 							${infoMsg }</button>
 					</div>
 				</div>

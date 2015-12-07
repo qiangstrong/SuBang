@@ -196,9 +196,42 @@
 				<div class="borderD2"></div>
 			</li>
 			<!-- 取衣员信息  end -->
+		
+			
+			
+			
+		</ul>
+	</div>
+	<ul>
+		<div class="item_list_box p15" style="padding-top:0; font-size: 16px "><img src="css/weixin/ccsjsp/order/index/order_detail_history.png" style="height: 24px; margin-right: 10px;">物流信息</div>
+		<li class="order_item">
+			<div class="myOrder_list order-detail-con">
+				<div class="order-logictics">
+					<div class="split-position"></div>
 
 
-			<!-- 取消订单等 按钮 start -->
+					<c:forEach var="history" items="${historys}">
+						<div>
+							<span></span>
+							<div class="con-text">
+								<em>${history.operationDes}</em>
+								<!-- 操作 -->
+								<div>
+									<small>${history.timeDes}</small>
+									<!-- 发生的时间 -->
+								</div>
+								<div class="borderD"></div>
+							</div>
+						</div>
+					</c:forEach>
+
+				</div>
+			</div>
+			<div class="borderD"></div>
+		</li>
+	</ul>
+	<ul>
+		<!-- 取消订单等 按钮 start -->
 			<c:if test="${orderDetail.state==0}">
 				<div class="white_bg cancel_detail">
 					<!-- 已接受 -->
@@ -213,7 +246,7 @@
 				<div class="white_bg cancel_detail">
 					<a href="weixin/order/cancel.html?orderid=${orderDetail.id}" id="order_link"
 						class="public_order borderF">取消</a> <a
-						href="weixin/order/prepay.html?orderid=${orderDetail.id}" id="complain_btn"
+						href="weixin/order/parapay.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderF"><font color="#f86005">支付</font></a>
 					<div class="clearBoth"></div>
 				</div>
@@ -237,37 +270,6 @@
 				</div>
 			</c:if>
 			<!-- 取消订单/分享领券/投诉 按钮 end -->
-		</ul>
-	</div>
-	<ul>
-
-
-		<div class="item_list_box p15" style="padding-top:0"><img src="css/weixin/ccsjsp/order/index/order_detail_history.png" style="height: 18px">物流信息</div>
-		<li class="order_item">
-			<div class="myOrder_list order-detail-con">
-				<div class="order-logictics">
-					<div class="split-position"></div>
-
-
-					<c:forEach var="history" items="${historys}">
-						<div>
-							<span></span>
-							<div class="con-text">
-								<em>${history.operationDes}</em>
-								<!-- 操作 -->
-								<div>
-									<small>${history.time}</small>
-									<!-- 发生的时间 -->
-								</div>
-								<div class="borderD"></div>
-							</div>
-						</div>
-					</c:forEach>
-
-				</div>
-			</div>
-			<div class="borderD"></div>
-		</li>
 	</ul>
 </body>
 </html>

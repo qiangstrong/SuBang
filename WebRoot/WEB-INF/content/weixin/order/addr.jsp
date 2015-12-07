@@ -45,28 +45,31 @@
 						<tr id="address_list_2478947" class="address_list">
 						
 						<td width="16%" class="white-bg"><span><img
-									src="css/weixin/ccsjsp/order/index/order_detail_addr.png">
+									src="css/weixin/ccsjsp/order/index/order_detail_addr.png" style="height:25px">
 							</span>
 							</td>
 							<!-- <a href="weixin/order/showadd.html?categoryid=${category.id}"> -->
 						
 							<td style="padding:0 0px">
 								<a href="weixin/order/showadd.html?categoryid=${categoryid}&addrid=${addrDetail.id}">
-								<div class="ui-btn ui-icon-carat-r" style="height: 74px">
-									<div>
-										<span ontouchstart="" class="bigf address_text">${addrDetail.name
-											}</span> <span>${addrDetail.cellnum }</span><span>${addrDetail.cityname
-											}</span><span>${addrDetail.districtname }</span>
+								<div class="ui-btn ui-icon-carat-r" style="height: 62px">
+											<div>
+												<span ontouchstart="" class="bigf address_text">${addrDetail.name
+													}</span> <span>${addrDetail.cellnum }</span>
 
-									</div>
-									<p ontouchstart="" class="address_text p_address"
-										style="top: 48px">${addrDetail.regionname }
-										${addrDetail.detail }</p>
+											</div>
+											<p ontouchstart="" class="address_text p_address" style="margin-top: 1px;">${addrDetail.cityname
+													}  ${addrDetail.districtname }  ${addrDetail.regionname}</p>
+											
+											<p ontouchstart="" class="address_text p_address"
+												style="margin-top: 1px; top: 52px;">
+												${addrDetail.detail }</p>
 
 
-									<img src="/css/weixin/ccsjsp/addr/order_arrow.png"
-										class="order_arrow">
-								</div> 
+											<img src="/css/weixin/ccsjsp/addr/order_arrow.png"
+												class="order_arrow">
+										</div> 
+								
 								</a>
 								<div class="borderD"></div>
 							</td>

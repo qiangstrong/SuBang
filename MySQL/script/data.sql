@@ -1,6 +1,6 @@
 insert into worker_t values(null,1,1,'李华','123','15502457990','辽宁省沈阳市和平区文化路3号巷11号','第一个取衣员');
-insert into city_t values(null,'葫芦岛市','image/info/scope/葫芦岛.jpg','葫芦岛市，包括连山区、南票区、龙港区。');
-insert into city_t values(null,'沈阳市','image/info/scope/葫芦岛.jpg','沈阳市，包括和平区，大东区，铁西区。');
+insert into city_t values(null,'葫芦岛市','image/info/scope/葫芦岛.png','葫芦岛市，包括连山区、南票区、龙港区。');
+insert into city_t values(null,'沈阳市','image/info/scope/葫芦岛.png','沈阳市，包括和平区，大东区，铁西区。');
 insert into district_t values (null,'连山区',1);
 insert into district_t values (null,'南票区',1);
 insert into district_t values (null,'和平区',2);
