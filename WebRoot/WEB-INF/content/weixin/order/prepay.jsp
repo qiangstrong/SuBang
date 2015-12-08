@@ -44,11 +44,7 @@
 		<span>支付详情</span>
 		<div class="clearBoth"></div>
 	</div>
-	<!-- <div class="recharge_list">
-		<p class="recharge_font">支付详情</p>
-		<p class="recharge_font">订单号： ${orderDetail.orderno }</p>
-		<p class="recharge_font">支付金额： ${orderDetail.actualMoney }</p>
-	</div> -->
+	
 	<div class="pay_manner white_bg">
 	<div class="item_list_box">
 				订单号： ${orderDetail.orderno} <span

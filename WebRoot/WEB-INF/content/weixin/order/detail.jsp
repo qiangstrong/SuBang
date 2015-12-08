@@ -34,7 +34,7 @@
 	type="text/css">
 <link href="css/weixin/ccsjsp/order/index/item.css" rel="stylesheet"
 	type="text/css">
-<!-- <script src="css/weixin/ccsjsp/order/index/hm.js"></script><script type="text/javascript" src="css/weixin/ccsjsp/order/index/jquery-1.8.2.min.js"></script>-->
+
 </head>
 <body style="padding-bottom:80px">
 	<div class="myOrder_list order-detail-con">
@@ -52,9 +52,7 @@
 				<div class="order-logictics">
 					<div class="split-position2"></div>
 					<span class="high-dottle"></span> <a style="color:#097de7">
-						<!-- 设置一个到底部历史的锚点 <img
-						src="css/weixin/ccsjsp/order/index/arrow-2.png"
-						class="position-img"> -->
+						
 						<div class="con-text blue-color" style="padding-top:8px;">
 							${historys.get(historys.size()-1).operationDes}
 							<div style="color:#555;">${historys.get(historys.size()-1).time}
@@ -262,8 +260,7 @@
 			<c:if test="${orderDetail.state==5}">
 				<!-- 已返还 -->
 				<div class="white_bg cancel_detail">
-					<!-- <a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
-						class="public_order borderB"> -->
+					
 					<a href="weixin/order/showremark.html?orderid=${orderDetail.id}" id="complain_btn"
 						class="public_order borderF"><font color="#f86005">评价</font></a>
 					<div class="clearBoth"></div>

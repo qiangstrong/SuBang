@@ -133,10 +133,9 @@
 					</c:if> <c:if test="${orderDetail.state==5}">
 						<!-- 已返还 -->
 						<div class="item_list_box">
-							<a href="javascript:void(0)"
+							<a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
 								id="order_link" class="order_link order_blue">
-							<!--  <a href="weixin/order/showremark.html?orderid=${orderDetail.id}"
-								id="order_link" class="order_link order_blue">-->
+							
 								评价</a>
 							<div class="clearBoth"></div>
 						</div>

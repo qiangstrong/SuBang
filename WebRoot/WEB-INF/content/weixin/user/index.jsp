@@ -25,7 +25,7 @@
 <title>个人中心</title>
 <link rel="stylesheet" type="text/css"
 	href="css/weixin/ccsjsp/user/index/card.css" media="all">
-<!-- <script src="css/weixin/ccsjsp/user/index/hm.js"></script><script type="text/javascript" src="css/weixin/ccsjsp/user/index/jquery-1.8.2.min.js"></script> -->
+
 </head>
 
 <body id="card" ondragstart="return false;"

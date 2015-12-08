@@ -305,8 +305,7 @@
 					+ "。 洗衣质量：" + $("input[name='quality']").val()
 					+ "。 服务态度：" + $("input[name='service']").val()
 					+ "。 软件质量： " + $("input[name='software']").val() + "。 备注：" + $("#userComment").val();
-			//var str1 = $("input[name='total']:checked").val() + $("input[name='total2']:checked").val() + 
-			// $("input[name='checkbox1']:checked").val() +$("input[name='checkbox2']:checked").val() + $("input[name='checkbox3']:checked").val();
+			
 			input.setAttribute("value", str);
 			form.appendChild(input);
 			

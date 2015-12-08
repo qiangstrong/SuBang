@@ -41,9 +41,7 @@
      </c:forEach>
     
     
-    <!-- <li class="cur"></li>
-    <li class=""></li>
-    <li class=""></li> -->
+   
   </ul>
 </div>
   <!-- 头部：轮转广告 end-->

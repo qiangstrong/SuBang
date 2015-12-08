@@ -32,7 +32,7 @@
 <link href="css/weixin/ccsjsp/order/index/base1.css" rel="stylesheet"
 	type="text/css">
 
-<!--  <link rel="stylesheet" type="text/css" href="css/style.css"/>  -->
+
 <script type="text/javascript" src="js/weixin/user.js"></script>
 <script type="text/javascript" src="js/weixin/jquery-1.7.1.min.js"></script>
 <script>
@@ -92,7 +92,7 @@
 				<div class="add_bg"></div>
 				<div class="p5"></div>
 
-				<!--  <div class="wrap_index">-->
+				
 				<!-- 服务日期 start -->
 				<div class="borderD2"></div>
 				<section class="section" style="height: 15px">
@@ -168,9 +168,7 @@
 				<div class="borderD2"></div>
 			</div>
 
-			<!-- <div class="tuijian_coupon">
-			<span class="quan">券</span><span class="quan_text">您暂无可用优惠券</span>
-		</div> -->
+			
 
 			<!-- 立即预约 start -->
 			<div class="order_bottom">
@@ -191,11 +189,7 @@
 				<a href="/content/weixin/info/serviceintro.htm">
 					<p class="ser-font">服务介绍</p> </a>
 			</div>
-			<!--  <div class="service-list" align="center">
-				<a href="weixin/region/scope.html?cityid=${city.id}">
-					<p class="ser-font">服务范围</p> </a>
-			</div>
-			-->
+			
 			<div class="service-list" align="center">
 				<a href="weixin/price/index.html?categoryid=${category.id}">
 					<p class="ser-font">${category.name}价目指引</p> </a>

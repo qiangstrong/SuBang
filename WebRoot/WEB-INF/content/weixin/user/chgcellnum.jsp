@@ -65,24 +65,7 @@
 </div>
 
 
-<!--  <div id="confirm_tip" style="display:none" class="cod">
-  <div class="wx_mask"></div>
-  <div class="wx_confirm">
-    <div class="wx_confirm_inner">
-      <div class="wx_confirm_hd">
-        <div class="" id="tip_div">亲~请确认是用本人手机号绑定奥~</div>
-      </div>
-      <input type="hidden" id="delete_id">
-      <div class="wx_confirm_bd">
-        <div class="wx_confirm_btn manage-btn">
-          <button type="button" onclick="closeConfirmTip();" class="okbtn blue-btn" id="codGoPay">取消</button>
-          <button type="button" onclick="confirmBinding();" class="okbtn orange-btn" id="confirm_binding">确定</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
--->
+
 <div id="add"></div>
 
  

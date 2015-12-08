@@ -59,7 +59,8 @@
 			</div>
 			<div class="borderD"></div>
 		</c:forEach>
-		<!--<c:forEach begin="1" end="100">
+		<!-- 
+		<c:forEach begin="1" end="100">
 			<div class="jifen_itle2 feature_block icard_row" page="1"
 				rows_count="2">
 				评论返现
@@ -68,37 +69,12 @@
 			</div>
 			<div class="borderD"></div>
 		</c:forEach>
-		  -->
+		 -->
+		 
 
 	</section>
 
-	<script type="text/javascript">
-		var pageSize = 10; // 每页显示记录数（由接口决定）
-		var totalHeight = 0; // 滚动距离 + 窗口高度
-		$(window).scroll(function() {
-			var lastRow = $('#icard_details_list .icard_row:last');
-			var rowsCount = lastRow.attr('rows_count');
-			if (rowsCount >= pageSize) {
-				var page = parseInt(lastRow.attr('page')) + 1;
-				nextPage(page);
-			}
-		});
-
-		// 加载下一页
-		function nextPage(page) {
-			totalHeight = parseFloat($(window).height())
-					+ parseFloat($(window).scrollTop());
-			if (totalHeight >= $(document).height()) {
-				var url = "mobile.php?m=wap&act=icard&do=next_balance&city_id=22&mark=66d5e0da-65b8-11e5-a990-5cb901892a54&page="
-						+ page;
-				$.getJSON(url, function(resp) {
-					if (resp.message.rows_count > 0) {
-						$("#icard_details_list").append(resp.message.html);
-					}
-				});
-			}
-		}
-	</script>
+	
 
 
 

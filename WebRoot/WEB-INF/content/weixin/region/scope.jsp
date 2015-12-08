@@ -23,9 +23,8 @@
 <title>${city.name}的服务范围</title>
 <meta content="authenticity_token" name="csrf-param">
 <meta content="NIXNSCrJ3Z4FBC6IQ/exFdWxkt0i6cHS8bDnuc7m+eI=" name="csrf-token">
-<!--  <script src="css/weixin/ccsjsp/region/scope/application-4cf7f57c679623180c7288d7aec39ce7.js"></script>-->
 <link href="css/weixin/ccsjsp/region/scope/mobile1.css" media="screen" rel="stylesheet">
-<!--<link href="http://cdnwww.edaixi.com/assets/mobile-7aa04e852ce01cd353054af7a1b95cee.css" media="screen" rel="stylesheet">-->
+
 <script type="text/javascript">window.onload = function(){
   if(isWeiXin()){
     var orderbtn = document.getElementById('orderBtn');

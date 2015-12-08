@@ -66,15 +66,7 @@
 					</div>
 					</a>
 				</c:forEach>
-					<!--  <a href="weixin/order/showadd.html?categoryid=3">
-					<div class="menu-list">
-						<img class="img-icon" src="image/info/category/家纺.png" />
-						<div class="list-right">
-							<p class="list-type">家纺</p>
-							<p class="list-price">0000000</p>
-						</div>
-					</div>
-					</a>-->
+					
 			</div>
 			<div class="clearBoth"></div>
 
@@ -90,7 +82,7 @@
 						<p class="ser-font">服务介绍</p> </a>
 				</div>
 				<div class="service-list" align="center">
-					<!--<a href="weixin/region/scope.html?cityid=${city.id}">-->
+					
 					<a href="weixin/region/scope.html?cityid=${city.id}">
 						<p class="ser-font">服务范围</p> </a>
 				</div>
