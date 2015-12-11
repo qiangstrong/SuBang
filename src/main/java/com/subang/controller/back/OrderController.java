@@ -162,12 +162,17 @@ public class OrderController extends BaseController {
 	public ModelAndView showModify(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
-		backStack.push(new PageState("laundry/modify", null));
+		backStack.push(new PageState("order/modify", null));
 
 		Order order = orderDao.get(orderid);
+		if (order == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("order/modify"));
+			return view;
+		}
 		prepare(view);
 		view.addObject("order", order);
-		view.addObject(KEY_BACK_LINK, backStack.getBackLink("laundry/modify"));
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/modify"));
 		view.setViewName(VIEW_PREFIX + "/modify");
 		return view;
 	}
@@ -183,7 +188,7 @@ public class OrderController extends BaseController {
 		}
 		prepare(view);
 		view.addObject("order", order);
-		view.addObject(KEY_BACK_LINK, backStack.getBackLink("laundry/modify"));
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/modify"));
 		view.setViewName(VIEW_PREFIX + "/modify");
 		return view;
 	}
@@ -200,7 +205,7 @@ public class OrderController extends BaseController {
 	public ModelAndView listHistory(HttpSession session, Integer orderid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
-		backStack.push(new PageState("laundry/history", null));
+		backStack.push(new PageState("order/history", null));
 
 		List<History> historys = historyDao.findByOrderid(orderid);
 		view.addObject("historys", historys);

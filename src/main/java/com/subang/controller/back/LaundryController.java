@@ -149,6 +149,11 @@ public class LaundryController extends BaseController {
 		backStack.push(new PageState("laundry/modify", null));
 
 		Laundry laundry = laundryDao.get(laundryid);
+		if (laundry == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("laundry/modify"));
+			return view;
+		}
 		view.addObject("laundry", laundry);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("laundry/modify"));
 		view.setViewName(VIEW_PREFIX + "/modify");

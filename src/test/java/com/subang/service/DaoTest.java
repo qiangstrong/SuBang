@@ -6,10 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.domain.Balance;
-import com.subang.domain.Order;
-import com.subang.domain.Order.OrderType;
-import com.subang.util.StratUtil;
+import com.subang.domain.Region;
 import com.subang.util.UtilTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,12 +17,12 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		Balance balance = new Balance();
-		balance.setMoney(1.0);
-		balance.setUserid(1);
-		balance.setState(Order.State.accepted);
-		balance.setOrderno(StratUtil.getOrderno(OrderType.balance));
-		balanceDao.save(balance);
+		Region region = new Region();
+		region.setId(5);
+		region.setDistrictid(6);
+		region.setName("12");
+		region.setWorkerid(1);
+		regionDao.update(region);
 		pause();
 	}
 

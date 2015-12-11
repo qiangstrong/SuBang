@@ -45,6 +45,10 @@
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
+						<tr>
+							<td>可用：</td>
+							<td><form:checkbox path="valid"/></td>
+						</tr>
 						<form:hidden path="icon"/>
 						<tr>
 							<td>图标：</td>

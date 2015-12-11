@@ -65,6 +65,11 @@ public class RoleController extends BaseController {
 		backStack.push(new PageState("role/modifyadmin", null));
 
 		Admin admin = getAdmin(session);
+		if (admin == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("role/modifyadmin"));
+			return view;
+		}
 		view.addObject("admin", admin);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("role/modifyadmin"));
 		view.setViewName(VIEW_PREFIX + "/modifyadmin");

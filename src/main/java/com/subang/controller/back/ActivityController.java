@@ -141,6 +141,11 @@ public class ActivityController extends BaseController {
 		backStack.push(new PageState("activity/modifytickettype", null));
 
 		TicketType ticketType = ticketTypeDao.get(ticketTypeid);
+		if (ticketType == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("activity/modifytickettype"));
+			return view;
+		}
 		view.addObject("ticketType", ticketType);
 
 		List<Category> categorys = categoryDao.findAll();
@@ -190,7 +195,7 @@ public class ActivityController extends BaseController {
 	}
 
 	private void afterTicketType(List<Category> categorys, TicketType ticketType) {
-		categorys.add(new Category(0, "通用", null, null));
+		categorys.add(new Category(0, true, "通用", null, null));
 		if (ticketType.getCategoryid() == null) {
 			ticketType.setCategoryid(0);
 		}
@@ -286,6 +291,11 @@ public class ActivityController extends BaseController {
 		backStack.push(new PageState("activity/modifybanner", null));
 
 		Banner banner = bannerDao.get(bannerid);
+		if (banner == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("activity/modifybanner"));
+			return view;
+		}
 		view.addObject("banner", banner);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifybanner"));
 		view.setViewName(VIEW_PREFIX + "/modifybanner");
@@ -406,6 +416,11 @@ public class ActivityController extends BaseController {
 		backStack.push(new PageState("activity/modifyrebate", null));
 
 		Rebate rebate = rebateDao.get(rebateid);
+		if (rebate == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("activity/modifyrebate"));
+			return view;
+		}
 		view.addObject("rebate", rebate);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifyrebate"));
 		view.setViewName(VIEW_PREFIX + "/modifyrebate");

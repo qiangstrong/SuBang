@@ -34,7 +34,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<form:form modelAttribute="region" action="back/region/addregion.html" method="post">
+				<form:form modelAttribute="region" action="back/region/modifyregion.html" method="post">
 					<form:hidden path="id"/>
 					<form:hidden path="districtid"/>
 					<table>

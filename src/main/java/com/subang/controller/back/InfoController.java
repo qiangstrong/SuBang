@@ -72,6 +72,11 @@ public class InfoController extends BaseController {
 		backStack.push(new PageState("info/modifyinfo", null));
 
 		Info info = infoDao.get(infoid);
+		if (info == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("info/modifyinfo"));
+			return view;
+		}
 		view.addObject("info", info);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("info/modifyinfo"));
 		view.setViewName(VIEW_PREFIX + "/modifyinfo");
@@ -177,6 +182,11 @@ public class InfoController extends BaseController {
 		backStack.push(new PageState("info/modifyfaq", null));
 
 		Faq faq = faqDao.get(faqid);
+		if (faq == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("info/modifyfaq"));
+			return view;
+		}
 		view.addObject("faq", faq);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("info/modifyfaq"));
 		view.setViewName(VIEW_PREFIX + "/modifyfaq");

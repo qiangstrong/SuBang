@@ -24,15 +24,16 @@ public class CategoryDao extends BaseDao<Category> {
 	}
 
 	public void save(Category category) {
-		String sql = "insert into category_t values(null,?,?,?)";
-		Object[] args = { category.getName(), category.getIcon(), category.getComment() };
+		String sql = "insert into category_t values(null,?,?,?,?)";
+		Object[] args = { category.getValid(), category.getName(), category.getIcon(),
+				category.getComment() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Category category) {
-		String sql = "update category_t set name=?,icon=?,comment=? where id=?";
-		Object[] args = { category.getName(), category.getIcon(), category.getComment(),
-				category.getId() };
+		String sql = "update category_t set valid=?,name=?,icon=?,comment=? where id=?";
+		Object[] args = { category.getValid(), category.getName(), category.getIcon(),
+				category.getComment(), category.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

@@ -131,6 +131,11 @@ public class PriceController extends BaseController {
 		backStack.push(new PageState("price/modifycategory", null));
 
 		Category category = categoryDao.get(categoryid);
+		if (category == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("price/modifycategory"));
+			return view;
+		}
 		view.addObject("category", category);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifycategory"));
 		view.setViewName(VIEW_PREFIX + "/modifycategory");
@@ -272,6 +277,11 @@ public class PriceController extends BaseController {
 		backStack.push(new PageState("price/modifyprice", null));
 
 		Price price = priceDao.get(priceid);
+		if (price == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("price/modifyprice"));
+			return view;
+		}
 		view.addObject("price", price);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifyprice"));
 		view.setViewName(VIEW_PREFIX + "/modifyprice");
@@ -436,6 +446,11 @@ public class PriceController extends BaseController {
 		backStack.push(new PageState("price/modifyclothestype", null));
 
 		ClothesType clothesType = clothesTypeDao.get(clothesTypeid);
+		if (clothesType == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("price/modifyclothestype"));
+			return view;
+		}
 		view.addObject("clothesType", clothesType);
 
 		List<Price> prices = priceDao.findByCategoryid(clothesType.getCategoryid());

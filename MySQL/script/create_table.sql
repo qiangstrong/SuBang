@@ -49,6 +49,7 @@ create table `region_t`(
 #类别表，如衣服、鞋等
 create table `category_t`(
 	`id` int auto_increment primary key,
+    `valid` tinyint not null default 1,		#类别是否可用。1：可用
     `name` char(10) not null unique,		#类别名称
     `icon` char(100) not null,				#类别图标的路径
     `comment` varchar(100)					#备注

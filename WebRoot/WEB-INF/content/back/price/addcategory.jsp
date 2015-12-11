@@ -45,6 +45,10 @@
 							<td><form:input path="name" /></td>
 						</tr>
 						<tr>
+							<td>可用：</td>
+							<td><form:checkbox path="valid"/></td>
+						</tr>
+						<tr>
 							<td>图标：</td>
 							<td><input type="file" name="iconImg"/></td>
 						</tr>

@@ -170,6 +170,11 @@ public class RegionController extends BaseController {
 		backStack.push(new PageState("region/modifycity", null));
 
 		City city = cityDao.get(cityid);
+		if (city == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("region/modifycity"));
+			return view;
+		}
 		view.addObject("city", city);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifycity"));
 		view.setViewName(VIEW_PREFIX + "/modifycity");
@@ -310,6 +315,11 @@ public class RegionController extends BaseController {
 		backStack.push(new PageState("region/modifydistrict", null));
 
 		District district = districtDao.get(districtid);
+		if (district == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("region/modifydistrict"));
+			return view;
+		}
 		view.addObject("district", district);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifydistrict"));
 		view.setViewName(VIEW_PREFIX + "/modifydistrict");
@@ -459,6 +469,11 @@ public class RegionController extends BaseController {
 		backStack.push(new PageState("region/modifyregion", null));
 
 		Region region = regionDao.get(regionid);
+		if (region == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("region/modifyregion"));
+			return view;
+		}
 		view.addObject("region", region);
 
 		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ALL, null);

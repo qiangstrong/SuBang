@@ -16,6 +16,8 @@ public class Category implements Filter, Serializable {
 
 	private Integer id;
 	@NotNull
+	private Boolean valid;
+	@NotNull
 	@Length(min = 1, max = 10)
 	private String name;
 	@Length(max = 100)
@@ -26,9 +28,10 @@ public class Category implements Filter, Serializable {
 	public Category() {
 	}
 
-	public Category(Integer id, String name, String icon, String comment) {
+	public Category(Integer id, Boolean valid, String name, String icon, String comment) {
 		super();
 		this.id = id;
+		this.valid = valid;
 		this.name = name;
 		this.icon = icon;
 		this.comment = comment;
@@ -40,6 +43,24 @@ public class Category implements Filter, Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Boolean getValid() {
+		return valid;
+	}
+
+	public String getValidDes() {
+		if (valid == null) {
+			return null;
+		}
+		if (valid) {
+			return "是";
+		}
+		return "否";
+	}
+
+	public void setValid(Boolean valid) {
+		this.valid = valid;
 	}
 
 	public String getName() {
@@ -74,6 +95,9 @@ public class Category implements Filter, Serializable {
 		Category category = (Category) object;
 		if (this.id == null) {
 			category.id = null;
+		}
+		if (this.valid == null) {
+			category.valid = null;
 		}
 		if (this.name == null) {
 			category.name = null;

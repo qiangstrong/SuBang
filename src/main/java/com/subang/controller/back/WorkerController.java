@@ -150,6 +150,11 @@ public class WorkerController extends BaseController {
 		backStack.push(new PageState("worker/modify", null));
 
 		Worker worker = workerDao.get(workerid);
+		if (worker == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("worker/modify"));
+			return view;
+		}
 		view.addObject("worker", worker);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("worker/modify"));
 		view.setViewName(VIEW_PREFIX + "/modify");
