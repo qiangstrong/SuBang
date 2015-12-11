@@ -36,7 +36,7 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right"><a href="back/user/index/back.html">返回</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteTickets()"/></td>

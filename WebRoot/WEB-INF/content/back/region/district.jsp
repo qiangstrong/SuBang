@@ -36,10 +36,12 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right">
+				<a href="back/region/city/back.html">返回</a>
+			</td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="<c:url value="back/region/showadddistrict.html?cityid=${cityid}"/>">添加区</a></td>
+			<td align="right" colspan="2"><a href="back/region/showadddistrict.html?cityid=${cityid}">添加区</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteDistricts()"/></td>
@@ -65,10 +67,10 @@
 							<td><input type="checkbox" name="districtid" value="${district.id}" /></td>
 							<td>${district.name}</td>
 							<td>
-								<a href="<c:url value="back/region/region.html?districtid=${district.id}"/>">小区</a>
+								<a href="back/region/region.html?districtid=${district.id}">小区</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/region/showmodifydistrict.html?districtid=${district.id}"/>">修改</a>
+								<a href="back/region/showmodifydistrict.html?districtid=${district.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

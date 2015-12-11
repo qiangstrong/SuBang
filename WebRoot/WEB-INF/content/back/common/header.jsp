@@ -2,10 +2,10 @@
 	<table width="80%" border="1px" align="center">
 		<tr>
 			<td align="center"><a href="back/index.html">系统首页</a></td>
-			<td align="center"><a href="back/order/index.html?type=0">订单管理</a></td>
-			<td align="center"><a href="back/user/index.html?type=0">用户管理</a></td>
-			<td align="center"><a href="back/laundry/index.html?type=0">商家管理</a></td>
-			<td align="center"><a href="back/worker/index.html?type=0">人员管理</a></td>
+			<td align="center"><a href="back/order/index.html">订单管理</a></td>
+			<td align="center"><a href="back/user/index.html">用户管理</a></td>
+			<td align="center"><a href="back/laundry/index.html">商家管理</a></td>
+			<td align="center"><a href="back/worker/index.html">人员管理</a></td>
 			<td align="center"><a href="back/region/city.html">区域管理</a></td>
 			<td align="center"><a href="back/price/category.html">价格管理</a></td>
 			<td align="center"><a href="back/info/info.html">产品运营</a></td>

@@ -21,7 +21,9 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right">
+				<a href="${backLink}">返回</a>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -45,7 +47,7 @@
 							<td>${area.districtname}</td>
 							<td>${area.regionname}</td>
 							<td>
-								<a href="<c:url value="back/region/showmodifyregion.html?regionid=${area.regionid}"/>">修改</a>
+								<a href="back/region/showmodifyregion.html?regionid=${area.regionid}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

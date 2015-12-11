@@ -84,6 +84,13 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+				<c:if test="${desMsg!=null}">
+					${desMsg}
+				</c:if>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
 				<c:if test="${infoMsg!=null}">
 					${infoMsg}
 				</c:if>
@@ -113,16 +120,16 @@
 							<td>${orderDetail.dateDes} ${orderDetail.timeDes}</td>
 							<td>${orderDetail.barcodeDes}</td>		
 							<td>
-							 	<a href="<c:url value="back/order/detail.html?orderid=${orderDetail.id}"/>">详情</a>
+							 	<a href="back/order/detail.html?orderid=${orderDetail.id}">详情</a>
 							</td>					
 							<td>
-							 	<a href="<c:url value="back/order/clothes.html?orderid=${orderDetail.id}"/>">明细</a>
+							 	<a href="back/order/clothes.html?orderid=${orderDetail.id}">明细</a>
 							</td>
 							<td>
-							 	<a href="<c:url value="back/order/history.html?orderid=${orderDetail.id}"/>">历史</a>
+							 	<a href="back/order/history.html?orderid=${orderDetail.id}">历史</a>
 							</td>
 							<td>
-							 	<a href="<c:url value="back/order/showmodify.html?orderid=${orderDetail.id}"/>">修改</a>
+							 	<a href="back/order/showmodify.html?orderid=${orderDetail.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

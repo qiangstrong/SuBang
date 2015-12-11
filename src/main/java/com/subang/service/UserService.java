@@ -16,11 +16,13 @@ import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.PayUtil;
 import weixin.popular.util.StringUtils;
 
+import com.subang.bean.GeoLoc;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
 import com.subang.domain.Balance;
+import com.subang.domain.City;
 import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.Order.OrderType;
@@ -30,8 +32,9 @@ import com.subang.domain.Rebate;
 import com.subang.domain.Ticket;
 import com.subang.domain.TicketType;
 import com.subang.domain.User;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
+import com.subang.util.LocUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
@@ -164,26 +167,32 @@ public class UserService extends BaseService {
 	/**
 	 * 用户位置
 	 */
-	public Location getLocationByUserid(Integer userid) {
-		List<Location> locations = locationDao.findByUserid(userid);
-		if (locations.isEmpty()) {
-			return null;
-		}
-		return locations.get(0);
-	}
-
 	public void updateLocation(Integer userid, Location location_new) {
-		Location location_old = getLocationByUserid(userid);
+		location_new.setTime(new Timestamp(System.currentTimeMillis()));
+		GeoLoc geoLoc = LocUtil.getGeoLoc(location_new);
+		City city = null;
+		if (geoLoc != null) {
+			city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
+		}
+
+		Location location_old = ComUtil.getFirst(locationDao.findByUserid(userid));
+
 		if (location_old != null) {
 			location_old.setLatitude(location_new.getLatitude());
 			location_old.setLongitude(location_new.getLongitude());
-			location_old.setTime(new Timestamp(System.currentTimeMillis()));
+			location_old.setTime(location_new.getTime());
+			if (city != null) {
+				location_old.setCityid(city.getId());
+			}
 			locationDao.update(location_old);
 		} else {
 			location_old = new Location();
 			location_old.setLatitude(location_new.getLatitude());
 			location_old.setLongitude(location_new.getLongitude());
-			location_old.setTime(new Timestamp(System.currentTimeMillis()));
+			location_old.setTime(location_new.getTime());
+			if (city != null) {
+				location_old.setCityid(city.getId());
+			}
 			location_old.setUserid(userid);
 			locationDao.save(location_old);
 		}

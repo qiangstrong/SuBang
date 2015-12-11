@@ -2,19 +2,38 @@ package com.subang.bean;
 
 import com.subang.util.WebConst;
 
+public class SearchArg extends PageArg {
 
-public class SearchArg{
-
+	private Integer upperid;
 	private int type;
 	private String arg;
 
-	public SearchArg() {	
-		this.type=WebConst.SEARCH_ALL;
+	public SearchArg() {
+		super(ArgType.para);
+		this.upperid = null;
+		this.type = WebConst.SEARCH_ALL;
 	}
 
 	public SearchArg(int type, String arg) {
+		super(ArgType.para);
+		this.upperid = null;
 		this.type = type;
 		this.arg = arg;
+	}
+
+	public SearchArg(Integer upperid, int type, String arg) {
+		super(ArgType.para);
+		this.upperid = upperid;
+		this.type = type;
+		this.arg = arg;
+	}
+
+	public Integer getUpperid() {
+		return upperid;
+	}
+
+	public void setUpperid(Integer upperid) {
+		this.upperid = upperid;
 	}
 
 	public int getType() {

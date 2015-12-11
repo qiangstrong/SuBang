@@ -67,13 +67,13 @@
 							<td>${city.name}</td>
 							<td>${city.scopeText}</td>
 							<td>
-								<a href="<c:url value="back/region/district.html?cityid=${city.id}"/>">区</a>
+								<a href="back/region/district.html?cityid=${city.id}">区</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/region/service.html?cityid=${city.id}"/>">服务</a>
+								<a href="back/region/service.html?cityid=${city.id}">服务</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/region/showmodifycity.html?cityid=${city.id}"/>">修改</a>
+								<a href="back/region/showmodifycity.html?cityid=${city.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

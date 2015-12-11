@@ -1,4 +1,4 @@
-package com.subang.exception;
+package com.subang.tool;
 
 public class SuException extends Exception {
 	

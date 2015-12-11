@@ -14,12 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.MsgArg;
+import com.subang.bean.PageArg;
+import com.subang.bean.PageState;
 import com.subang.controller.BaseController;
 import com.subang.domain.Banner;
 import com.subang.domain.Category;
 import com.subang.domain.Rebate;
 import com.subang.domain.TicketType;
-import com.subang.exception.SuException;
+import com.subang.tool.BackStack;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -29,25 +33,47 @@ public class ActivityController extends BaseController {
 
 	private static final String VIEW_PREFIX = WebConst.BACK_PREFIX + "/activity";
 
+	@RequestMapping("/tickettype/back")
+	public ModelAndView ticketTypeBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/tickettype.html");
+		return view;
+	}
+
 	@RequestMapping("/tickettype")
 	public ModelAndView listTicketType(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		invalidtePageState(session);
+		BackStack backStack = getBackStack(session);
+		backStack.clear("activity/tickettype");
+
+		if (!backStack.isTop("activity/tickettype")) {
+			backStack.push(new PageState("activity/tickettype", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
 		List<TicketType> ticketTypes = ticketTypeDao.findDetailAll();
 		view.addObject("ticketTypes", ticketTypes);
-
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
-
 		view.setViewName(VIEW_PREFIX + "/tickettype");
 		return view;
 	}
 
 	@RequestMapping("/showaddtickettype")
-	public ModelAndView showAddTicketType() {
+	public ModelAndView showAddTicketType(HttpSession session) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/addtickettype", null));
+
 		TicketType ticketType = new TicketType();
 		view.addObject("ticketType", ticketType);
 
@@ -55,6 +81,7 @@ public class ActivityController extends BaseController {
 		view.addObject("categorys", categorys);
 
 		afterTicketType(categorys, ticketType);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addtickettype"));
 		view.setViewName(VIEW_PREFIX + "/addtickettype");
 		return view;
 	}
@@ -63,6 +90,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView addTicketType(HttpServletRequest request, @Valid TicketType ticketType,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		preTicketType(ticketType);
 		if (!result.hasErrors()) {
 			boolean isException = false;
@@ -82,6 +110,7 @@ public class ActivityController extends BaseController {
 		view.addObject("categorys", categorys);
 
 		afterTicketType(categorys, ticketType);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addtickettype"));
 		view.setViewName(VIEW_PREFIX + "/addtickettype");
 		return view;
 	}
@@ -94,19 +123,23 @@ public class ActivityController extends BaseController {
 		try {
 			activityService.deleteTicketTypes(SuUtil.getIds(ticketTypeids));
 		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
 			isException = true;
 		}
 		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		}
 		view.setViewName("redirect:" + VIEW_PREFIX + "/tickettype.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifytickettype")
-	public ModelAndView showModifyTicketType(@RequestParam("ticketTypeid") Integer ticketTypeid) {
+	public ModelAndView showModifyTicketType(HttpSession session,
+			@RequestParam("ticketTypeid") Integer ticketTypeid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/modifytickettype", null));
+
 		TicketType ticketType = ticketTypeDao.get(ticketTypeid);
 		view.addObject("ticketType", ticketType);
 
@@ -114,6 +147,7 @@ public class ActivityController extends BaseController {
 		view.addObject("categorys", categorys);
 
 		afterTicketType(categorys, ticketType);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifytickettype"));
 		view.setViewName(VIEW_PREFIX + "/modifytickettype");
 		return view;
 	}
@@ -122,6 +156,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView modifyTicketType(HttpServletRequest request, @Valid TicketType ticketType,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		preTicketType(ticketType);
 		if (ticketType.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
@@ -143,6 +178,7 @@ public class ActivityController extends BaseController {
 		view.addObject("categorys", categorys);
 
 		afterTicketType(categorys, ticketType);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifytickettype"));
 		view.setViewName(VIEW_PREFIX + "/modifytickettype");
 		return view;
 	}
@@ -160,26 +196,49 @@ public class ActivityController extends BaseController {
 		}
 	}
 
+	@RequestMapping("/banner/back")
+	public ModelAndView bannerBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/banner.html");
+		return view;
+	}
+
 	@RequestMapping("/banner")
 	public ModelAndView listBanner(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		invalidtePageState(session);
+		BackStack backStack = getBackStack(session);
+		backStack.clear("activity/banner");
+
+		if (!backStack.isTop("activity/banner")) {
+			backStack.push(new PageState("activity/banner", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
 		List<Banner> banners = bannerDao.findAll();
 		view.addObject("banners", banners);
-
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
-
 		view.setViewName(VIEW_PREFIX + "/banner");
 		return view;
 	}
 
 	@RequestMapping("/showaddbanner")
-	public ModelAndView showAddBanner() {
+	public ModelAndView showAddBanner(HttpSession session) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/addbanner", null));
+
 		view.addObject("banner", new Banner());
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addbanner"));
 		view.setViewName(VIEW_PREFIX + "/addbanner");
 		return view;
 	}
@@ -188,6 +247,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView addBanner(HttpServletRequest request, @Valid Banner banner,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -203,6 +263,7 @@ public class ActivityController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addbanner"));
 		view.setViewName(VIEW_PREFIX + "/addbanner");
 		return view;
 	}
@@ -212,16 +273,21 @@ public class ActivityController extends BaseController {
 			@RequestParam("bannerids") String bannerids) {
 		ModelAndView view = new ModelAndView();
 		activityService.deleteBanners(SuUtil.getIds(bannerids));
-		session.setAttribute(KEY_INFO_MSG, "删除成功。");
+		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		view.setViewName("redirect:" + VIEW_PREFIX + "/banner.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifybanner")
-	public ModelAndView showModifyBanner(@RequestParam("bannerid") Integer bannerid) {
+	public ModelAndView showModifyBanner(HttpSession session,
+			@RequestParam("bannerid") Integer bannerid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/modifybanner", null));
+
 		Banner banner = bannerDao.get(bannerid);
 		view.addObject("banner", banner);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifybanner"));
 		view.setViewName(VIEW_PREFIX + "/modifybanner");
 		return view;
 	}
@@ -230,6 +296,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView modifyBanner(HttpServletRequest request, @Valid Banner banner,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		if (banner.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 			view.addObject("banner", banner);
@@ -248,35 +315,62 @@ public class ActivityController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "修改成功。");
 			}
 		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifybanner"));
 		view.setViewName(VIEW_PREFIX + "/modifybanner");
+		return view;
+	}
+
+	@RequestMapping("/rebate/back")
+	public ModelAndView rebateBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/rebate.html");
 		return view;
 	}
 
 	@RequestMapping("/rebate")
 	public ModelAndView listRebate(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		invalidtePageState(session);
+		BackStack backStack = getBackStack(session);
+		backStack.clear("activity/rebate");
+
+		if (!backStack.isTop("activity/rebate")) {
+			backStack.push(new PageState("activity/rebate", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
 		List<Rebate> rebates = rebateDao.findAll();
 		view.addObject("rebates", rebates);
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
-		view.setViewName(WebConst.BACK_PREFIX + "/activity/rebate");
+		view.setViewName(VIEW_PREFIX + "/rebate");
 		return view;
 	}
 
 	@RequestMapping("/showaddrebate")
-	public ModelAndView showAddRebate() {
+	public ModelAndView showAddRebate(HttpSession session) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/addrebate", null));
+
 		view.addObject("rebate", new Rebate());
-		view.setViewName(WebConst.BACK_PREFIX + "/activity/addrebate");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addrebate"));
+		view.setViewName(VIEW_PREFIX + "/addrebate");
 		return view;
 	}
 
 	@RequestMapping("/addrebate")
-	public ModelAndView addRebate(@Valid Rebate rebate, BindingResult result) {
+	public ModelAndView addRebate(HttpSession session, @Valid Rebate rebate, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -289,7 +383,8 @@ public class ActivityController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/activity/addrebate");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addrebate"));
+		view.setViewName(VIEW_PREFIX + "/addrebate");
 		return view;
 	}
 
@@ -298,23 +393,29 @@ public class ActivityController extends BaseController {
 			@RequestParam("rebateids") String rebateids) {
 		ModelAndView view = new ModelAndView();
 		activityService.deleteRebates(SuUtil.getIds(rebateids));
-		session.setAttribute(KEY_INFO_MSG, "删除成功。");
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/activity/rebate.html");
+		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		view.setViewName("redirect:" + VIEW_PREFIX + "/rebate.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifyrebate")
-	public ModelAndView showModifyRebate(@RequestParam("rebateid") Integer rebateid) {
+	public ModelAndView showModifyRebate(HttpSession session,
+			@RequestParam("rebateid") Integer rebateid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/modifyrebate", null));
+
 		Rebate rebate = rebateDao.get(rebateid);
 		view.addObject("rebate", rebate);
-		view.setViewName(WebConst.BACK_PREFIX + "/activity/modifyrebate");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifyrebate"));
+		view.setViewName(VIEW_PREFIX + "/modifyrebate");
 		return view;
 	}
 
 	@RequestMapping("/modifyrebate")
-	public ModelAndView modifyRebate(@Valid Rebate rebate, BindingResult result) {
+	public ModelAndView modifyRebate(HttpSession session, @Valid Rebate rebate, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (rebate.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 		} else if (!result.hasErrors()) {
@@ -330,7 +431,8 @@ public class ActivityController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "修改成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/activity/modifyrebate");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifyrebate"));
+		view.setViewName(VIEW_PREFIX + "/modifyrebate");
 		return view;
 	}
 }

@@ -65,7 +65,7 @@
 							<td>${faq.question}</td>
 							<td>${faq.answer}</td>
 							<td>
-								<a href="<c:url value="back/info/showmodifyfaq.html?faqid=${faq.id}"/>">修改</a>
+								<a href="back/info/showmodifyfaq.html?faqid=${faq.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

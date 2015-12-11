@@ -16,7 +16,7 @@ import com.subang.domain.District;
 import com.subang.domain.Location;
 import com.subang.domain.Notice.Code;
 import com.subang.domain.Region;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.LocUtil;
 import com.subang.util.SuUtil;
@@ -62,7 +62,7 @@ public class RegionService extends BaseService {
 			}
 		}
 		if (!isAll) {
-			throw new SuException("部分城市没有成功删除。请先删除城市的所有订单，再尝试删除城市。");
+			throw new SuException("部分城市没有成功删除。存在用户地址引用了该城市。");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class RegionService extends BaseService {
 			}
 		}
 		if (!isAll) {
-			throw new SuException("部分区没有成功删除。请先删除区的所有订单，再尝试删除区。");
+			throw new SuException("部分区没有成功删除。存在用户地址引用了该区。");
 		}
 	}
 
@@ -122,7 +122,7 @@ public class RegionService extends BaseService {
 			}
 		}
 		if (!isAll) {
-			throw new SuException("部分小区没有成功删除。请先删除小区的所有订单，再尝试删除小区。");
+			throw new SuException("部分小区没有成功删除。存在用户地址引用了该小区");
 		}
 	}
 
@@ -228,27 +228,13 @@ public class RegionService extends BaseService {
 		return categorys;
 	}
 
-	public Integer getCityid(Location location) {
-		City city = null;
-		if (location != null) {
-			GeoLoc geoLoc = LocUtil.getGeoLoc(location);
-			if (geoLoc != null) {
-				city = ComUtil.getFirst(cityDao.findByName(geoLoc.getCity()));
-			}
-			if (city != null) {
-				return city.getId();
-			}
-			if (location.getCityid() != null) {
-				return location.getCityid();
-			}
-		}
-		city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
-		return city.getId();
-	}
-
 	public Integer getCityid(Integer userid) {
 		Location location = ComUtil.getFirst(locationDao.findByUserid(userid));
-		return getCityid(location);
+		if (location != null && location.getCityid() != null) {
+			return location.getCityid();
+		}
+		City city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
+		return city.getId();
 	}
 
 	/**

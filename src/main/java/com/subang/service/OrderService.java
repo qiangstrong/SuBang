@@ -32,7 +32,7 @@ import com.subang.domain.Payment.PayType;
 import com.subang.domain.Region;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;

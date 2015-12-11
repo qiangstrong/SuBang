@@ -23,7 +23,7 @@ import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 

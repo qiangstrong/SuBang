@@ -71,7 +71,7 @@
 							<td>${ticketType.deadlineDes}</td>
 							<td>${ticketType.categoryname}</td>
 							<td>
-								<a href="<c:url value="back/activity/showmodifytickettype.html?ticketTypeid=${ticketType.id}"/>">修改</a>
+								<a href="back/activity/showmodifytickettype.html?ticketTypeid=${ticketType.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

@@ -28,8 +28,8 @@ public class MainController extends BaseController {
 	private static ExpireSet<String> expireSet = new ExpireSet<String>(WebConst.EXPIRED_INTERVAL);
 
 	@RequestMapping("/index")
-	protected void service(HttpServletRequest request, HttpServletResponse response,
-			WeixinArg getArg) throws Exception {
+	protected void index(HttpServletRequest request, HttpServletResponse response, WeixinArg getArg)
+			throws Exception {
 		response.setContentType("text/xml");
 		ServletInputStream inputStream = request.getInputStream();
 		// 验证请求签名
@@ -74,7 +74,8 @@ public class MainController extends BaseController {
 	private void unsubscribe(EventMessage eventMessage, HttpServletResponse response) {
 	}
 
-	private void location(EventMessage eventMessage, HttpServletResponse response) {
+	private void location(EventMessage eventMessage, HttpServletResponse response) throws Exception {
+		response.flushBuffer();
 		User user = userDao.getByOpenid(eventMessage.getFromUserName());
 		if (user != null) {
 			Location location = new Location();

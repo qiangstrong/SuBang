@@ -29,7 +29,7 @@ import com.subang.dao.NoticeDao;
 import com.subang.domain.Notice;
 import com.subang.domain.Notice.Code;
 import com.subang.domain.face.Filter;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 
 /**
  * @author Qiang 与业务相关的公用函数

@@ -22,6 +22,9 @@
 	<%@ include file="../common/header.jsp"%>
 	<table align="center">	
 		<tr>
+			<td colspan="2" align="right"><a href="back/order/index/back.html">返回</a></td>
+		</tr>
+		<tr>
 			<th colspan="2">订单信息</th>			
 		</tr>
 		<tr>

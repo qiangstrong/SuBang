@@ -12,7 +12,7 @@ import com.subang.domain.Notice.Code;
 import com.subang.domain.Order;
 import com.subang.domain.Region;
 import com.subang.domain.Worker;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 

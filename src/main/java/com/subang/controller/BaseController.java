@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.subang.bean.Identity;
-import com.subang.bean.PageState;
+import com.subang.bean.PageArg;
 import com.subang.dao.AddrDao;
 import com.subang.dao.AdminDao;
 import com.subang.dao.BalanceDao;
@@ -47,6 +47,7 @@ import com.subang.service.RoleService;
 import com.subang.service.StatService;
 import com.subang.service.UserService;
 import com.subang.service.WorkerService;
+import com.subang.tool.BackStack;
 
 public class BaseController {
 
@@ -132,26 +133,31 @@ public class BaseController {
 	protected static final String KEY_USER = "user";
 	protected static final String KEY_OPENID = "openid";
 
+	protected static final String KEY_BACK_STACK = "backStack";
+	protected static final String KEY_PAGE_ARG = "pageArg";
+
+	protected static final String KEY_PAGE_STATE = "pageState";
+	protected static final String KEY_BACK_LINK = "backLink";
 	protected static final String KEY_DES_MSG = "desMsg"; // 显示下一级列表的描述信息，比如：订单历史，用户地址等
 	protected static final String KEY_INFO_MSG = "infoMsg"; // 直接显示此类消息
-	protected static final String KEY_ERR_MSG = "errMsg"; // 弹出显示此类消息，很少用到此种类型
-	protected static final String KEY_PAGE_STATE = "pageState";
+	protected static final String KEY_ERR_MSG = "errMsg"; // 弹出显示此类消息，目前没有用到此种类型
 
-	protected PageState getPageState(HttpSession session) {
-		return (PageState) session.getAttribute(KEY_PAGE_STATE);
+	protected void initBackStack(HttpSession session) {
+		session.setAttribute(KEY_BACK_STACK, new BackStack());
 	}
 
-	protected void savePageState(HttpSession session, Object contentArg) {
-		PageState pageState = getPageState(session);
-		if (pageState == null) {
-			pageState = new PageState();
-			session.setAttribute(KEY_PAGE_STATE, pageState);
-		}
-		pageState.setContentArg(contentArg);
+	protected BackStack getBackStack(HttpSession session) {
+		return (BackStack) session.getAttribute(KEY_BACK_STACK);
 	}
 
-	protected void invalidtePageState(HttpSession session) {
-		session.removeAttribute(KEY_PAGE_STATE);
+	protected PageArg getPageArg(HttpSession session) {
+		PageArg pageArg = (PageArg) session.getAttribute(KEY_PAGE_ARG);
+		session.removeAttribute(KEY_PAGE_ARG);
+		return pageArg;
+	}
+
+	protected void setPageArg(HttpSession session, PageArg pageArg) {
+		session.setAttribute(KEY_PAGE_ARG, pageArg);
 	}
 
 	protected Admin getAdmin(HttpSession session) {

@@ -36,10 +36,12 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right">
+				<a href="back/price/category/back.html">返回</a>
+			</td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="<c:url value="back/price/showaddprice.html?categoryid=${categoryid}"/>">添加价格</a></td>
+			<td align="right" colspan="2"><a href="back/price/showaddprice.html?categoryid=${categoryid}">添加价格</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deletePrices()"/></td>
@@ -66,7 +68,7 @@
 							<td>${price.money}</td>
 							<td>${price.comment}</td>
 							<td>
-								<a href="<c:url value="back/price/showmodifyprice.html?priceid=${price.id}"/>">修改</a>
+								<a href="back/price/showmodifyprice.html?priceid=${price.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

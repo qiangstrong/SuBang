@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.WebConst;
 
 @Controller("ticketController_weixin")

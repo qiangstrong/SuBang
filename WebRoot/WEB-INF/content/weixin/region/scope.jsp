@@ -52,8 +52,8 @@ function isWeiXin(){
 		<div id="content">
 			<div class="map" id="beijing_map">
 				<div class="area_list">${city.scopeText}</div>
-				<img
-					alt="由于网络原因地图无法显示" class="img-city" src="${city.scope}">
+				<a href="${city.scope}"><img
+					alt="由于网络原因地图无法显示" class="img-city" src="${city.scope}"></a>
 			</div>
 		</div>
 	</div>

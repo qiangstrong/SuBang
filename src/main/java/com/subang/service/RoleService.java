@@ -4,7 +4,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.subang.domain.Admin;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 
 @Service
 public class RoleService extends BaseService  {

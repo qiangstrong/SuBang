@@ -10,7 +10,7 @@ import com.subang.bean.SearchArg;
 import com.subang.domain.Faq;
 import com.subang.domain.Feedback;
 import com.subang.domain.Info;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.WebConst;
 
 @Service

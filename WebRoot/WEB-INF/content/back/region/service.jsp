@@ -36,10 +36,12 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right">
+				<a href="back/region/city/back.html">返回</a>
+			</td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="<c:url value="back/region/showaddservice.html?cityid=${cityid}"/>">添加服务</a></td>
+			<td align="right" colspan="2"><a href="back/region/showaddservice.html?cityid=${cityid}">添加服务</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteServices()"/></td>

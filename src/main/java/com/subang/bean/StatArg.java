@@ -2,17 +2,19 @@ package com.subang.bean;
 
 import com.subang.util.WebConst;
 
-public class StatArg {
+public class StatArg extends PageArg {
 
 	private int type0;
 	private int type1;
 	private int type2;
 
 	public StatArg() {
-		this.type0=WebConst.STAT_NULL;
+		super(ArgType.para);
+		this.type0 = WebConst.STAT_NULL;
 	}
 
 	public StatArg(int type0, int type1, int type2) {
+		super(ArgType.para);
 		this.type0 = type0;
 		this.type1 = type1;
 		this.type2 = type2;

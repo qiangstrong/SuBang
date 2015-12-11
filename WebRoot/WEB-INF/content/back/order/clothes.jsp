@@ -36,10 +36,13 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"><a href="back/order/check.html?orderid=${orderid}">完成</a></td>
+			<td align="right"><a href="back/order/index/back.html">返回</a></td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="<c:url value="back/order/showaddclothes.html?orderid=${orderid}"/>">添加衣物</a></td>
+			<td align="right" colspan="2">
+				<a href="back/order/showaddclothes.html?orderid=${orderid}">添加衣物</a>
+				<a href="back/order/check.html?orderid=${orderid}">完成</a>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteClothess()"/></td>

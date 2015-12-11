@@ -10,7 +10,7 @@ import com.subang.bean.Identity;
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.Worker;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
 
 @Controller("workerController_app")

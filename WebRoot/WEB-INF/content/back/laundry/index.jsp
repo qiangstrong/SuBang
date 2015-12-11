@@ -88,10 +88,10 @@
 							<td>${laundry.detail}</td>
 							<td>${laundry.comment}</td>
 							<td>
-								<a href="<c:url value="back/laundry/order.html?laundryid=${laundry.id}"/>">订单</a>
+								<a href="back/laundry/order.html?laundryid=${laundry.id}">订单</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/laundry/showmodify.html?laundryid=${laundry.id}"/>">修改</a>
+								<a href="back/laundry/showmodify.html?laundryid=${laundry.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

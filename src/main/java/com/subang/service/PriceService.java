@@ -8,12 +8,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.subang.bean.SearchArg;
 import com.subang.domain.Category;
 import com.subang.domain.ClothesType;
 import com.subang.domain.Notice.Code;
 import com.subang.domain.Price;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
+import com.subang.util.WebConst;
 
 @Service
 public class PriceService extends BaseService {
@@ -88,6 +90,22 @@ public class PriceService extends BaseService {
 	/**
 	 * 衣服类型
 	 */
+	public List<ClothesType> searchClothesType(SearchArg searchArg) {
+		List<ClothesType> clothesTypes = null;
+		switch (searchArg.getType()) {
+		case WebConst.SEARCH_ALL:
+			clothesTypes = clothesTypeDao.findDetailByCategoryid(searchArg.getUpperid());
+			break;
+
+		case WebConst.SEARCH_INCOMPLETE:
+			clothesTypes = clothesTypeDao.findIncomplete(searchArg.getUpperid());
+			break;
+		default:
+			clothesTypes = new ArrayList<ClothesType>();
+		}
+		return clothesTypes;
+	}
+
 	public void addClothesType(ClothesType clothesType, MultipartFile icon) throws SuException {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");

@@ -43,7 +43,7 @@
 		<tr>
 			<td align="right" colspan="2">
 				<a href="back/worker/list.html">所有工作人员</a>
-				<a href="back/worker/showadd.html">添加新工作人员</a>
+				<a href="back/worker/showadd.html">添加工作人员</a>
 			</td>
 		</tr>
 		<tr>
@@ -92,13 +92,13 @@
 							<td>${worker.detail}</td>
 							<td>${worker.comment}</td>
 							<td>
-								<a href="<c:url value="back/worker/order.html?workerid=${worker.id}"/>">订单</a>
+								<a href="back/worker/order.html?workerid=${worker.id}">订单</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/worker/area.html?workerid=${worker.id}"/>">区域</a>
+								<a href="back/worker/area.html?workerid=${worker.id}">区域</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/worker/showmodify.html?workerid=${worker.id}"/>">修改</a>
+								<a href="back/worker/showmodify.html?workerid=${worker.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

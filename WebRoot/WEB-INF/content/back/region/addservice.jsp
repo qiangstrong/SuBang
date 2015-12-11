@@ -30,7 +30,7 @@
 					${infoMsg}
 				</c:if>
 			</td>
-			<td align="right"></td>
+			<td align="right"><a href="${backLink}">返回</a></td>
 		</tr>
 		<tr>
 			<td colspan="2">

@@ -25,7 +25,7 @@ import com.subang.domain.Balance;
 import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.User;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
@@ -218,9 +218,11 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/setlocation")
-	public void setLocation(Identity identity, Location location, HttpServletResponse response) {
+	public void setLocation(Identity identity, Location location, HttpServletResponse response)
+			throws Exception {
 		User user = getUser(identity);
-		userService.updateLocation(user.getId(), location);
 		SuUtil.outputJsonOK(response);
+		response.flushBuffer();
+		userService.updateLocation(user.getId(), location);
 	}
 }

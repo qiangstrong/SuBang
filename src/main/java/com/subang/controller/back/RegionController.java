@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.Area;
+import com.subang.bean.MsgArg;
+import com.subang.bean.PageArg;
+import com.subang.bean.PageState;
 import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Category;
@@ -23,7 +26,8 @@ import com.subang.domain.District;
 import com.subang.domain.Region;
 import com.subang.domain.Service;
 import com.subang.domain.Worker;
-import com.subang.exception.SuException;
+import com.subang.tool.BackStack;
+import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -31,42 +35,97 @@ import com.subang.util.WebConst;
 @RequestMapping("/back/region")
 public class RegionController extends BaseController {
 
+	private static final String VIEW_PREFIX = WebConst.BACK_PREFIX + "/region";
+
+	@RequestMapping("/city/back")
+	public ModelAndView cityBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/city.html");
+		return view;
+	}
+
 	@RequestMapping("/city")
 	public ModelAndView listCity(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		invalidtePageState(session);
+		BackStack backStack = getBackStack(session);
+		backStack.clear("region/city");
+
+		if (!backStack.isTop("region/city")) {
+			backStack.push(new PageState("region/city", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
 		List<City> citys = cityDao.findAll();
 		view.addObject("citys", citys);
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/city");
+		view.setViewName(VIEW_PREFIX + "/city");
+		return view;
+	}
+
+	@RequestMapping("/incomplete/back")
+	public ModelAndView incompleteBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/incomplete.html");
 		return view;
 	}
 
 	@RequestMapping("/incomplete")
-	public ModelAndView listIncomplete() {
+	public ModelAndView listIncomplete(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		List<Area> areas = regionDao.findIncomplete();
-		view.addObject("areas", areas);
+
+		BackStack backStack = getBackStack(session);
+		if (!backStack.isTop("region/incomplete")) {
+			backStack.push(new PageState("region/incomplete", null));
+		}
+
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
 		String desMsg = "没有分配取衣员的区域如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/area");
+		List<Area> areas = regionDao.findIncomplete();
+		view.addObject("areas", areas);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/incomplete"));
+		view.setViewName(VIEW_PREFIX + "/area");
 		return view;
 	}
 
 	@RequestMapping("/showaddcity")
-	public ModelAndView showAddCity() {
+	public ModelAndView showAddCity(HttpSession session) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/addcity", null));
+
 		view.addObject("city", new City());
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addcity");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addcity"));
+		view.setViewName(VIEW_PREFIX + "/addcity");
 		return view;
 	}
 
 	@RequestMapping("/addcity")
 	public ModelAndView addCity(HttpServletRequest request, @Valid City city, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -82,7 +141,8 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addcity");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addcity"));
+		view.setViewName(VIEW_PREFIX + "/addcity");
 		return view;
 	}
 
@@ -93,22 +153,26 @@ public class RegionController extends BaseController {
 		try {
 			regionService.deleteCitys(SuUtil.getIds(cityids));
 		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
 			isException = true;
 		}
 		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		}
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/region/city.html");
+		view.setViewName("redirect:" + VIEW_PREFIX + "/city.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifycity")
-	public ModelAndView showModifyCity(@RequestParam("cityid") Integer cityid) {
+	public ModelAndView showModifyCity(HttpSession session, @RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/modifycity", null));
+
 		City city = cityDao.get(cityid);
 		view.addObject("city", city);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifycity");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifycity"));
+		view.setViewName(VIEW_PREFIX + "/modifycity");
 		return view;
 	}
 
@@ -116,6 +180,7 @@ public class RegionController extends BaseController {
 	public ModelAndView modifyCity(HttpServletRequest request, @Valid City city,
 			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		if (city.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 			view.addObject("city", city);
@@ -134,43 +199,69 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "修改成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifycity");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifycity"));
+		view.setViewName(VIEW_PREFIX + "/modifycity");
+		return view;
+	}
+
+	@RequestMapping("/district/back")
+	public ModelAndView districtBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		PageState pageState = backStack.peek();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/district.html?cityid="
+				+ pageState.getUpperid());
 		return view;
 	}
 
 	@RequestMapping("/district")
 	public ModelAndView listDistrict(HttpSession session, @RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
-		List<District> districts = districtDao.findByCityid(cityid);
-		view.addObject("districts", districts);
-		view.addObject("cityid", cityid);
+
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/district", cityid));
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
 
 		City city = cityDao.get(cityid);
 		String desMsg = "城市名称：" + city.getName() + "。此城市的区如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
-
-		view.setViewName(WebConst.BACK_PREFIX + "/region/district");
+		List<District> districts = districtDao.findByCityid(cityid);
+		view.addObject("districts", districts);
+		view.addObject("cityid", cityid);
+		view.setViewName(VIEW_PREFIX + "/district");
 		return view;
 	}
 
 	@RequestMapping("/showadddistrict")
-	public ModelAndView showAddDistrict(@RequestParam("cityid") Integer cityid) {
+	public ModelAndView showAddDistrict(HttpSession session, @RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/dddistrict", null));
+
 		District district = new District();
 		district.setCityid(cityid);
 		view.addObject("district", district);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/adddistrict");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/dddistrict"));
+		view.setViewName(VIEW_PREFIX + "/adddistrict");
 		return view;
 	}
 
 	@RequestMapping("/adddistrict")
-	public ModelAndView addDistrict(@Valid District district, BindingResult result) {
+	public ModelAndView addDistrict(HttpServletRequest request, @Valid District district,
+			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -184,7 +275,8 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/region/adddistrict");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/dddistrict"));
+		view.setViewName(VIEW_PREFIX + "/adddistrict");
 		return view;
 	}
 
@@ -192,35 +284,43 @@ public class RegionController extends BaseController {
 	public ModelAndView deleteDistrict(HttpSession session,
 			@RequestParam("districtids") String districtids) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/deletedistrict", null));
+
 		boolean isException = false;
 		List<Integer> districtidList = SuUtil.getIds(districtids);
 		try {
 			regionService.deleteDistricts(districtidList);
 		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
 			isException = true;
 		}
 		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		}
-		District district = districtDao.get(districtidList.get(0));
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/region/district.html?cityid="
-				+ district.getCityid());
+		view.setViewName("redirect:" + VIEW_PREFIX + "/district/back.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifydistrict")
-	public ModelAndView showModifyDistrict(@RequestParam("districtid") Integer districtid) {
+	public ModelAndView showModifyDistrict(HttpSession session,
+			@RequestParam("districtid") Integer districtid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/modifydistrict", null));
+
 		District district = districtDao.get(districtid);
 		view.addObject("district", district);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifydistrict");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifydistrict"));
+		view.setViewName(VIEW_PREFIX + "/modifydistrict");
 		return view;
 	}
 
 	@RequestMapping("/modifydistrict")
-	public ModelAndView modifyDistrict(@Valid District district, BindingResult result) {
+	public ModelAndView modifyDistrict(HttpSession session, @Valid District district,
+			BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (district.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 			view.addObject("district", district);
@@ -237,7 +337,19 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "修改成功。");
 			}
 		}
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifydistrict");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifydistrict"));
+		view.setViewName(VIEW_PREFIX + "/modifydistrict");
+		return view;
+	}
+
+	@RequestMapping("/region/back")
+	public ModelAndView regionBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		PageState pageState = backStack.peek();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/region.html?districtid="
+				+ pageState.getUpperid());
 		return view;
 	}
 
@@ -245,26 +357,39 @@ public class RegionController extends BaseController {
 	public ModelAndView listRegion(HttpSession session,
 			@RequestParam("districtid") Integer districtid) {
 		ModelAndView view = new ModelAndView();
-		List<Region> regions = regionDao.findByDistrictid(districtid);
-		view.addObject("regions", regions);
-		view.addObject("districtid", districtid);
+
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/region", districtid));
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
 
 		District district = districtDao.get(districtid);
 		String desMsg = "区名称：" + district.getName() + "。此区的小区如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
+		List<Region> regions = regionDao.findByDistrictid(districtid);
+		view.addObject("regions", regions);
+		view.addObject("districtid", districtid);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/region");
+		view.setViewName(VIEW_PREFIX + "/region");
 		return view;
 	}
 
 	@RequestMapping("/showaddregion")
-	public ModelAndView showAddRegion(@RequestParam("districtid") Integer districtid) {
+	public ModelAndView showAddRegion(HttpSession session,
+			@RequestParam("districtid") Integer districtid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/addregion", null));
+
 		Region region = new Region();
 		region.setDistrictid(districtid);
 		view.addObject("region", region);
@@ -273,13 +398,15 @@ public class RegionController extends BaseController {
 		List<Worker> workers = workerService.searchWorker(searchArg);
 		view.addObject("workers", workers);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addregion");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addregion"));
+		view.setViewName(VIEW_PREFIX + "/addregion");
 		return view;
 	}
 
 	@RequestMapping("/addregion")
-	public ModelAndView addRegion(@Valid Region region, BindingResult result) {
+	public ModelAndView addRegion(HttpSession session, @Valid Region region, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -297,7 +424,8 @@ public class RegionController extends BaseController {
 		List<Worker> workers = workerService.searchWorker(searchArg);
 		view.addObject("workers", workers);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addregion");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addregion"));
+		view.setViewName(VIEW_PREFIX + "/addregion");
 		return view;
 	}
 
@@ -305,26 +433,31 @@ public class RegionController extends BaseController {
 	public ModelAndView deleteRegion(HttpSession session,
 			@RequestParam("regionids") String regionids) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/deleteregion", null));
+
 		boolean isException = false;
 		List<Integer> regionidList = SuUtil.getIds(regionids);
 		try {
 			regionService.deleteRegions(regionidList);
 		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
 			isException = true;
 		}
 		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		}
-		Region region = regionDao.get(regionidList.get(0));
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/region/region.html?districtid="
-				+ region.getDistrictid());
+		view.setViewName("redirect:" + VIEW_PREFIX + "/region/back.html");
 		return view;
 	}
 
 	@RequestMapping("/showmodifyregion")
-	public ModelAndView showModifyRegion(@RequestParam("regionid") Integer regionid) {
+	public ModelAndView showModifyRegion(HttpSession session,
+			@RequestParam("regionid") Integer regionid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/modifyregion", null));
+
 		Region region = regionDao.get(regionid);
 		view.addObject("region", region);
 
@@ -332,13 +465,15 @@ public class RegionController extends BaseController {
 		List<Worker> workers = workerService.searchWorker(searchArg);
 		view.addObject("workers", workers);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifyregion");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyregion"));
+		view.setViewName(VIEW_PREFIX + "/modifyregion");
 		return view;
 	}
 
 	@RequestMapping("/modifyregion")
-	public ModelAndView modifyRegion(@Valid Region region, BindingResult result) {
+	public ModelAndView modifyRegion(HttpSession session, @Valid Region region, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (region.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 			view.addObject("region", region);
@@ -360,33 +495,57 @@ public class RegionController extends BaseController {
 		List<Worker> workers = workerService.searchWorker(searchArg);
 		view.addObject("workers", workers);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/modifyregion");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyregion"));
+		view.setViewName(VIEW_PREFIX + "/modifyregion");
+		return view;
+	}
+
+	@RequestMapping("/service/back")
+	public ModelAndView serviceBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		PageState pageState = backStack.peek();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/service.html?cityid="
+				+ pageState.getUpperid());
 		return view;
 	}
 
 	@RequestMapping("/service")
 	public ModelAndView listService(HttpSession session, @RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
-		List<Service> services = serviceDao.findDetailByCityid(cityid);
-		view.addObject("services", services);
-		view.addObject("cityid", cityid);
+
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/service", cityid));
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
 
 		City city = cityDao.get(cityid);
 		String desMsg = "城市名称：" + city.getName() + "。此城市的服务如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 
-		view.addObject(KEY_ERR_MSG, session.getAttribute(KEY_ERR_MSG));
-		session.removeAttribute(KEY_ERR_MSG);
-		view.addObject(KEY_INFO_MSG, session.getAttribute(KEY_INFO_MSG));
-		session.removeAttribute(KEY_INFO_MSG);
+		List<Service> services = serviceDao.findDetailByCityid(cityid);
+		view.addObject("services", services);
+		view.addObject("cityid", cityid);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/service");
+		view.setViewName(VIEW_PREFIX + "/service");
 		return view;
 	}
 
 	@RequestMapping("/showaddservice")
-	public ModelAndView showAddService(@RequestParam("cityid") Integer cityid) {
+	public ModelAndView showAddService(HttpSession session, @RequestParam("cityid") Integer cityid) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/addservice", null));
+
 		Service service = new Service();
 		service.setCityid(cityid);
 		view.addObject("service", service);
@@ -394,13 +553,15 @@ public class RegionController extends BaseController {
 		List<Category> categories = categoryDao.findAll();
 		view.addObject("categories", categories);
 
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addservice");
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addservice"));
+		view.setViewName(VIEW_PREFIX + "/addservice");
 		return view;
 	}
 
 	@RequestMapping("/addservice")
-	public ModelAndView addService(@Valid Service service, BindingResult result) {
+	public ModelAndView addService(HttpSession session, @Valid Service service, BindingResult result) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
 		if (!result.hasErrors()) {
 			boolean isException = false;
 			try {
@@ -416,7 +577,9 @@ public class RegionController extends BaseController {
 		}
 		List<Category> categories = categoryDao.findAll();
 		view.addObject("categories", categories);
-		view.setViewName(WebConst.BACK_PREFIX + "/region/addservice");
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addservice"));
+		view.setViewName(VIEW_PREFIX + "/addservice");
 		return view;
 	}
 
@@ -424,20 +587,21 @@ public class RegionController extends BaseController {
 	public ModelAndView deleteService(HttpSession session,
 			@RequestParam("serviceids") String serviceids) {
 		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/deleteservice", null));
+
 		boolean isException = false;
 		List<Integer> serviceidList = SuUtil.getIds(serviceids);
 		try {
 			regionService.deleteServices(serviceidList);
 		} catch (SuException e) {
-			session.setAttribute(KEY_INFO_MSG, "删除失败。" + e.getMessage());
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
 			isException = true;
 		}
 		if (!isException) {
-			session.setAttribute(KEY_INFO_MSG, "删除成功。");
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		}
-		Service service = serviceDao.get(serviceidList.get(0));
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/region/service.html?cityid="
-				+ service.getCityid());
+		view.setViewName("redirect:" + VIEW_PREFIX + "/service/back.html");
 		return view;
 	}
 }

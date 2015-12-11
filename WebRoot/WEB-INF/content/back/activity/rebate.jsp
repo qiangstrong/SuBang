@@ -65,7 +65,7 @@
 							<td>${rebate.money}</td>
 							<td>${rebate.benefit}</td>
 							<td>
-								<a href="<c:url value="back/activity/showmodifyrebate.html?rebateid=${rebate.id}"/>">修改</a>
+								<a href="back/activity/showmodifyrebate.html?rebateid=${rebate.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

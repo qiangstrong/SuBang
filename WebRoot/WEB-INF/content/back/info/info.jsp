@@ -42,7 +42,7 @@
 					</tr>
 					<tr>
 						<th>修改</th>
-						<td><a href="<c:url value="back/info/showmodifyinfo.html?infoid=${info.id}"/>">修改</a></td>
+						<td><a href="back/info/showmodifyinfo.html?infoid=${info.id}">修改</a></td>
 					</tr>	
 				</c:forEach>
 			</table>

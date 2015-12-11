@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.controller.BaseController;
 import com.subang.domain.Admin;
+import com.subang.tool.BackStack;
 import com.subang.util.WebConst;
 
 /**
@@ -21,7 +22,8 @@ public class MainController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
-		invalidtePageState(session);
+		BackStack backStack = getBackStack(session);
+		backStack.clear("index");
 		view.addObject("admin", getAdmin(session));
 		view.setViewName(WebConst.BACK_PREFIX + "/index");
 		return view;
@@ -55,8 +57,9 @@ public class MainController extends BaseController {
 			view.setViewName(WebConst.BACK_PREFIX + "/login");
 			return view;
 		}
+		initBackStack(session);
 		setAdmin(session, matchAdmin);
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/index.html?type=0");
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/index.html");
 		return view;
 	}
 

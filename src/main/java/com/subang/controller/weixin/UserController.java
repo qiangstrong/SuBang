@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
-import com.subang.exception.SuException;
+import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;

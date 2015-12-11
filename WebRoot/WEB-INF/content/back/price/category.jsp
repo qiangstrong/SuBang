@@ -66,13 +66,13 @@
 							<td>${category.name}</td>
 							<td>${category.comment}</td>
 							<td>
-								<a href="<c:url value="back/price/price.html?categoryid=${category.id}"/>">价格</a>
+								<a href="back/price/price.html?categoryid=${category.id}">价格</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/price/clothestype.html?categoryid=${category.id}&type=1"/>">衣物类型</a>
+								<a href="back/price/clothestype.html?categoryid=${category.id}&type=1">衣物类型</a>
 							</td>
 							<td>
-								<a href="<c:url value="back/price/showmodifycategory.html?categoryid=${category.id}"/>">修改</a>
+								<a href="back/price/showmodifycategory.html?categoryid=${category.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

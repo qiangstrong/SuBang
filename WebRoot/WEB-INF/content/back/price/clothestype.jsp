@@ -36,13 +36,15 @@
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
-			<td align="right"></td>
+			<td align="right">
+				<a href="back/price/category/back.html">返回</a>
+			</td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2">
-				<a href="<c:url value="back/price/clothestype.html?categoryid=${categoryid}&type=5"/>">不完成类型</a>
-				<a href="<c:url value="back/price/clothestype.html?categoryid=${categoryid}&type=1"/>">所有类型</a>
-				<a href="<c:url value="back/price/showaddclothestype.html?categoryid=${categoryid}"/>">添加类型</a>
+				<a href="back/price/clothestype.html?categoryid=${categoryid}&type=5">不完成类型</a>
+				<a href="back/price/clothestype.html?categoryid=${categoryid}&type=1">所有类型</a>
+				<a href="back/price/showaddclothestype.html?categoryid=${categoryid}">添加类型</a>
 			</td>
 		</tr>
 		<tr>
@@ -70,7 +72,7 @@
 							<td>${clothesType.name}</td>
 							<td>${clothesType.money}</td>							
 							<td>
-								<a href="<c:url value="back/price/showmodifyclothestype.html?clothesTypeid=${clothesType.id}"/>">修改</a>
+								<a href="back/price/showmodifyclothestype.html?clothesTypeid=${clothesType.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

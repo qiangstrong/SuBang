@@ -65,7 +65,7 @@
 							<td>${banner.link}</td>
 							<td>${banner.comment}</td>
 							<td>
-								<a href="<c:url value="back/activity/showmodifybanner.html?bannerid=${banner.id}"/>">修改</a>
+								<a href="back/activity/showmodifybanner.html?bannerid=${banner.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>
