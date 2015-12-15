@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import weixin.popular.bean.paymch.MchPayNotify;
-import weixin.popular.util.ExpireSet;
 import weixin.popular.util.MapUtil;
 import weixin.popular.util.StreamUtils;
 import weixin.popular.util.XMLConverUtil;
 
+import com.alipay.util.SignUtil;
 import com.subang.bean.AddrDetail;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
@@ -35,6 +35,7 @@ import com.subang.domain.History;
 import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.tool.SuException;
+import com.subang.util.PayUtil;
 import com.subang.util.SuUtil;
 import com.subang.util.TimeUtil;
 import com.subang.util.TimeUtil.Option;
@@ -43,9 +44,6 @@ import com.subang.util.WebConst;
 @Controller("orderController_weixin")
 @RequestMapping("/weixin/order")
 public class OrderController extends BaseController {
-
-	private static ExpireSet<String> expireSet = new ExpireSet<String>(
-			WebConst.EXPIRED_PAY_INTERVAL);
 
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/order";
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
@@ -234,7 +232,12 @@ public class OrderController extends BaseController {
 			switch (payArg.getPayTypeEnum()) {
 			case weixin: {
 				view.addObject("json", prepayResult.getArg());
-				view.setViewName(VIEW_PREFIX + "/prepay");
+				view.setViewName(VIEW_PREFIX + "/wxprepay");
+				break;
+			}
+			case alipay: {
+				view.addObject("list", prepayResult.getArg());
+				view.setViewName(VIEW_PREFIX + "/aliprepay");
 				break;
 			}
 			}
@@ -242,44 +245,62 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/pay")
-	public void pay(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/wxpay")
+	public void wxpay(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/xml;charset=UTF-8");
 
 		// 获取请求数据
 		String xml = StreamUtils.copyToString(request.getInputStream(), Charset.forName("utf-8"));
 		Map<String, String> map = MapUtil.xmlToMap(xml);
 
-		// 已处理 去重
-		if (expireSet.contains(map.get("transaction_id"))) {
-			SuUtil.paySucc(response);
-			return;
-		}
-
 		if (!map.get("return_code").equals("SUCCESS")) {
 			LOG.error("错误码:" + map.get("return_code") + "; 错误信息:" + map.get("return_msg"));
-			SuUtil.payError(response);
+			PayUtil.wxpayError(response);
 			return;
 		}
 
 		if (!map.get("result_code").equals("SUCCESS")) {
 			LOG.error("错误码:" + map.get("err_code") + "; 错误信息:" + map.get("err_code_des"));
-			SuUtil.payError(response);
+			PayUtil.wxpayError(response);
 			return;
 		}
 
-		if (!SuUtil.validate(map)) {
+		if (!PayUtil.wxVerify(map)) {
 			LOG.error("错误码:" + WebConst.LOG_TAG + "; 错误信息:" + "签名校验失败。");
-			SuUtil.payError(response);
+			PayUtil.wxpayError(response);
 			return;
 		}
 
 		MchPayNotify payNotify = XMLConverUtil.convertToObject(MchPayNotify.class, xml);
-		expireSet.add(payNotify.getTransaction_id());
-		SuUtil.paySucc(response);
-		response.flushBuffer();
 		orderService.payOrder(payNotify.getOut_trade_no());
+		PayUtil.wxpaySucc(response);
+	}
 
+	@RequestMapping("/alipay")
+	public void alipay(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/xml;charset=UTF-8");
+
+		// 获取请求数据
+		Map<String, String> map = com.alipay.util.MapUtil.genParamMap(request.getParameterMap());
+
+		if (!SignUtil.verify(map)) {
+			LOG.error("错误码:" + WebConst.LOG_TAG + "; 错误信息:" + "签名校验失败。");
+			PayUtil.alipayError(response);
+			return;
+		}
+
+		String trade_status = map.get("trade_status");
+		if (trade_status.equals("TRADE_FINISHED") || trade_status.equals("TRADE_SUCCESS")) {
+			orderService.payOrder(map.get("out_trade_no"));
+		}
+		PayUtil.alipaySucc(response);
+	}
+
+	@RequestMapping("alireturn")
+	public ModelAndView alireturn(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView();
+		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_UNDONE);
+		return view;
 	}
 
 	/**

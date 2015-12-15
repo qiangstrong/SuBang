@@ -16,6 +16,8 @@ import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.PayUtil;
 import weixin.popular.util.StringUtils;
 
+import com.alipay.api.PayAPI;
+import com.alipay.bean.AlipayOrder;
 import com.subang.bean.GeoLoc;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
@@ -26,6 +28,7 @@ import com.subang.domain.City;
 import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.Order.OrderType;
+import com.subang.domain.Order.State;
 import com.subang.domain.Payment;
 import com.subang.domain.Payment.PayType;
 import com.subang.domain.Rebate;
@@ -292,7 +295,7 @@ public class UserService extends BaseService {
 			Integer money = (int) (balance.getMoney() * 100);
 			unifiedorder.setTotal_fee(money.toString());
 			unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
-			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/balance/pay.html");
+			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/balance/wxpay.html");
 
 			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder, apikey);
 
@@ -340,6 +343,42 @@ public class UserService extends BaseService {
 		return result;
 	}
 
+	private PrepayResult payByAli(PayArg payArg, HttpServletRequest request) {
+		PrepayResult result = new PrepayResult();
+		Balance balance = balanceDao.getDetail(payArg.getOrderid());
+
+		String pid = SuUtil.getAppProperty("pid_ali");
+		String prikey = SuUtil.getAppProperty("prikey_ali");
+
+		AlipayOrder alipayOrder = new AlipayOrder();
+		alipayOrder.setPartner(pid);
+		alipayOrder.setSeller_id(pid);
+		alipayOrder.setNotify_url(SuUtil.getBasePath(request) + "weixin/balance/alipay.html");
+		alipayOrder.setOut_trade_no(balance.getOrderno());
+		alipayOrder.setSubject("recharge");
+		alipayOrder.setBody("recharge");
+		alipayOrder.setTotal_fee(balance.getMoney().toString());
+
+		Object arg = null;
+		switch (payArg.getClientEnum()) {
+		case weixin: {
+			alipayOrder
+					.setReturn_url(SuUtil.getBasePath(request) + "weixin/balance/alireturn.html");
+			alipayOrder.setShow_url(SuUtil.getBasePath(request) + "weixin/user/index.html");
+			arg = PayAPI.generatePayWapRequest(alipayOrder, prikey);
+			break;
+		}
+		case user: {
+			arg = PayAPI.generatePayMobileRequest(alipayOrder, prikey);
+			break;
+		}
+		}
+
+		result.setCode(PrepayResult.Code.conti);
+		result.setArg(arg);
+		return result;
+	}
+
 	public PrepayResult prepay(PayArg payArg, Integer userid, HttpServletRequest request) {
 
 		// 生成本地订单
@@ -355,9 +394,14 @@ public class UserService extends BaseService {
 			result = payByWeixin(payArg, request);
 			break;
 		}
+		case alipay: {
+			result = payByAli(payArg, request);
+			break;
+		}
 		default: {
 			result = new PrepayResult();
 			result.setCode(PrepayResult.Code.succ);
+			break;
 		}
 		}
 		return result;
@@ -365,6 +409,9 @@ public class UserService extends BaseService {
 
 	public void payBalance(String orderno) {
 		Balance balance = balanceDao.getByOrderno(orderno);
+		if (balance.getStateEnum() == State.paid) {
+			return;
+		}
 		balance.setState(Order.State.paid);
 		balance.setTime(new Timestamp(System.currentTimeMillis()));
 		balanceDao.update(balance);

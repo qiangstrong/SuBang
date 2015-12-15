@@ -161,7 +161,7 @@
 							<td><img alt=""
 								src="css/weixin/ccsjsp/user/index/user_xieyi2.png">
 							</td>
-							<td><a href="/content/weixin/info/term.html">
+							<td><a href="/content/weixin/info/term.htm">
 									<div class="list-titel no-img">
 										用户协议 <img alt=""
 											src="css/weixin/ccsjsp/user/index/rignt_icon.png"

@@ -15,6 +15,8 @@ import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.PayUtil;
 import weixin.popular.util.StringUtils;
 
+import com.alipay.api.PayAPI;
+import com.alipay.bean.AlipayOrder;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
@@ -335,12 +337,12 @@ public class OrderService extends BaseService {
 	 * 支付
 	 */
 
-	// 使用优惠券支付。true：完成支付。false：由于优惠券的金额不足，还需继续支付
-	private PrepayResult payByTicket(Integer orderid, Integer ticketid) {
+	// 使用优惠券支付。
+	private PrepayResult payByTicket(PayArg payArg) {
 		PrepayResult result = new PrepayResult();
-		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
-		TicketDetail ticketDetail = ticketDao.getDetail(ticketid);
+		TicketDetail ticketDetail = ticketDao.getDetail(payArg.getTicketid());
 		if (ticketDetail.getCategoryid() != null) {
 			if (ticketDetail.getCategoryid() != orderDetail.getCategoryid()) {
 				result.setCode(PrepayResult.Code.fail);
@@ -348,7 +350,7 @@ public class OrderService extends BaseService {
 				return result;
 			}
 		}
-		ticketDao.delete(ticketid);
+		ticketDao.delete(payArg.getTicketid());
 		if (orderDetail.getActualMoney() > ticketDetail.getMoney()) {
 			payment.setMoneyTicket(ticketDetail.getMoney());
 			paymentDao.update(payment);
@@ -363,9 +365,9 @@ public class OrderService extends BaseService {
 		return result;
 	}
 
-	private PrepayResult payByBalance(Integer orderid) {
+	private PrepayResult payByBalance(PayArg payArg) {
 		PrepayResult result = new PrepayResult();
-		OrderDetail orderDetail = orderDao.getDetail(orderid);
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		User user = userDao.get(orderDetail.getUserid());
 		if (orderDetail.getActualMoney() > user.getMoney()) {
 			result.setCode(PrepayResult.Code.fail);
@@ -405,6 +407,12 @@ public class OrderService extends BaseService {
 			apikey = SuUtil.getAppProperty("apikey_user");
 			break;
 		}
+		case worker: {
+			appid = SuUtil.getAppProperty("appid_worker");
+			mch_id = SuUtil.getAppProperty("mch_id_worker");
+			apikey = SuUtil.getAppProperty("apikey_worker");
+			break;
+		}
 		}
 
 		if (prepay_id == null) {
@@ -415,6 +423,7 @@ public class OrderService extends BaseService {
 				unifiedorder.setOpenid(user.getOpenid());
 				break;
 			}
+			case worker:
 			case user: {
 				unifiedorder.setTrade_type("APP");
 				break;
@@ -429,7 +438,7 @@ public class OrderService extends BaseService {
 			Integer money = (int) (orderDetail.getActualMoney() * 100);
 			unifiedorder.setTotal_fee(money.toString());
 			unifiedorder.setSpbill_create_ip(request.getRemoteAddr());
-			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/order/pay.html");
+			unifiedorder.setNotify_url(SuUtil.getBasePath(request) + "weixin/order/wxpay.html");
 
 			UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder, apikey);
 
@@ -461,6 +470,7 @@ public class OrderService extends BaseService {
 			arg = PayUtil.generateMchPayJsRequestJson(prepay_id, appid, apikey);
 			break;
 		}
+		case worker:
 		case user: {
 			PayAppRequest payApprequest = new PayAppRequest();
 			payApprequest.setAppid(appid);
@@ -476,11 +486,48 @@ public class OrderService extends BaseService {
 		return result;
 	}
 
+	private PrepayResult payByAli(PayArg payArg, HttpServletRequest request) {
+		PrepayResult result = new PrepayResult();
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+
+		String pid = SuUtil.getAppProperty("pid_ali");
+		String prikey = SuUtil.getAppProperty("prikey_ali");
+
+		AlipayOrder alipayOrder = new AlipayOrder();
+		alipayOrder.setPartner(pid);
+		alipayOrder.setSeller_id(pid);
+		alipayOrder.setNotify_url(SuUtil.getBasePath(request) + "weixin/order/alipay.html");
+		alipayOrder.setOut_trade_no(orderDetail.getOrderno());
+		alipayOrder.setSubject("pay");
+		alipayOrder.setBody("pay");
+		alipayOrder.setTotal_fee(orderDetail.getActualMoney().toString());
+
+		Object arg = null;
+		switch (payArg.getClientEnum()) {
+		case weixin: {
+			alipayOrder.setReturn_url(SuUtil.getBasePath(request) + "weixin/order/alireturn.html");
+			alipayOrder.setShow_url(SuUtil.getBasePath(request) + "weixin/order/index.html?type="
+					+ WebConst.ORDER_STATE_UNDONE);
+			arg = PayAPI.generatePayWapRequest(alipayOrder, prikey);
+			break;
+		}
+		case worker:
+		case user: {
+			arg = PayAPI.generatePayMobileRequest(alipayOrder, prikey);
+			break;
+		}
+		}
+
+		result.setCode(PrepayResult.Code.conti);
+		result.setArg(arg);
+		return result;
+	}
+
 	public PrepayResult prepay(PayArg payArg, HttpServletRequest request) {
 		PrepayResult result;
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		if (!orderDetail.isTicket() && payArg.getTicketid() != null) {
-			result = payByTicket(payArg.getOrderid(), payArg.getTicketid());
+			result = payByTicket(payArg);
 			if (result.getCodeEnum() == PrepayResult.Code.succ
 					|| result.getCodeEnum() == PrepayResult.Code.fail) {
 				return result;
@@ -488,28 +535,35 @@ public class OrderService extends BaseService {
 		}
 		switch (payArg.getPayTypeEnum()) {
 		case balance: {
-			result = payByBalance(payArg.getOrderid());
+			result = payByBalance(payArg);
 			break;
 		}
 		case weixin: {
 			result = payByWeixin(payArg, request);
 			break;
 		}
+		case alipay: {
+			result = payByAli(payArg, request);
+			break;
+		}
 		default: {
 			result = new PrepayResult();
 			result.setCode(PrepayResult.Code.succ);
+			break;
 		}
 		}
 		return result;
 	}
 
 	public void payOrder(String orderno) {
-		History history = null;
 		Order order = orderDao.getByOrderno(orderno);
+		if (order.getStateEnum() == State.paid) {
+			return;
+		}
 		order.setState(State.paid);
 		orderDao.update(order);
 
-		history = new History();
+		History history = new History();
 		history.setOrderid(order.getId());
 		history.setOperation(State.paid);
 		historyDao.save(history);
