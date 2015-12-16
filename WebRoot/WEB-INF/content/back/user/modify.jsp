@@ -10,44 +10,56 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>操作历史</title>
+	<title>修改用户信息</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 </head>
 <body>
+	<c:if test="${errMsg!=null}">
+		<script>
+			alert('${errMsg}');
+		</script>
+	</c:if>
 	<%@ include file="../common/header.jsp"%>
 	<table align="center">
 		<tr>
-			<td>${desMsg}</td>
-			<td align="right"><a href="back/order/index/back.html">返回</a></td>
-		</tr>
-		<tr>
-			<td colspan="2">
+			<td>
 				<c:if test="${infoMsg!=null}">
 					${infoMsg}
 				</c:if>
 			</td>
+			<td align="right"><a href="${backLink}">返回</a></td>
 		</tr>
 		<tr>
 			<td colspan="2">
-			<%!int count; %>
-			<table border="1" cellpadding="5">
-				<tr>
-					<th>编号</th>
-					<th>操作名称</th>
-					<th>操作时间</th>
-				</tr>
-				<%count=0;%>
-				<c:forEach var="history" items="${historys}">
-					<tr>
-						<td><%=++count%></td>
-						<td>${history.operationDes}</td>
-						<td>${history.timeDes}</td>
-					</tr>
-				</c:forEach>
-			</table>
+				<form:form modelAttribute="user" action="back/user/modify.html" method="post">
+					<form:hidden path="id"/>
+					<form:hidden path="cellnum"/>
+					<table>
+						<tr>
+							<td></td>
+							<td><form:errors path="score" /></td>
+						</tr>
+						<tr>
+							<td>积分：</td>
+							<td><form:input path="score" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="password" /></td>
+						</tr>
+						<tr>
+							<td>密码：</td>
+							<td><form:input path="password" /></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="修改" /></td>
+							<td><input type="reset" value="重置" /></td>
+						</tr>
+					</table>
+				</form:form>
 			</td>
 		</tr>
 	</table>

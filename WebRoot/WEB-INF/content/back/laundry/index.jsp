@@ -70,9 +70,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('laundryid')" /></th>
+						<th>编号</th>
 						<th>商家名称</th>
 						<th>手机号</th>
 						<th>地址</th>
@@ -80,9 +82,11 @@
 						<th>订单</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="laundry" items="${laundrys}">
 						<tr>
 							<td><input type="checkbox" name="laundryid" value="${laundry.id}" /></td>
+							<td><%=++count%></td>
 							<td>${laundry.name}</td>
 							<td>${laundry.cellnum}</td>
 							<td>${laundry.detail}</td>

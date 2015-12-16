@@ -10,8 +10,12 @@ public class Payment implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * 订单付款，只有前三种方式； 如果由取衣员代为支付，记录取衣员的支付方式（此时只有weixin、alipay两种支付方式）。
+	 * 用户充值，只有后三种方式； 在管理端由管理员代为充值的，记录为cash
+	 */
 	public enum PayType {
-		balance, weixin, alipay;
+		balance, weixin, alipay, cash;
 
 		public static PayType toPayType(String arg) {
 			return PayType.values()[new Integer(arg)];
@@ -31,6 +35,9 @@ public class Payment implements Filter, Serializable {
 				break;
 			case alipay:
 				description = "支付宝";
+				break;
+			case cash:
+				description = "现金";
 				break;
 			}
 			return description;

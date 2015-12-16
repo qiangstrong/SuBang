@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.domain.Admin;
+import com.subang.bean.OrderDetail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -21,23 +21,16 @@ public class DomainTest {
 
 	@Test
 	public void test() {
-		String username = "";
-		String password = "\" or \"1";
-		String sql = "select * from admin_t where username=? and password=?";
-		Object[] args = { username, password };
-		List<Admin> admins = null;
-		try {
-			admins = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Admin>(Admin.class));
-		} catch (Exception e) {
-			pause();
-		}
+		List<OrderDetail> orderDetails = findDetailByUserid("19");
 		pause();
 	}
 
-	public void test1() {
-		/*
-		 * String str= System.out.println(str);
-		 */
+	public List<OrderDetail> findDetailByUserid(String userid) {
+		String sql = "select * from orderdetail_v where userid= ?";
+		Object[] args = { userid };
+		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetails;
 	}
 
 	public void pause() {

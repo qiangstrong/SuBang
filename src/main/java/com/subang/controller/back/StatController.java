@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.PageState;
 import com.subang.bean.StatArg;
 import com.subang.bean.StatItem;
 import com.subang.controller.BaseController;
@@ -27,6 +28,11 @@ public class StatController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
 		backStack.clear("stat/index");
+		backStack.push(new PageState("stat/index", statArg));
+
+		PageState pageState = backStack.peek();
+		view.addObject(KEY_PAGE_STATE, pageState);
+
 		List<StatItem> statItems = statService.stat(statArg);
 		view.addObject(KEY_DATA, statItems);
 		view.setViewName(INDEX_PAGE);

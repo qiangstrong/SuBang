@@ -55,31 +55,52 @@
 		<tr>
 			<td>
 				<form name="searchArg" action="back/order/search.html" method="post">
-					类别：
-					<select id="type" name="type" onchange="switchOrderState()">
-						<option value="2" selected="selected">订单状态</option>
-						<option value="3">订单号</option>
-						<option value="5">用户手机号</option>
-						<option value="6">商家名称</option>
-					</select>
-					关键词：
-					<select id="arg0" name="arg" >
-						<option value="0" selected="selected">已接受</option>
-						<option value="1">已计价</option>
-						<option value="2">已支付</option>
-						<option value="3">已取走</option>
-						<option value="4">已分拣</option>
-						<option value="5">已送达</option>
-						<option value="6">已评价</option>
-						<option value="7">已取消</option>
-					</select>
-					<input id="arg1" name="arg" type="text" disabled="disabled"/>
-					<input type="submit" value="确定" />
+				<table>
+					<tr>
+					<td>
+						类别：
+						<select id="type" name="type" onchange="switchOrderState()">
+							<option value="2" selected="selected">订单状态</option>
+							<option value="3">订单号</option>
+							<option value="5">用户手机号</option>
+							<option value="6">商家名称</option>
+						</select>
+						关键词：
+						<select id="arg0" name="arg" >
+							<option value="0" selected="selected">已接受</option>
+							<option value="1">已计价</option>
+							<option value="2">已支付</option>
+							<option value="3">已取走</option>
+							<option value="4">已分拣</option>
+							<option value="5">已送达</option>
+							<option value="6">已评价</option>
+							<option value="7">已取消</option>
+						</select>
+						<input id="arg1" name="arg" type="text" disabled="disabled"/>					
+					</td>
+					</tr>
+					<tr>
+					<td>
+						起始日期：
+						<input type="date" name="startTime" value="${searchArg.startTimeDes}"/>
+						截止日期：
+						<input type="date" name="endTime" value="${searchArg.endTimeDes}"/>							
+						<input type="submit" value="确定" />
+					</td>
+					<tr>
+				</table>
 				</form>
 			</td>
 			<td align="right">
-				<input type="button" value="取消" onclick="cancelOrders()"/>
-				<input type="button" value="删除" onclick="deleteOrders()"/>
+				<table>
+					<tr><td>
+						<input type="button" value="取消" onclick="cancelOrders()"/>
+					</td></tr>
+					<tr><td>
+						<input type="button" value="删除" onclick="deleteOrders()"/>
+					</td></tr>
+				</table>
+				
 			</td>
 		</tr>
 		<tr>
@@ -98,12 +119,15 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('orderid')" /></th>
+						<th>编号</th>
 						<th>订单号</th>
 						<th>类别</th>
-						<th>状态</th>					
+						<th>状态</th>		
+						<th>金额</th>			
 						<th>取件时间</th>						
 						<th>条形码</th>
 						<th>详情</th>
@@ -111,12 +135,15 @@
 						<th>历史</th>						
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="orderDetail" items="${orderDetails}">
 						<tr>
 							<td><input type="checkbox" name="orderid" value="${orderDetail.id}" /></td>
+							<td><%=++count%></td>
 							<td>${orderDetail.orderno}</td>
 							<td>${orderDetail.categoryname}</td>
 							<td>${orderDetail.stateDes}</td>
+							<td>${orderDetail.totalMoneyDes}</td>
 							<td>${orderDetail.dateDes} ${orderDetail.timeDes}</td>
 							<td>${orderDetail.barcodeDes}</td>		
 							<td>

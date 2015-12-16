@@ -2,6 +2,7 @@ package com.subang.util;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -23,6 +24,15 @@ public class ComUtil extends BaseUtil {
 	public static SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
 	public static SimpleDateFormat sdf_datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static SimpleDateFormat sdf_timestamp = new SimpleDateFormat("yyyyMMddHHmmss"); // 用于对app的请求签名
+	public static Timestamp firstTime, lastTime;
+
+	static {
+		firstTime = new Timestamp(0);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(firstTime.getTime());
+		calendar.add(Calendar.YEAR, 200);
+		lastTime = new Timestamp(calendar.getTimeInMillis());
+	}
 
 	public static String getLikeStr(String str) {
 		return "%" + str + "%";
@@ -117,6 +127,13 @@ public class ComUtil extends BaseUtil {
 		return BigDecimal.valueOf(d).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
+	public static Double round(Double d, int scale) {
+		if (d == null) {
+			return null;
+		}
+		return BigDecimal.valueOf(d).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
+
 	public static boolean equal(double d1, double d2) {
 		if (Math.abs(d1 - d2) < 0.1) {
 			return true;
@@ -125,6 +142,7 @@ public class ComUtil extends BaseUtil {
 	}
 
 	public static void main(String[] args) {
-
+		boolean result = isTimestampValid("20151216195528");
+		System.out.println(result);
 	}
 }

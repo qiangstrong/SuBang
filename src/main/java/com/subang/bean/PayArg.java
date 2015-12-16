@@ -10,7 +10,7 @@ import com.subang.util.ComUtil;
 public class PayArg {
 
 	public enum Client {
-		weixin, user, worker
+		weixin, user, worker, back
 	}
 
 	private Integer client; // 微信端，不传此参数；app端传此参数

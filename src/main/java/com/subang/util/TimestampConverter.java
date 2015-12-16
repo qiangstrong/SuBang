@@ -6,6 +6,9 @@ import java.util.Date;
 
 import org.springframework.core.convert.converter.Converter;
 
+/**
+ * @author Qiang 用于TicketType，Ticket中deadline的转换，把日期转换为日期时间
+ */
 public class TimestampConverter implements Converter<String, Timestamp> {
 
 	public Timestamp convert(String arg0) {

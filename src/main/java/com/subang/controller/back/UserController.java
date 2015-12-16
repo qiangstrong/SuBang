@@ -2,9 +2,12 @@ package com.subang.controller.back;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,9 +17,14 @@ import com.subang.bean.MsgArg;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageArg.ArgType;
 import com.subang.bean.PageState;
+import com.subang.bean.PayArg;
+import com.subang.bean.PayArg.Client;
 import com.subang.bean.SearchArg;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
+import com.subang.domain.Payment.PayType;
+import com.subang.domain.Ticket;
+import com.subang.domain.TicketType;
 import com.subang.domain.User;
 import com.subang.tool.BackStack;
 import com.subang.tool.SuException;
@@ -96,6 +104,72 @@ public class UserController extends BaseController {
 		userService.deleteUsers(SuUtil.getIds(userids));
 		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	@RequestMapping("/showmodify")
+	public ModelAndView showModify(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/modify", null));
+
+		User user = userDao.get(userid);
+		if (user == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("user/modify"));
+			return view;
+		}
+		view.addObject("user", user);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/modify"));
+		view.setViewName(VIEW_PREFIX + "/modify");
+		return view;
+	}
+
+	@RequestMapping("/modify")
+	public ModelAndView modify(HttpSession session, @Valid User user, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (user.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+		} else if (!result.hasErrors()) {
+			userService.modifyUserBack(user);
+			view.addObject(KEY_INFO_MSG, "修改成功。");
+		}
+		view.addObject("user", user);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/modify"));
+		view.setViewName(VIEW_PREFIX + "/modify");
+		return view;
+	}
+
+	@RequestMapping("showrecharge")
+	public ModelAndView showRecharge(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/recharge", null));
+
+		PayArg payArg = new PayArg();
+		payArg.setPayType(PayType.cash);
+		view.addObject("payArg", payArg);
+		view.addObject("userid", userid);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/recharge"));
+		view.setViewName(VIEW_PREFIX + "/recharge");
+		return view;
+	}
+
+	@RequestMapping("/recharge")
+	public ModelAndView modify(HttpServletRequest request, @RequestParam("userid") Integer userid,
+			@Valid PayArg payArg, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
+		if (!result.hasErrors()) {
+			payArg.setClient(Client.back);
+			userService.prepay(payArg, userid, request);
+			view.addObject(KEY_INFO_MSG, "充值成功。");
+		}
+		view.addObject("payArg", payArg);
+		view.addObject("userid", userid);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/recharge"));
+		view.setViewName(VIEW_PREFIX + "/recharge");
 		return view;
 	}
 
@@ -201,8 +275,39 @@ public class UserController extends BaseController {
 
 		List<TicketDetail> ticketDetails = ticketDao.findValidDetailByUserid(userid);
 		view.addObject("ticketDetails", ticketDetails);
-
+		view.addObject("userid", userid);
 		view.setViewName(VIEW_PREFIX + "/ticket");
+		return view;
+	}
+
+	@RequestMapping("/showaddticket")
+	public ModelAndView showAddTicket(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("ticket/addticket", null));
+
+		Ticket ticket = new Ticket();
+		ticket.setUserid(userid);
+		view.addObject("ticket", ticket);
+		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
+		view.addObject("ticketTypes", ticketTypes);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("ticket/addticket"));
+		view.setViewName(VIEW_PREFIX + "/addticket");
+		return view;
+	}
+
+	@RequestMapping("/addticket")
+	public ModelAndView addTicket(HttpSession session, @Valid Ticket ticket, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (!result.hasErrors()) {
+			userService.addTicketBack(ticket);
+			view.addObject(KEY_INFO_MSG, "添加成功。");
+		}
+		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
+		view.addObject("ticketTypes", ticketTypes);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("ticket/addticket"));
+		view.setViewName(VIEW_PREFIX + "/addticket");
 		return view;
 	}
 

@@ -50,52 +50,59 @@ public class OrderService extends BaseService {
 	// 后台查找订单
 	public List<OrderDetail> searchOrder(SearchArg searchArg) {
 		List<OrderDetail> orderDetails = null;
+		searchArg.pre();
 		switch (searchArg.getType()) {
 		case WebConst.SEARCH_NULL:
 			orderDetails = new ArrayList<OrderDetail>();
 			break;
 		case WebConst.SEARCH_ALL:
-			orderDetails = orderDao.findDetailAll();
-			break;
 		case WebConst.SEARCH_ORDER_STATE:
-			orderDetails = orderDao.findDetailByState(State.toState(searchArg.getArg()));
-			break;
 		case WebConst.SEARCH_ORDER_ORDERNO:
-			orderDetails = orderDao.findDetailByOrderno(searchArg.getArg());
+		case WebConst.SEARCH_ORDER_USERID:
+		case WebConst.SEARCH_ORDER_WORKERID:
+		case WebConst.SEARCH_ORDER_LAUNDRYID:
+			orderDetails = orderDao.findDetail(searchArg);
 			break;
 		case WebConst.SEARCH_ORDER_USER_NICKNAME:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<User> users1 = userDao.findByNickname(searchArg.getArg());
+			SearchArg searchArg1 = new SearchArg();
+			searchArg1.setType(WebConst.SEARCH_ORDER_USERID);
+			searchArg1.setStartTime(searchArg.getStartTime());
+			searchArg1.setEndTime(searchArg.getEndTime());
 			for (User user : users1) {
-				orderDetails.addAll(orderDao.findDetailByUserid(user.getId()));
+				searchArg1.setArg(user.getId().toString());
+				orderDetails.addAll(orderDao.findDetail(searchArg));
 			}
 			break;
 		case WebConst.SEARCH_ORDER_USER_CELLNUM:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<User> users2 = userDao.findByCellnum(searchArg.getArg());
+			SearchArg searchArg2 = new SearchArg();
+			searchArg2.setType(WebConst.SEARCH_ORDER_USERID);
+			searchArg2.setStartTime(searchArg.getStartTime());
+			searchArg2.setEndTime(searchArg.getEndTime());
 			for (User user : users2) {
-				orderDetails.addAll(orderDao.findDetailByUserid(user.getId()));
+				searchArg.setArg(user.getId().toString());
+				orderDetails.addAll(orderDao.findDetail(searchArg));
 			}
 			break;
 		case WebConst.SEARCH_ORDER_LAUNDRY_NAME:
 			orderDetails = new ArrayList<OrderDetail>();
 			List<Laundry> laundrys = laundryDao.findByName(searchArg.getArg());
+			SearchArg searchArg3 = new SearchArg();
+			searchArg3.setType(WebConst.SEARCH_ORDER_LAUNDRYID);
+			searchArg3.setStartTime(searchArg.getStartTime());
+			searchArg3.setEndTime(searchArg.getEndTime());
 			for (Laundry laundry : laundrys) {
-				orderDetails.addAll(orderDao.findDetailByLaundryid(laundry.getId()));
+				searchArg3.setArg(laundry.getId().toString());
+				orderDetails.addAll(orderDao.findDetail(searchArg));
 			}
-			break;
-		case WebConst.SEARCH_ORDER_USERID:
-			orderDetails = orderDao.findDetailByUserid(new Integer(searchArg.getArg()));
-			break;
-		case WebConst.SEARCH_ORDER_WORKERID:
-			orderDetails = orderDao.findDetailByWorkerid(new Integer(searchArg.getArg()));
-			break;
-		case WebConst.SEARCH_ORDER_LAUNDRYID:
-			orderDetails = orderDao.findDetailByLaundryid(new Integer(searchArg.getArg()));
 			break;
 		default:
 			orderDetails = new ArrayList<OrderDetail>();
 		}
+		searchArg.after();
 		return orderDetails;
 	}
 
@@ -140,7 +147,7 @@ public class OrderService extends BaseService {
 		return orderDetails;
 	}
 
-	// 用户添加订单。 工作人员使用app查询自己的订单，不在给工作人员发送短信。 下单的时候生成支付信息（由数据库触发器保证）
+	// 用户添加订单。 工作人员使用app查询自己的订单，不再给工作人员发送短信。 下单的时候生成支付信息（由数据库触发器保证）
 	public void addOrder(Order order) {
 
 		order.setState(State.accepted);
@@ -229,6 +236,10 @@ public class OrderService extends BaseService {
 	// 后台完成订单分配商家，手动分配取衣员的功能
 	public void modifyOrder(Order order) {
 		Order order_old = orderDao.get(order.getId());
+		// 如果订单被其他管理人员删除，修改操作已经没有意义，直接返回
+		if (order_old == null) {
+			return;
+		}
 		order_old.setLaundryid(order.getLaundryid());
 		order_old.setWorkerid(order.getWorkerid());
 		orderDao.update(order_old);
@@ -458,9 +469,7 @@ public class OrderService extends BaseService {
 				return result;
 			}
 
-			payment.setType(PayType.weixin);
 			payment.setPrepay_id(unifiedorderResult.getPrepay_id());
-			paymentDao.update(payment);
 			prepay_id = payment.getPrepay_id();
 		}
 
@@ -481,6 +490,8 @@ public class OrderService extends BaseService {
 		}
 		}
 
+		payment.setType(PayType.weixin);
+		paymentDao.update(payment);
 		result.setCode(PrepayResult.Code.conti);
 		result.setArg(arg);
 		return result;
@@ -518,6 +529,9 @@ public class OrderService extends BaseService {
 		}
 		}
 
+		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
+		payment.setType(PayType.alipay);
+		paymentDao.update(payment);
 		result.setCode(PrepayResult.Code.conti);
 		result.setArg(arg);
 		return result;

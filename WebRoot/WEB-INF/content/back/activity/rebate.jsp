@@ -52,16 +52,20 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('rebateid')" /></th>
+						<th>编号</th>
 						<th>金额</th>
 						<th>折扣</th>				
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="rebate" items="${rebates}">
 						<tr>
 							<td><input type="checkbox" name="rebateid" value="${rebate.id}" /></td>
+							<td><%=++count%></td>
 							<td>${rebate.money}</td>
 							<td>${rebate.benefit}</td>
 							<td>

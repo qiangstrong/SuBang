@@ -52,16 +52,20 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('bannerid')" /></th>
+						<th>编号</th>
 						<th>链接</th>
 						<th>备注</th>			
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="banner" items="${banners}">
 						<tr>
 							<td><input type="checkbox" name="bannerid" value="${banner.id}" /></td>
+							<td><%=++count%></td>
 							<td>${banner.link}</td>
 							<td>${banner.comment}</td>
 							<td>

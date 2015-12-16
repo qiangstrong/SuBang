@@ -16,9 +16,10 @@ drop view if exists orderdetail_v;
 create view orderdetail_v 
 as ( select order_t.*, category_t.name `categoryname`, user_t.cellnum, payment_t.type `pay_type`, payment_t.money_ticket,
  addrdetail_v.name `addrname`, addrdetail_v.cellnum `addrcellnum`, addrdetail_v.cityname, addrdetail_v.districtname, addrdetail_v.regionname, addrdetail_v.detail `addrdetail`,  
- worker_t.name `workername`, worker_t.cellnum `workercellnum` 
-from order_t, user_t, addrdetail_v, worker_t, category_t, payment_t 
+ worker_t.name `workername`, worker_t.cellnum `workercellnum` ,history_t.time `accept_time`
+from order_t, user_t, addrdetail_v, worker_t, category_t, payment_t, history_t 
 where order_t.userid=user_t.id and order_t.addrid=addrdetail_v.id and order_t.workerid=worker_t.id and order_t.categoryid=category_t.id and payment_t.orderno=order_t.orderno
+ and order_t.id=history_t.id and history_t.operation=0
 );
 
 drop view if exists ticket_typedetail_v;

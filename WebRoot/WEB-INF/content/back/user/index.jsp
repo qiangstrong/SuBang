@@ -68,23 +68,31 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('userid')" /></th>
-						
+						<th>编号</th>
 						<th>手机号</th>
 						<th>积分</th>
 						<th>余额</th>
+						<th>充值</th>
 						<th>地址</th>
 						<th>卡券</th>
 						<th>订单</th>
+						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="user" items="${users}">
 						<tr>
 							<td><input type="checkbox" name="userid" value="${user.id}" /></td>
+							<td><%=++count%></td>
 							<td>${user.cellnum}</td>
 							<td>${user.score}</td>
 							<td>${user.money}</td>
+							<td>
+								<a href="back/user/showrecharge.html?userid=${user.id}">充值</a>
+							</td>
 							<td>
 								<a href="back/user/addr.html?userid=${user.id}">地址</a>
 							</td>
@@ -93,6 +101,9 @@
 							</td>						
 							<td>
 								<a href="back/user/order.html?userid=${user.id}">订单</a>
+							</td>
+							<td>
+								<a href="back/user/showmodify.html?userid=${user.id}">修改</a>
 							</td>
 						</tr>
 					</c:forEach>

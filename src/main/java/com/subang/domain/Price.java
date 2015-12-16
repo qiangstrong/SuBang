@@ -17,7 +17,7 @@ public class Price implements Filter, Serializable {
 	private Integer id;
 	@NotNull
 	@Min(0)
-	@Digits(integer = 4, fraction = 1)
+	@Digits(integer = 4, fraction = 0)
 	private Double money;
 	@Length(max = 100)
 	private String comment;
@@ -46,8 +46,12 @@ public class Price implements Filter, Serializable {
 		return money;
 	}
 
+	public String getMoneyDes() {
+		return String.valueOf(Math.round(money));
+	}
+
 	public void setMoney(Double money) {
-		this.money = ComUtil.round(money);
+		this.money = ComUtil.round(money, 0);
 	}
 
 	public String getComment() {

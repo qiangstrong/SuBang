@@ -52,9 +52,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('ticketTypeid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>金额</th>
 						<th>积分</th>	
@@ -62,9 +64,11 @@
 						<th>类别</th>				
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="ticketType" items="${ticketTypes}">
 						<tr>
 							<td><input type="checkbox" name="ticketTypeid" value="${ticketType.id}" /></td>
+							<td><%=++count%></td>
 							<td>${ticketType.name}</td>
 							<td>${ticketType.money}</td>
 							<td>${ticketType.score}</td>

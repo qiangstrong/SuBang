@@ -55,16 +55,20 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('districtid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>小区</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="district" items="${districts}">
 						<tr>
 							<td><input type="checkbox" name="districtid" value="${district.id}" /></td>
+							<td><%=++count%></td>
 							<td>${district.name}</td>
 							<td>
 								<a href="back/region/region.html?districtid=${district.id}">小区</a>

@@ -47,16 +47,20 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('noticeid')" /></th>
+						<th>编号</th>
 						<th>时间</th>
 						<th>代码</th>
 						<th>消息</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="notice" items="${notices}">
 						<tr>
 							<td><input type="checkbox" name="noticeid" value="${notice.id}" /></td>
+							<td><%=++count%></td>
 							<td>${notice.time}</td>
 							<td>${notice.code}</td>	
 							<td>${notice.msg}</td>						

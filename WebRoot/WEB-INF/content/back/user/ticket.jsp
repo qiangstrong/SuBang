@@ -39,6 +39,9 @@
 			<td align="right"><a href="back/user/index/back.html">返回</a></td>
 		</tr>
 		<tr>
+			<td align="right" colspan="2"><a href="back/user/showaddticket.html?userid=${userid}">添加卡券</a></td>
+		</tr>
+		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteTickets()"/></td>
 		</tr>
 		<tr>
@@ -50,23 +53,27 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('ticketid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>类别</th>
 						<th>金额</th>
 						<th>积分</th>
 						<th>期限</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="ticketDetail" items="${ticketDetails}">
 						<tr>
 							<td><input type="checkbox" name="ticketid" value="${ticketDetail.id}" /></td>
+							<td><%=++count%></td>
 							<td>${ticketDetail.name}</td>
 							<td>${ticketDetail.categoryname}</td>
 							<td>${ticketDetail.money}</td>
 							<td>${ticketDetail.score}</td>
-							<td>${ticketDetail.deadline}</td>
+							<td>${ticketDetail.deadlineDes}</td>
 						</tr>
 					</c:forEach>
 				</table>

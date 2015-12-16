@@ -2,6 +2,7 @@ package com.subang.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -25,6 +26,8 @@ public class User implements Filter, Serializable {
 	@NotNull
 	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
+	@NotNull
+	@Min(0)
 	private Integer score;
 	private Double money;
 	private Integer addrid; // 用户的默认地址

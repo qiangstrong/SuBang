@@ -34,15 +34,19 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+				<%!int count; %>
 				<table border="1" cellpadding="5">
 					<tr>
+						<th>编号</th>
 						<th>城市名称</th>
 						<th>区名称</th>
 						<th>小区名称</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="area" items="${areas}">
 						<tr>
+							<td><%=++count%></td>
 							<td>${area.cityname}</td>
 							<td>${area.districtname}</td>
 							<td>${area.regionname}</td>

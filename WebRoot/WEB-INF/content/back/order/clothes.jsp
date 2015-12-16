@@ -56,16 +56,20 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('clothesid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>颜色</th>
 						<th>瑕疵</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="clothes" items="${clothess}">
 						<tr>
 							<td><input type="checkbox" name="clothesid" value="${clothes.id}" /></td>
+							<td><%=++count%></td>
 							<td>${clothes.name}</td>
 							<td>${clothes.color}</td>
 							<td>${clothes.flaw}</td>

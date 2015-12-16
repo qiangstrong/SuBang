@@ -51,9 +51,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('categoryid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>可用</th>
 						<th>备注</th>
@@ -61,9 +63,11 @@
 						<th>衣物类型</th>					
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="category" items="${categorys}">
 						<tr>
 							<td><input type="checkbox" name="categoryid" value="${category.id}" /></td>
+							<td><%=++count%></td>
 							<td>${category.name}</td>
 							<td>${category.validDes}</td>
 							<td>${category.comment}</td>

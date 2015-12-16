@@ -50,9 +50,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('addrid')" /></th>
+						<th>编号</th>
 						<th>姓名</th>
 						<th>手机号</th>
 						<th>城市名称</th>
@@ -60,9 +62,11 @@
 						<th>小区名称</th>
 						<th>详细地址</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="addrDetail" items="${addrDetails}">
 						<tr>
 							<td><input type="checkbox" name="addrid" value="${addrDetail.id}" /></td>
+							<td><%=++count%></td>
 							<td>${addrDetail.name}</td>
 							<td>${addrDetail.cellnum}</td>
 							<td>${addrDetail.cityname}</td>

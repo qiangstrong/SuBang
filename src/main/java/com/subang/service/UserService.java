@@ -88,12 +88,25 @@ public class UserService extends BaseService {
 		}
 	}
 
+	// 客户端修改用户信息
 	public void modifyUser(User user) throws SuException {
 		try {
 			userDao.update(user);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("手机号码不能相同。");
 		}
+	}
+
+	// 管理端修改用户信息
+	public void modifyUserBack(User user) {
+		User user_old = userDao.get(user.getId());
+		// 如果用户被其他管理人员删除，修改操作已经没有意义，直接返回
+		if (user_old == null) {
+			return;
+		}
+		user_old.setPassword(user.getPassword());
+		user_old.setScore(user.getScore());
+		userDao.update(user_old);
 	}
 
 	// 后台删除用户
@@ -220,6 +233,14 @@ public class UserService extends BaseService {
 		userDao.update(user);
 	}
 
+	public void addTicketBack(Ticket ticket) {
+		if (ticket.getDeadline() == null) {
+			TicketType ticketType = ticketTypeDao.get(ticket.getTicketTypeid());
+			ticket.setDeadline(ticketType.getDeadline());
+		}
+		ticketDao.save(ticket);
+	}
+
 	// 管理员删除用户的卡券。除非特殊情况，管理员不应执行此操作
 	public void deleteTickets(List<Integer> ticketids) {
 		for (Integer ticketid : ticketids) {
@@ -315,11 +336,8 @@ public class UserService extends BaseService {
 				return result;
 			}
 
-			payment.setType(PayType.weixin);
 			payment.setPrepay_id(unifiedorderResult.getPrepay_id());
-			paymentDao.update(payment);
 			prepay_id = payment.getPrepay_id();
-
 		}
 
 		Object arg = null;
@@ -338,6 +356,8 @@ public class UserService extends BaseService {
 		}
 		}
 
+		payment.setType(PayType.weixin);
+		paymentDao.update(payment);
 		result.setCode(PrepayResult.Code.conti);
 		result.setArg(arg);
 		return result;
@@ -374,8 +394,22 @@ public class UserService extends BaseService {
 		}
 		}
 
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.alipay);
+		paymentDao.update(payment);
 		result.setCode(PrepayResult.Code.conti);
 		result.setArg(arg);
+		return result;
+	}
+
+	private PrepayResult payByCash(PayArg payArg) {
+		PrepayResult result = new PrepayResult();
+		Balance balance = balanceDao.getDetail(payArg.getOrderid());
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.cash);
+		paymentDao.update(payment);
+		payBalance(balance.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
 		return result;
 	}
 
@@ -396,6 +430,10 @@ public class UserService extends BaseService {
 		}
 		case alipay: {
 			result = payByAli(payArg, request);
+			break;
+		}
+		case cash: {
+			result = payByCash(payArg);
 			break;
 		}
 		default: {

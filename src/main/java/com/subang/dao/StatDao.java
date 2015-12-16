@@ -11,9 +11,10 @@ import com.subang.bean.StatItem;
 @Repository
 public class StatDao extends BaseDao<StatItem> {
 
-	public List<StatItem> findByStatArg(StatArg statArg) {
-		String sql = "call stat(?,?,?)";
-		Object[] args = { statArg.getType0(), statArg.getType1(), statArg.getType2() };
+	public List<StatItem> find(StatArg statArg) {
+		String sql = "call stat(?,?,?,?,?)";
+		Object[] args = { statArg.getType0(), statArg.getType1(), statArg.getType2(),
+				statArg.getStartTime(), statArg.getEndTime() };
 		List<StatItem> statItems = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<StatItem>(StatItem.class));
 		return statItems;

@@ -55,14 +55,18 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('serviceid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="service" items="${services}">
 						<tr>
 							<td><input type="checkbox" name="serviceid" value="${service.id}" /></td>
+							<td><%=++count%></td>
 							<td>${service.categoryname}</td>
 						</tr>
 					</c:forEach>

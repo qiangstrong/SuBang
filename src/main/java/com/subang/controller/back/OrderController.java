@@ -76,6 +76,7 @@ public class OrderController extends BaseController {
 
 		List<OrderDetail> orderDetails = orderService.searchOrder(pageState.getSearchArg());
 		view.addObject(KEY_DATA, orderDetails);
+		view.addObject("searchArg", pageState.getSearchArg());
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
@@ -113,9 +114,13 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/search")
-	public ModelAndView search(HttpSession session, SearchArg searchArg) {
+	public ModelAndView search(HttpSession session, @Valid SearchArg searchArg, BindingResult result) {
 		ModelAndView view = new ModelAndView();
-		setPageArg(session, searchArg);
+		if (result.hasErrors()) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "查询参数错误。"));
+		} else {
+			setPageArg(session, searchArg);
+		}
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		return view;
 	}

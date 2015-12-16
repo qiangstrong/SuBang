@@ -71,9 +71,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('workerid')" /></th>
+						<th>编号</th>
 						<th>姓名</th>
 						<th>核心</th>
 						<th>手机号</th>
@@ -83,9 +85,11 @@
 						<th>区域</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="worker" items="${workers}">
 						<tr>
 							<td><input type="checkbox" name="workerid" value="${worker.id}" /></td>
+							<td><%=++count%></td>
 							<td>${worker.name}</td>
 							<td>${worker.coreDes}</td>
 							<td>${worker.cellnum}</td>

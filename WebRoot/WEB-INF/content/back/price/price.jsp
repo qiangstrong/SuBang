@@ -55,17 +55,21 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('priceid')" /></th>
+						<th>编号</th>
 						<th>金额</th>
 						<th>备注</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="price" items="${prices}">
 						<tr>
 							<td><input type="checkbox" name="priceid" value="${price.id}" /></td>
-							<td>${price.money}</td>
+							<td><%=++count%></td>
+							<td>${price.moneyDes}</td>
 							<td>${price.comment}</td>
 							<td>
 								<a href="back/price/showmodifyprice.html?priceid=${price.id}">修改</a>

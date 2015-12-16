@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.bean.OrderDetail;
+import com.subang.bean.SearchArg;
 import com.subang.domain.Order;
 import com.subang.domain.Order.State;
 import com.subang.util.ComUtil;
@@ -157,6 +158,15 @@ public class OrderDao extends BaseDao<Order> {
 		} catch (EmptyResultDataAccessException e) {
 		}
 		return orderDetail;
+	}
+
+	public List<OrderDetail> findDetail(SearchArg searchArg) {
+		String sql = "call find(?,?,?,?,?)";
+		Object[] args = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
+				searchArg.getStartTime(), searchArg.getEndTime() };
+		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetails;
 	}
 
 	public List<OrderDetail> findDetailAll() {

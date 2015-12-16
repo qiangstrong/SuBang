@@ -73,6 +73,12 @@
 								<input type="radio" name="type1" id="id11" value="1" disabled="disabled"/>
 							</td>
 							<td></td>
+						</tr>
+						<tr>
+							<td>起始日期：</td>
+							<td><input type="date" name="startTime" value="${statArg.startTimeDes}"/></td>
+							<td>截止日期：</td>
+							<td><input type="date" name="endTime" value="${statArg.endTimeDes}"/></td>
 							<td>
 								<input type="submit" value="确定" />
 							</td>
@@ -90,13 +96,17 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
+						<th>编号</th>
 						<th>名称</th>
 						<th>数量</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="statItem" items="${statItems}">
 						<tr>
+							<td><%=++count%></td>
 							<td>${statItem.name}</td>
 							<td>${statItem.quantity}</td>
 						</tr>

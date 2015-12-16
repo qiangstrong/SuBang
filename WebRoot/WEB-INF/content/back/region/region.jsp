@@ -55,15 +55,19 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('regionid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="region" items="${regions}">
 						<tr>
 							<td><input type="checkbox" name="regionid" value="${region.id}" /></td>
+							<td><%=++count%></td>
 							<td>${region.name}</td>
 							<td>
 								<a href="back/region/showmodifyregion.html?regionid=${region.id}">修改</a>

@@ -52,18 +52,22 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('cityid')" /></th>
+						<th>编号</th>
 						<th>名称</th>
 						<th>服务范围描述</th>
 						<th>区</th>	
 						<th>服务</th>					
 						<th>修改</th>
 					</tr>
+					<%count=0;%>
 					<c:forEach var="city" items="${citys}">
 						<tr>
 							<td><input type="checkbox" name="cityid" value="${city.id}" /></td>
+							<td><%=++count%></td>
 							<td>${city.name}</td>
 							<td>${city.scopeText}</td>
 							<td>

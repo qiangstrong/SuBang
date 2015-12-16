@@ -11,25 +11,30 @@ import com.subang.util.WebConst;
 
 @Service
 public class StatService extends BaseService {
-	
-	public List<StatItem> stat(StatArg statArg){
-		List<StatItem> statItems=null;
+
+	public List<StatItem> stat(StatArg statArg) {
+		List<StatItem> statItems = null;
+		statArg.pre();
 		switch (statArg.getType0()) {
 		case WebConst.STAT_NULL:
-			statItems=new ArrayList<StatItem>();
+			statItems = new ArrayList<StatItem>();
 			break;
 		case WebConst.STAT_AREA:
 		case WebConst.STAT_USER:
-			statItems=statDao.findByStatArg(statArg);
+			statItems = statDao.find(statArg);
 			break;
-		}	
+		default:
+			statItems = new ArrayList<StatItem>();
+			break;
+		}
 		preproccess(statItems);
+		statArg.after();
 		return statItems;
 	}
-	
-	private void preproccess(List<StatItem> statItems){
+
+	private void preproccess(List<StatItem> statItems) {
 		for (StatItem statItem : statItems) {
-			if (statItem.getQuantity()==null) {
+			if (statItem.getQuantity() == null) {
 				statItem.setQuantity(0);
 			}
 		}
