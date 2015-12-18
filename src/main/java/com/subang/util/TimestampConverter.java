@@ -17,7 +17,7 @@ public class TimestampConverter implements Converter<String, Timestamp> {
 			return ts;
 		}
 		try {
-			Date date = ComUtil.sdf_date.parse(arg0);
+			Date date = ComUtil.getDateFormat().parse(arg0);
 			ts = new Timestamp(date.getTime());
 		} catch (ParseException e) {
 			throw new IllegalArgumentException();

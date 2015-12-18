@@ -40,6 +40,7 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, user);
 	}
 
+	// 使用手机号和密码登录
 	@RequestMapping("/login")
 	public void login(User user, HttpServletResponse response) {
 		User matchUser = userDao.findByUser(user);
@@ -52,6 +53,18 @@ public class UserController extends BaseController {
 			result.setCode(Result.OK);
 		}
 		SuUtil.outputJson(response, result);
+	}
+
+	// 使用验证过的手机号登录
+	@RequestMapping("/logincellnum")
+	public void loginCellnum(User user, HttpServletResponse response) {
+		User matchUser = userDao.getByCellnum(user.getCellnum());
+		if (matchUser == null) {
+			matchUser = new User();
+		} else {
+			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
+		}
+		SuUtil.outputJson(response, matchUser);
 	}
 
 	@RequestMapping("/add")

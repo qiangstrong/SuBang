@@ -36,6 +36,16 @@ public class WorkerController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
+	// 使用验证过的手机号登录
+	@RequestMapping("/logincellnum")
+	public void loginCellnum(Worker worker, HttpServletResponse response) {
+		Worker matchWorker = workerDao.getByCellnum(worker.getCellnum());
+		if (matchWorker == null) {
+			matchWorker = new Worker();
+		}
+		SuUtil.outputJson(response, matchWorker);
+	}
+
 	// 工作人员不需要注册，访问这个url需要认证信息
 	@RequestMapping("/chkcellnum")
 	public void chkCellnum(@RequestParam("cellnum") String cellnum, HttpServletResponse response) {

@@ -1,6 +1,5 @@
 package com.subang.util;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.subang.dao.UserDao;
@@ -14,7 +13,6 @@ public class StratUtil extends BaseUtil {
 
 	private static final String dataPath = "data/StatUtil.dat";
 
-	private static SimpleDateFormat sdf_orderno = new SimpleDateFormat("yyMMdd");
 	private static UserDao userDao = null;
 
 	public void setUserDao(UserDao userDao) {
@@ -31,7 +29,7 @@ public class StratUtil extends BaseUtil {
 	}
 
 	public static String getOrderno(Order.OrderType orderType) {
-		String no_date = sdf_orderno.format(new Date());
+		String no_date = ComUtil.getOrdernoFormat().format(new Date());
 		StringBuffer on_random = new StringBuffer();
 		for (int i = 0; i < WebConst.ORDERNO_RANDOM_LENGTH; i++) {
 			on_random.append(ComUtil.random.nextInt(10));

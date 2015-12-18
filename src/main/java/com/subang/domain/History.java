@@ -95,7 +95,7 @@ public class History implements Filter, Serializable {
 		if (time == null) {
 			return null;
 		}
-		return ComUtil.sdf_datetime.format(time);
+		return ComUtil.getDatetimeFormat().format(time);
 	}
 
 	public void setTime(Timestamp time) {

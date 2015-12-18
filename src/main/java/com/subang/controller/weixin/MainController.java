@@ -59,6 +59,8 @@ public class MainController extends BaseController {
 					unsubscribe(eventMessage, response);
 				} else if (eventMessage.getEvent().equals("LOCATION")) {
 					location(eventMessage, response);
+				} else if (eventMessage.getEvent().equals("CLICK")) {
+					click(eventMessage, response);
 				}
 			}
 		}
@@ -83,5 +85,11 @@ public class MainController extends BaseController {
 			location.setLongitude(eventMessage.getLongitude());
 			userService.updateLocation(user.getId(), location);
 		}
+	}
+
+	private void click(EventMessage eventMessage, HttpServletResponse response) throws Exception {
+		XMLTextMessage xmlTextMessage = new XMLTextMessage(eventMessage.getFromUserName(),
+				eventMessage.getToUserName(), SuUtil.getAppProperty("welcomeMsg"));
+		xmlTextMessage.outputStreamWrite(response.getOutputStream());
 	}
 }

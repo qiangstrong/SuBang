@@ -6,34 +6,59 @@
 			"url":"http://www.subang123.com/weixin/region/index.html"
 		},
 		{
-			"name":"服务中心",
+			"name":"会员中心",
 			"sub_button":[
 				{
 					"type":"view",
+					"name":"APP下载",
+					"url":"http://a.app.qq.com/o/simple.jsp?pkgname=com.subang.app.activity"
+				},
+				{
+					"type":"view",
+					"name":"更多优惠",
+					"url":"http://www.subang123.com/weixin/region/index.html"
+				},
+				{
+					"type":"view",
+					"name":"小区管家招募",
+					"url":"http://www.subang123.com/weixin/region/index.html"
+				},
+				{
+					"type":"view",
 					"name":"个人中心",
-					"url":"http://www.subang123.com/weixin/user/index.html"					
-				},					
+					"url":"http://www.subang123.com/weixin/user/index.html"
+				},
 				{
 					"type":"view",
 					"name":"我的订单",
 					"url":"http://www.subang123.com/weixin/order/index.html?type=2"
 				}
+				
 			]
+			
 		},
 		{
 			"name":"在线客服",
 			"sub_button":[
 				{
 					"type":"view",
-					"name":"联系客服",
-					"url":"http://www.subang123.com/weixin/region/index.html"					
-				},					
+					"name":"了解速帮",
+					"url":"http://www.subang123.com/content/weixin/info/serviceintro.htm"
+				},
 				{
 					"type":"view",
 					"name":"我要吐槽",
-					"url":"http://www.subang123.com/weixin/region/index.html"
+					"url":"http://www.subang123.com/weixin/info/showaddfeedback.html"
+				},
+				{
+					"type":"click",
+					"name":"联系客服",
+					"key":"0"
 				}
+				
 			]
-		}	
+			
+		}
+		
 	]
 }

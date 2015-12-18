@@ -24,8 +24,8 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 	private static final String URI_PREFIX = WebConst.CONTEXT_PREFIX + WebConst.WEIXIN_PREFIX;
 	private static final String[] FREE_URIS = { "/index.html", "/order/wxpay.html",
 			"/order/alipay.html", "/balance/wxpay.html", "/balance/alipay.html", "/info/faq.html",
-			"/info/showfeedback.html", "/info/feedback.html", "/price/index.html",
-			"/region/scope.html", "/activity/detail.html" };
+			"/info/showaddfeedback.html", "/info/addfeedback.html", "/info/addfeedbackresult.html",
+			"/price/index.html", "/region/scope.html", "/activity/detail.html" };
 	private static final String[] REG_URIS = { "/user/login.html", "/user/showregcellnum.html",
 			"/user/cellnum.html", "/user/regauthcode.html", "/user/showregpassword.html",
 			"/user/regpassword.html" };

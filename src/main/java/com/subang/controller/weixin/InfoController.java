@@ -29,7 +29,7 @@ public class InfoController extends BaseController {
 	@RequestMapping("/showaddfeedback")
 	public ModelAndView showAddFeedback() {
 		ModelAndView view = new ModelAndView();
-		view.setViewName(VIEW_PREFIX + "/feedback");
+		view.setViewName(VIEW_PREFIX + "/addfeedback");
 		return view;
 	}
 
@@ -38,7 +38,7 @@ public class InfoController extends BaseController {
 	public ModelAndView addFeedback(@RequestParam("comment") String comment) {
 		ModelAndView view = new ModelAndView();
 		infoService.addFeedback(comment);
-		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/user/index.html");
+		view.setViewName(VIEW_PREFIX + "/addfeedbackresult");
 		return view;
 	}
 }

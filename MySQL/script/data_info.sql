@@ -1,6 +1,6 @@
 insert into info_t values(
 	null,
-    '0429-2912222');
+    '400-004-0429');
 insert into faq_t values(
 	null,
     '衣服多久可以洗好送回，怎么送回？',
