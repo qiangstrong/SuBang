@@ -68,7 +68,7 @@ function isWeiXin(){
 				<p class="p5" style="padding-top:0">按件计价</p>
 				<div class="tab_nav_price" id="tab">
 					<c:forEach var="price" items="${prices}">
-						<span class="on">${price.money}元/件</span>
+						<span class="on">${price.moneyDes}</span>
 					</c:forEach>
 				</div>
 				<div id="list">

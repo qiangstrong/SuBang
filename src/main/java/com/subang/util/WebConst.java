@@ -7,6 +7,7 @@ public interface WebConst {
 	String WEIXIN_PREFIX = "/weixin";
 	String APP_PREFIX = "/app";
 	String LOG_TAG = "subang";
+	String ALIAS_TYPE = "subang_cellnum";
 
 	String KEY_ADMIN_AUTHCODE = "admin_authcode";
 	String KEY_USER_AUTHCODE = "user_authcode";

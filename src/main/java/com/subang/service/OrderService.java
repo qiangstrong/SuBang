@@ -36,6 +36,7 @@ import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
+import com.subang.util.PushUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
@@ -181,6 +182,9 @@ public class OrderService extends BaseService {
 		User user = userDao.get(order.getUserid());
 		user.setAddrid(order.getAddrid());
 		userDao.update(user);
+
+		Worker worker = workerDao.get(workerid);
+		PushUtil.send(new String[] { worker.getCellnum() });
 	}
 
 	// 取衣员计价
@@ -240,8 +244,17 @@ public class OrderService extends BaseService {
 		if (order_old == null) {
 			return;
 		}
+
+		Integer workerid_old = order_old.getWorkerid();
+		Integer workerid = order.getWorkerid();
+		if (!workerid_old.equals(workerid)) {
+			Worker worker_old = workerDao.get(workerid_old);
+			Worker worker = workerDao.get(workerid);
+			PushUtil.send(new String[] { worker_old.getCellnum(), worker.getCellnum() });
+		}
+
 		order_old.setLaundryid(order.getLaundryid());
-		order_old.setWorkerid(order.getWorkerid());
+		order_old.setWorkerid(workerid);
 		orderDao.update(order_old);
 	}
 
@@ -326,6 +339,9 @@ public class OrderService extends BaseService {
 		history.setOperation(State.canceled);
 		history.setOrderid(order.getId());
 		historyDao.save(history);
+
+		Worker worker = workerDao.get(order.getWorkerid());
+		PushUtil.send(new String[] { worker.getCellnum() });
 		return true;
 	}
 

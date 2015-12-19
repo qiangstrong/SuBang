@@ -1,17 +1,23 @@
-[
-	[
-		{
-			"cityid":1,
-			"id":1,
-			"name":"和平区"
+{
+	"appkey":"5662e474e0f55a71d40027d5",
+	"production_mode":"true",
+	"description":"消息2",
+	"type":"customizedcast",
+	"payload":{
+		"display_type":"notification",
+		"body":{
+			"title":"下单",
+			"ticker":"下单",
+			"text":"您有新的订单，请注意查收。",
+			"after_open":"go_app",
+			"play_vibrate":"true",
+			"play_sound":"true",
+			"play_lights":"true"
 		}
-	],
-	[
-		{
-			"districtid":1,
-			"id":1,
-			"name":"新世界花园",
-			"workerid":1
-		}
-	]
-]
+	},
+	"policy":{
+		"expire_time":"2015-12-20 15:34:51"
+	},
+	"alias":"15502457990",
+	"alias_type":"subang_cellnum"
+}
