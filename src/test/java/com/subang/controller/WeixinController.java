@@ -29,7 +29,7 @@ public class WeixinController extends BaseController {
 	@RequestMapping("/setopenid")
 	public void setopenid(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		User user = userDao.get(1);
+		User user = userDao.get(21);
 		setOpenid(request.getSession(), user.getOpenid());
 		SuUtil.outputStreamWrite(response.getOutputStream(), "openid登录成功。");
 	}

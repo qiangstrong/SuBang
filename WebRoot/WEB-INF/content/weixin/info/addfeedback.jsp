@@ -139,10 +139,10 @@
 </script>
 </head>
 <body style="zoom: 1;">
-	<input id="rating" name="rating" value="4" type="hidden"> <input
-			id="quality" name="quality" value="4" type="hidden"> <input
-			id="software" name="software" value="4" type="hidden"> <input
-			id="service" name="service" value="4" type="hidden">
+	<input id="rating" name="rating" value="3" type="hidden"> <input
+			id="quality" name="quality" value="3" type="hidden"> <input
+			id="software" name="software" value="3" type="hidden"> <input
+			id="service" name="service" value="3" type="hidden">
 	<div class="pay_font">
 		<span>谢谢您的小星星！</span>
 		<div class="clearBoth"></div>
@@ -171,7 +171,7 @@
 				onmouseout="javascript:setProfix('star_');clearStars('rating');"
 				href="javascript:setProfix('star_');setStars(4,'rating');"><img
 					id="star_4" title="很好(4)"
-					src="/css/weixin/ccsjsp/info/icon_star_2.png"> </a><a
+					src="/css/weixin/ccsjsp/info/icon_star_1.png"> </a><a
 				onmouseover="javascript:setProfix('star_');showStars(5,'rating');"
 				onmouseout="javascript:setProfix('star_');clearStars('rating');"
 				href="javascript:setProfix('star_');setStars(5,'rating');"><img
@@ -205,7 +205,7 @@
 				onmouseout="javascript:setProfix('quality_');clearStars('quality');"
 				href="javascript:setProfix('quality_');setStars(4,'quality');"><img
 					id="quality_4" title="很好(4)"
-					src="/css/weixin/ccsjsp/info/icon_star_2.png"> </a><a
+					src="/css/weixin/ccsjsp/info/icon_star_1.png"> </a><a
 				onmouseover="javascript:setProfix('quality_');showStars(5,'quality');"
 				onmouseout="javascript:setProfix('quality_');clearStars('quality');"
 				href="javascript:setProfix('quality_');setStars(5,'quality');"><img
@@ -234,7 +234,7 @@
 				onmouseout="javascript:setProfix('service_');clearStars('service');"
 				href="javascript:setProfix('service_');setStars(4,'service');"><img
 					id="service_4" title="很好(4)"
-					src="/css/weixin/ccsjsp/info/icon_star_2.png"> </a><a
+					src="/css/weixin/ccsjsp/info/icon_star_1.png"> </a><a
 				onmouseover="javascript:setProfix('service_');showStars(5,'service');"
 				onmouseout="javascript:setProfix('service_');clearStars('service');"
 				href="javascript:setProfix('service_');setStars(5,'service');"><img
@@ -263,7 +263,7 @@
 				onmouseout="javascript:setProfix('software_');clearStars('software');"
 				href="javascript:setProfix('software_');setStars(4,'software');"><img
 					id="software_4" title="很好(4)"
-					src="/css/weixin/ccsjsp/info/icon_star_2.png"> </a><a
+					src="/css/weixin/ccsjsp/info/icon_star_1.png"> </a><a
 				onmouseover="javascript:setProfix('software_');showStars(5,'software');"
 				onmouseout="javascript:setProfix('software_');clearStars('software');"
 				href="javascript:setProfix('software_');setStars(5,'software');"><img

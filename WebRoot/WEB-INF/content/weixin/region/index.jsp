@@ -56,7 +56,13 @@
 			<div class="commonWashing">
 
 				<c:forEach var="category" items="${categorys}">
-					<a href="weixin/order/showadd.html?categoryid=${category.id}">
+				    <c:if test="${category.valid==false}">
+				    <a href="javascript:void(0)">
+				    </c:if>
+				     <c:if test="${category.valid==true}">
+				     <a href="weixin/order/showadd.html?categoryid=${category.id}">
+				    </c:if>
+					
 					<div class="menu-list">
 						<img class="img-icon" src="${category.icon}" />
 						<div class="list-right">

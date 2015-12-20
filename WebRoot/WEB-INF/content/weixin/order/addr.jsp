@@ -41,39 +41,35 @@
 				cellspacing="0">
 				<tbody>
 					<c:forEach var="addrDetail" items="${addrDetails}">
-			
+
 						<tr id="address_list_2478947" class="address_list">
-						
-						<td width="16%" class="white-bg"><span><img
-									src="css/weixin/ccsjsp/order/index/order_detail_addr.png" style="height:25px">
-							</span>
-							</td>
+
+							<td width="16%" class="white-bg"><span><img
+									src="css/weixin/ccsjsp/order/index/order_detail_addr.png"
+									style="height:25px"> </span></td>
 							<!-- <a href="weixin/order/showadd.html?categoryid=${category.id}"> -->
-						
-							<td style="padding:0 0px">
-								<a href="weixin/order/showadd.html?categoryid=${categoryid}&addrid=${addrDetail.id}">
-								<div class="ui-btn ui-icon-carat-r" style="height: 62px">
-											<div>
-												<span ontouchstart="" class="bigf address_text">${addrDetail.name
-													}</span> <span>${addrDetail.cellnum }</span>
 
-											</div>
-											<p ontouchstart="" class="address_text p_address" style="margin-top: 1px;">${addrDetail.cityname
-													}  ${addrDetail.districtname }  ${addrDetail.regionname}</p>
-											
-											<p ontouchstart="" class="address_text p_address"
-												style="margin-top: 1px; top: 52px;">
-												${addrDetail.detail }</p>
+							<td style="padding:0 0px"><a
+								href="weixin/order/showadd.html?categoryid=${categoryid}&addrid=${addrDetail.id}">
+									<div class="ui-btn ui-icon-carat-r" style="height: 62px">
+										<div>
+											<span ontouchstart="" class="bigf address_text">${addrDetail.name
+												}</span> <span>${addrDetail.cellnum }</span>
+
+										</div>
+										<p ontouchstart="" class="address_text p_address"
+											style="margin-top: 1px;">${addrDetail.cityname }
+											${addrDetail.districtname } ${addrDetail.regionname}</p>
+
+										<p ontouchstart="" class="address_text p_address"
+											style="margin-top: 1px; top: 52px;">${addrDetail.detail }</p>
 
 
-											<img src="/css/weixin/ccsjsp/addr/order_arrow.png"
-												class="order_arrow">
-										</div> 
-								
-								</a>
-								<div class="borderD"></div>
-							</td>
-												
+										<img src="/css/weixin/ccsjsp/addr/order_arrow.png"
+											class="order_arrow">
+									</div> </a>
+								<div class="borderD"></div></td>
+
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -83,6 +79,15 @@
 			<div style="height:10px;background:#f0f0f0"></div>
 		</div>
 	</div>
-
+ 
+	<div class="fixed-bottom white-bg">
+		<a href="weixin/addr/showadd.html?categoryid=${categoryid}" target="_blank">
+			<div class="borderD2"></div>
+			<div class="choose-time ">
+				<img src="/css/weixin/ccsjsp/addr/icon_add.png"> <span
+					class="am-button"> 添加地址</span>
+			</div> </a>
+	</div>
+ 
 </body>
 </html>

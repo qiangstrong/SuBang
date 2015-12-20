@@ -65,6 +65,8 @@
 		<div class="space-split10"></div>
 		<form:form modelAttribute="addr" action="weixin/addr/add.html"
 			method="post">
+			<input type="hidden" name="categoryid" id="categoryid"
+				value="${categoryid}">
 
 			<!-- 地址信息 start -->
 			<div class="white-bg">

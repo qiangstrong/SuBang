@@ -67,6 +67,10 @@
 				</tbody>
 			</table>
 		</form>
+		<div id="declare"
+				style="text-align:center;color:#999;">轻触上面的“确认”按钮，即表示您同意：</div>
+		<a href="/content/weixin/info/term.htm"><div id="declare"
+				style="text-align:center;color:#4CA0FF;">速帮服务协议</div></a>
 	</div>
 	<script type="text/javascript">
 		function checkvalue() {

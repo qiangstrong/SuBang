@@ -51,8 +51,7 @@
 	</section>
 	<section id="icard_details_list" class="jifen_list white-bg">
 		<c:forEach var="balance" items="${balances}">
-			<div class="jifen_itle2 feature_block icard_row" page="1"
-				rows_count="2">
+			<div class="jifen_itle2 feature_block icard_row">
 				${balance.payTypeDes}
 				<div class="add_jifen chongzhi_yue ">${balance.money}</div>
 				<div class="time2">${balance.timeDes}</div>
