@@ -40,6 +40,7 @@ import com.subang.domain.Worker;
 import com.subang.service.ActivityService;
 import com.subang.service.InfoService;
 import com.subang.service.LaundryService;
+import com.subang.service.MiscService;
 import com.subang.service.OrderService;
 import com.subang.service.PriceService;
 import com.subang.service.RegionService;
@@ -128,6 +129,8 @@ public class BaseController {
 	protected UserService userService;
 	@Autowired
 	protected WorkerService workerService;
+	@Autowired
+	protected MiscService miscService;
 
 	protected static final String KEY_ADMIN = "admin";
 	protected static final String KEY_USER = "user";

@@ -81,7 +81,7 @@ function isWeiXin(){
 									<c:forEach var="clothesType" items="${clothesTypes}">
 										<div class="block_pic">
 											<div class="pic">
-												<img alt="${clothesType.name}" src="${clothesType.icon}">
+												<img alt="${clothesType.name}" src="${clothesType.icon}" style="margin: 0 0;">
 												<div>${clothesType.name}</div>
 											</div>
 										</div>
