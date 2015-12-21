@@ -34,4 +34,10 @@ public class Result {
 		this.msg = msg;
 	}
 
+	public boolean isOk() {
+		if (code.equals(OK)) {
+			return true;
+		}
+		return false;
+	}
 }

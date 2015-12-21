@@ -64,7 +64,7 @@ public class History implements Filter, Serializable {
 			description = "取走";
 			break;
 		case checked:
-			description = "分拣";
+			description = "洗衣";
 			break;
 		case delivered:
 			description = "送达";

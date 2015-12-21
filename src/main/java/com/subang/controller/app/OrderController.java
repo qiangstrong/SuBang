@@ -63,6 +63,9 @@ public class OrderController extends BaseController {
 		} else {
 			String barcode = arg;
 			orderDetail = orderDao.getDetailByBarcode(barcode);
+			if (orderDetail == null) {
+				orderDetail = new OrderDetail();
+			}
 		}
 		SuUtil.outputJson(response, orderDetail);
 	}

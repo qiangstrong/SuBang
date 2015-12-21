@@ -127,7 +127,7 @@ public class Order implements Filter, Serializable {
 			description = "已取走";
 			break;
 		case checked:
-			description = "已分拣";
+			description = "已洗衣";
 			break;
 		case delivered:
 			description = "已送达";
