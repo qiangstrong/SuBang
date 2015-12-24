@@ -35,6 +35,7 @@ public class SuUtil extends BaseUtil {
 	private static ServletContext servletContext = null;
 	private static Properties su_properties = null;
 	private static Properties app_properties = null;
+	private static Properties msg_properties = null;
 	private static NoticeDao noticeDao = null;
 
 	private static final String RESULT_OK;
@@ -51,6 +52,7 @@ public class SuUtil extends BaseUtil {
 		SuUtil.servletContext = servletContext;
 		su_properties = new Properties();
 		app_properties = new Properties();
+		msg_properties = new Properties();
 		String path = null;
 		InputStream in = null;
 		try {
@@ -61,6 +63,10 @@ public class SuUtil extends BaseUtil {
 			path = servletContext.getRealPath("WEB-INF/classes/app.properties");
 			in = new BufferedInputStream(new FileInputStream(path));
 			app_properties.load(in);
+			in.close();
+			path = servletContext.getRealPath("WEB-INF/classes/msg.properties");
+			in = new BufferedInputStream(new FileInputStream(path));
+			msg_properties.load(in);
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -81,14 +87,19 @@ public class SuUtil extends BaseUtil {
 		return basePath;
 	}
 
+	// 获取与业务相关的配置信息
+	public static String getSuProperty(String key) {
+		return su_properties.getProperty(key);
+	}
+
 	// 获取与app相关的配置
 	public static String getAppProperty(String key) {
 		return app_properties.getProperty(key);
 	}
 
-	// 获取与业务相关的配置信息
-	public static String getSuProperty(String key) {
-		return su_properties.getProperty(key);
+	// 获取与msg相关的配置
+	public static String getMsgProperty(String key) {
+		return msg_properties.getProperty(key);
 	}
 
 	public static List<Integer> getIds(String someIds) {

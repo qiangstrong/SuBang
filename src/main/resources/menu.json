@@ -21,7 +21,7 @@
 				{
 					"type":"view",
 					"name":"小区管家招募",
-					"url":"http://www.subang123.com/weixin/region/index.html"
+					"url":"http://viewer.maka.im/k/5AQ3DM75"
 				},
 				{
 					"type":"view",
@@ -53,7 +53,7 @@
 				{
 					"type":"click",
 					"name":"联系客服",
-					"key":"0"
+					"key":"contact"
 				}
 				
 			]
