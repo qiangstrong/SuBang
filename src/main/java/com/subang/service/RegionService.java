@@ -137,6 +137,14 @@ public class RegionService extends BaseService {
 		}
 	}
 
+	public void modifyService(com.subang.domain.Service service) throws SuException {
+		try {
+			serviceDao.update(service);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("重复服务。");
+		}
+	}
+
 	public void deleteServices(List<Integer> serviceids) throws SuException {
 		for (Integer serviceid : serviceids) {
 			serviceDao.delete(serviceid);

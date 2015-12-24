@@ -16,16 +16,20 @@ import com.subang.bean.OrderDetail;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageArg.ArgType;
 import com.subang.bean.PageState;
+import com.subang.bean.PayArg;
+import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
 import com.subang.domain.Clothes;
 import com.subang.domain.History;
 import com.subang.domain.Laundry;
 import com.subang.domain.Order;
+import com.subang.domain.Payment.PayType;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.tool.BackStack;
 import com.subang.tool.SuException;
+import com.subang.util.ComUtil;
 import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
@@ -76,6 +80,7 @@ public class OrderController extends BaseController {
 
 		List<OrderDetail> orderDetails = orderService.searchOrder(pageState.getSearchArg());
 		view.addObject(KEY_DATA, orderDetails);
+		view.addObject("totalMoney", getTotalMoney(orderDetails));
 		view.addObject("searchArg", pageState.getSearchArg());
 		view.setViewName(INDEX_PAGE);
 		return view;
@@ -104,11 +109,31 @@ public class OrderController extends BaseController {
 		return desMsg;
 	}
 
+	private Double getTotalMoney(List<OrderDetail> orderDetails) {
+		Double totalMoney = 0.0;
+		Double money;
+		for (OrderDetail orderDetail : orderDetails) {
+			money = orderDetail.getTotalMoney();
+			if (money != null) {
+				totalMoney += money;
+			}
+		}
+		return totalMoney;
+	}
+
 	@RequestMapping("/list")
 	public ModelAndView list(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ALL, null);
 		setPageArg(session, searchArg);
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	@RequestMapping("/curday")
+	public ModelAndView curDay(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		setPageArg(session, ComUtil.curDayArg);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		return view;
 	}
@@ -163,6 +188,33 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
+	@RequestMapping("/pay")
+	public ModelAndView pay(HttpSession session, @RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		PrepayResult prepayResult = null;
+		try {
+			PayArg payArg = new PayArg();
+			payArg.setClient(PayArg.Client.back);
+			payArg.setPayType(PayType.balance);
+			payArg.setOrderid(orderid);
+			prepayResult = orderService.prepay(payArg, null);
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			if (prepayResult.getCodeEnum() != PrepayResult.Code.succ) {
+				setPageArg(session, new MsgArg(KEY_INFO_MSG, prepayResult.getMsg()));
+			} else {
+				setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付成功。"));
+			}
+
+		}
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
 	@RequestMapping("/showmodify")
 	public ModelAndView showModify(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
@@ -207,7 +259,7 @@ public class OrderController extends BaseController {
 	}
 
 	@RequestMapping("/history")
-	public ModelAndView listHistory(HttpSession session, Integer orderid) {
+	public ModelAndView listHistory(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
 		backStack.push(new PageState("order/history", null));

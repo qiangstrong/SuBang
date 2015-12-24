@@ -21,6 +21,7 @@ import com.alipay.bean.AlipayOrder;
 import com.subang.bean.GeoLoc;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
+import com.subang.bean.Result;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
 import com.subang.domain.Balance;
@@ -40,6 +41,7 @@ import com.subang.util.ComUtil;
 import com.subang.util.LocUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.SuUtil;
+import com.subang.util.Validator;
 import com.subang.util.WebConst;
 
 @Service
@@ -60,6 +62,9 @@ public class UserService extends BaseService {
 			break;
 		case WebConst.SEARCH_CELLNUM:
 			users = userDao.findByCellnum(searchArg.getArg());
+			break;
+		case WebConst.SEARCH_NO:
+			users = userDao.findByUserno(searchArg.getArg());
 			break;
 		default:
 			users = new ArrayList<User>();
@@ -98,12 +103,22 @@ public class UserService extends BaseService {
 	}
 
 	// 管理端修改用户信息
-	public void modifyUserBack(User user) {
+	public void modifyUserBack(User user) throws SuException {
 		User user_old = userDao.get(user.getId());
 		// 如果用户被其他管理人员删除，修改操作已经没有意义，直接返回
 		if (user_old == null) {
 			return;
 		}
+		if (user.getUserno() != null && user.getUserno().length() == 0) {
+			user.setUserno(null);
+		}
+		if (user.getUserno() != null) {
+			Result result = Validator.validUserno(user.getUserno());
+			if (!result.isOk()) {
+				throw new SuException(result.getMsg());
+			}
+		}
+		user_old.setUserno(user.getUserno());
 		user_old.setPassword(user.getPassword());
 		user_old.setScore(user.getScore());
 		userDao.update(user_old);
@@ -413,6 +428,23 @@ public class UserService extends BaseService {
 		return result;
 	}
 
+	private PrepayResult payByExpense(PayArg payArg) {
+		PrepayResult result = new PrepayResult();
+		Balance balance = balanceDao.getDetail(payArg.getOrderid());
+		User user = userDao.get(balance.getUserid());
+		if (-balance.getMoney() > user.getMoney()) {
+			result.setCode(PrepayResult.Code.fail);
+			result.setMsg("余额不足。");
+			return result;
+		}
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.expense);
+		paymentDao.update(payment);
+		payBalance(balance.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
+		return result;
+	}
+
 	public PrepayResult prepay(PayArg payArg, Integer userid, HttpServletRequest request) {
 
 		// 生成本地订单
@@ -434,6 +466,10 @@ public class UserService extends BaseService {
 		}
 		case cash: {
 			result = payByCash(payArg);
+			break;
+		}
+		case expense: {
+			result = payByExpense(payArg);
 			break;
 		}
 		default: {

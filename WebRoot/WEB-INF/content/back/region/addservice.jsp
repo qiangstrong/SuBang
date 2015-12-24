@@ -38,6 +38,18 @@
 					<form:hidden path="cityid"/>
 					<table>
 						<tr>
+							<td></td>
+							<td><form:errors path="seq" /></td>
+						</tr>
+						<tr>
+							<td>序号：</td>
+							<td><form:input path="seq"/></td>
+						</tr>
+						<tr>
+							<td>可用：</td>
+							<td><form:checkbox path="valid"/></td>
+						</tr>
+						<tr>
 							<td>类别：</td>
 							<td>    
 								<form:select path="categoryid" items="${categories}" itemLabel="name" itemValue="id"></form:select>  

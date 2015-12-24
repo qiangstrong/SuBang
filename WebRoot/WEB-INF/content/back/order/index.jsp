@@ -49,6 +49,7 @@
 	<table align="center">
 		<tr>
 			<td align="right" colspan="2">
+				<a href="back/order/curday.html">当日订单</a>	
 				<a href="back/order/list.html">所有订单</a>								
 			</td>
 		</tr>
@@ -60,7 +61,8 @@
 					<td>
 						类别：
 						<select id="type" name="type" onchange="switchOrderState()">
-							<option value="2" selected="selected">订单状态</option>
+							<option value="1" selected="selected">所有订单</option>
+							<option value="2">订单状态</option>
 							<option value="3">订单号</option>
 							<option value="5">用户手机号</option>
 							<option value="6">商家名称</option>
@@ -119,6 +121,11 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+				金额总计：${totalMoney }
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
 			<%!int count; %>
 			<table border="1">
 					<tr>
@@ -132,7 +139,8 @@
 						<th>条形码</th>
 						<th>详情</th>
 						<th>明细</th>					
-						<th>历史</th>						
+						<th>历史</th>		
+						<th>支付</th>				
 						<th>修改</th>
 					</tr>
 					<%count=0;%>
@@ -154,6 +162,9 @@
 							</td>
 							<td>
 							 	<a href="back/order/history.html?orderid=${orderDetail.id}">历史</a>
+							</td>
+							<td>
+							 	<a href="back/order/pay.html?orderid=${orderDetail.id}">支付</a>
 							</td>
 							<td>
 							 	<a href="back/order/showmodify.html?orderid=${orderDetail.id}">修改</a>

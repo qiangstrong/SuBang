@@ -11,6 +11,9 @@ public class Service implements Filter, Serializable {
 
 	private Integer id;
 	@NotNull
+	private Boolean valid;
+	private Integer seq; // 前台显示的顺序
+	@NotNull
 	private Integer cityid;
 	@NotNull
 	private Integer categoryid;
@@ -20,8 +23,10 @@ public class Service implements Filter, Serializable {
 	public Service() {
 	}
 
-	public Service(Integer id, Integer cityid, Integer categoryid, String categoryname) {
+	public Service(Integer id, Boolean valid, Integer cityid, Integer categoryid,
+			String categoryname) {
 		this.id = id;
+		this.valid = valid;
 		this.cityid = cityid;
 		this.categoryid = categoryid;
 		this.setCategoryname(categoryname);
@@ -33,6 +38,32 @@ public class Service implements Filter, Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Boolean getValid() {
+		return valid;
+	}
+
+	public String getValidDes() {
+		if (valid == null) {
+			return null;
+		}
+		if (valid) {
+			return "是";
+		}
+		return "否";
+	}
+
+	public void setValid(Boolean valid) {
+		this.valid = valid;
+	}
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 
 	public Integer getCityid() {
@@ -63,6 +94,12 @@ public class Service implements Filter, Serializable {
 		Service service = (Service) object;
 		if (this.id == null) {
 			service.id = null;
+		}
+		if (this.valid == null) {
+			service.valid = null;
+		}
+		if (this.seq == null) {
+			service.seq = null;
 		}
 		if (this.cityid == null) {
 			service.cityid = null;

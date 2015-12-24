@@ -57,6 +57,7 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('bannerid')" /></th>
 						<th>编号</th>
+						<th>序号</th>
 						<th>链接</th>
 						<th>备注</th>			
 						<th>修改</th>
@@ -66,6 +67,7 @@
 						<tr>
 							<td><input type="checkbox" name="bannerid" value="${banner.id}" /></td>
 							<td><%=++count%></td>
+							<td>${banner.seq}</td>
 							<td>${banner.link}</td>
 							<td>${banner.comment}</td>
 							<td>

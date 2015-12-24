@@ -20,6 +20,7 @@ as ( select order_t.*, category_t.name `categoryname`, user_t.cellnum, payment_t
 from order_t, user_t, addrdetail_v, worker_t, category_t, payment_t, history_t 
 where order_t.userid=user_t.id and order_t.addrid=addrdetail_v.id and order_t.workerid=worker_t.id and order_t.categoryid=category_t.id and payment_t.orderno=order_t.orderno
  and order_t.id=history_t.orderid and history_t.operation=0
+ order by accept_time desc
 );
 
 drop view if exists ticket_typedetail_v;

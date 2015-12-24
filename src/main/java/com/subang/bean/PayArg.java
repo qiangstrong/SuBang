@@ -13,7 +13,7 @@ public class PayArg {
 		weixin, user, worker, back
 	}
 
-	private Integer client; // 微信端，不传此参数；app端传此参数
+	private Integer client; // 微信端，不传此参数；app端，传此参数；向service层传递时，需要传递此参数
 	@NotNull
 	private Integer payType;
 	private Integer orderid;

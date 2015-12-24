@@ -23,14 +23,16 @@ public class ServiceDao extends BaseDao<Service> {
 	}
 
 	public void save(Service service) {
-		String sql = "insert into service_t values(null,?,?)";
-		Object[] args = { service.getCityid(), service.getCategoryid() };
+		String sql = "insert into service_t values(null,?,?,?,?)";
+		Object[] args = { service.getValid(), service.getSeq(), service.getCityid(),
+				service.getCategoryid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Service service) {
-		String sql = "update service_t set cityid=?,categoryid=? where id=?";
-		Object[] args = { service.getCityid(), service.getCategoryid(), service.getId() };
+		String sql = "update service_t set valid=?, seq=?, cityid=?, categoryid=? where id=?";
+		Object[] args = { service.getValid(), service.getSeq(), service.getCityid(),
+				service.getCategoryid(), service.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -62,7 +64,7 @@ public class ServiceDao extends BaseDao<Service> {
 
 	public List<Service> findDetailByCityid(Integer cityid) {
 		String sql = "select service_t.* ,category_t.name `categoryname` from service_t,category_t "
-				+ "where category_t.id=service_t.categoryid and service_t.cityid=?";
+				+ "where category_t.id=service_t.categoryid and service_t.cityid=? order by seq asc";
 		Object[] args = { cityid };
 		List<Service> services = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Service>(
 				Service.class));

@@ -11,11 +11,13 @@ public class Payment implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*
-	 * 订单付款，只有前三种方式； 如果由取衣员代为支付，记录取衣员的支付方式（此时只有weixin、alipay两种支付方式）。
-	 * 用户充值，只有后三种方式； 在管理端由管理员代为充值的，记录为cash
+	 * 订单付款，只有三种方式(balance, weixin, alipay)；
+	 * 如果由取衣员代为支付，记录取衣员的支付方式（此时只有weixin、alipay两种支付方式）。 用户充值，只有三种方式(weixin,
+	 * alipay, cash)； 在管理端由管理员代为充值的，记录为cash。
+	 * expense为支出类型。例如订单付款。使用余额为订单付款时，需要生成balance订单，此时记录为expense类型。
 	 */
 	public enum PayType {
-		balance, weixin, alipay, cash;
+		balance, weixin, alipay, cash, expense;
 
 		public static PayType toPayType(String arg) {
 			return PayType.values()[new Integer(arg)];
@@ -38,6 +40,9 @@ public class Payment implements Filter, Serializable {
 				break;
 			case cash:
 				description = "现金";
+				break;
+			case expense:
+				description = "支出";
 				break;
 			}
 			return description;

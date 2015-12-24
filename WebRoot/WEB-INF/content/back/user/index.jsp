@@ -51,6 +51,7 @@
 					类别：
 					<select id="type" name="type" >
 						<option value="3" selected="selected">手机号</option>
+						<option value="6">会员号</option>
 					</select>
 					关键词：
 					<input id="arg" type="text" name="arg" />
@@ -73,10 +74,12 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('userid')" /></th>
 						<th>编号</th>
+						<th>会员号</th>
 						<th>手机号</th>
 						<th>积分</th>
 						<th>余额</th>
 						<th>充值</th>
+						<th>记录</th>
 						<th>地址</th>
 						<th>卡券</th>
 						<th>订单</th>
@@ -87,11 +90,15 @@
 						<tr>
 							<td><input type="checkbox" name="userid" value="${user.id}" /></td>
 							<td><%=++count%></td>
+							<td>${user.usernoDes}</td>
 							<td>${user.cellnum}</td>
 							<td>${user.score}</td>
 							<td>${user.money}</td>
 							<td>
 								<a href="back/user/showrecharge.html?userid=${user.id}">充值</a>
+							</td>
+							<td>
+								<a href="back/user/balance.html?userid=${user.id}">记录</a>
 							</td>
 							<td>
 								<a href="back/user/addr.html?userid=${user.id}">地址</a>

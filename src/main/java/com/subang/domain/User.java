@@ -18,6 +18,7 @@ public class User implements Filter, Serializable {
 	private Integer id;
 	private Boolean login;
 	private String openid;
+	private String userno;
 	@Length(max = 100)
 	private String nickname;
 	@NotNull
@@ -38,12 +39,13 @@ public class User implements Filter, Serializable {
 		this.money = 0.0;
 	}
 
-	public User(Integer id, Boolean login, String openid, String nickname, String password,
-			String cellnum, Integer score, Double money, Integer addrid) {
+	public User(Integer id, Boolean login, String openid, String userno, String nickname,
+			String password, String cellnum, Integer score, Double money, Integer addrid) {
 		super();
 		this.id = id;
 		this.login = login;
 		this.openid = openid;
+		this.userno = userno;
 		this.nickname = nickname;
 		this.password = password;
 		this.cellnum = cellnum;
@@ -74,6 +76,18 @@ public class User implements Filter, Serializable {
 
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+
+	public String getUserno() {
+		return userno;
+	}
+
+	public String getUsernoDes() {
+		return ComUtil.getDes(userno);
+	}
+
+	public void setUserno(String userno) {
+		this.userno = userno;
 	}
 
 	public String getNickname() {
@@ -134,6 +148,9 @@ public class User implements Filter, Serializable {
 		}
 		if (this.openid == null) {
 			user.openid = null;
+		}
+		if (this.userno == null) {
+			user.userno = null;
 		}
 		if (this.nickname == null) {
 			user.nickname = null;

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 
+import com.subang.bean.SearchArg;
+
 /**
  * @author Qiang 与业务无关的公用函数
  */
@@ -19,6 +21,7 @@ public class ComUtil extends BaseUtil {
 	public static Random random = new Random();
 	public static Timer timer = new Timer();
 	public static Timestamp firstTime, lastTime;
+	public static SearchArg curDayArg;
 
 	static {
 		firstTime = new Timestamp(0);
@@ -26,6 +29,19 @@ public class ComUtil extends BaseUtil {
 		calendar.setTimeInMillis(firstTime.getTime());
 		calendar.add(Calendar.YEAR, 200);
 		lastTime = new Timestamp(calendar.getTimeInMillis());
+
+		calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Timestamp today = new Timestamp(calendar.getTimeInMillis());
+		calendar.add(Calendar.DATE, 1);
+		Timestamp tomorrow = new Timestamp(calendar.getTimeInMillis());
+		curDayArg = new SearchArg();
+		curDayArg.setType(WebConst.SEARCH_ALL);
+		curDayArg.setStartTime(today);
+		curDayArg.setEndTime(tomorrow);
 	}
 
 	public static NumberFormat getNumberFormat() {

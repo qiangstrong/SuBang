@@ -122,19 +122,24 @@
 			<div class="p5"></div>
 			<div class="p5"></div>
 			<div class="pay_manner white_bg">
+			<label for="ali_pay1">
 				<div class="item_list_box">
 					<img src="css/weixin/ccsjsp/order/index/wexin_pay_icon.png">
 					微信支付 <span class="pull-right orange_color" style="right: 40px;">
 						<input id="ali_pay1" type="radio" name="payType" value="1"
 						checked="checked"> </span>
 				</div>
+			</label>	
 				<div class="borderD2"></div>
 				 
-				<!--  <div class="item_list_box">
+				<!--<label for="ali_pay2">  
+				<div class="item_list_box">
 					<img src="css/weixin/ccsjsp/order/index/ali_pay_icon.png">
 					支付宝支付 <span class="pull-right orange_color" style= "right: 40px;"> <input
 						id="ali_pay2" type="radio" name="payType" value="2"> </span>
-				</div>-->
+				</div>
+				</label>
+				-->
 
 			</div>
 			<table width="100%" cellspacing="0" cellpadding="0"

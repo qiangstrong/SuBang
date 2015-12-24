@@ -38,6 +38,18 @@ public class UserDao extends BaseDao<User> {
 		return user;
 	}
 
+	public User getByUserno(String userno) {
+		String sql = "select * from user_t where userno=?";
+		Object[] args = { userno };
+		User user = null;
+		try {
+			user = jdbcTemplate.queryForObject(sql, args, new BeanPropertyRowMapper<User>(
+					User.class));
+		} catch (EmptyResultDataAccessException e) {
+		}
+		return user;
+	}
+
 	public User getByCellnum(String cellnum) {
 		String sql = "select * from user_t where cellnum=?";
 		Object[] args = { cellnum };
@@ -51,17 +63,17 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?)";
-		Object[] args = { user.getLogin(), user.getOpenid(), user.getNickname(),
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?)";
+		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
 				user.getAddrid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
-		String sql = "update user_t set login=?,openid=? ,nickname=? ,password=? , "
+		String sql = "update user_t set login=?,openid=? ,userno=?, nickname=? ,password=? , "
 				+ "cellnum=? ,score=? ,money=?, addrid=? where id=?";
-		Object[] args = { user.getLogin(), user.getOpenid(), user.getNickname(),
+		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
 				user.getAddrid(), user.getId() };
 		jdbcTemplate.update(sql, args);
@@ -96,6 +108,14 @@ public class UserDao extends BaseDao<User> {
 		int offset = (pageno - 1) * WebConst.PAGE_SIZE;
 		String sql = "select * from user_t";
 		List<User> users = findByPage(sql, new Object[] {}, offset, WebConst.PAGE_SIZE);
+		return users;
+	}
+
+	public List<User> findByUserno(String userno) {
+		String sql = "select * from user_t where userno like ?";
+		Object[] args = { ComUtil.getLikeStr(userno) };
+		List<User> users = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<User>(User.class));
 		return users;
 	}
 

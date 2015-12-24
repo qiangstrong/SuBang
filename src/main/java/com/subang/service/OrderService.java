@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,9 @@ import com.subang.util.WebConst;
 
 @Service
 public class OrderService extends BaseService {
+
+	@Autowired
+	protected UserService userService; // 余额支付，需要生成balance订单
 
 	/**
 	 * 订单
@@ -401,8 +405,16 @@ public class OrderService extends BaseService {
 			result.setMsg("余额不足。");
 			return result;
 		}
-		user.setMoney(user.getMoney() - orderDetail.getActualMoney());
-		userDao.update(user);
+
+		PayArg expensePayArg = new PayArg();
+		expensePayArg.setClient(payArg.getClient());
+		expensePayArg.setPayType(PayType.expense);
+		expensePayArg.setMoney(-orderDetail.getActualMoney());
+		result = userService.prepay(expensePayArg, user.getId(), null);
+		if (result.getCodeEnum() != PrepayResult.Code.succ) {
+			return result;
+		}
+
 		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
 		payment.setType(PayType.balance);
 		paymentDao.update(payment);
@@ -553,9 +565,13 @@ public class OrderService extends BaseService {
 		return result;
 	}
 
-	public PrepayResult prepay(PayArg payArg, HttpServletRequest request) {
+	public PrepayResult prepay(PayArg payArg, HttpServletRequest request) throws SuException {
 		PrepayResult result;
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+		if (orderDetail.getStateEnum() != State.priced) {
+			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
+
 		if (!orderDetail.isTicket() && payArg.getTicketid() != null) {
 			result = payByTicket(payArg);
 			if (result.getCodeEnum() == PrepayResult.Code.succ

@@ -24,16 +24,15 @@ public class CategoryDao extends BaseDao<Category> {
 	}
 
 	public void save(Category category) {
-		String sql = "insert into category_t values(null,?,?,?,?)";
-		Object[] args = { category.getValid(), category.getName(), category.getIcon(),
-				category.getComment() };
+		String sql = "insert into category_t values(null,?,?,?)";
+		Object[] args = { category.getName(), category.getIcon(), category.getComment() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Category category) {
-		String sql = "update category_t set valid=?,name=?,icon=?,comment=? where id=?";
-		Object[] args = { category.getValid(), category.getName(), category.getIcon(),
-				category.getComment(), category.getId() };
+		String sql = "update category_t set name=?,icon=?,comment=? where id=?";
+		Object[] args = { category.getName(), category.getIcon(), category.getComment(),
+				category.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -51,8 +50,8 @@ public class CategoryDao extends BaseDao<Category> {
 	}
 
 	public List<Category> findByCityid(Integer cityid) {
-		String sql = "select category_t.*  from service_t,category_t "
-				+ "where category_t.id=service_t.categoryid and service_t.cityid=?";
+		String sql = "select category_t.* ,service_t.valid, service_t.seq from service_t,category_t "
+				+ "where category_t.id=service_t.categoryid and service_t.cityid=? order by seq asc";
 		Object[] args = { cityid };
 		List<Category> categorys = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<Category>(Category.class));

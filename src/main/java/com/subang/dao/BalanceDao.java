@@ -77,7 +77,7 @@ public class BalanceDao extends BaseDao<Balance> {
 
 	public List<Balance> findDetailByUseridAndState(Integer userid, Order.State state) {
 		String sql = "select balance_t.*, payment_t.type `pay_type` from balance_t, payment_t"
-				+ " where balance_t.orderno=payment_t.orderno and balance_t.userid=? and balance_t.state=?";
+				+ " where balance_t.orderno=payment_t.orderno and balance_t.userid=? and balance_t.state=? order by time asc";
 		Object[] args = { userid, state.ordinal() };
 		List<Balance> balances = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Balance>(
 				Balance.class));

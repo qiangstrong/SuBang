@@ -24,14 +24,15 @@ public class BannerDao extends BaseDao<Banner> {
 	}
 
 	public void save(Banner banner) {
-		String sql = "insert into banner_t values(null,?,?,?)";
-		Object[] args = { banner.getLink(), banner.getIcon(), banner.getComment() };
+		String sql = "insert into banner_t values(null,?,?,?,?)";
+		Object[] args = { banner.getSeq(), banner.getLink(), banner.getIcon(), banner.getComment() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Banner banner) {
-		String sql = "update banner_t set link=?,icon=?,comment=? where id=?";
-		Object[] args = { banner.getLink(), banner.getIcon(), banner.getComment(), banner.getId() };
+		String sql = "update banner_t set seq=?, link=?,icon=?,comment=? where id=?";
+		Object[] args = { banner.getSeq(), banner.getLink(), banner.getIcon(), banner.getComment(),
+				banner.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -42,7 +43,7 @@ public class BannerDao extends BaseDao<Banner> {
 	}
 
 	public List<Banner> findAll() {
-		String sql = "select * from banner_t";
+		String sql = "select * from banner_t order by seq asc";
 		List<Banner> banners = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Banner>(
 				Banner.class));
 		return banners;

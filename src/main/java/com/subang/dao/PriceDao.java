@@ -46,15 +46,16 @@ public class PriceDao extends BaseDao<Price> {
 		List<Price> prices = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Price>(Price.class));
 		return prices;
 	}
-	
-	public List<Double> findAllMoney(){
-		String sql = "select distinct money from price_t";
-		List<Double> moneys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Double>(Double.class));
+
+	public List<Double> findAllMoney() {
+		String sql = "select distinct money from price_t order by money asc";
+		List<Double> moneys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Double>(
+				Double.class));
 		return moneys;
 	}
 
 	public List<Price> findByCategoryid(Integer categoryid) {
-		String sql = "select * from price_t where categoryid=?";
+		String sql = "select * from price_t where categoryid=? order by money asc";
 		Object[] args = { categoryid };
 		List<Price> prices = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Price>(
 				Price.class));

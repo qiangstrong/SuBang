@@ -13,6 +13,7 @@ public class Banner implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	private Integer seq; // 前台显示的顺序
 	@Length(max = 100)
 	private String link;
 	@Length(max = 100)
@@ -23,9 +24,10 @@ public class Banner implements Filter, Serializable {
 	public Banner() {
 	}
 
-	public Banner(Integer id, String link, String icon, String comment) {
+	public Banner(Integer id, Integer seq, String link, String icon, String comment) {
 		super();
 		this.id = id;
+		this.seq = seq;
 		this.link = link;
 		this.icon = icon;
 		this.comment = comment;
@@ -37,6 +39,14 @@ public class Banner implements Filter, Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 
 	public String getLink() {
@@ -71,6 +81,9 @@ public class Banner implements Filter, Serializable {
 		Banner banner = (Banner) object;
 		if (this.id == null) {
 			banner.id = null;
+		}
+		if (this.seq == null) {
+			banner.seq = null;
 		}
 		if (this.link == null) {
 			banner.link = null;

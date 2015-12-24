@@ -218,7 +218,12 @@ public class OrderController extends BaseController {
 		}
 
 		payArg.setClient(Client.weixin);
-		PrepayResult prepayResult = orderService.prepay(payArg, request);
+		PrepayResult prepayResult = null;
+		try {
+			prepayResult = orderService.prepay(payArg, request);
+		} catch (SuException e) {
+			e.printStackTrace();
+		}
 
 		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
 		view.addObject("orderDetail", orderDetail);

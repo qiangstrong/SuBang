@@ -598,6 +598,59 @@ public class RegionController extends BaseController {
 		return view;
 	}
 
+	@RequestMapping("/showmodifyservice")
+	public ModelAndView showModifyService(HttpSession session,
+			@RequestParam("serviceid") Integer serviceid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("region/modifyservice", null));
+
+		Service service = serviceDao.get(serviceid);
+		if (service == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("region/modifyservice"));
+			return view;
+		}
+		view.addObject("service", service);
+
+		List<Category> categories = categoryDao.findAll();
+		view.addObject("categories", categories);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyservice"));
+		view.setViewName(VIEW_PREFIX + "/modifyservice");
+		return view;
+	}
+
+	@RequestMapping("/modifyservice")
+	public ModelAndView modifyService(HttpSession session, @Valid Service service,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (service.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+			view.addObject("service", service);
+		} else if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				regionService.modifyService(service);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("service", service);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
+		}
+
+		List<Category> categories = categoryDao.findAll();
+		view.addObject("categories", categories);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyservice"));
+		view.setViewName(VIEW_PREFIX + "/modifyservice");
+		return view;
+	}
+
 	@RequestMapping("/deleteservice")
 	public ModelAndView deleteService(HttpSession session,
 			@RequestParam("serviceids") String serviceids) {

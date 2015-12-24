@@ -30,6 +30,7 @@ public interface WebConst {
 	int SEARCH_CELLNUM = 3;
 	int SEARCH_AREA = 4;
 	int SEARCH_INCOMPLETE = 5;
+	int SEARCH_NO = 6; // 按照编号进行搜索，如订单编号，用户编号（会员号）
 
 	int SEARCH_ORDER_STATE = 2;
 	int SEARCH_ORDER_ORDERNO = 3;

@@ -49,7 +49,6 @@ create table `region_t`(
 #类别表，如衣服、鞋等
 create table `category_t`(
 	`id` int auto_increment primary key,
-    `valid` tinyint not null default 1,		#类别是否可用。1：可用
     `name` char(10) not null unique,		#类别名称
     `icon` char(100) not null,				#类别图标的路径
     `comment` varchar(100)					#备注
@@ -79,6 +78,8 @@ create table `clothes_type_t`(
 #服务类别表，不同城市有不同的服务类别
 create table `service_t`(
 	`id` int auto_increment primary key,
+    `valid` tinyint not null default 1,		#类别是否可用。1：可用
+    `seq` tinyint,
     `cityid` int not null,
     `categoryid` int not null,
     unique (`cityid`,`categoryid`),
@@ -115,6 +116,7 @@ create table `user_t`(
 	`id` int auto_increment primary key,
     `login` tinyint not null default 0,		#今日用户是否登录过，用于计算积分
     `openid` char(28) unique,				#微信的openid
+    `userno` char(10) unique,				#会员号
     `nickname` varchar(100),				#微信昵称，也可以作为本系统的用户名
     `password` char(50) not null,			#用户密码
     `cellnum` char(11) not null unique,		#用户绑定的电话号码
@@ -262,6 +264,7 @@ create table `notice_t`(
 #横幅表
 create table `banner_t`(
 	`id` int auto_increment primary key,
+    `seq` tinyint,
     `link` char(100),
     `icon` char(100) not null,
     `comment` varchar(100)					

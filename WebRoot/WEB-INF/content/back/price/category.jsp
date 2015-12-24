@@ -57,7 +57,6 @@
 						<th><input type="checkbox" onclick="switchCheckboxs('categoryid')" /></th>
 						<th>编号</th>
 						<th>名称</th>
-						<th>可用</th>
 						<th>备注</th>
 						<th>价格</th>	
 						<th>衣物类型</th>					
@@ -69,7 +68,6 @@
 							<td><input type="checkbox" name="categoryid" value="${category.id}" /></td>
 							<td><%=++count%></td>
 							<td>${category.name}</td>
-							<td>${category.validDes}</td>
 							<td>${category.comment}</td>
 							<td>
 								<a href="back/price/price.html?categoryid=${category.id}">价格</a>

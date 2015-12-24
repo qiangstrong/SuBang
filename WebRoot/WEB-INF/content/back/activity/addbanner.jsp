@@ -39,6 +39,14 @@
 					<table>
 						<tr>
 							<td></td>
+							<td><form:errors path="seq" /></td>
+						</tr>
+						<tr>
+							<td>序号：</td>
+							<td><form:input path="seq"/></td>
+						</tr>
+						<tr>
+							<td></td>
 							<td><form:errors path="link" /></td>
 						</tr>
 						<tr>

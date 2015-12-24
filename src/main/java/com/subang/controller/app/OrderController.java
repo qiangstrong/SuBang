@@ -148,7 +148,11 @@ public class OrderController extends BaseController {
 			prepayResult.setCode(Code.fail);
 			prepayResult.setMsg("参数错误");
 		} else {
-			prepayResult = orderService.prepay(payArg, request);
+			try {
+				prepayResult = orderService.prepay(payArg, request);
+			} catch (SuException e) {
+				e.printStackTrace();
+			}
 		}
 		SuUtil.outputJson(response, prepayResult);
 	}

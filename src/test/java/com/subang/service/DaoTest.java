@@ -1,12 +1,14 @@
 package com.subang.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.domain.Region;
+import com.subang.domain.Category;
 import com.subang.util.UtilTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,12 +19,7 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		Region region = new Region();
-		region.setId(5);
-		region.setDistrictid(6);
-		region.setName("12");
-		region.setWorkerid(1);
-		regionDao.update(region);
+		List<Category> categories = categoryDao.findByCityid(1);
 		pause();
 	}
 

@@ -60,14 +60,22 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('serviceid')" /></th>
 						<th>编号</th>
+						<th>序号</th>
+						<th>可用</th>
 						<th>名称</th>
+						<th>修改</th>
 					</tr>
 					<%count=0;%>
 					<c:forEach var="service" items="${services}">
 						<tr>
 							<td><input type="checkbox" name="serviceid" value="${service.id}" /></td>
 							<td><%=++count%></td>
+							<td>${service.seq}</td>
+							<td>${service.validDes}</td>
 							<td>${service.categoryname}</td>
+							<td>
+								<a href="back/region/showmodifyservice.html?serviceid=${service.id}">修改</a>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>

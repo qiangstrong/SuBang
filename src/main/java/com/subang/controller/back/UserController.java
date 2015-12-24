@@ -22,6 +22,8 @@ import com.subang.bean.PayArg.Client;
 import com.subang.bean.SearchArg;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
+import com.subang.domain.Balance;
+import com.subang.domain.Order;
 import com.subang.domain.Payment.PayType;
 import com.subang.domain.Ticket;
 import com.subang.domain.TicketType;
@@ -132,8 +134,16 @@ public class UserController extends BaseController {
 		if (user.getId() == null) {
 			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
 		} else if (!result.hasErrors()) {
-			userService.modifyUserBack(user);
-			view.addObject(KEY_INFO_MSG, "修改成功。");
+			boolean isException = false;
+			try {
+				userService.modifyUserBack(user);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
 		}
 		view.addObject("user", user);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/modify"));
@@ -170,6 +180,21 @@ public class UserController extends BaseController {
 		view.addObject("userid", userid);
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/recharge"));
 		view.setViewName(VIEW_PREFIX + "/recharge");
+		return view;
+	}
+
+	@RequestMapping("/balance")
+	public ModelAndView listBalance(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/balance", null));
+
+		List<Balance> balances = balanceDao.findDetailByUseridAndState(userid, Order.State.paid);
+		view.addObject("balances", balances);
+		User user = userDao.get(userid);
+		String desMsg = "用户：" + user.getCellnum() + "。此用户的余额记录如下：";
+		view.addObject(KEY_DES_MSG, desMsg);
+		view.setViewName(VIEW_PREFIX + "/balance");
 		return view;
 	}
 

@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>修改用户信息</title>
+	<title>修改区信息</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -34,31 +34,29 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<form:form modelAttribute="user" action="back/user/modify.html" method="post">
+				<form:form modelAttribute="service" action="back/region/modifyservice.html" method="post">
 					<form:hidden path="id"/>
-					<form:hidden path="cellnum"/>
+					<form:hidden path="cityid"/>
 					<table>
 						<tr>
-							<td>会员号：</td>
-							<td><form:input path="userno" /></td>
-						</tr>
-						<tr>
 							<td></td>
-							<td><form:errors path="score" /></td>
+							<td><form:errors path="seq" /></td>
 						</tr>
 						<tr>
-							<td>积分：</td>
-							<td><form:input path="score" /></td>
+							<td>序号：</td>
+							<td><form:input path="seq"/></td>
 						</tr>
 						<tr>
-							<td></td>
-							<td><form:errors path="password" /></td>
+							<td>可用：</td>
+							<td><form:checkbox path="valid"/></td>
 						</tr>
 						<tr>
-							<td>密码：</td>
-							<td><form:input path="password" /></td>
+							<td>类别：</td>
+							<td>    
+								<form:select path="categoryid" items="${categories}" itemLabel="name" itemValue="id"></form:select>  
+        					</td>
 						</tr>
-						<tr>
+						<tr >
 							<td><input type="submit" value="修改" /></td>
 							<td><input type="reset" value="重置" /></td>
 						</tr>
