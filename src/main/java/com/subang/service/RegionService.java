@@ -30,24 +30,39 @@ public class RegionService extends BaseService {
 		if (scope.isEmpty()) {
 			throw new SuException("未选择服务范围文件。");
 		}
+		city.calcScope(scope.getOriginalFilename());
+		if (SuUtil.imageExists(city.getScope())) {
+			throw new SuException("文件重名。");
+		}
 		try {
-			city.calcScope(scope.getOriginalFilename());
-			SuUtil.saveMultipartFile(false, scope, city.getScope());
 			cityDao.save(city);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("城市名称不能相同。");
 		}
+		SuUtil.saveMultipartFile(scope, city.getScope());
 	}
 
 	public void modifyCity(City city, MultipartFile scope) throws SuException {
-		try {
-			if (!scope.isEmpty()) {
-				city.calcScope(scope.getOriginalFilename());
-				SuUtil.saveMultipartFile(true, scope, city.getScope());
+		String scope_old = city.getScope();
+		if (!scope.isEmpty()) {
+			city.calcScope(scope.getOriginalFilename());
+			if (!scope_old.equals(city.getScope())) {
+				if (SuUtil.imageExists(city.getScope())) {
+					city.setScope(scope_old);
+					throw new SuException("文件重名。");
+				}
 			}
+		}
+		try {
 			cityDao.update(city);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("城市名称不能相同。");
+		}
+		if (!scope.isEmpty()) {
+			if (!scope_old.equals(city.getScope())) {
+				SuUtil.deleteFile(scope_old);
+			}
+			SuUtil.saveMultipartFile(scope, city.getScope());
 		}
 	}
 
@@ -55,8 +70,8 @@ public class RegionService extends BaseService {
 		boolean isAll = true;
 		for (Integer cityid : cityids) {
 			try {
-				SuUtil.deleteFile(cityDao.get(cityid).getScope());
 				cityDao.delete(cityid);
+				SuUtil.deleteFile(cityDao.get(cityid).getScope());
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
 			}

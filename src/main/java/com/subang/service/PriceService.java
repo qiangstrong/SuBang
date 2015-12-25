@@ -26,24 +26,39 @@ public class PriceService extends BaseService {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
+		category.calcIcon(icon.getOriginalFilename());
+		if (SuUtil.imageExists(category.getIcon())) {
+			throw new SuException("文件重名。");
+		}
 		try {
-			category.calcIcon(icon.getOriginalFilename());
-			SuUtil.saveMultipartFile(false, icon, category.getIcon());
 			categoryDao.save(category);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("类别名称不能相同。");
 		}
+		SuUtil.saveMultipartFile(icon, category.getIcon());
 	}
 
 	public void modifyCategory(Category category, MultipartFile icon) throws SuException {
-		try {
-			if (!icon.isEmpty()) {
-				category.calcIcon(icon.getOriginalFilename());
-				SuUtil.saveMultipartFile(true, icon, category.getIcon());
+		String icon_old = category.getIcon();
+		if (!icon.isEmpty()) {
+			category.calcIcon(icon.getOriginalFilename());
+			if (!icon_old.equals(category.getIcon())) {
+				if (SuUtil.imageExists(category.getIcon())) {
+					category.setIcon(icon_old);
+					throw new SuException("文件重名。");
+				}
 			}
+		}
+		try {
 			categoryDao.update(category);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("类别名称不能相同。");
+		}
+		if (!icon.isEmpty()) {
+			if (!icon_old.equals(category.getIcon())) {
+				SuUtil.deleteFile(icon_old);
+			}
+			SuUtil.saveMultipartFile(icon, category.getIcon());
 		}
 	}
 
@@ -51,8 +66,8 @@ public class PriceService extends BaseService {
 		boolean isAll = true;
 		for (Integer categoryid : categoryids) {
 			try {
-				SuUtil.deleteFile(categoryDao.get(categoryid).getIcon());
 				categoryDao.delete(categoryid);
+				SuUtil.deleteFile(categoryDao.get(categoryid).getIcon());
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
 			}
@@ -110,31 +125,46 @@ public class PriceService extends BaseService {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
+		clothesType.calcIcon(icon.getOriginalFilename());
+		if (SuUtil.imageExists(clothesType.getIcon())) {
+			throw new SuException("文件重名。");
+		}
 		try {
-			clothesType.calcIcon(icon.getOriginalFilename());
-			SuUtil.saveMultipartFile(false, icon, clothesType.getIcon());
 			clothesTypeDao.save(clothesType);
 		} catch (DuplicateKeyException e) {
-			throw new SuException("衣服名称不能相同。");
+			throw new SuException("衣物名称不能相同。");
 		}
+		SuUtil.saveMultipartFile(icon, clothesType.getIcon());
 	}
 
 	public void modifyClothesType(ClothesType clothesType, MultipartFile icon) throws SuException {
-		try {
-			if (!icon.isEmpty()) {
-				clothesType.calcIcon(icon.getOriginalFilename());
-				SuUtil.saveMultipartFile(true, icon, clothesType.getIcon());
+		String icon_old = clothesType.getIcon();
+		if (!icon.isEmpty()) {
+			clothesType.calcIcon(icon.getOriginalFilename());
+			if (!icon_old.equals(clothesType.getIcon())) {
+				if (SuUtil.imageExists(clothesType.getIcon())) {
+					clothesType.setIcon(icon_old);
+					throw new SuException("文件重名。");
+				}
 			}
+		}
+		try {
 			clothesTypeDao.update(clothesType);
 		} catch (DuplicateKeyException e) {
-			throw new SuException("衣服名称不能相同。");
+			throw new SuException("衣物名称不能相同。");
+		}
+		if (!icon.isEmpty()) {
+			if (!icon_old.equals(clothesType.getIcon())) {
+				SuUtil.deleteFile(icon_old);
+			}
+			SuUtil.saveMultipartFile(icon, clothesType.getIcon());
 		}
 	}
 
 	public void deleteClothesTypes(List<Integer> clothesTypeids) throws SuException {
 		for (Integer clothesTypeid : clothesTypeids) {
-			SuUtil.deleteFile(clothesTypeDao.get(clothesTypeid).getIcon());
 			clothesTypeDao.delete(clothesTypeid);
+			SuUtil.deleteFile(clothesTypeDao.get(clothesTypeid).getIcon());
 		}
 	}
 

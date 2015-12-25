@@ -172,13 +172,12 @@
 
 			<!-- 立即预约 start -->
 			<div class="order_bottom">
-
 				<div class="delivery_fee" style="padding-top: 8px; padding-bottom: 16px;">
-					<ul>
+					<!-- <ul>
 						<li>订单金额不满 10 元收取 10 元运费</li>
 					</ul>
+					 -->
 				</div>
-
 			</div>
 			<input type="button" value="立即预约" class="btn_order Book"
 				onclick="this.form.submit()">

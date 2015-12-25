@@ -309,14 +309,14 @@ public class UserController extends BaseController {
 	public ModelAndView showAddTicket(HttpSession session, @RequestParam("userid") Integer userid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
-		backStack.push(new PageState("ticket/addticket", null));
+		backStack.push(new PageState("user/addticket", null));
 
 		Ticket ticket = new Ticket();
 		ticket.setUserid(userid);
 		view.addObject("ticket", ticket);
 		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
 		view.addObject("ticketTypes", ticketTypes);
-		view.addObject(KEY_BACK_LINK, backStack.getBackLink("ticket/addticket"));
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addticket"));
 		view.setViewName(VIEW_PREFIX + "/addticket");
 		return view;
 	}
@@ -331,7 +331,7 @@ public class UserController extends BaseController {
 		}
 		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
 		view.addObject("ticketTypes", ticketTypes);
-		view.addObject(KEY_BACK_LINK, backStack.getBackLink("ticket/addticket"));
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addticket"));
 		view.setViewName(VIEW_PREFIX + "/addticket");
 		return view;
 	}
@@ -346,7 +346,7 @@ public class UserController extends BaseController {
 		List<Integer> ticketidList = SuUtil.getIds(ticketids);
 		userService.deleteTickets(ticketidList);
 		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
-		view.setViewName("redirect:" + VIEW_PREFIX + "/addr/ticket.html");
+		view.setViewName("redirect:" + VIEW_PREFIX + "/ticket/back.html");
 		return view;
 	}
 }

@@ -53,7 +53,7 @@
         					</td>
 						</tr>
 						<tr>
-							<td><input type="submit" value="修改" /></td>
+							<td><input type="submit" value="添加" /></td>
 							<td><input type="reset" value="重置" /></td>
 						</tr>
 					</table>

@@ -25,7 +25,6 @@ import com.subang.dao.NoticeDao;
 import com.subang.domain.Notice;
 import com.subang.domain.Notice.Code;
 import com.subang.domain.face.Filter;
-import com.subang.tool.SuException;
 
 /**
  * @author Qiang 与业务相关的公用函数
@@ -115,13 +114,18 @@ public class SuUtil extends BaseUtil {
 	 * @param desPath
 	 *            相对于WebRoot的路径
 	 */
-	public static void saveMultipartFile(Boolean isReplace, MultipartFile srcFile, String desPath)
-			throws SuException {
+	public static boolean imageExists(String desPath) {
 		String path = servletContext.getRealPath(desPath);
 		File file = new File(path);
-		if (!isReplace && file.exists()) {
-			throw new SuException("文件重名。");
+		if (file.exists()) {
+			return true;
 		}
+		return false;
+	}
+
+	public static void saveMultipartFile(MultipartFile srcFile, String desPath) {
+		String path = servletContext.getRealPath(desPath);
+		File file = new File(path);
 		try {
 			srcFile.transferTo(file);
 		} catch (Exception e) {

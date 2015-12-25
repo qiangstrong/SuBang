@@ -53,7 +53,7 @@
 		<c:forEach var="balance" items="${balances}">
 			<div class="jifen_itle2 feature_block icard_row">
 				${balance.payTypeDes}
-				<div class="add_jifen chongzhi_yue ">+${balance.money}</div>
+				<div class="add_jifen chongzhi_yue ">${balance.moneyDes}</div>
 				<div class="time2">${balance.timeDes}</div>
 			</div>
 			<div class="borderD"></div>
