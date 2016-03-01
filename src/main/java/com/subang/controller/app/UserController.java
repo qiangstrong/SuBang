@@ -26,6 +26,8 @@ import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.tool.SuException;
+import com.subang.util.SmsUtil;
+import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
@@ -237,5 +239,18 @@ public class UserController extends BaseController {
 		SuUtil.outputJsonOK(response);
 		response.flushBuffer();
 		userService.updateLocation(user.getId(), location);
+	}
+
+	@RequestMapping("/authcode")
+	public void setAuthcode(@RequestParam("cellnum") String cellnum,
+			@RequestParam("authcode") String authcode, HttpServletResponse response) {
+		Result result = new Result();
+		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toAuthcodeContent(authcode))) {
+			result.setCode(Result.ERR);
+			result.setMsg("发送验证码错误。");
+		} else {
+			result.setCode(Result.OK);
+		}
+		SuUtil.outputJson(response, result);
 	}
 }

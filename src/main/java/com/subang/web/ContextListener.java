@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebListener;
 import weixin.popular.support.TicketManager;
 import weixin.popular.support.TokenManager;
 
+import com.subang.util.ComUtil;
 import com.subang.util.PushUtil;
 import com.subang.util.SmsUtil;
 import com.subang.util.StratUtil;
@@ -22,6 +23,7 @@ public class ContextListener implements ServletContextListener {
 		SmsUtil.init();
 		StratUtil.init();
 		PushUtil.init();
+		ComUtil.init();
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {

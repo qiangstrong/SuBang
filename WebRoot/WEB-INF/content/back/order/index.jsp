@@ -73,7 +73,7 @@
 							<option value="1">已计价</option>
 							<option value="2">已支付</option>
 							<option value="3">已取走</option>
-							<option value="4">已分拣</option>
+							<option value="4">已洗衣</option>
 							<option value="5">已送达</option>
 							<option value="6">已评价</option>
 							<option value="7">已取消</option>

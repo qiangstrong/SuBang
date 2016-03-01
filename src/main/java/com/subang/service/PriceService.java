@@ -66,8 +66,11 @@ public class PriceService extends BaseService {
 		boolean isAll = true;
 		for (Integer categoryid : categoryids) {
 			try {
+				Category category = categoryDao.get(categoryid);
 				categoryDao.delete(categoryid);
-				SuUtil.deleteFile(categoryDao.get(categoryid).getIcon());
+				if (category != null) {
+					SuUtil.deleteFile(category.getIcon());
+				}
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
 			}
@@ -163,8 +166,11 @@ public class PriceService extends BaseService {
 
 	public void deleteClothesTypes(List<Integer> clothesTypeids) throws SuException {
 		for (Integer clothesTypeid : clothesTypeids) {
+			ClothesType clothesType = clothesTypeDao.get(clothesTypeid);
 			clothesTypeDao.delete(clothesTypeid);
-			SuUtil.deleteFile(clothesTypeDao.get(clothesTypeid).getIcon());
+			if (clothesType != null) {
+				SuUtil.deleteFile(clothesType.getIcon());
+			}
 		}
 	}
 

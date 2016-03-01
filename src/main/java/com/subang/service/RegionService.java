@@ -70,8 +70,11 @@ public class RegionService extends BaseService {
 		boolean isAll = true;
 		for (Integer cityid : cityids) {
 			try {
+				City city = cityDao.get(cityid);
 				cityDao.delete(cityid);
-				SuUtil.deleteFile(cityDao.get(cityid).getScope());
+				if (city != null) {
+					SuUtil.deleteFile(city.getScope());
+				}
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
 			}

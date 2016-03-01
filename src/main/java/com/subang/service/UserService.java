@@ -121,7 +121,11 @@ public class UserService extends BaseService {
 		user_old.setUserno(user.getUserno());
 		user_old.setPassword(user.getPassword());
 		user_old.setScore(user.getScore());
-		userDao.update(user_old);
+		try {
+			userDao.update(user_old);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("会员号不能相同。");
+		}
 	}
 
 	// 后台删除用户

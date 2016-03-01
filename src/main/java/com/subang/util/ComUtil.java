@@ -23,14 +23,21 @@ public class ComUtil extends BaseUtil {
 	public static Timestamp firstTime, lastTime;
 	public static SearchArg curDayArg;
 
-	static {
+	public static void init() {
 		firstTime = new Timestamp(0);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(firstTime.getTime());
 		calendar.add(Calendar.YEAR, 200);
 		lastTime = new Timestamp(calendar.getTimeInMillis());
+		calcCurDayArg();
+	}
 
-		calendar = Calendar.getInstance();
+	public static void reset() {
+		calcCurDayArg();
+	}
+
+	private static void calcCurDayArg() {
+		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);

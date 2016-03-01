@@ -63,8 +63,11 @@ public class ActivityService extends BaseService {
 		boolean isAll = true;
 		for (Integer ticketTypeid : ticketTypeids) {
 			try {
+				TicketType ticketType = ticketTypeDao.get(ticketTypeid);
 				ticketTypeDao.delete(ticketTypeid);
-				SuUtil.deleteFile(ticketTypeDao.get(ticketTypeid).getIcon());
+				if (ticketType != null) {
+					SuUtil.deleteFile(ticketType.getIcon());
+				}
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
 			}
@@ -112,8 +115,11 @@ public class ActivityService extends BaseService {
 
 	public void deleteBanners(List<Integer> bannerids) {
 		for (Integer bannerid : bannerids) {
+			Banner banner = bannerDao.get(bannerid);
 			bannerDao.delete(bannerid);
-			SuUtil.deleteFile(bannerDao.get(bannerid).getIcon());
+			if (banner != null) {
+				SuUtil.deleteFile(banner.getIcon());
+			}
 		}
 	}
 

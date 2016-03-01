@@ -32,42 +32,45 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {
-		String code = request.getParameter("code");
-		if (code == null) {
-			User user = getUser(request.getSession());
-			String openid = getOpenid(request.getSession());
-			if ((user == null && isResURI(request.getRequestURI()))
-					|| (openid == null && user == null && isRegURI(request.getRequestURI()))) {
+		User user = getUser(request.getSession());
+		String openid = getOpenid(request.getSession());
+		if ((user == null && isResURI(request.getRequestURI()))
+				|| (openid == null && user == null && isRegURI(request.getRequestURI()))) {
+
+			String code = request.getParameter("code");
+			if (code == null) {
 				String redirect_uri = request.getRequestURL() + "?" + request.getQueryString();
 				String url = SnsAPI.connectOauth2Authorize(SuUtil.getAppProperty("appid"),
 						redirect_uri, false, null);
 				response.sendRedirect(url);
 				return false;
-			}
-		} else {
-			SnsToken snsToken = SnsAPI.oauth2AccessToken(SuUtil.getAppProperty("appid"),
-					SuUtil.getAppProperty("appsecret"), code);
-			if (snsToken.getErrcode() != null) {
-				// 可能的原因是：用户手动输入URL,伪造了code
-				request.getRequestDispatcher("/content/weixin/common/error.htm").forward(request,
-						response);
-				return false;
-			}
-			if (isRegURI(request.getRequestURI())) {
-				setOpenid(request.getSession(), snsToken.getOpenid());
 			} else {
-				User user = userDao.getByOpenid(snsToken.getOpenid());
-				if (user == null) {
-					// 用户还未注册
-					setOpenid(request.getSession(), snsToken.getOpenid());
-					request.getRequestDispatcher("/WEB-INF/content/weixin/user/login.jsp").forward(
+				SnsToken snsToken = SnsAPI.oauth2AccessToken(SuUtil.getAppProperty("appid"),
+						SuUtil.getAppProperty("appsecret"), code);
+				if (snsToken.getErrcode() != null) {
+					// 可能的原因是：用户手动输入URL,伪造了code
+					request.getRequestDispatcher("/content/weixin/common/error.htm").forward(
 							request, response);
 					return false;
 				}
-				StratUtil.updateScore(user.getId(), ScoreType.login, null);
-				setUser(request.getSession(), user);
+				if (isRegURI(request.getRequestURI())) {
+					setOpenid(request.getSession(), snsToken.getOpenid());
+				} else {
+					user = userDao.getByOpenid(snsToken.getOpenid());
+					if (user == null) {
+						// 用户还未注册
+						setOpenid(request.getSession(), snsToken.getOpenid());
+						request.getRequestDispatcher("/WEB-INF/content/weixin/user/login.jsp")
+								.forward(request, response);
+						return false;
+					}
+					StratUtil.updateScore(user.getId(), ScoreType.login, null);
+					setUser(request.getSession(), user);
+				}
 			}
+
 		}
+
 		return true;
 	}
 

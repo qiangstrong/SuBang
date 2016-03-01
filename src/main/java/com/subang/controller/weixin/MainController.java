@@ -134,36 +134,55 @@ public class MainController extends BaseController {
 		switch (msgid) {
 		case 1:
 			article = new Article();
-			article.setTitle("服务介绍");
-			article.setDescription("服务介绍");
-			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/serviceintro.png");
-			article.setUrl(SuUtil.getBasePath(request) + "content/weixin/info/serviceintro.htm");
+			article.setTitle("如何下单");
+			article.setDescription("如何下单");
+			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/11.jpg");
+			article.setUrl(SuUtil.getBasePath(request) + "image/weixin/news/12.jpg");
 			articles = new ArrayList<XMLNewsMessage.Article>();
 			articles.add(article);
 			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
 					eventMessage.getToUserName(), articles);
 			break;
 		case 2:
-			article = new Article();
-			article.setTitle("服务流程");
-			article.setDescription("服务流程");
-			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/servicepro.png");
-			article.setUrl(SuUtil.getBasePath(request) + "content/weixin/info/servicepro.htm");
-			articles = new ArrayList<XMLNewsMessage.Article>();
-			articles.add(article);
-			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
-					eventMessage.getToUserName(), articles);
+			xmlMessage = new XMLTextMessage(eventMessage.getFromUserName(),
+					eventMessage.getToUserName(), SuUtil.getMsgProperty("default"));
 			break;
 		case 3:
 			article = new Article();
 			article.setTitle("优惠券使用");
 			article.setDescription("优惠券使用");
-			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/ticketintro.png");
+			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/31.jpg");
 			article.setUrl(SuUtil.getBasePath(request) + "content/weixin/ticket/intro.htm");
 			articles = new ArrayList<XMLNewsMessage.Article>();
 			articles.add(article);
 			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
 					eventMessage.getToUserName(), articles);
+			break;
+		case 4:
+			article = new Article();
+			article.setTitle("服务范围");
+			article.setDescription("服务范围");
+			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/41.jpg");
+			article.setUrl(SuUtil.getBasePath(request) + "weixin/region/scope.html?cityid=1");
+			articles = new ArrayList<XMLNewsMessage.Article>();
+			articles.add(article);
+			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
+					eventMessage.getToUserName(), articles);
+			break;
+		case 5:
+			article = new Article();
+			article.setTitle("优惠活动");
+			article.setDescription("优惠活动");
+			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/51.jpg");
+			article.setUrl(SuUtil.getBasePath(request) + "image/weixin/news/52.jpg");
+			articles = new ArrayList<XMLNewsMessage.Article>();
+			articles.add(article);
+			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
+					eventMessage.getToUserName(), articles);
+			break;
+		case 6:
+			xmlMessage = new XMLTextMessage(eventMessage.getFromUserName(),
+					eventMessage.getToUserName(), SuUtil.getMsgProperty("pay"));
 			break;
 		default:
 			xmlMessage = new XMLTextMessage(eventMessage.getFromUserName(),

@@ -77,7 +77,7 @@ public class OrderService extends BaseService {
 			searchArg1.setEndTime(searchArg.getEndTime());
 			for (User user : users1) {
 				searchArg1.setArg(user.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg));
+				orderDetails.addAll(orderDao.findDetail(searchArg1));
 			}
 			break;
 		case WebConst.SEARCH_ORDER_USER_CELLNUM:
@@ -88,8 +88,8 @@ public class OrderService extends BaseService {
 			searchArg2.setStartTime(searchArg.getStartTime());
 			searchArg2.setEndTime(searchArg.getEndTime());
 			for (User user : users2) {
-				searchArg.setArg(user.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg));
+				searchArg2.setArg(user.getId().toString());
+				orderDetails.addAll(orderDao.findDetail(searchArg2));
 			}
 			break;
 		case WebConst.SEARCH_ORDER_LAUNDRY_NAME:
@@ -101,7 +101,7 @@ public class OrderService extends BaseService {
 			searchArg3.setEndTime(searchArg.getEndTime());
 			for (Laundry laundry : laundrys) {
 				searchArg3.setArg(laundry.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg));
+				orderDetails.addAll(orderDao.findDetail(searchArg3));
 			}
 			break;
 		default:

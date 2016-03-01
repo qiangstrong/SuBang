@@ -3,7 +3,7 @@ use `subang`;
 set foreign_key_checks=0;
 drop table if exists `worker_t`, `city_t`, `district_t`, `region_t`, `category_t`, `price_t`, `clothes_type_t`, 
 `service_t`, `ticket_type_t`, `laundry_t`, `user_t`, `location_t`, `ticket_t`, `addr_t`, `order_t`, `balance_t`,
-`payment_t`, `clothes_t`, `history_t`, `admin_t`, `info_t`, `faq_t`, `feedback_t`, `notice_t`;
+`payment_t`, `clothes_t`, `history_t`, `admin_t`, `info_t`, `faq_t`, `feedback_t`, `notice_t`, `banner_t`, `rebate_t` ;
 set foreign_key_checks=1;
 
 #工作人员（取衣员）表
