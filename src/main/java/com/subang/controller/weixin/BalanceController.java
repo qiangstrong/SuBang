@@ -21,7 +21,6 @@ import weixin.popular.util.XMLConverUtil;
 
 import com.alipay.util.SignUtil;
 import com.subang.bean.PayArg;
-import com.subang.bean.PayArg.Client;
 import com.subang.bean.PrepayResult;
 import com.subang.controller.BaseController;
 import com.subang.domain.Balance;
@@ -81,7 +80,7 @@ public class BalanceController extends BaseController {
 			return view;
 		}
 
-		payArg.setClient(Client.weixin);
+		payArg.setClient(User.Client.weixin);
 		PrepayResult prepayResult = userService.prepay(payArg, user.getId(), request);
 
 		view.addObject("user", user);

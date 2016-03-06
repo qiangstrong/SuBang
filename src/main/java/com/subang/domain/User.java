@@ -15,15 +15,40 @@ public class User implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public enum Client {
+		weixin, user, worker, back;
+
+		public static String toClientDes(Client client) {
+			if (client == null) {
+				return "未知";
+			}
+			String description = null;
+			switch (client) {
+			case weixin:
+				description = "微信";
+				break;
+			case user:
+				description = "app";
+				break;
+			case worker:
+				description = "app";
+				break;
+			case back:
+				description = "后台";
+				break;
+			}
+			return description;
+		}
+	}
+
 	private Integer id;
 	private Boolean login;
 	private String openid;
 	private String userno;
 	@Length(max = 100)
-	private String nickname;
-	@NotNull
+	private String nickname; // 没有使用
 	@Length(min = 1, max = 50)
-	private String password;
+	private String password;// 没有使用
 	@NotNull
 	@Pattern(regexp = "\\d{11}")
 	private String cellnum;
@@ -31,6 +56,7 @@ public class User implements Filter, Serializable {
 	@Min(0)
 	private Integer score;
 	private Double money;
+	private Integer client; // 用户注册的方式
 	private Integer addrid; // 用户的默认地址
 
 	public User() {
@@ -40,7 +66,8 @@ public class User implements Filter, Serializable {
 	}
 
 	public User(Integer id, Boolean login, String openid, String userno, String nickname,
-			String password, String cellnum, Integer score, Double money, Integer addrid) {
+			String password, String cellnum, Integer score, Double money, Integer client,
+			Integer addrid) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -51,6 +78,7 @@ public class User implements Filter, Serializable {
 		this.cellnum = cellnum;
 		this.score = score;
 		this.money = money;
+		this.client = client;
 		this.addrid = addrid;
 	}
 
@@ -128,6 +156,29 @@ public class User implements Filter, Serializable {
 
 	public void setMoney(Double money) {
 		this.money = ComUtil.round(money);
+	}
+
+	public Integer getClient() {
+		return client;
+	}
+
+	public Client getClientEnum() {
+		if (client == null) {
+			return null;
+		}
+		return Client.values()[client];
+	}
+
+	public String getClientDes() {
+		return Client.toClientDes(getClientEnum());
+	}
+
+	public void setClient(Integer client) {
+		this.client = client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client.ordinal();
 	}
 
 	public Integer getAddrid() {

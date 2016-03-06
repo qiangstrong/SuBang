@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -111,12 +112,12 @@ public class SuUtil extends BaseUtil {
 	}
 
 	/**
-	 * @param desPath
+	 * @param path
 	 *            相对于WebRoot的路径
 	 */
-	public static boolean imageExists(String desPath) {
-		String path = servletContext.getRealPath(desPath);
-		File file = new File(path);
+	public static boolean fileExist(String path) {
+		String path1 = servletContext.getRealPath(path);
+		File file = new File(path1);
 		if (file.exists()) {
 			return true;
 		}
@@ -199,11 +200,14 @@ public class SuUtil extends BaseUtil {
 
 	// 用户、取衣员改绑手机号时，产生验证码
 	public static String getAuthcode() {
-		StringBuffer authcode = new StringBuffer();
-		for (int i = 0; i < WebConst.AUTHCODE_LENGTH; i++) {
-			authcode.append(ComUtil.random.nextInt(10));
-		}
-		return authcode.toString();
+		return ComUtil.getRandomStr(WebConst.AUTHCODE_LENGTH);
+	}
+
+	// 计算管理员上传图片的文件名。日期+固定位数的随机字符串+上传文件的后缀
+	public static String getIcon(String originalFilename) {
+		String no_date = ComUtil.getOrdernoFormat().format(new Date());
+		return no_date + ComUtil.getRandomStr(WebConst.ICON_RANDOM_LENGTH)
+				+ ComUtil.getSuffix(originalFilename);
 	}
 
 	public static void notice(Code code, String msg) {

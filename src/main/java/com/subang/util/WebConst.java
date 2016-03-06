@@ -13,7 +13,7 @@ public interface WebConst {
 	String KEY_USER_AUTHCODE = "user_authcode";
 
 	int AUTHCODE_LENGTH = 4;
-
+	int ICON_RANDOM_LENGTH = 6; // icon的文件名随机部分的长度
 	int ORDERNO_RANDOM_LENGTH = 7;
 
 	int AUTHCODE_INTERVAL = 5 * 60 * 1000;// 验证码过期时间，5分钟，单位毫秒
@@ -40,8 +40,9 @@ public interface WebConst {
 	int SEARCH_ORDER_USERID = 7;
 	int SEARCH_ORDER_WORKERID = 8;
 	int SEARCH_ORDER_LAUNDRYID = 9;
-	int SEARCH_ORDER_USERID_STATE = 10;
-	int SEARCH_ORDER_WORKERID_STATE = 11;
+	int SEARCH_ORDER_BARCODE = 10;
+	int SEARCH_ORDER_USERID_STATE = 11;
+	int SEARCH_ORDER_WORKERID_STATE = 12;
 
 	int STAT_NULL = 0;
 	int STAT_AREA = 1;
@@ -68,6 +69,8 @@ public interface WebConst {
 
 	int ORDER_GET_ID = 1;
 	int ORDER_GET_BARCODE = 2;
+
+	int ORDER_NUM = 50; // 前台最多显示50个已完成订单
 
 	int EXPIRED_INTERVAL = 60; // 重复通知（微信服务器发送的消息，不包括支付通知）过滤 时效60秒
 }

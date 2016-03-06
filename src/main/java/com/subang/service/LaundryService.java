@@ -8,12 +8,13 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.subang.bean.SearchArg;
+import com.subang.domain.Cost;
 import com.subang.domain.Laundry;
 import com.subang.tool.SuException;
 import com.subang.util.WebConst;
 
 @Service
-public class LaundryService extends BaseService  {
+public class LaundryService extends BaseService {
 	public List<Laundry> searchLaundry(SearchArg searchArg) {
 		List<Laundry> laundrys = null;
 		switch (searchArg.getType()) {
@@ -62,6 +63,31 @@ public class LaundryService extends BaseService  {
 		}
 		if (!isAll) {
 			throw new SuException("部分商家没有成功删除。请先删除商家负责的订单，再尝试删除商家。");
+		}
+	}
+
+	/**
+	 * 价格
+	 */
+	public void addCost(Cost cost) throws SuException {
+		try {
+			costDao.save(cost);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("重复添加。");
+		}
+	}
+
+	public void modifyCost(Cost cost) throws SuException {
+		try {
+			costDao.update(cost);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("重复价格。");
+		}
+	}
+
+	public void deleteCosts(List<Integer> costids) throws SuException {
+		for (Integer costid : costids) {
+			costDao.delete(costid);
 		}
 	}
 }

@@ -73,13 +73,13 @@
             <mvc:mapping path="/weixin/*/*" />  
             <bean class="com.subang.web.WeixinInterceptor"/>  
         </mvc:interceptor> 
-        <!-- 
+        
         <mvc:interceptor>  
             <mvc:mapping path="/app/*" />  
             <mvc:mapping path="/app/*/*" />  
             <bean class="com.subang.web.AppInterceptor"/>  
         </mvc:interceptor> 
-         -->
+         
     </mvc:interceptors>  
     
     <!-- 自动调度 -->

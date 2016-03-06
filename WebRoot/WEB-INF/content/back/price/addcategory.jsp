@@ -23,6 +23,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="priceheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>

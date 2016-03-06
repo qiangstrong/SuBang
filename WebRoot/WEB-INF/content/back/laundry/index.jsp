@@ -80,6 +80,7 @@
 						<th>地址</th>
 						<th>备注</th>
 						<th>订单</th>
+						<th>价格</th>
 						<th>修改</th>
 					</tr>
 					<%count=0;%>
@@ -93,6 +94,9 @@
 							<td>${laundry.comment}</td>
 							<td>
 								<a href="back/laundry/order.html?laundryid=${laundry.id}">订单</a>
+							</td>
+							<td>
+								<a href="back/laundry/cost.html?laundryid=${laundry.id}">价格</a>
 							</td>
 							<td>
 								<a href="back/laundry/showmodify.html?laundryid=${laundry.id}">修改</a>

@@ -39,6 +39,9 @@
 			<td align="right"><a href="back/user/index/back.html">返回</a></td>
 		</tr>
 		<tr>
+			<td align="right" colspan="2"><a href="back/user/showaddaddr.html?userid=${userid}">添加地址</a></td>
+		</tr>
+		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deleteAddrs()"/></td>
 		</tr>
 		<tr>

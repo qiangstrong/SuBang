@@ -2,6 +2,7 @@ package com.subang.controller.back;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.MsgArg;
@@ -20,11 +23,13 @@ import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
+import com.subang.domain.Article;
 import com.subang.domain.Clothes;
+import com.subang.domain.Color;
 import com.subang.domain.History;
 import com.subang.domain.Laundry;
 import com.subang.domain.Order;
-import com.subang.domain.Payment.PayType;
+import com.subang.domain.Snapshot;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.tool.BackStack;
@@ -188,33 +193,6 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/pay")
-	public ModelAndView pay(HttpSession session, @RequestParam("orderid") Integer orderid) {
-		ModelAndView view = new ModelAndView();
-		boolean isException = false;
-		PrepayResult prepayResult = null;
-		try {
-			PayArg payArg = new PayArg();
-			payArg.setClient(PayArg.Client.back);
-			payArg.setPayType(PayType.balance);
-			payArg.setOrderid(orderid);
-			prepayResult = orderService.prepay(payArg, null);
-		} catch (SuException e) {
-			setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付失败。" + e.getMessage()));
-			isException = true;
-		}
-		if (!isException) {
-			if (prepayResult.getCodeEnum() != PrepayResult.Code.succ) {
-				setPageArg(session, new MsgArg(KEY_INFO_MSG, prepayResult.getMsg()));
-			} else {
-				setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付成功。"));
-			}
-
-		}
-		view.setViewName("redirect:" + INDEX_PAGE + ".html");
-		return view;
-	}
-
 	@RequestMapping("/showmodify")
 	public ModelAndView showModify(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
@@ -258,18 +236,110 @@ public class OrderController extends BaseController {
 		view.addObject("laundrys", laundrys);
 	}
 
-	@RequestMapping("/history")
-	public ModelAndView listHistory(HttpSession session, @RequestParam("orderid") Integer orderid) {
+	/**
+	 * 订单的流程
+	 */
+	@RequestMapping("/showprice")
+	public ModelAndView showPrice(HttpSession session, @RequestParam("orderid") Integer orderid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
-		backStack.push(new PageState("order/history", null));
+		backStack.push(new PageState("order/price", null));
 
-		List<History> historys = historyDao.findByOrderid(orderid);
-		view.addObject("historys", historys);
 		Order order = orderDao.get(orderid);
-		String desMsg = "订单号：" + order.getOrderno() + "。此订单的操作历史如下：";
-		view.addObject(KEY_DES_MSG, desMsg);
-		view.setViewName(VIEW_PREFIX + "/history");
+		if (order == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "计价失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("order/price"));
+			return view;
+		}
+		view.addObject("orderid", orderid);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/price"));
+		view.setViewName(VIEW_PREFIX + "/price");
+		return view;
+	}
+
+	@RequestMapping("/price")
+	public ModelAndView price(HttpSession session, @RequestParam("orderid") Integer orderid,
+			@RequestParam("money") Double money) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		boolean isException = false;
+		try {
+			orderService.priceOrder(orderid, money);
+		} catch (SuException e) {
+			view.addObject(KEY_INFO_MSG, "计价失败。" + e.getMessage());
+			isException = true;
+		}
+		if (!isException) {
+			view.addObject(KEY_INFO_MSG, "计价成功。");
+		}
+		view.addObject("orderid", orderid);
+		view.addObject("money", money);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/price"));
+		view.setViewName(VIEW_PREFIX + "/price");
+		return view;
+	}
+
+	@RequestMapping("/pay")
+	public ModelAndView pay(HttpSession session, PayArg payArg) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		PrepayResult prepayResult = null;
+		try {
+			payArg.setClient(User.Client.back);
+			prepayResult = orderService.prepay(payArg, null);
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			if (prepayResult.getCodeEnum() != PrepayResult.Code.succ) {
+				setPageArg(session, new MsgArg(KEY_INFO_MSG, prepayResult.getMsg()));
+			} else {
+				setPageArg(session, new MsgArg(KEY_INFO_MSG, "支付成功。"));
+			}
+
+		}
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	@RequestMapping("/showfetch")
+	public ModelAndView showFetch(HttpSession session, @RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/fetch", null));
+
+		Order order = orderDao.get(orderid);
+		if (order == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "计价失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("order/fetch"));
+			return view;
+		}
+		view.addObject("orderid", orderid);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/fetch"));
+		view.setViewName(VIEW_PREFIX + "/fetch");
+		return view;
+	}
+
+	@RequestMapping("/fetch")
+	public ModelAndView fetch(HttpSession session, @RequestParam("orderid") Integer orderid,
+			@RequestParam("barcode") String barcode) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		boolean isException = false;
+		try {
+			orderService.fetchOrder(orderid, barcode);
+		} catch (SuException e) {
+			view.addObject(KEY_INFO_MSG, "取走失败。" + e.getMessage());
+			isException = true;
+		}
+		if (!isException) {
+			view.addObject(KEY_INFO_MSG, "取走成功。");
+		}
+		view.addObject("orderid", orderid);
+		view.addObject("barcode", barcode);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/fetch"));
+		view.setViewName(VIEW_PREFIX + "/fetch");
 		return view;
 	}
 
@@ -290,6 +360,44 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
+	@RequestMapping("/deliver")
+	public ModelAndView deliver(HttpSession session, @RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		try {
+			orderService.deliverOrder(orderid);
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "送达失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "送达成功。"));
+		}
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	/**
+	 * 订单历史
+	 */
+	@RequestMapping("/history")
+	public ModelAndView listHistory(HttpSession session, @RequestParam("orderid") Integer orderid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/history", null));
+
+		List<History> historys = historyDao.findByOrderid(orderid);
+		view.addObject("historys", historys);
+		Order order = orderDao.get(orderid);
+		String desMsg = "订单号：" + order.getOrderno() + "。此订单的操作历史如下：";
+		view.addObject(KEY_DES_MSG, desMsg);
+		view.setViewName(VIEW_PREFIX + "/history");
+		return view;
+	}
+
+	/**
+	 * 物品明细
+	 */
 	@RequestMapping("/clothes/back")
 	public ModelAndView clothesBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -322,7 +430,7 @@ public class OrderController extends BaseController {
 		String desMsg = "订单号：" + order.getOrderno() + "。此订单的物品明细如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 
-		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
+		List<Clothes> clothess = clothesDao.findDetailByOrderid(orderid);
 		view.addObject("clothess", clothess);
 		view.addObject("orderid", orderid);
 		view.setViewName(VIEW_PREFIX + "/clothes");
@@ -338,6 +446,12 @@ public class OrderController extends BaseController {
 		Clothes clothes = new Clothes();
 		clothes.setOrderid(orderid);
 		view.addObject("clothes", clothes);
+
+		List<Article> articles = articleDao.findAll();
+		view.addObject("articles", articles);
+		List<Color> colors = colorDao.findAll();
+		view.addObject("colors", colors);
+
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/addclothes"));
 		view.setViewName(VIEW_PREFIX + "/addclothes");
 		return view;
@@ -351,6 +465,12 @@ public class OrderController extends BaseController {
 			orderService.addClothes(clothes);
 			view.addObject(KEY_INFO_MSG, "添加成功。");
 		}
+
+		List<Article> articles = articleDao.findAll();
+		view.addObject("articles", articles);
+		List<Color> colors = colorDao.findAll();
+		view.addObject("colors", colors);
+
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/addclothes"));
 		view.setViewName(VIEW_PREFIX + "/addclothes");
 		return view;
@@ -370,4 +490,139 @@ public class OrderController extends BaseController {
 		return view;
 	}
 
+	@RequestMapping("/showmodifyclothes")
+	public ModelAndView showModifyClothes(HttpSession session,
+			@RequestParam("clothesid") Integer clothesid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/modifyclothes", null));
+
+		Clothes clothes = clothesDao.get(clothesid);
+		if (clothes == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("order/modifyclothes"));
+			return view;
+		}
+		view.addObject("clothes", clothes);
+		List<Article> articles = articleDao.findAll();
+		view.addObject("articles", articles);
+		List<Color> colors = colorDao.findAll();
+		view.addObject("colors", colors);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/modifyclothes"));
+		view.setViewName(VIEW_PREFIX + "/modifyclothes");
+		return view;
+	}
+
+	@RequestMapping("/modifyclothes")
+	public ModelAndView modifyClothes(HttpSession session, @Valid Clothes clothes,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (clothes.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+			view.addObject("clothes", clothes);
+		} else if (!result.hasErrors()) {
+			orderService.modifyClothes(clothes);
+			view.addObject(KEY_INFO_MSG, "修改成功。");
+		}
+		List<Article> articles = articleDao.findAll();
+		view.addObject("articles", articles);
+		List<Color> colors = colorDao.findAll();
+		view.addObject("colors", colors);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/modifyclothes"));
+		view.setViewName(VIEW_PREFIX + "/modifyclothes");
+		return view;
+	}
+
+	/**
+	 * 快照
+	 */
+	@RequestMapping("/snapshot/back")
+	public ModelAndView snapshotBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		PageState pageState = backStack.peek();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/snapshot.html?clothesid="
+				+ pageState.getUpperid());
+		return view;
+	}
+
+	@RequestMapping("/snapshot")
+	public ModelAndView listSnapshot(HttpSession session,
+			@RequestParam("clothesid") Integer clothesid) {
+		ModelAndView view = new ModelAndView();
+
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/snapshot", clothesid));
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
+		Clothes clothes = clothesDao.getDetail(clothesid);
+		String desMsg = "物品名称：" + clothes.getName() + "。此物品的快照如下：";
+		view.addObject(KEY_DES_MSG, desMsg);
+
+		List<Snapshot> snapshots = snapshotDao.findByClothesid(clothesid);
+		view.addObject("snapshots", snapshots);
+		view.addObject("clothesid", clothesid);
+		view.setViewName(VIEW_PREFIX + "/snapshot");
+		return view;
+	}
+
+	@RequestMapping("/showaddsnapshot")
+	public ModelAndView showAddSnapshot(HttpSession session,
+			@RequestParam("clothesid") Integer clothesid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/addsnapshot", null));
+
+		Snapshot snapshot = new Snapshot();
+		snapshot.setClothesid(clothesid);
+		view.addObject("snapshot", snapshot);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/addsnapshot"));
+		view.setViewName(VIEW_PREFIX + "/addsnapshot");
+		return view;
+	}
+
+	@RequestMapping("/addsnapshot")
+	public ModelAndView addSnapshot(HttpServletRequest request, @Valid Snapshot snapshot,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
+		if (!result.hasErrors()) {
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			MultipartFile icon = multipartRequest.getFile("iconImg");
+			orderService.addSnapshot(snapshot, icon);
+			view.addObject(KEY_INFO_MSG, "添加成功。");
+		}
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/addsnapshot"));
+		view.setViewName(VIEW_PREFIX + "/addsnapshot");
+		return view;
+	}
+
+	@RequestMapping("/deletesnapshot")
+	public ModelAndView deleteSnapshot(HttpSession session,
+			@RequestParam("snapshotids") String snapshotids) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("order/deletesnapshot", null));
+
+		List<Integer> snapshotidList = SuUtil.getIds(snapshotids);
+		orderService.deleteSnapshots(snapshotidList);
+		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		view.setViewName("redirect:" + VIEW_PREFIX + "/snapshot/back.html");
+		return view;
+	}
 }

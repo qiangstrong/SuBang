@@ -25,10 +25,9 @@ public class WeixinInterceptor extends BaseController implements HandlerIntercep
 	private static final String[] FREE_URIS = { "/index.html", "/order/wxpay.html",
 			"/order/alipay.html", "/balance/wxpay.html", "/balance/alipay.html", "/info/faq.html",
 			"/info/showaddfeedback.html", "/info/addfeedback.html", "/info/addfeedbackresult.html",
-			"/price/index.html", "/region/scope.html", "/activity/detail.html" };
-	private static final String[] REG_URIS = { "/user/login.html", "/user/showregcellnum.html",
-			"/user/cellnum.html", "/user/regauthcode.html", "/user/showregpassword.html",
-			"/user/regpassword.html" };
+			"/price/index.html", "/region/scope.html", "/activity/detail.html",
+			"/user/authcode.html", "/addr/select.html", "/order/select.html" };
+	private static final String[] REG_URIS = { "/user/login.html" };
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2)
 			throws Exception {

@@ -1,12 +1,9 @@
 use `subang`;
 
 set foreign_key_checks=0;
-drop table if exists `worker_t`, `city_t`, `district_t`, `region_t`, `category_t`, `price_t`, `clothes_type_t`, 
-`service_t`, `ticket_type_t`, `laundry_t`, `user_t`, `location_t`, `ticket_t`, `addr_t`, `order_t`, `balance_t`,
-`payment_t`, `clothes_t`, `history_t`, `admin_t`, `info_t`, `faq_t`, `feedback_t`, `notice_t`, `banner_t`, `rebate_t` ;
-set foreign_key_checks=1;
 
 #工作人员（取衣员）表
+drop table if exists worker_t;
 create table `worker_t`(
 	`id` int auto_increment primary key,
     `valid` tinyint not null default 1,		#工作人员是否离职。1：未离职
@@ -19,6 +16,7 @@ create table `worker_t`(
 );
 
 #城市表，如沈阳市
+drop table if exists city_t;
 create table `city_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
@@ -27,6 +25,7 @@ create table `city_t`(
 );
 
 #区表，如和平区
+drop table if exists district_t;
 create table `district_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null,
@@ -36,6 +35,7 @@ create table `district_t`(
 );
 
 #小区表，如新世界花园
+drop table if exists region_t;
 create table `region_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null,
@@ -47,6 +47,7 @@ create table `region_t`(
 );
 
 #类别表，如衣服、鞋等
+drop table if exists category_t;
 create table `category_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,		#类别名称
@@ -54,20 +55,23 @@ create table `category_t`(
     `comment` varchar(100)					#备注
 );
 
-#价格表，不同类别下分不同的价格，如19元
+#价格表，不同类别下分不同的价格；类别下的小类
+drop table if exists price_t;
 create table `price_t`(
 	`id` int auto_increment primary key,
-    `money` double not null,				#价格
+    `name` char(10) not null,				#小类的名称
     `comment` varchar(100),
     `categoryid` int not null,
-    unique (`money`,`categoryid`),
+    unique (`name`,`categoryid`),
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
 );
 
-#衣物类型表，不同的价格下分不同的衣物类型，如运动鞋、帆布鞋
+#衣物类型表，不同的小类下分不同的衣物类型，如运动鞋、帆布鞋。用于用户的价目表
+drop table if exists clothes_type_t;
 create table `clothes_type_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
+    `money` double,
     `icon` char(100) not null,
     `categoryid` int not null,
     `priceid` int,
@@ -75,7 +79,22 @@ create table `clothes_type_t`(
     foreign key (`priceid`) references `price_t`(`id`) on delete set null
 );
 
+#物品表，订单物品明细表，商户价格表引用这个表。
+drop table if exists article_t;
+create table `article_t`(
+	`id` int auto_increment primary key,
+    `name` char(10) not null unique
+);
+
+#颜色表，订单物品明细引用这个表
+drop table if exists color_t;
+create table `color_t`(
+	`id` int auto_increment primary key,
+    `name` char(10) not null unique
+);
+
 #服务类别表，不同城市有不同的服务类别
+drop table if exists service_t;
 create table `service_t`(
 	`id` int auto_increment primary key,
     `valid` tinyint not null default 1,		#类别是否可用。1：可用
@@ -88,6 +107,7 @@ create table `service_t`(
 );
 
 #卡券类型表
+drop table if exists ticket_type_t;
 create table `ticket_type_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
@@ -101,6 +121,7 @@ create table `ticket_type_t`(
 );
 
 #商家（洗衣店）表
+drop table if exists laundry_t;
 create table `laundry_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
@@ -109,24 +130,37 @@ create table `laundry_t`(
     `comment` varchar(100)					#备注（如洗衣店可以服务的类别）
 );
 
-SET foreign_key_checks=0;
+#商家价格表
+drop table if exists cost_t;
+create table `cost_t`(
+	`id` int auto_increment primary key,
+    `money` double not null,
+    `laundryid` int not null,
+    `articleid` int not null,
+    unique (`laundryid`,`articleid`),
+    foreign key (`laundryid`) references `laundry_t`(`id`) on delete cascade,
+    foreign key (`articleid`) references `article_t`(`id`) on delete cascade
+);
 
 #用户表
+drop table if exists user_t;
 create table `user_t`(
 	`id` int auto_increment primary key,
     `login` tinyint not null default 0,		#今日用户是否登录过，用于计算积分
     `openid` char(28) unique,				#微信的openid
     `userno` char(10) unique,				#会员号
     `nickname` varchar(100),				#微信昵称，也可以作为本系统的用户名
-    `password` char(50) not null,			#用户密码
+    `password` char(50),					#用户密码;不需要用户密码，目前为null，以后为了app的用户认证，可使用动态密码（比如验证码）
     `cellnum` char(11) not null unique,		#用户绑定的电话号码
     `score` int not null default 0,			#积分
     `money` double not null default 0,		#用户余额
+    `client` tinyint,						#用户的来源
     `addrid` int,							#用户的默认地址
     foreign key(`addrid`) references `addr_t`(`id`) on delete set null
 );
 
 #用户位置表，用于为用户提供位置服务
+drop table if exists location_t;
 create table `location_t`(
 	`id` int auto_increment primary key,
 	`latitude` char(15),
@@ -139,6 +173,7 @@ create table `location_t`(
 );
 
 #卡券表，记录用户拥有的卡券。优惠券无用（被使用，过期）之后，从系统中删除
+drop table if exists ticket_t;
 create table `ticket_t`(
 	`id` int auto_increment primary key,
     `deadline` datetime,					#卡券的过期时间
@@ -149,6 +184,7 @@ create table `ticket_t`(
 );
 
 #地址表
+drop table if exists addr_t;
 create table `addr_t`(
 	`id` int auto_increment primary key,
     `valid` tinyint not null default 1,		#用户是否删除了此地址
@@ -160,9 +196,9 @@ create table `addr_t`(
     foreign key(`userid`) references `user_t`(`id`) on delete cascade,
     foreign key(`regionid`) references `region_t`(`id`) on delete restrict
 );
-SET foreign_key_checks=1;
 
 #订单表
+drop table if exists order_t;
 create table `order_t`(
 	`id` int auto_Increment primary key,	
     `orderno` char(14) not null unique,		#订单号
@@ -187,6 +223,8 @@ create table `order_t`(
     foreign key(`laundryid`) references `laundry_t`(`id`) on delete restrict
 );
 
+#余额表，记录余额的每一笔收支
+drop table if exists balance_t;
 create table `balance_t`(
 	`id` int auto_Increment primary key,	
     `orderno` char(14) not null unique,		#订单号
@@ -198,6 +236,7 @@ create table `balance_t`(
 );
 
 #支付表，记录订单的支付信息和特定于api的参数
+drop table if exists payment_t;
 create table `payment_t`(
 	`id` int auto_Increment primary key,
 	`type` tinyint,								#支付类型，支付宝，微信支付，余额支付
@@ -208,16 +247,30 @@ create table `payment_t`(
 );
 
 #物品信息表，订单中衣物明细
+drop table if exists clothes_t;
 create table `clothes_t`(
 	`id` int auto_Increment primary key,
-    `name` char(10) not null,				#衣物名称
-    `color` char(4) not null,				#颜色
     `flaw` char(100),						#瑕疵
+    `position` int,							#位置号
+    `articleid` int not null,				#物品
+    `colorid` int not null,					#颜色
 	`orderid` int not null,
+    foreign key(`articleid`) references `article_t`(`id`) on delete restrict,
+    foreign key(`colorid`) references `color_t`(`id`) on delete restrict,
     foreign key(`orderid`) references `order_t`(`id`) on delete cascade
 );
 
+#快照表。每一件物品可以存储若干快照
+drop table if exists snapshot_t;
+create table `snapshot_t`(
+	`id` int auto_Increment primary key,
+    `icon` char(100) not null,				#图标
+    `clothesid` int not null,
+    foreign key(`clothesid`) references `clothes_t`(`id`) on delete cascade
+);
+
 #订单历史表，记录订单状态转换的过程
+drop table if exists history_t;
 create table `history_t`(
 	`id` int auto_Increment primary key,
     `operation` tinyint not null,			#操作
@@ -227,6 +280,7 @@ create table `history_t`(
 );
 
 #管理人员表
+drop table if exists admin_t;
 create table `admin_t`(
 	`id` int auto_Increment primary key,
     `username` char(10) not null unique,
@@ -234,12 +288,14 @@ create table `admin_t`(
 );
 
 #信息表
+drop table if exists info_t;
 create table `info_t`(
 	`id` int auto_Increment primary key,
     `phone` char(12) not null				#客服电话
 );
 
 #常见问题表
+drop table if exists faq_t;
 create table `faq_t`(
 	`id` int auto_Increment primary key,
     `question` varchar(100) not null unique,#问题
@@ -247,6 +303,7 @@ create table `faq_t`(
 );
 
 #用户反馈表
+drop table if exists feedback_t;
 create table `feedback_t`(
 	`id` int auto_Increment primary key,
     `time` datetime not null,				#反馈的时间
@@ -254,6 +311,7 @@ create table `feedback_t`(
 );
 
 #通知表，用于向管理员显示系统无法处理的异常
+drop table if exists notice_t;
 create table `notice_t`(
 	`id` int auto_Increment primary key,
     `time` datetime not null,				#时间戳
@@ -262,6 +320,7 @@ create table `notice_t`(
 );
 
 #横幅表
+drop table if exists banner_t;
 create table `banner_t`(
 	`id` int auto_increment primary key,
     `seq` tinyint,
@@ -271,8 +330,11 @@ create table `banner_t`(
 );
 
 #折扣表
+drop table if exists rebate_t;
 create table `rebate_t`(
 	`id` int auto_increment primary key,
     `money` double not null unique,			#充值的金额
     `benefit` double not null				#赠送的金额
 );
+
+set foreign_key_checks=1;

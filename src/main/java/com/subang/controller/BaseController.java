@@ -9,12 +9,15 @@ import com.subang.bean.Identity;
 import com.subang.bean.PageArg;
 import com.subang.dao.AddrDao;
 import com.subang.dao.AdminDao;
+import com.subang.dao.ArticleDao;
 import com.subang.dao.BalanceDao;
 import com.subang.dao.BannerDao;
 import com.subang.dao.CategoryDao;
 import com.subang.dao.CityDao;
 import com.subang.dao.ClothesDao;
 import com.subang.dao.ClothesTypeDao;
+import com.subang.dao.ColorDao;
+import com.subang.dao.CostDao;
 import com.subang.dao.DistrictDao;
 import com.subang.dao.FaqDao;
 import com.subang.dao.FeedbackDao;
@@ -29,6 +32,7 @@ import com.subang.dao.PriceDao;
 import com.subang.dao.RebateDao;
 import com.subang.dao.RegionDao;
 import com.subang.dao.ServiceDao;
+import com.subang.dao.SnapshotDao;
 import com.subang.dao.StatDao;
 import com.subang.dao.TicketDao;
 import com.subang.dao.TicketTypeDao;
@@ -59,6 +63,8 @@ public class BaseController {
 	@Autowired
 	protected AdminDao adminDao;
 	@Autowired
+	protected ArticleDao articleDao;
+	@Autowired
 	protected BalanceDao balanceDao;
 	@Autowired
 	protected BannerDao bannerDao;
@@ -72,6 +78,10 @@ public class BaseController {
 	protected ClothesDao clothesDao;
 	@Autowired
 	protected ClothesTypeDao clothesTypeDao;
+	@Autowired
+	protected ColorDao colorDao;
+	@Autowired
+	protected CostDao costDao;
 	@Autowired
 	protected DistrictDao districtDao;
 	@Autowired
@@ -98,6 +108,8 @@ public class BaseController {
 	protected RegionDao regionDao;
 	@Autowired
 	protected ServiceDao serviceDao;
+	@Autowired
+	protected SnapshotDao snapshotDao;
 	@Autowired
 	protected StatDao statDao;
 	@Autowired

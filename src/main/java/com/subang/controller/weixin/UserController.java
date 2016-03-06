@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.User;
+import com.subang.domain.User.Client;
 import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.SmsUtil;
@@ -29,8 +30,8 @@ public class UserController extends BaseController {
 	private static final String VIEW_PREFIX = WebConst.WEIXIN_PREFIX + "/user";
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
 
-	private static String KEY_CELLNUM = "cellnum";
-	private static String KEY_TIMERTASK = "timerTask_authcode";
+	private static final String KEY_CELLNUM = "cellnum";
+	private static final String KEY_TIMERTASK = "timerTask_authcode";
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
@@ -42,52 +43,13 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * 用户登录
+	 * 用户登录,注册
 	 */
-	@RequestMapping("/login")
-	public ModelAndView login(HttpSession session, User user) {
-		ModelAndView view = new ModelAndView();
-
-		User matchUser = userDao.findByUser(user);
-		if (matchUser == null) {
-			view.addObject(KEY_INFO_MSG, "登录失败。手机号或密码错误。");
-			view.addObject("user", user);
-			view.setViewName(VIEW_PREFIX + "/login");
-			return view;
-		}
-		matchUser.setOpenid(getOpenid(session));
-		try {
-			userService.modifyUser(matchUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
-		setUser(session, matchUser);
-		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
-		return view;
-	}
-
-	/**
-	 * 用户注册
-	 */
-	@RequestMapping("/showregcellnum")
-	public ModelAndView showRegCellnum() {
-		ModelAndView view = new ModelAndView();
-		view.setViewName(VIEW_PREFIX + "/regcellnum");
-		return view;
-	}
-
-	// 客户端校验cellnum书写是否正确
-	@RequestMapping("/cellnum")
-	public void setCellnum(final HttpSession session, @RequestParam("cellnum") String cellnum,
+	// 客户端校验cellnum书写是否正确,请求后台向特定的手机发送验证码
+	@RequestMapping("/authcode")
+	public void getAuthcode(final HttpSession session, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
 		Result result = new Result();
-		if (!userService.checkCellnum(cellnum)) {
-			result.setCode(Result.ERR);
-			result.setMsg("该手机号码已经被注册。");
-			SuUtil.outputJson(response, result);
-			return;
-		}
 
 		TimerTask task = (TimerTask) session.getAttribute(KEY_TIMERTASK);
 		if (task != null) {
@@ -116,12 +78,14 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
-	@RequestMapping("/regauthcode")
-	public void regAuthcode(HttpSession session, @RequestParam("authcode") String authcodeFront,
+	// 用户登录或注册
+	@RequestMapping("/login")
+	public void login(HttpSession session, @RequestParam("authcode") String authcodeFront,
 			HttpServletResponse response) {
 		Result result = new Result();
+		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
 		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
-		if (authcodeBack == null) {
+		if (cellnum == null || authcodeBack == null) {
 			result.setCode(Result.ERR);
 			result.setMsg("验证码已失效，请重新获取验证码。");
 			SuUtil.outputJson(response, result);
@@ -133,45 +97,33 @@ public class UserController extends BaseController {
 			SuUtil.outputJson(response, result);
 			return;
 		}
+		session.removeAttribute(KEY_CELLNUM);
 		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
-		result.setCode(Result.OK);
-		SuUtil.outputJson(response, result);
-	}
 
-	@RequestMapping("/showregpassword")
-	public ModelAndView showRegPassword() {
-		ModelAndView view = new ModelAndView();
-		view.setViewName(VIEW_PREFIX + "/regpassword");
-		return view;
-	}
-
-	// 客户端校验两次密码是否相等，以及密码的长度是否合适
-	@RequestMapping("/regpassword")
-	public ModelAndView regPassword(HttpSession session, @RequestParam("password") String password) {
-		ModelAndView view = new ModelAndView();
-		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
-		if (cellnum == null) {
-			view.addObject(KEY_INFO_MSG, "系统出错，请您重新注册。");
-			view.addObject("password", password);
-			view.setViewName(VIEW_PREFIX + "/regcellnum");
-			return view;
+		User matchUser = userDao.getByCellnum(cellnum);
+		if (matchUser == null) {
+			User user = new User();
+			user.setCellnum(cellnum);
+			user.setClient(Client.weixin);
+			try {
+				userService.addUser(user);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			matchUser = userDao.getByCellnum(cellnum);
 		}
 
-		User user = new User();
-		user.setOpenid(getOpenid(session));
-		user.setPassword(password);
-		user.setCellnum((String) session.getAttribute(KEY_CELLNUM));
+		matchUser.setOpenid(getOpenid(session));
 		try {
-			userService.addUser(user);
-		} catch (SuException e) {
+			userService.modifyUser(matchUser);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		session.removeAttribute(KEY_CELLNUM);
-		user = userDao.getByOpenid(user.getOpenid());
-		StratUtil.updateScore(user.getId(), ScoreType.login, null);
-		setUser(session, user);
-		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/region/index.html");
-		return view;
+
+		StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
+		setUser(session, matchUser);
+		result.setCode(Result.OK);
+		SuUtil.outputJson(response, result);
 	}
 
 	/**
@@ -184,8 +136,8 @@ public class UserController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/chgauthcode")
-	public void chgAuthcode(HttpSession session, @RequestParam("authcode") String authcodeFront,
+	@RequestMapping("/chgcellnum")
+	public void chgCellnum(HttpSession session, @RequestParam("authcode") String authcodeFront,
 			HttpServletResponse response) {
 		Result result = new Result();
 		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
@@ -202,38 +154,19 @@ public class UserController extends BaseController {
 			SuUtil.outputJson(response, result);
 			return;
 		}
+
+		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
+		session.removeAttribute(KEY_CELLNUM);
+		result.setCode(Result.OK);
+
 		User user = getUser(session);
 		user.setCellnum(cellnum);
 		try {
 			userService.modifyUser(user);
 		} catch (SuException e) {
-			e.printStackTrace();
+			result.setCode(Result.ERR);
+			result.setMsg("该手机号码已经被注册。");
 		}
-		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
-		session.removeAttribute(KEY_CELLNUM);
-		result.setCode(Result.OK);
 		SuUtil.outputJson(response, result);
-	}
-
-	@RequestMapping("/showchgpassword")
-	public ModelAndView showChgPassword() {
-		ModelAndView view = new ModelAndView();
-		view.setViewName(VIEW_PREFIX + "/chgpassword");
-		return view;
-	}
-
-	// 客户端校验密码的长度
-	@RequestMapping("/chgpassword")
-	public ModelAndView chgPassword(HttpSession session, @RequestParam("password") String password) {
-		ModelAndView view = new ModelAndView();
-		User user = getUser(session);
-		user.setPassword(password);
-		try {
-			userService.modifyUser(user);
-		} catch (SuException e) {
-			e.printStackTrace();
-		}
-		view.setViewName("redirect:" + VIEW_PREFIX + "/index.html");
-		return view;
 	}
 }

@@ -23,6 +23,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="priceheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>
@@ -46,6 +47,14 @@
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="money" /></td>
+						</tr>
+						<tr>
+							<td>金额：</td>
+							<td><form:input path="money" /></td>
+						</tr>
 						<form:hidden path="icon"/>
 						<tr>
 							<td>图标：</td>
@@ -56,9 +65,9 @@
 							<td><input type="file" name="iconImg"/></td>
 						</tr>
 						<tr>
-							<td>价格：</td>
+							<td>小类：</td>
 							<td>    
-								<form:select path="priceid" items="${prices}" itemLabel="money" itemValue="id"></form:select>  
+								<form:select path="priceid" items="${prices}" itemLabel="name" itemValue="id"></form:select>  
         					</td>
 						</tr>
 						<tr >

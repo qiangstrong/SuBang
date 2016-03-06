@@ -33,6 +33,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="priceheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
@@ -65,6 +66,7 @@
 						<th><input type="checkbox" onclick="switchCheckboxs('clothesTypeid')" /></th>
 						<th>编号</th>
 						<th>名称</th>
+						<th>小类</th>
 						<th>金额</th>						
 						<th>修改</th>
 					</tr>
@@ -74,6 +76,7 @@
 							<td><input type="checkbox" name="clothesTypeid" value="${clothesType.id}" /></td>
 							<td><%=++count%></td>
 							<td>${clothesType.name}</td>
+							<td>${clothesType.pricename}</td>
 							<td>${clothesType.money}</td>							
 							<td>
 								<a href="back/price/showmodifyclothestype.html?clothesTypeid=${clothesType.id}">修改</a>

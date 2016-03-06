@@ -63,19 +63,19 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?)";
 		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
-				user.getAddrid() };
+				user.getClient(), user.getAddrid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
 		String sql = "update user_t set login=?,openid=? ,userno=?, nickname=? ,password=? , "
-				+ "cellnum=? ,score=? ,money=?, addrid=? where id=?";
+				+ "cellnum=? ,score=? ,money=?, client=?, addrid=? where id=?";
 		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
-				user.getAddrid(), user.getId() };
+				user.getClient(), user.getAddrid(), user.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

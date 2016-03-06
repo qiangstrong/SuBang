@@ -22,11 +22,16 @@ import com.subang.util.SuUtil;
 public class RegionController extends BaseController {
 
 	// 获取用户使用那个城市的服务
-	@RequestMapping("/getcityid")
-	public void getCityid(Identity identity, HttpServletResponse response) {
+	@RequestMapping("/getusercity")
+	public void getUserCity(Identity identity, HttpServletResponse response) {
 		User user = getUser(identity);
 		Integer cityid = regionService.getCityid(user.getId());
-		SuUtil.outputJson(response, cityid);
+		City city = cityDao.get(cityid);
+		City filter = new City();
+		filter.setId(0);
+		filter.setName("");
+		city.doFilter(filter);
+		SuUtil.outputJson(response, city);
 	}
 
 	@RequestMapping("/city")

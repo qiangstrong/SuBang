@@ -61,9 +61,9 @@
 					<td>
 						类别：
 						<select id="type" name="type" onchange="switchOrderState()">
-							<option value="1" selected="selected">所有订单</option>
 							<option value="2">订单状态</option>
 							<option value="3">订单号</option>
+							<option value="10">条码</option>
 							<option value="5">用户手机号</option>
 							<option value="6">商家名称</option>
 						</select>
@@ -127,7 +127,7 @@
 		<tr>
 			<td colspan="2">
 			<%!int count; %>
-			<table border="1">
+			<table border="1" cellpadding="5">
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('orderid')" /></th>
 						<th>编号</th>
@@ -138,9 +138,13 @@
 						<th>取件时间</th>						
 						<th>条形码</th>
 						<th>详情</th>
+						<th>计价</th>
+						<th>现金支付</th>	
+						<th>余额支付</th>
+						<th>取走</th>
+						<th>送达</th>	
 						<th>明细</th>					
-						<th>历史</th>		
-						<th>支付</th>				
+						<th>历史</th>
 						<th>修改</th>
 					</tr>
 					<%count=0;%>
@@ -156,15 +160,27 @@
 							<td>${orderDetail.barcodeDes}</td>		
 							<td>
 							 	<a href="back/order/detail.html?orderid=${orderDetail.id}">详情</a>
-							</td>					
+							</td>	
+							<td>
+							 	<a href="back/order/showprice.html?orderid=${orderDetail.id}">计价</a>
+							</td>
+							<td>
+							 	<a href="back/order/pay.html?orderid=${orderDetail.id}&payType=3">现金支付</a>
+							</td>
+							<td>
+							 	<a href="back/order/pay.html?orderid=${orderDetail.id}&payType=0">余额支付</a>
+							</td>
+							<td>
+							 	<a href="back/order/showfetch.html?orderid=${orderDetail.id}">取走</a>
+							</td>
+							<td>
+							 	<a href="back/order/deliver.html?orderid=${orderDetail.id}">送达</a>
+							</td>				
 							<td>
 							 	<a href="back/order/clothes.html?orderid=${orderDetail.id}">明细</a>
 							</td>
 							<td>
 							 	<a href="back/order/history.html?orderid=${orderDetail.id}">历史</a>
-							</td>
-							<td>
-							 	<a href="back/order/pay.html?orderid=${orderDetail.id}">支付</a>
 							</td>
 							<td>
 							 	<a href="back/order/showmodify.html?orderid=${orderDetail.id}">修改</a>

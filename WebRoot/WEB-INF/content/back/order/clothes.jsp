@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td align="right" colspan="2">
-				<a href="back/order/showaddclothes.html?orderid=${orderid}">添加衣物</a>
+				<a href="back/order/showaddclothes.html?orderid=${orderid}">添加物品</a>
 				<a href="back/order/check.html?orderid=${orderid}">完成</a>
 			</td>
 		</tr>
@@ -64,6 +64,9 @@
 						<th>名称</th>
 						<th>颜色</th>
 						<th>瑕疵</th>
+						<th>位置</th>
+						<th>快照</th>
+						<th>修改</th>
 					</tr>
 					<%count=0;%>
 					<c:forEach var="clothes" items="${clothess}">
@@ -73,6 +76,13 @@
 							<td>${clothes.name}</td>
 							<td>${clothes.color}</td>
 							<td>${clothes.flaw}</td>
+							<td>${clothes.position}</td>
+							<td>
+								<a href="back/order/snapshot.html?clothesid=${clothes.id}">快照</a>
+							</td>
+							<td>
+								<a href="back/order/showmodifyclothes.html?clothesid=${clothes.id}">修改</a>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>

@@ -17,8 +17,10 @@ begin
 	when 9 then		
 		call findByLaundryid(arg, start_time, end_time);
 	when 10 then		
-		call findByUseridAndState(upperid, arg, start_time, end_time);
+		call findByBarcode(arg, start_time, end_time);
 	when 11 then		
+		call findByUseridAndState(upperid, arg, start_time, end_time);
+	when 12 then		
 		call findByWorkeridAndState(upperid, arg, start_time, end_time);
     end case;
 end
@@ -63,6 +65,13 @@ drop procedure if exists findByLaundryid $$
 create procedure `findByLaundryid` (`arg` varchar(100), `start_time` datetime, `end_time` datetime)
 begin
 select * from orderdetail_v where laundryid= arg and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time;
+end
+$$
+
+drop procedure if exists findByBarcode $$
+create procedure `findByBarcode` (`arg` varchar(100), `start_time` datetime, `end_time` datetime)
+begin
+select * from orderdetail_v where barcode like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time;
 end
 $$
 

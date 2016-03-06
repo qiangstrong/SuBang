@@ -84,15 +84,22 @@ public class ComUtil extends BaseUtil {
 		return t;
 	}
 
-	/**
-	 * 把一个整数转换为固定长度的字符串
-	 */
+	// 把一个整数转换为固定长度的字符串
 	public static String intToStr(int value, int length) {
 		NumberFormat nf = getNumberFormat();
 		nf.setGroupingUsed(false);
 		nf.setMaximumIntegerDigits(length);
 		nf.setMinimumIntegerDigits(length);
 		return nf.format(value);
+	}
+
+	// 生成指定长度的由数字组成的随机字符串
+	public static String getRandomStr(int length) {
+		StringBuffer str = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			str.append(ComUtil.random.nextInt(10));
+		}
+		return str.toString();
 	}
 
 	public static String getDes(Object object) {
@@ -103,10 +110,16 @@ public class ComUtil extends BaseUtil {
 	}
 
 	public static String getDateDes(Date date) {
+		if (date == null) {
+			return null;
+		}
 		return date.toString();
 	}
 
-	public static String getTimeDes(int time) {
+	public static String getTimeDes(Integer time) {
+		if (time == null) {
+			return null;
+		}
 		String description = "";
 		description = time + ":00-" + (time + 1) + ":00";
 		return description;
@@ -178,6 +191,15 @@ public class ComUtil extends BaseUtil {
 			return true;
 		}
 		return false;
+	}
+
+	// 计算文件的后缀名
+	public static String getSuffix(String filename) {
+		int index = filename.lastIndexOf(".");
+		if (index == -1) {
+			return "";
+		}
+		return filename.substring(index);
 	}
 
 	public static void main(String[] args) {

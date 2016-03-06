@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>价格管理</title>
+	<title>小类管理</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -33,6 +33,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="priceheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>${desMsg}</td>
@@ -41,7 +42,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right" colspan="2"><a href="back/price/showaddprice.html?categoryid=${categoryid}">添加价格</a></td>
+			<td align="right" colspan="2"><a href="back/price/showaddprice.html?categoryid=${categoryid}">添加小类</a></td>
 		</tr>
 		<tr>
 			<td align="right" colspan="2"><input type="button" value="删除" onclick="deletePrices()"/></td>
@@ -60,7 +61,7 @@
 					<tr>
 						<th><input type="checkbox" onclick="switchCheckboxs('priceid')" /></th>
 						<th>编号</th>
-						<th>金额</th>
+						<th>名称</th>
 						<th>备注</th>
 						<th>修改</th>
 					</tr>
@@ -69,7 +70,7 @@
 						<tr>
 							<td><input type="checkbox" name="priceid" value="${price.id}" /></td>
 							<td><%=++count%></td>
-							<td>${price.moneyDes}</td>
+							<td>${price.name}</td>
 							<td>${price.comment}</td>
 							<td>
 								<a href="back/price/showmodifyprice.html?priceid=${price.id}">修改</a>

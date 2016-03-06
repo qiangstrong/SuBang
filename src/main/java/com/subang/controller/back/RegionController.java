@@ -565,8 +565,8 @@ public class RegionController extends BaseController {
 		service.setCityid(cityid);
 		view.addObject("service", service);
 
-		List<Category> categories = categoryDao.findAll();
-		view.addObject("categories", categories);
+		List<Category> categorys = categoryDao.findAll();
+		view.addObject("categorys", categorys);
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addservice"));
 		view.setViewName(VIEW_PREFIX + "/addservice");
@@ -590,8 +590,8 @@ public class RegionController extends BaseController {
 				view.addObject(KEY_INFO_MSG, "添加成功。");
 			}
 		}
-		List<Category> categories = categoryDao.findAll();
-		view.addObject("categories", categories);
+		List<Category> categorys = categoryDao.findAll();
+		view.addObject("categorys", categorys);
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/addservice"));
 		view.setViewName(VIEW_PREFIX + "/addservice");
@@ -613,8 +613,8 @@ public class RegionController extends BaseController {
 		}
 		view.addObject("service", service);
 
-		List<Category> categories = categoryDao.findAll();
-		view.addObject("categories", categories);
+		List<Category> categorys = categoryDao.findAll();
+		view.addObject("categorys", categorys);
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyservice"));
 		view.setViewName(VIEW_PREFIX + "/modifyservice");
@@ -643,8 +643,8 @@ public class RegionController extends BaseController {
 			}
 		}
 
-		List<Category> categories = categoryDao.findAll();
-		view.addObject("categories", categories);
+		List<Category> categorys = categoryDao.findAll();
+		view.addObject("categorys", categorys);
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("region/modifyservice"));
 		view.setViewName(VIEW_PREFIX + "/modifyservice");

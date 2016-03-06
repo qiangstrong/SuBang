@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>添加衣物</title>
+	<title>添加物品</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -34,24 +34,28 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<form:form modelAttribute="clothes" action="back/order/addclothes.html" method="post">
+				<form:form modelAttribute="clothes" action="back/order/addclothes.html" method="post" >
 					<form:hidden path="orderid"/>
 					<table>
 						<tr>
-							<td></td>
-							<td><form:errors path="name" /></td>
-						</tr>
-						<tr>
 							<td>名称：</td>
-							<td><form:input path="name" /></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><form:errors path="color" /></td>
+							<td>    
+								<form:select path="articleid" items="${articles}" itemLabel="name" itemValue="id"></form:select>  
+        					</td>
 						</tr>
 						<tr>
 							<td>颜色：</td>
-							<td><form:input path="color" /></td>
+							<td>    
+								<form:select path="colorid" items="${colors}" itemLabel="name" itemValue="id"></form:select>  
+        					</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="position" /></td>
+						</tr>
+						<tr>
+							<td>位置：</td>
+							<td><form:input path="position" /></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -59,7 +63,7 @@
 						</tr>
 						<tr>
 							<td>瑕疵：</td>
-							<td><form:input path="flaw" /></td>
+							<td><textarea rows="5" cols="50" name="flaw">${clothes.flaw}</textarea></td>
 						</tr>
 						<tr >
 							<td><input type="submit" value="添加" /></td>

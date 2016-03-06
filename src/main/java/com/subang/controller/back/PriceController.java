@@ -19,8 +19,10 @@ import com.subang.bean.PageArg;
 import com.subang.bean.PageState;
 import com.subang.bean.SearchArg;
 import com.subang.controller.BaseController;
+import com.subang.domain.Article;
 import com.subang.domain.Category;
 import com.subang.domain.ClothesType;
+import com.subang.domain.Color;
 import com.subang.domain.Price;
 import com.subang.tool.BackStack;
 import com.subang.tool.SuException;
@@ -33,6 +35,9 @@ public class PriceController extends BaseController {
 
 	private static final String VIEW_PREFIX = WebConst.BACK_PREFIX + "/price";
 
+	/**
+	 * 类别
+	 */
 	@RequestMapping("/category/back")
 	public ModelAndView indexBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -170,8 +175,11 @@ public class PriceController extends BaseController {
 		return view;
 	}
 
+	/**
+	 * 小类
+	 */
 	@RequestMapping("/price/back")
-	public ModelAndView clothesBack(HttpSession session) {
+	public ModelAndView priceBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
 		backStack.pop();
@@ -200,7 +208,7 @@ public class PriceController extends BaseController {
 		}
 
 		Category category = categoryDao.get(categoryid);
-		String desMsg = "类别名称：" + category.getName() + "。此类别下的价格如下：";
+		String desMsg = "类别名称：" + category.getName() + "。此类别下的小类如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 
 		List<Price> prices = priceDao.findByCategoryid(categoryid);
@@ -313,6 +321,9 @@ public class PriceController extends BaseController {
 		return view;
 	}
 
+	/**
+	 * 衣物类型
+	 */
 	@RequestMapping("/clothestype/back")
 	public ModelAndView clothestypeBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -490,6 +501,270 @@ public class PriceController extends BaseController {
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifyclothestype"));
 		view.setViewName(VIEW_PREFIX + "/modifyclothestype");
+		return view;
+	}
+
+	/**
+	 * 物品
+	 */
+	@RequestMapping("/article/back")
+	public ModelAndView articleBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/article.html");
+		return view;
+	}
+
+	@RequestMapping("/article")
+	public ModelAndView listArticle(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.clear("price/article");
+
+		if (!backStack.isTop("price/article")) {
+			backStack.push(new PageState("price/article", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
+		List<Article> articles = articleDao.findAll();
+		view.addObject("articles", articles);
+		view.setViewName(VIEW_PREFIX + "/article");
+		return view;
+	}
+
+	@RequestMapping("/showaddarticle")
+	public ModelAndView showAddArticle(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("price/addarticle", null));
+
+		view.addObject("article", new Article());
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/addarticle"));
+		view.setViewName(VIEW_PREFIX + "/addarticle");
+		return view;
+	}
+
+	@RequestMapping("/addarticle")
+	public ModelAndView addArticle(HttpSession session, @Valid Article article, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				priceService.addArticle(article);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
+		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/addarticle"));
+		view.setViewName(VIEW_PREFIX + "/addarticle");
+		return view;
+	}
+
+	@RequestMapping("/deletearticle")
+	public ModelAndView deleteArticle(HttpSession session,
+			@RequestParam("articleids") String articleids) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		try {
+			priceService.deleteArticles(SuUtil.getIds(articleids));
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		}
+		view.setViewName("redirect:" + VIEW_PREFIX + "/article.html");
+		return view;
+	}
+
+	@RequestMapping("/showmodifyarticle")
+	public ModelAndView showModifyArticle(HttpSession session,
+			@RequestParam("articleid") Integer articleid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("price/modifyarticle", null));
+
+		Article article = articleDao.get(articleid);
+		if (article == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("price/modifyarticle"));
+			return view;
+		}
+		view.addObject("article", article);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifyarticle"));
+		view.setViewName(VIEW_PREFIX + "/modifyarticle");
+		return view;
+	}
+
+	@RequestMapping("/modifyarticle")
+	public ModelAndView modifyArticle(HttpSession session, @Valid Article article,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (article.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+		} else if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				priceService.modifyArticle(article);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("article", article);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
+		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifyarticle"));
+		view.setViewName(VIEW_PREFIX + "/modifyarticle");
+		return view;
+	}
+
+	/**
+	 * 颜色
+	 */
+	@RequestMapping("/color/back")
+	public ModelAndView colorBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/color.html");
+		return view;
+	}
+
+	@RequestMapping("/color")
+	public ModelAndView listColor(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.clear("price/color");
+
+		if (!backStack.isTop("price/color")) {
+			backStack.push(new PageState("price/color", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
+		List<Color> colors = colorDao.findAll();
+		view.addObject("colors", colors);
+		view.setViewName(VIEW_PREFIX + "/color");
+		return view;
+	}
+
+	@RequestMapping("/showaddcolor")
+	public ModelAndView showAddColor(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("price/addcolor", null));
+
+		view.addObject("color", new Color());
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/addcolor"));
+		view.setViewName(VIEW_PREFIX + "/addcolor");
+		return view;
+	}
+
+	@RequestMapping("/addcolor")
+	public ModelAndView addColor(HttpSession session, @Valid Color color, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				priceService.addColor(color);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
+		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/addcolor"));
+		view.setViewName(VIEW_PREFIX + "/addcolor");
+		return view;
+	}
+
+	@RequestMapping("/deletecolor")
+	public ModelAndView deleteColor(HttpSession session, @RequestParam("colorids") String colorids) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		try {
+			priceService.deleteColors(SuUtil.getIds(colorids));
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		}
+		view.setViewName("redirect:" + VIEW_PREFIX + "/color.html");
+		return view;
+	}
+
+	@RequestMapping("/showmodifycolor")
+	public ModelAndView showModifyColor(HttpSession session,
+			@RequestParam("colorid") Integer colorid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("price/modifycolor", null));
+
+		Color color = colorDao.get(colorid);
+		if (color == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("price/modifycolor"));
+			return view;
+		}
+		view.addObject("color", color);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifycolor"));
+		view.setViewName(VIEW_PREFIX + "/modifycolor");
+		return view;
+	}
+
+	@RequestMapping("/modifycolor")
+	public ModelAndView modifyColor(HttpSession session, @Valid Color color, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (color.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+		} else if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				priceService.modifyColor(color);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				view.addObject("color", color);
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
+		}
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("price/modifycolor"));
+		view.setViewName(VIEW_PREFIX + "/modifycolor");
 		return view;
 	}
 }

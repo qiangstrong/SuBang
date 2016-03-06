@@ -25,6 +25,7 @@ import com.subang.domain.Balance;
 import com.subang.domain.Location;
 import com.subang.domain.Order;
 import com.subang.domain.User;
+import com.subang.domain.User.Client;
 import com.subang.tool.SuException;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
@@ -42,51 +43,40 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, user);
 	}
 
-	// 使用手机号和密码登录
-	@RequestMapping("/login")
-	public void login(User user, HttpServletResponse response) {
-		User matchUser = userDao.findByUser(user);
+	// 请求后台向特定的手机发送验证码
+	@RequestMapping("/authcode")
+	public void getAuthcode(@RequestParam("cellnum") String cellnum,
+			@RequestParam("authcode") String authcode, HttpServletResponse response) {
 		Result result = new Result();
-		if (matchUser == null) {
+		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toAuthcodeContent(authcode))) {
 			result.setCode(Result.ERR);
-			result.setMsg("手机号或密码错误。");
+			result.setMsg("发送验证码错误。");
 		} else {
-			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
 			result.setCode(Result.OK);
 		}
 		SuUtil.outputJson(response, result);
 	}
 
-	// 使用验证过的手机号登录
-	@RequestMapping("/logincellnum")
-	public void loginCellnum(User user, HttpServletResponse response) {
-		User matchUser = userDao.getByCellnum(user.getCellnum());
+	// 使用验证过的手机号登录或注册
+	@RequestMapping("/login")
+	public void login(String cellnum, HttpServletResponse response) {
+		User matchUser = userDao.getByCellnum(cellnum);
 		if (matchUser == null) {
-			matchUser = new User();
-		} else {
-			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
-		}
-		SuUtil.outputJson(response, matchUser);
-	}
-
-	@RequestMapping("/add")
-	public void add(@Valid User user, BindingResult result, HttpServletResponse response) {
-		List<Result> results = SuUtil.getResults(result.getFieldErrors());
-		if (!result.hasErrors()) {
+			User user = new User();
+			user.setCellnum(cellnum);
+			user.setClient(Client.user);
 			try {
 				userService.addUser(user);
 			} catch (Exception e) {
-				results.add(new Result(Result.ERR, "该手机号码已经被注册。"));
+				e.printStackTrace();
 			}
+			matchUser = userDao.getByCellnum(cellnum);
 		}
-		if (results.isEmpty()) {
-			User matchUser = userDao.getByCellnum(user.getCellnum());
-			StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
-		}
-		SuUtil.outputJson(response, results);
+		StratUtil.updateScore(matchUser.getId(), ScoreType.login, null);
+		SuUtil.outputJsonOK(response);
 	}
 
-	// 注册和改变手机号都要使用这个链接，所以访问这个url不需要认证信息
+	// 访问这个url不需要认证信息;但目前app访问这个链接，都可以提供认证信息;
 	@RequestMapping("/chkcellnum")
 	public void chkCellnum(@RequestParam("cellnum") String cellnum, HttpServletResponse response) {
 		Result result = new Result();
@@ -104,32 +94,17 @@ public class UserController extends BaseController {
 	public void chgCellnum(Identity identity, @RequestParam("cellnum") String cellnum,
 			HttpServletResponse response) {
 		Result result = new Result();
-		if (!userService.checkCellnum(cellnum)) {
-			result.setCode(Result.ERR);
-			result.setMsg("该手机号码已经被注册。");
-			SuUtil.outputJson(response, result);
-			return;
-		}
+		result.setCode(Result.OK);
+
 		User user = getUser(identity);
 		user.setCellnum(cellnum);
 		try {
 			userService.modifyUser(user);
 		} catch (SuException e) {
+			result.setCode(Result.ERR);
+			result.setMsg("该手机号码已经被注册。");
 		}
-		result.setCode(Result.OK);
 		SuUtil.outputJson(response, result);
-	}
-
-	@RequestMapping("/chgpassword")
-	public void chgPassword(Identity identity, @RequestParam("password") String password,
-			HttpServletResponse response) {
-		User user = getUser(identity);
-		user.setPassword(password);
-		try {
-			userService.modifyUser(user);
-		} catch (SuException e) {
-		}
-		SuUtil.outputJsonOK(response);
 	}
 
 	@RequestMapping("/addr")
@@ -241,16 +216,4 @@ public class UserController extends BaseController {
 		userService.updateLocation(user.getId(), location);
 	}
 
-	@RequestMapping("/authcode")
-	public void setAuthcode(@RequestParam("cellnum") String cellnum,
-			@RequestParam("authcode") String authcode, HttpServletResponse response) {
-		Result result = new Result();
-		if (!SmsUtil.send(cellnum, SmsType.authcode, SmsUtil.toAuthcodeContent(authcode))) {
-			result.setCode(Result.ERR);
-			result.setMsg("发送验证码错误。");
-		} else {
-			result.setCode(Result.OK);
-		}
-		SuUtil.outputJson(response, result);
-	}
 }

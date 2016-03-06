@@ -25,7 +25,6 @@ import com.alipay.util.SignUtil;
 import com.subang.bean.AddrDetail;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
-import com.subang.bean.PayArg.Client;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
@@ -64,7 +63,7 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		OrderDetail orderDetail = orderDao.getDetail(orderid);
 		List<History> historys = historyDao.findByOrderid(orderid);
-		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
+		List<Clothes> clothess = clothesDao.findDetailByOrderid(orderid);
 
 		view.addObject("orderDetail", orderDetail);
 		view.addObject("historys", historys);
@@ -217,7 +216,7 @@ public class OrderController extends BaseController {
 			return view;
 		}
 
-		payArg.setClient(Client.weixin);
+		payArg.setClient(User.Client.weixin);
 		PrepayResult prepayResult = null;
 		try {
 			prepayResult = orderService.prepay(payArg, request);
@@ -309,7 +308,7 @@ public class OrderController extends BaseController {
 	}
 
 	/**
-	 * 为展示层准备相应的数据 默认地址的添加删除逻辑保证：只要用户有地址，默认地址就不为空
+	 * 为展示层准备相应的数据, 默认地址的添加删除逻辑保证：只要用户有地址，默认地址就不为空
 	 */
 	private void prepare(ModelAndView view, User user, Integer categoryid, Integer addrid) {
 

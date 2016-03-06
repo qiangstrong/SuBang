@@ -140,7 +140,7 @@ public class OrderController extends BaseController {
 
 	// app应该做充分的校验，确保参数正确
 	@RequestMapping("/prepay")
-	public void prepay(HttpServletRequest request, PayArg payArg, BindingResult result,
+	public void prepay(HttpServletRequest request, @Valid PayArg payArg, BindingResult result,
 			HttpServletResponse response) {
 		PrepayResult prepayResult = null;
 		if (result.hasErrors() || payArg.getOrderid() == null) {
@@ -165,7 +165,7 @@ public class OrderController extends BaseController {
 
 	@RequestMapping("/clothes")
 	public void listClothes(@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
-		List<Clothes> clothess = clothesDao.findByOrderid(orderid);
+		List<Clothes> clothess = clothesDao.findDetailByOrderid(orderid);
 		SuUtil.outputJson(response, clothess);
 	}
 }

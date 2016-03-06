@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>添加价格</title>
+	<title>添加小类</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -23,6 +23,7 @@
 		</script>
 	</c:if>
 	<%@ include file="../common/header.jsp"%>
+	<%@ include file="priceheader.jsp"%>
 	<table align="center">
 		<tr>
 			<td>
@@ -39,11 +40,11 @@
 					<table>
 						<tr>
 							<td></td>
-							<td><form:errors path="money" /></td>
+							<td><form:errors path="name" /></td>
 						</tr>
 						<tr>
-							<td>金额：</td>
-							<td><form:input path="money" /></td>
+							<td>名称：</td>
+							<td><form:input path="name" /></td>
 						</tr>
 						<tr>
 							<td></td>

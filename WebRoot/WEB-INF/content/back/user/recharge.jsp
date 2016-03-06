@@ -46,7 +46,7 @@
 							<td><form:input path="money" /></td>
 						</tr>
 						<tr>
-							<td><input type="submit" value="修改" /></td>
+							<td><input type="submit" value="充值" /></td>
 							<td><input type="reset" value="重置" /></td>
 						</tr>
 					</table>

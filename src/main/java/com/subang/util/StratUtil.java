@@ -30,11 +30,7 @@ public class StratUtil extends BaseUtil {
 
 	public static String getOrderno(Order.OrderType orderType) {
 		String no_date = ComUtil.getOrdernoFormat().format(new Date());
-		StringBuffer on_random = new StringBuffer();
-		for (int i = 0; i < WebConst.ORDERNO_RANDOM_LENGTH; i++) {
-			on_random.append(ComUtil.random.nextInt(10));
-		}
-		return no_date + orderType.ordinal() + on_random.toString();
+		return no_date + orderType.ordinal() + ComUtil.getRandomStr(WebConst.ORDERNO_RANDOM_LENGTH);
 	}
 
 	// 可以获取积分的事件类型

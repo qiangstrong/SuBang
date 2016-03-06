@@ -24,14 +24,13 @@ public class PriceDao extends BaseDao<Price> {
 
 	public void save(Price price) {
 		String sql = "insert into price_t values(null,?,?,?)";
-		Object[] args = { price.getMoney(), price.getComment(), price.getCategoryid() };
+		Object[] args = { price.getName(), price.getComment(), price.getCategoryid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(Price price) {
-		String sql = "update price_t set money=?,comment=?,categoryid=? where id=?";
-		Object[] args = { price.getMoney(), price.getComment(), price.getCategoryid(),
-				price.getId() };
+		String sql = "update price_t set name=?,comment=?,categoryid=? where id=?";
+		Object[] args = { price.getName(), price.getComment(), price.getCategoryid(), price.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -47,15 +46,8 @@ public class PriceDao extends BaseDao<Price> {
 		return prices;
 	}
 
-	public List<Double> findAllMoney() {
-		String sql = "select distinct money from price_t order by money asc";
-		List<Double> moneys = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Double>(
-				Double.class));
-		return moneys;
-	}
-
 	public List<Price> findByCategoryid(Integer categoryid) {
-		String sql = "select * from price_t where categoryid=? order by money asc";
+		String sql = "select * from price_t where categoryid=?";
 		Object[] args = { categoryid };
 		List<Price> prices = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<Price>(
 				Price.class));

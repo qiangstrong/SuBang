@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.pay.PayAppRequest;
@@ -21,6 +22,7 @@ import com.alipay.bean.AlipayOrder;
 import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
+import com.subang.bean.Result;
 import com.subang.bean.SearchArg;
 import com.subang.bean.TicketDetail;
 import com.subang.domain.Addr;
@@ -33,6 +35,7 @@ import com.subang.domain.Order.State;
 import com.subang.domain.Payment;
 import com.subang.domain.Payment.PayType;
 import com.subang.domain.Region;
+import com.subang.domain.Snapshot;
 import com.subang.domain.User;
 import com.subang.domain.Worker;
 import com.subang.tool.SuException;
@@ -41,6 +44,7 @@ import com.subang.util.PushUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
+import com.subang.util.Validator;
 import com.subang.util.WebConst;
 
 @Service
@@ -66,6 +70,7 @@ public class OrderService extends BaseService {
 		case WebConst.SEARCH_ORDER_USERID:
 		case WebConst.SEARCH_ORDER_WORKERID:
 		case WebConst.SEARCH_ORDER_LAUNDRYID:
+		case WebConst.SEARCH_ORDER_BARCODE:
 			orderDetails = orderDao.findDetail(searchArg);
 			break;
 		case WebConst.SEARCH_ORDER_USER_NICKNAME:
@@ -124,8 +129,16 @@ public class OrderService extends BaseService {
 			break;
 		case WebConst.ORDER_STATE_DONE:
 			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.delivered));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.remarked));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.canceled));
+			if (orderDetails.size() < WebConst.ORDER_NUM) {
+				orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.remarked));
+				if (orderDetails.size() < WebConst.ORDER_NUM) {
+					orderDetails
+							.addAll(orderDao.findDetailByUseridAndState(userid, State.canceled));
+				}
+			}
+			if (orderDetails.size() > WebConst.ORDER_NUM) {
+				orderDetails = orderDetails.subList(0, WebConst.ORDER_NUM);
+			}
 			break;
 		}
 		return orderDetails;
@@ -146,7 +159,13 @@ public class OrderService extends BaseService {
 			break;
 		case WebConst.ORDER_STATE_FINISH:
 			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.delivered));
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.remarked));
+			if (orderDetails.size() < WebConst.ORDER_NUM) {
+				orderDetails
+						.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.remarked));
+			}
+			if (orderDetails.size() > WebConst.ORDER_NUM) {
+				orderDetails = orderDetails.subList(0, WebConst.ORDER_NUM);
+			}
 			break;
 		}
 		return orderDetails;
@@ -199,6 +218,9 @@ public class OrderService extends BaseService {
 			throw new SuException("由于订单状态不符，没有完成指定操作。");
 		}
 		money = ComUtil.round(money);
+		if (money <= 0) {
+			throw new SuException("价格输入错误。");
+		}
 		order.setMoney(money);
 		if (money < new Double(SuUtil.getSuProperty("orderMoney"))) {
 			order.setFreight(new Double(SuUtil.getSuProperty("orderFreight")));
@@ -223,6 +245,10 @@ public class OrderService extends BaseService {
 		Order order = orderDao.get(orderid);
 		if (order.getStateEnum() != State.paid) {
 			throw new SuException("由于订单状态不符，没有完成指定操作。");
+		}
+		Result result = Validator.validBarcode(barcode);
+		if (!result.isOk()) {
+			throw new SuException("条码输入错误。");
 		}
 		order.setBarcode(barcode);
 		order.setState(State.fetched);
@@ -423,6 +449,17 @@ public class OrderService extends BaseService {
 		return result;
 	}
 
+	private PrepayResult payByCash(PayArg payArg) {
+		PrepayResult result = new PrepayResult();
+		OrderDetail orderDetail = orderDao.getDetail(payArg.getOrderid());
+		Payment payment = paymentDao.getByOrderno(orderDetail.getOrderno());
+		payment.setType(PayType.cash);
+		paymentDao.update(payment);
+		payOrder(orderDetail.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
+		return result;
+	}
+
 	private PrepayResult payByWeixin(PayArg payArg, HttpServletRequest request) {
 		PrepayResult result = new PrepayResult();
 
@@ -592,6 +629,9 @@ public class OrderService extends BaseService {
 			result = payByAli(payArg, request);
 			break;
 		}
+		case cash:
+			result = payByCash(payArg);
+			break;
 		default: {
 			result = new PrepayResult();
 			result.setCode(PrepayResult.Code.succ);
@@ -632,9 +672,46 @@ public class OrderService extends BaseService {
 		clothesDao.save(clothes);
 	}
 
+	public void modifyClothes(Clothes clothes) {
+		clothesDao.update(clothes);
+	}
+
+	// 删除时，把此物品关联的快照也删除。
 	public void deleteClothess(List<Integer> clothesids) {
 		for (Integer clothesid : clothesids) {
+			List<Snapshot> snapshots = snapshotDao.findByClothesid(clothesid);
+			for (Snapshot snapshot : snapshots) {
+				SuUtil.deleteFile(snapshot.getIcon());
+			}
 			clothesDao.delete(clothesid);
 		}
 	}
+
+	/**
+	 * 快照
+	 */
+	public void addSnapshot(Snapshot snapshot, MultipartFile icon) {
+		if (!icon.isEmpty()) {
+			Clothes clothes = clothesDao.get(snapshot.getClothesid());
+			String orderno = orderDao.get(clothes.getOrderid()).getOrderno();
+			do {
+				String filename = orderno + ComUtil.getRandomStr(WebConst.ICON_RANDOM_LENGTH)
+						+ ComUtil.getSuffix(icon.getOriginalFilename());
+				snapshot.calcIcon(filename);
+			} while (SuUtil.fileExist(snapshot.getIcon()));
+			SuUtil.saveMultipartFile(icon, snapshot.getIcon());
+		}
+		snapshotDao.save(snapshot);
+	}
+
+	public void deleteSnapshots(List<Integer> snapshotids) {
+		for (Integer snapshotid : snapshotids) {
+			Snapshot snapshot = snapshotDao.get(snapshotid);
+			snapshotDao.delete(snapshotid);
+			if (snapshot != null) {
+				SuUtil.deleteFile(snapshot.getIcon());
+			}
+		}
+	}
+
 }

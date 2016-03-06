@@ -3,6 +3,7 @@ package com.subang.controller.back;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -12,25 +13,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.AddrData;
 import com.subang.bean.AddrDetail;
 import com.subang.bean.MsgArg;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageArg.ArgType;
 import com.subang.bean.PageState;
 import com.subang.bean.PayArg;
-import com.subang.bean.PayArg.Client;
+import com.subang.bean.Result;
 import com.subang.bean.SearchArg;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
+import com.subang.domain.Addr;
 import com.subang.domain.Balance;
+import com.subang.domain.Category;
 import com.subang.domain.Order;
 import com.subang.domain.Payment.PayType;
 import com.subang.domain.Ticket;
 import com.subang.domain.TicketType;
 import com.subang.domain.User;
+import com.subang.domain.User.Client;
 import com.subang.tool.BackStack;
 import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
+import com.subang.util.TimeUtil;
+import com.subang.util.TimeUtil.Option;
 import com.subang.util.WebConst;
 
 @Controller
@@ -39,7 +46,10 @@ public class UserController extends BaseController {
 
 	private static final String VIEW_PREFIX = WebConst.BACK_PREFIX + "/user";
 	private static final String INDEX_PAGE = VIEW_PREFIX + "/index";
+
 	private static final String KEY_DATA = "users";
+	private static final String KEY_CELLNUM = "cellnum";
+	private static final String KEY_TIMERTASK = "timerTask_authcode";
 
 	@RequestMapping("/index/back")
 	public ModelAndView indexBack(HttpSession session) {
@@ -98,6 +108,56 @@ public class UserController extends BaseController {
 		setPageArg(session, searchArg);
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		return view;
+	}
+
+	@RequestMapping("/showadd")
+	public ModelAndView showAdd(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/add", null));
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/add"));
+		view.setViewName(VIEW_PREFIX + "/add");
+		return view;
+	}
+
+	// 添加用户。需要客户端校验
+	@RequestMapping("/add")
+	public void add(HttpSession session, @RequestParam("authcode") String authcodeFront,
+			HttpServletResponse response) {
+		Result result = new Result();
+		String cellnum = (String) session.getAttribute(KEY_CELLNUM);
+		String authcodeBack = (String) session.getAttribute(WebConst.KEY_USER_AUTHCODE);
+		if (cellnum == null || authcodeBack == null) {
+			result.setCode(Result.ERR);
+			result.setMsg("验证码已失效，请重新获取验证码。");
+			SuUtil.outputJson(response, result);
+			return;
+		}
+		if (!authcodeBack.equalsIgnoreCase(authcodeFront.trim())) {
+			result.setCode(Result.ERR);
+			result.setMsg("验证码输入错误，请重新输入。");
+			SuUtil.outputJson(response, result);
+			return;
+		}
+		session.removeAttribute(KEY_CELLNUM);
+		session.removeAttribute(WebConst.KEY_USER_AUTHCODE);
+
+		User user = new User();
+		user.setCellnum(cellnum);
+		user.setClient(Client.back);
+		boolean isException = false;
+		try {
+			userService.addUser(user);
+		} catch (SuException e) {
+			result.setCode(Result.ERR);
+			result.setMsg(e.getMessage());
+			isException = true;
+		}
+		if (!isException) {
+			result.setCode(Result.OK);
+		}
+		SuUtil.outputJson(response, result);
 	}
 
 	@RequestMapping("/delete")
@@ -172,7 +232,7 @@ public class UserController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(request.getSession());
 		if (!result.hasErrors()) {
-			payArg.setClient(Client.back);
+			payArg.setClient(User.Client.back);
 			userService.prepay(payArg, userid, request);
 			view.addObject(KEY_INFO_MSG, "充值成功。");
 		}
@@ -198,15 +258,9 @@ public class UserController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/order")
-	public ModelAndView listOrder(HttpSession session, @RequestParam("userid") Integer userid) {
-		ModelAndView view = new ModelAndView();
-		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_USERID, userid.toString());
-		setPageArg(session, searchArg);
-		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html");
-		return view;
-	}
-
+	/**
+	 * 用户地址
+	 */
 	@RequestMapping("/addr/back")
 	public ModelAndView addrBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -240,9 +294,57 @@ public class UserController extends BaseController {
 
 		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(userid);
 		view.addObject("addrDetails", addrDetails);
-
+		view.addObject("userid", userid);
 		view.setViewName(VIEW_PREFIX + "/addr");
 		return view;
+	}
+
+	@RequestMapping("/showaddaddr")
+	public ModelAndView showAddAddr(HttpSession session,
+			@RequestParam(value = "userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/addaddr", null));
+
+		Addr addr = new Addr();
+		addr.setUserid(userid);
+		prepareAddr(view, userDao.get(userid), addr);
+		view.addObject("addr", addr);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addaddr"));
+		view.setViewName(VIEW_PREFIX + "/addaddr");
+		return view;
+	}
+
+	@RequestMapping("/addaddr")
+	public ModelAndView addAddr(HttpSession session, @Valid Addr addr, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (!result.hasErrors()) {
+			userService.addAddr(addr);
+			view.addObject(KEY_INFO_MSG, "添加成功。");
+		}
+
+		prepareAddr(view, userDao.get(addr.getUserid()), addr);
+		view.addObject("addr", addr);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addaddr"));
+		view.setViewName(VIEW_PREFIX + "/addaddr");
+		return view;
+	}
+
+	private void prepareAddr(ModelAndView view, User user, Addr addr) {
+		AddrData addrData;
+		if (addr.getRegionid() == null) {
+			addrData = regionService.getAddrDataByUserid(user.getId());
+			// addr.setDetail(addrData.getDetail());
+		} else {
+			addrData = regionService.getAddrDataByRegionid(addr.getRegionid());
+		}
+		view.addObject("citys", addrData.getCitys());
+		view.addObject("defaultCityid", addrData.getDefaultCityid());
+		view.addObject("districts", addrData.getDistricts());
+		view.addObject("defaultDistrictid", addrData.getDefaultDistrictid());
+		view.addObject("regions", addrData.getRegions());
+		view.addObject("defaultRegionid", addrData.getDefaultRegionid());
 	}
 
 	@RequestMapping("/deleteaddr")
@@ -266,6 +368,9 @@ public class UserController extends BaseController {
 		return view;
 	}
 
+	/**
+	 * 优惠券
+	 */
 	@RequestMapping("/ticket/back")
 	public ModelAndView ticketBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();
@@ -348,5 +453,65 @@ public class UserController extends BaseController {
 		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
 		view.setViewName("redirect:" + VIEW_PREFIX + "/ticket/back.html");
 		return view;
+	}
+
+	/**
+	 * 订单。下单操作由于需要指定一个用户，所以放在这个模块里
+	 */
+	@RequestMapping("/order")
+	public ModelAndView listOrder(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_USERID, userid.toString());
+		setPageArg(session, searchArg);
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/order/index.html");
+		return view;
+	}
+
+	@RequestMapping("/showaddorder")
+	public ModelAndView showAddOrder(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/addorder", null));
+
+		Order order = new Order();
+		order.setUserid(userid);
+		prepareOrder(view, userid);
+		view.addObject("order", order);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addorder"));
+		view.setViewName(VIEW_PREFIX + "/addorder");
+		return view;
+	}
+
+	@RequestMapping("/addorder")
+	public ModelAndView addOrder(HttpSession session, @Valid Order order, BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		if (!result.hasErrors()) {
+			orderService.addOrder(order);
+			view.addObject(KEY_INFO_MSG, "下单成功。");
+		}
+		prepareOrder(view, order.getUserid());
+		view.addObject("order", order);
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("user/addorder"));
+		view.setViewName(VIEW_PREFIX + "/addorder");
+		return view;
+	}
+
+	private void prepareOrder(ModelAndView view, Integer userid) {
+
+		User user = userDao.get(userid);
+		view.addObject("defaultAddrid", user.getAddrid());
+
+		List<AddrDetail> addrDetails = addrDao.findDetailByUserid(userid);
+		view.addObject("addrDetails", addrDetails);
+
+		List<Option> dates = TimeUtil.getDateOptions();
+		view.addObject("dates", dates);
+
+		List<Option> times = TimeUtil.getTimeOptions(dates.get(0).getValue());
+		view.addObject("times", times);
+
+		List<Category> categorys = categoryDao.findAll();
+		view.addObject("categorys", categorys);
 	}
 }
