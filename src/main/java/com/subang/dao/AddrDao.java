@@ -1,9 +1,16 @@
 package com.subang.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.subang.bean.AddrDetail;
@@ -24,11 +31,24 @@ public class AddrDao extends BaseDao<Addr> {
 		return addr;
 	}
 
-	public void save(Addr addr) {
-		String sql = "insert into addr_t values(null,?,?,?,?,?,?)";
-		Object[] args = { addr.getValid(), addr.getName(), addr.getCellnum(), addr.getDetail(),
-				addr.getUserid(), addr.getRegionid() };
-		jdbcTemplate.update(sql, args);
+	// 返回自增主键值
+	public void save(final Addr addr) {
+		final String sql = "insert into addr_t values(null,?,?,?,?,?,?)";
+		KeyHolder holder = new GeneratedKeyHolder();
+		PreparedStatementCreator psc = new PreparedStatementCreator() {
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				ps.setObject(1, addr.getValid());
+				ps.setObject(2, addr.getName());
+				ps.setObject(3, addr.getCellnum());
+				ps.setObject(4, addr.getDetail());
+				ps.setObject(5, addr.getUserid());
+				ps.setObject(6, addr.getRegionid());
+				return ps;
+			}
+		};
+		jdbcTemplate.update(psc, holder);
+		addr.setId(holder.getKey().intValue());
 	}
 
 	public void update(Addr addr) {

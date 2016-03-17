@@ -124,6 +124,21 @@
 				</table>
 			</td>
 		</tr>
+		<tr>
+			<td align="right" colspan="2">
+			记录数：${pagination.recordnum }
+			<a href="back/user/page.html?type=1&pageno=1">首页</a>
+			<a href="back/user/page.html?type=0&pageno=${pagination.pageno }">上一页</a>
+			${pagination.pageno }/${pagination.pagenum }
+			<a href="back/user/page.html?type=2&pageno=${pagination.pageno }">下一页</a>
+			<a href="back/user/page.html?type=1&pageno=${pagination.pagenum }">尾页</a>
+			<form action="back/user/page.html" method="post" style="margin:0px;display: inline">
+				<input name="type" type="hidden" value="1" />
+				<input name="pageno" type="text" size="2"/>
+				<input type="submit" value="跳转" />
+			</form>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>

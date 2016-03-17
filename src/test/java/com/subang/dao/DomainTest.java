@@ -1,16 +1,21 @@
 package com.subang.dao;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.bean.OrderDetail;
+import com.subang.domain.Color;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -21,16 +26,25 @@ public class DomainTest {
 
 	@Test
 	public void test() {
-		List<OrderDetail> orderDetails = findDetailByUserid("19");
+		Color color = new Color();
+		color.setName("蓝色");
+		save(color);
+		System.out.println(color.getId());
 		pause();
 	}
 
-	public List<OrderDetail> findDetailByUserid(String userid) {
-		String sql = "select * from orderdetail_v where userid= ?";
-		Object[] args = { userid };
-		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
-				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
-		return orderDetails;
+	public void save(final Color color) {
+		final String sql = "insert into color_t values(null,?)";
+		KeyHolder holder = new GeneratedKeyHolder();
+		PreparedStatementCreator psc = new PreparedStatementCreator() {
+			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+				PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				ps.setObject(1, color.getName());
+				return ps;
+			}
+		};
+		jdbcTemplate.update(psc, holder);
+		color.setId(holder.getKey().intValue());
 	}
 
 	public void pause() {

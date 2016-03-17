@@ -61,6 +61,7 @@
 					<td>
 						类别：
 						<select id="type" name="type" onchange="switchOrderState()">
+							<option value="1">所有订单</option>
 							<option value="2">订单状态</option>
 							<option value="3">订单号</option>
 							<option value="10">条码</option>
@@ -68,7 +69,7 @@
 							<option value="6">商家名称</option>
 						</select>
 						关键词：
-						<select id="arg0" name="arg" >
+						<select id="arg0" name="arg" disabled="disabled">
 							<option value="0" selected="selected">已接受</option>
 							<option value="1">已计价</option>
 							<option value="2">已支付</option>
@@ -78,15 +79,15 @@
 							<option value="6">已评价</option>
 							<option value="7">已取消</option>
 						</select>
-						<input id="arg1" name="arg" type="text" disabled="disabled"/>					
+						<input id="arg1" name="arg" type="text"/>					
 					</td>
 					</tr>
 					<tr>
 					<td>
 						起始日期：
-						<input type="date" name="startTime" value="${searchArg.startTimeDes}"/>
+						<input type="date" name="startTime" value="${pageState.searchArg.startTimeDes}"/>
 						截止日期：
-						<input type="date" name="endTime" value="${searchArg.endTimeDes}"/>							
+						<input type="date" name="endTime" value="${pageState.searchArg.endTimeDes}"/>							
 						<input type="submit" value="确定" />
 					</td>
 					<tr>
@@ -187,7 +188,22 @@
 							</td>
 						</tr>
 					</c:forEach>
-				</table>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" colspan="2">
+			记录数：${pagination.recordnum }
+			<a href="back/order/page.html?type=1&pageno=1">首页</a>
+			<a href="back/order/page.html?type=0&pageno=${pagination.pageno }">上一页</a>
+			${pagination.pageno }/${pagination.pagenum }
+			<a href="back/order/page.html?type=2&pageno=${pagination.pageno }">下一页</a>
+			<a href="back/order/page.html?type=1&pageno=${pagination.pagenum }">尾页</a>
+			<form action="back/order/page.html" method="post" style="margin:0px;display: inline">
+				<input name="type" type="hidden" value="1" />
+				<input name="pageno" type="text" size="2"/>
+				<input type="submit" value="跳转" />
+			</form>
 			</td>
 		</tr>
 	</table>

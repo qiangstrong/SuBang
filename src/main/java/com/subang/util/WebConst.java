@@ -19,7 +19,10 @@ public interface WebConst {
 	int AUTHCODE_INTERVAL = 5 * 60 * 1000;// 验证码过期时间，5分钟，单位毫秒
 	int TIMESTAMP_INTERVAL = 5 * 60 * 1000;// 时间戳过期时间
 
-	int PAGE_SIZE = 10;
+	int PAGE_SIZE = 30;
+	int PREV = 0; // 表示要查看上一页
+	int CUR = 1;// 表示要查看指定页面
+	int NEXT = 2;// 表示要查看下一页
 
 	int INDEX_BREAK = 0;
 	int INDEX_CONTINUE = 1;

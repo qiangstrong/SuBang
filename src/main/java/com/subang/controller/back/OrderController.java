@@ -19,6 +19,7 @@ import com.subang.bean.OrderDetail;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageArg.ArgType;
 import com.subang.bean.PageState;
+import com.subang.bean.Pagination;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.SearchArg;
@@ -83,10 +84,11 @@ public class OrderController extends BaseController {
 		view.addObject(KEY_PAGE_STATE, pageState);
 		view.addObject(KEY_DES_MSG, getDesMsg(pageState.getSearchArg()));
 
-		List<OrderDetail> orderDetails = orderService.searchOrder(pageState.getSearchArg());
+		List<OrderDetail> orderDetails = orderService.searchOrder(pageState.getSearchArg(),
+				pageState.getPageArg().getPagination());
 		view.addObject(KEY_DATA, orderDetails);
 		view.addObject("totalMoney", getTotalMoney(orderDetails));
-		view.addObject("searchArg", pageState.getSearchArg());
+		view.addObject("pagination", pageState.getPageArg().getPagination());
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
@@ -151,6 +153,20 @@ public class OrderController extends BaseController {
 		} else {
 			setPageArg(session, searchArg);
 		}
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	@RequestMapping("/page")
+	public ModelAndView paginate(HttpSession session, @Valid Pagination pagination,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		if (!result.hasErrors()) {
+			pagination.calc();
+			PageState pageState = getBackStack(session).peek();
+			pageState.getPageArg().setPagination(pagination);
+		}
+
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		return view;
 	}

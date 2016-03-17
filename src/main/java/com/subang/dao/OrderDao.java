@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.subang.bean.OrderDetail;
+import com.subang.bean.Pagination;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Order;
 import com.subang.domain.Order.State;
@@ -74,10 +75,10 @@ public class OrderDao extends BaseDao<Order> {
 		return orders;
 	}
 
-	public List<Order> findAll(int pageno) {
-		int offset = (pageno - 1) * WebConst.PAGE_SIZE;
+	public List<Order> findAll(Pagination pagination) {
 		String sql = "select * from order_t";
-		List<Order> orders = findByPage(sql, new Object[] {}, offset, WebConst.PAGE_SIZE);
+		String sql1 = "select count(*) from order_t";
+		List<Order> orders = findByPage(pagination, sql, sql1, new Object[] {});
 		return orders;
 	}
 
@@ -161,9 +162,27 @@ public class OrderDao extends BaseDao<Order> {
 	}
 
 	public List<OrderDetail> findDetail(SearchArg searchArg) {
-		String sql = "call find(?,?,?,?,?)";
+		String sql = "call find(?,?,?,?,?,0,1000)";
 		Object[] args = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
 				searchArg.getStartTime(), searchArg.getEndTime() };
+		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetails;
+	}
+
+	public List<OrderDetail> findDetail(SearchArg searchArg, Pagination pagination) {
+		String sql1 = "call count0(?,?,?,?,?)";
+		Object[] args1 = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
+				searchArg.getStartTime(), searchArg.getEndTime() };
+		int recordnum = jdbcTemplate.queryForInt(sql1, args1);
+		pagination.setRecordnum(recordnum);
+		pagination.round();
+
+		String sql = "call find(?,?,?,?,?,?,?)";
+		Object[] args = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
+				searchArg.getStartTime(), searchArg.getEndTime(), pagination.getOffset(),
+				WebConst.PAGE_SIZE };
+
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
 		return orderDetails;
@@ -173,6 +192,14 @@ public class OrderDao extends BaseDao<Order> {
 		String sql = "select * from orderdetail_v";
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
+		return orderDetails;
+	}
+
+	public List<OrderDetail> findDetailAll(Pagination pagination) {
+		String sql = "select * from orderdetail_v";
+		String sql1 = "select count(*) from orderdetail_v";
+		List<OrderDetail> orderDetails = findByPage(pagination, sql, sql1, new Object[] {},
+				OrderDetail.class);
 		return orderDetails;
 	}
 

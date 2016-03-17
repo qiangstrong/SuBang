@@ -20,6 +20,7 @@ import weixin.popular.util.StringUtils;
 import com.alipay.api.PayAPI;
 import com.alipay.bean.AlipayOrder;
 import com.subang.bean.OrderDetail;
+import com.subang.bean.Pagination;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.Result;
@@ -28,7 +29,6 @@ import com.subang.bean.TicketDetail;
 import com.subang.domain.Addr;
 import com.subang.domain.Clothes;
 import com.subang.domain.History;
-import com.subang.domain.Laundry;
 import com.subang.domain.Order;
 import com.subang.domain.Order.OrderType;
 import com.subang.domain.Order.State;
@@ -57,7 +57,7 @@ public class OrderService extends BaseService {
 	 * 订单
 	 */
 	// 后台查找订单
-	public List<OrderDetail> searchOrder(SearchArg searchArg) {
+	public List<OrderDetail> searchOrder(SearchArg searchArg, Pagination pagination) {
 		List<OrderDetail> orderDetails = null;
 		searchArg.pre();
 		switch (searchArg.getType()) {
@@ -67,47 +67,14 @@ public class OrderService extends BaseService {
 		case WebConst.SEARCH_ALL:
 		case WebConst.SEARCH_ORDER_STATE:
 		case WebConst.SEARCH_ORDER_ORDERNO:
+		case WebConst.SEARCH_ORDER_USER_NICKNAME:
+		case WebConst.SEARCH_ORDER_USER_CELLNUM:
+		case WebConst.SEARCH_ORDER_LAUNDRY_NAME:
 		case WebConst.SEARCH_ORDER_USERID:
 		case WebConst.SEARCH_ORDER_WORKERID:
 		case WebConst.SEARCH_ORDER_LAUNDRYID:
 		case WebConst.SEARCH_ORDER_BARCODE:
-			orderDetails = orderDao.findDetail(searchArg);
-			break;
-		case WebConst.SEARCH_ORDER_USER_NICKNAME:
-			orderDetails = new ArrayList<OrderDetail>();
-			List<User> users1 = userDao.findByNickname(searchArg.getArg());
-			SearchArg searchArg1 = new SearchArg();
-			searchArg1.setType(WebConst.SEARCH_ORDER_USERID);
-			searchArg1.setStartTime(searchArg.getStartTime());
-			searchArg1.setEndTime(searchArg.getEndTime());
-			for (User user : users1) {
-				searchArg1.setArg(user.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg1));
-			}
-			break;
-		case WebConst.SEARCH_ORDER_USER_CELLNUM:
-			orderDetails = new ArrayList<OrderDetail>();
-			List<User> users2 = userDao.findByCellnum(searchArg.getArg());
-			SearchArg searchArg2 = new SearchArg();
-			searchArg2.setType(WebConst.SEARCH_ORDER_USERID);
-			searchArg2.setStartTime(searchArg.getStartTime());
-			searchArg2.setEndTime(searchArg.getEndTime());
-			for (User user : users2) {
-				searchArg2.setArg(user.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg2));
-			}
-			break;
-		case WebConst.SEARCH_ORDER_LAUNDRY_NAME:
-			orderDetails = new ArrayList<OrderDetail>();
-			List<Laundry> laundrys = laundryDao.findByName(searchArg.getArg());
-			SearchArg searchArg3 = new SearchArg();
-			searchArg3.setType(WebConst.SEARCH_ORDER_LAUNDRYID);
-			searchArg3.setStartTime(searchArg.getStartTime());
-			searchArg3.setEndTime(searchArg.getEndTime());
-			for (Laundry laundry : laundrys) {
-				searchArg3.setArg(laundry.getId().toString());
-				orderDetails.addAll(orderDao.findDetail(searchArg3));
-			}
+			orderDetails = orderDao.findDetail(searchArg, pagination);
 			break;
 		default:
 			orderDetails = new ArrayList<OrderDetail>();

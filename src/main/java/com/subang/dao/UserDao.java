@@ -7,9 +7,9 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.subang.bean.Pagination;
 import com.subang.domain.User;
 import com.subang.util.ComUtil;
-import com.subang.util.WebConst;
 
 @Repository
 public class UserDao extends BaseDao<User> {
@@ -104,10 +104,10 @@ public class UserDao extends BaseDao<User> {
 		return users;
 	}
 
-	public List<User> findAll(int pageno) {
-		int offset = (pageno - 1) * WebConst.PAGE_SIZE;
+	public List<User> findAll(Pagination pagination) {
 		String sql = "select * from user_t";
-		List<User> users = findByPage(sql, new Object[] {}, offset, WebConst.PAGE_SIZE);
+		String sql1 = "select count(*) from user_t";
+		List<User> users = findByPage(pagination, sql, sql1, new Object[] {});
 		return users;
 	}
 
@@ -119,17 +119,33 @@ public class UserDao extends BaseDao<User> {
 		return users;
 	}
 
-	public List<User> findByNickname(String nickname) {
-		String sql = "select * from user_t where nickname like ?";
-		Object[] args = { ComUtil.getLikeStr(nickname) };
-		List<User> users = jdbcTemplate.query(sql, args,
-				new BeanPropertyRowMapper<User>(User.class));
+	public List<User> findByUserno(String userno, Pagination pagination) {
+		String sql = "select * from user_t where userno like ?";
+		String sql1 = "select count(*) from user_t where userno like ?";
+		Object[] args = { ComUtil.getLikeStr(userno) };
+		List<User> users = findByPage(pagination, sql, sql1, args);
 		return users;
 	}
 
 	public List<User> findByCellnum(String cellnum) {
 		String sql = "select * from user_t where cellnum like ?";
 		Object[] args = { ComUtil.getLikeStr(cellnum) };
+		List<User> users = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<User>(User.class));
+		return users;
+	}
+
+	public List<User> findByCellnum(String cellnum, Pagination pagination) {
+		String sql = "select * from user_t where cellnum like ?";
+		String sql1 = "select count(*) from user_t where cellnum like ?";
+		Object[] args = { ComUtil.getLikeStr(cellnum) };
+		List<User> users = findByPage(pagination, sql, sql1, args);
+		return users;
+	}
+
+	public List<User> findByNickname(String nickname) {
+		String sql = "select * from user_t where nickname like ?";
+		Object[] args = { ComUtil.getLikeStr(nickname) };
 		List<User> users = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;

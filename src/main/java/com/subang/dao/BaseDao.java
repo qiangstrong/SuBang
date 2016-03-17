@@ -2,21 +2,20 @@ package com.subang.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
+
+import com.subang.bean.Pagination;
+import com.subang.util.WebConst;
 
 public class BaseDao<T> {
 
-	protected static final Logger LOG = Logger.getLogger ( BaseDao.class.getName());
-	
+	protected static final Logger LOG = Logger.getLogger(BaseDao.class.getName());
+
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
@@ -28,23 +27,29 @@ public class BaseDao<T> {
 		entityClass = (Class) params[0];
 	}
 
-	protected List<T> findByPage(final String sql, final Object[] args, final int offset,
-			final int pageSize) {
-		final List<T> pageItems = new ArrayList<T>();
-		final BeanPropertyRowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(entityClass);
-		jdbcTemplate.query(sql, args, new RowCallbackHandler() {
-			public void processRow(ResultSet rs) throws SQLException {
-				int currentRow = 0;
-				rs.beforeFirst();
-				while (rs.next() && currentRow < offset + pageSize) {
-					if (currentRow >= offset) {
-						pageItems.add((T) rowMapper.mapRow(rs, currentRow));
-					}
-					currentRow++;
-				}
-			}
-		});
-		return pageItems;
+	// pagination中需要传入type和pageno。函数会计算pagenum和recordnum，并会重新计算pageno
+	protected List<T> findByPage(Pagination pagination, String sqlQuery, String sqlCount,
+			Object[] args) {
+		int recordnum = jdbcTemplate.queryForInt(sqlCount);
+		pagination.setRecordnum(recordnum);
+		pagination.round();
+		int offset = pagination.getOffset();
 
+		String sql = sqlQuery + " limit " + offset + " , " + WebConst.PAGE_SIZE;
+		List<T> items = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<T>(entityClass));
+		return items;
 	}
+
+	protected <T1> List<T1> findByPage(Pagination pagination, String sqlQuery, String sqlCount,
+			Object[] args, Class<T1> clazz) {
+		int recordnum = jdbcTemplate.queryForInt(sqlCount);
+		pagination.setRecordnum(recordnum);
+		pagination.round();
+		int offset = pagination.getOffset();
+
+		String sql = sqlQuery + " limit " + offset + " , " + WebConst.PAGE_SIZE;
+		List<T1> items = jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<T1>(clazz));
+		return items;
+	}
+
 }

@@ -19,6 +19,7 @@ import com.subang.bean.MsgArg;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageArg.ArgType;
 import com.subang.bean.PageState;
+import com.subang.bean.Pagination;
 import com.subang.bean.PayArg;
 import com.subang.bean.Result;
 import com.subang.bean.SearchArg;
@@ -87,8 +88,10 @@ public class UserController extends BaseController {
 		PageState pageState = backStack.peek();
 		view.addObject(KEY_PAGE_STATE, pageState);
 
-		List<User> users = userService.searchUser(pageState.getSearchArg());
+		List<User> users = userService.searchUser(pageState.getSearchArg(), pageState.getPageArg()
+				.getPagination());
 		view.addObject(KEY_DATA, users);
+		view.addObject("pagination", pageState.getPageArg().getPagination());
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
@@ -106,6 +109,20 @@ public class UserController extends BaseController {
 	public ModelAndView search(HttpSession session, SearchArg searchArg) {
 		ModelAndView view = new ModelAndView();
 		setPageArg(session, searchArg);
+		view.setViewName("redirect:" + INDEX_PAGE + ".html");
+		return view;
+	}
+
+	@RequestMapping("/page")
+	public ModelAndView paginate(HttpSession session, @Valid Pagination pagination,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		if (!result.hasErrors()) {
+			pagination.calc();
+			PageState pageState = getBackStack(session).peek();
+			pageState.getPageArg().setPagination(pagination);
+		}
+
 		view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		return view;
 	}

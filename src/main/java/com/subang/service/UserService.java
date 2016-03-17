@@ -19,6 +19,7 @@ import weixin.popular.util.StringUtils;
 import com.alipay.api.PayAPI;
 import com.alipay.bean.AlipayOrder;
 import com.subang.bean.GeoLoc;
+import com.subang.bean.Pagination;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.Result;
@@ -51,20 +52,20 @@ public class UserService extends BaseService {
 	 * 用户
 	 */
 	// 后台查找用户
-	public List<User> searchUser(SearchArg searchArg) {
+	public List<User> searchUser(SearchArg searchArg, Pagination pagination) {
 		List<User> users = null;
 		switch (searchArg.getType()) {
 		case WebConst.SEARCH_NULL:
 			users = new ArrayList<User>();
 			break;
 		case WebConst.SEARCH_ALL:
-			users = userDao.findAll();
+			users = userDao.findAll(pagination);
 			break;
 		case WebConst.SEARCH_CELLNUM:
-			users = userDao.findByCellnum(searchArg.getArg());
+			users = userDao.findByCellnum(searchArg.getArg(), pagination);
 			break;
 		case WebConst.SEARCH_NO:
-			users = userDao.findByUserno(searchArg.getArg());
+			users = userDao.findByUserno(searchArg.getArg(), pagination);
 			break;
 		default:
 			users = new ArrayList<User>();

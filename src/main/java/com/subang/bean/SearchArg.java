@@ -76,7 +76,7 @@ public class SearchArg extends PageArg {
 
 	public String getStartTimeDes() {
 		if (startTime == null) {
-			return "无期限";
+			return null;
 		}
 		return new Date(startTime.getTime()).toString();
 	}
@@ -91,7 +91,7 @@ public class SearchArg extends PageArg {
 
 	public String getEndTimeDes() {
 		if (endTime == null) {
-			return "无期限";
+			return null;
 		}
 		return new Date(endTime.getTime()).toString();
 	}

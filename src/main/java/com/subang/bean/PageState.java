@@ -2,6 +2,9 @@ package com.subang.bean;
 
 import com.subang.util.WebConst;
 
+/**
+ * @author Qiang back栈中的元素
+ */
 public class PageState {
 
 	private String name;
@@ -38,6 +41,10 @@ public class PageState {
 	/*
 	 * getter方法说明了arg的用途
 	 */
+	public PageArg getPageArg() {
+		return (PageArg) arg;
+	}
+
 	public SearchArg getSearchArg() {
 		return (SearchArg) arg;
 	}

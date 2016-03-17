@@ -8,8 +8,12 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.subang.domain.Category;
+import com.subang.bean.OrderDetail;
+import com.subang.bean.Pagination;
+import com.subang.bean.SearchArg;
+import com.subang.util.ComUtil;
 import com.subang.util.UtilTest;
+import com.subang.util.WebConst;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -19,7 +23,13 @@ public class DaoTest extends BaseService {
 
 	@Test
 	public void test() {
-		List<Category> categories = categoryDao.findByCityid(1);
+		ComUtil.init();
+		Pagination pagination = new Pagination();
+		pagination.setType(WebConst.CUR);
+		pagination.setPageno(1);
+		SearchArg searchArg = new SearchArg();
+		searchArg.pre();
+		List<OrderDetail> orderDetails = orderDao.findDetail(searchArg, pagination);
 		pause();
 	}
 
