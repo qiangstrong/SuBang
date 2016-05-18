@@ -72,7 +72,7 @@
 
 <script type="text/javascript">
   var user_type = "20";
-  var back_url = "weixin/user/cellnum.html";///???
+  var back_url = "weixin/user/authcode.html";///???
   var InterValObj; 	//timer变量，控制时间  
   var count = 60; 	//间隔函数，1秒执行  
   var curCount;		//当前剩余秒数 
@@ -88,7 +88,7 @@
         if(flag == 1){
           flag = 0;
           curCount = count; 
-          $.post("weixin/user/cellnum.html", submit_data, function (data){
+          $.post("weixin/user/authcode.html", submit_data, function (data){
               if(data.code=="ok"){
                 setVCodeBtn();
               }else if (data.code=="err") {
@@ -219,7 +219,7 @@
       $("#confirm_tip").hide();
       var submit_data = {  authcode : $("#authcode").val()};
       $("#confirmbn").attr("class","btn-public select"); 
-      $.post("weixin/user/chgauthcode.html", submit_data, function (data){
+      $.post("weixin/user/chgcellnum.html", submit_data, function (data){
          if (data.code == "err") {
            flag = 1;
            $("#confirmbn").attr("class", "btn-public");

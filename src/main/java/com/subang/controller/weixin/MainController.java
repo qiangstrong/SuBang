@@ -144,8 +144,15 @@ public class MainController extends BaseController {
 					eventMessage.getToUserName(), articles);
 			break;
 		case 2:
-			xmlMessage = new XMLTextMessage(eventMessage.getFromUserName(),
-					eventMessage.getToUserName(), SuUtil.getMsgProperty("default"));
+			article = new Article();
+			article.setTitle("价目表");
+			article.setDescription("价目表");
+			article.setPicurl(SuUtil.getBasePath(request) + "image/weixin/news/21.jpg");
+			article.setUrl(SuUtil.getBasePath(request) + "image/weixin/news/22.jpg");
+			articles = new ArrayList<XMLNewsMessage.Article>();
+			articles.add(article);
+			xmlMessage = new XMLNewsMessage(eventMessage.getFromUserName(),
+					eventMessage.getToUserName(), articles);
 			break;
 		case 3:
 			article = new Article();

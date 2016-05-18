@@ -167,6 +167,7 @@
 									</div> </a>
 								<div class="borderD"></div></td>
 						</tr>
+						<!-- 
 						<tr>
 							<td style="border:0;width:42px;"><img alt=""
 								src="css/weixin/ccsjsp/user/index/welcome_pas.png"></td>
@@ -178,7 +179,7 @@
 									</div> </a>
 								<div class="borderD"></div></td>
 						</tr>
-
+						 -->
 					</tbody>
 				</table>
 				<div class="borderD2"></div>

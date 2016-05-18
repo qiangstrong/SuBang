@@ -30,7 +30,7 @@ public class BaseDao<T> {
 	// pagination中需要传入type和pageno。函数会计算pagenum和recordnum，并会重新计算pageno
 	protected List<T> findByPage(Pagination pagination, String sqlQuery, String sqlCount,
 			Object[] args) {
-		int recordnum = jdbcTemplate.queryForInt(sqlCount);
+		int recordnum = jdbcTemplate.queryForInt(sqlCount, args);
 		pagination.setRecordnum(recordnum);
 		pagination.round();
 		int offset = pagination.getOffset();
@@ -42,7 +42,7 @@ public class BaseDao<T> {
 
 	protected <T1> List<T1> findByPage(Pagination pagination, String sqlQuery, String sqlCount,
 			Object[] args, Class<T1> clazz) {
-		int recordnum = jdbcTemplate.queryForInt(sqlCount);
+		int recordnum = jdbcTemplate.queryForInt(sqlCount, args);
 		pagination.setRecordnum(recordnum);
 		pagination.round();
 		int offset = pagination.getOffset();

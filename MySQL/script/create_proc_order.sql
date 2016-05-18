@@ -172,23 +172,23 @@ end
 $$
 
 drop procedure if exists countByUsername $$
-create procedure `countByUsername` (`arg` varchar(100), `start_time` datetime, `end_time` datetime, `offset0` int, `page_size` int)
+create procedure `countByUsername` (`arg` varchar(100), `start_time` datetime, `end_time` datetime)
 begin
-select count(*) from orderdetail_v, user_t where orderdetail_v.userid=user_t.id and user_t.nickname like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time limit offset0, page_size;
+select count(*) from orderdetail_v, user_t where orderdetail_v.userid=user_t.id and user_t.nickname like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time;
 end
 $$
 
 drop procedure if exists countByCellnum $$
-create procedure `countByCellnum` (`arg` varchar(100), `start_time` datetime, `end_time` datetime, `offset0` int, `page_size` int)
+create procedure `countByCellnum` (`arg` varchar(100), `start_time` datetime, `end_time` datetime)
 begin
-select count(*) from orderdetail_v, user_t where orderdetail_v.userid=user_t.id and user_t.cellnum like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time limit offset0, page_size;
+select count(*) from orderdetail_v, user_t where orderdetail_v.userid=user_t.id and user_t.cellnum like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time;
 end
 $$
 
 drop procedure if exists countByLaundryname $$
-create procedure `countByLaundryname` (`arg` varchar(100), `start_time` datetime, `end_time` datetime, `offset0` int, `page_size` int)
+create procedure `countByLaundryname` (`arg` varchar(100), `start_time` datetime, `end_time` datetime)
 begin
-select count(*) from orderdetail_v, laundry_t where orderdetail_v.laundryid=laundry_t.id and laundry_t.name like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time limit offset0, page_size;
+select count(*) from orderdetail_v, laundry_t where orderdetail_v.laundryid=laundry_t.id and laundry_t.name like concat('%',arg,'%') and orderdetail_v.accept_time>=start_time and orderdetail_v.accept_time<=end_time;
 end
 $$
 

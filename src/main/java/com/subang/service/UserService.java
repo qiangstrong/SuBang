@@ -495,7 +495,13 @@ public class UserService extends BaseService {
 		balance.setTime(new Timestamp(System.currentTimeMillis()));
 		balanceDao.update(balance);
 
-		// 计算折扣
+		User user = userDao.get(balance.getUserid());
+		user.setMoney(user.getMoney() + balance.getMoney() + calcBenefit(balance));
+		userDao.update(user);
+	}
+
+	// 计算折扣
+	private double calcBenefit(Balance balance) {
 		double benefit = 0.0;
 		List<Rebate> rebates = rebateDao.findAll();
 		for (Rebate rebate : rebates) {
@@ -505,9 +511,22 @@ public class UserService extends BaseService {
 			}
 		}
 
-		User user = userDao.get(balance.getUserid());
-		user.setMoney(user.getMoney() + balance.getMoney() + benefit);
-		userDao.update(user);
+		if (!ComUtil.equal(benefit, 0.0)) {
+			// 生成一个新的balance已记录返现
+			Balance benifitBalance = new Balance();
+			benifitBalance.setUserid(balance.getUserid());
+			benifitBalance.setMoney(benefit);
+			benifitBalance = addBalance(benifitBalance);
+			benifitBalance.setState(Order.State.paid);
+			benifitBalance.setTime(new Timestamp(System.currentTimeMillis()));
+			balanceDao.update(benifitBalance);
+
+			Payment payment = paymentDao.getByOrderno(benifitBalance.getOrderno());
+			payment.setType(PayType.rebate);
+			paymentDao.update(payment);
+		}
+
+		return benefit;
 	}
 
 	/**

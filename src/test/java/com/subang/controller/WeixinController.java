@@ -31,6 +31,7 @@ public class WeixinController extends BaseController {
 			throws Exception {
 		User user = userDao.get(21);
 		setOpenid(request.getSession(), user.getOpenid());
+		// setOpenid(request.getSession(), "o64-8vkEc7aqJ2SAHbO0_3BPa0KE");
 		SuUtil.outputStreamWrite(response.getOutputStream(), "openid登录成功。");
 	}
 
