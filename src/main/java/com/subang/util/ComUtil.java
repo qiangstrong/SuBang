@@ -202,8 +202,24 @@ public class ComUtil extends BaseUtil {
 		return filename.substring(index);
 	}
 
+	public static String hideCellnum(String cellnum) {
+		StringBuffer cellnumBuffer = new StringBuffer();
+		int i = 0;
+		for (; i < 3; i++) {
+			cellnumBuffer.append(cellnum.charAt(i));
+		}
+		for (; i < 7; i++) {
+			cellnumBuffer.append('*');
+		}
+		for (; i < Validator.CELLNUM_LENGTH; i++) {
+			cellnumBuffer.append(cellnum.charAt(i));
+		}
+		return cellnumBuffer.toString();
+	}
+
 	public static void main(String[] args) {
-		boolean result = isTimestampValid("20151216195528");
-		System.out.println(result);
+		String cellnum = "15502457990";
+		String string = hideCellnum(cellnum);
+		System.out.println(string);
 	}
 }

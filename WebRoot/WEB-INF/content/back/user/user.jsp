@@ -10,31 +10,44 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>Insert title here</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<title>下级用户</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 </head>
 <body>
-	hello
-	<script>
-		wx.config(${configStr});
-		wx.ready(function () {
-			wx.onMenuShareTimeline({
-	      		title: '互联网之子',
-	      		link: 'http://movie.douban.com/subject/25785114/',
-	      		imgUrl: 'http://demo.open.weixin.qq.com/jssdk/images/p2166127561.jpg',
-	      		success: function () { 
-					alert('分享成功');
-    			}
-	    	});		
-		});
-		wx.error(function(res){
-			alert(JSON.stringify(res));
-		});
-	</script>
+	<%@ include file="../common/header.jsp"%>
+	<table align="center">
+		<tr>
+			<td>${desMsg}</td>
+			<td align="right"><a href="back/user/index/back.html">返回</a></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<c:if test="${infoMsg!=null}">
+					${infoMsg}
+				</c:if>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<%!int count; %>
+			<table border="1" cellpadding="5">
+				<tr>
+					<th>编号</th>
+					<th>手机号</th>
+				</tr>
+				<%count=0;%>
+				<c:forEach var="user" items="${users}">
+					<tr>
+						<td><%=++count%></td>
+						<td>${user.cellnum}</td>
+					</tr>
+				</c:forEach>
+			</table>
+			</td>
+		</tr>
+	</table>
 </body>
 </html>

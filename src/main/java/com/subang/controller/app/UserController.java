@@ -24,9 +24,11 @@ import com.subang.domain.Addr;
 import com.subang.domain.Balance;
 import com.subang.domain.Location;
 import com.subang.domain.Order;
+import com.subang.domain.Payment.PayType;
 import com.subang.domain.User;
 import com.subang.domain.User.Client;
 import com.subang.tool.SuException;
+import com.subang.util.Setting;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.StratUtil;
@@ -181,15 +183,54 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
+	@RequestMapping("/user.html")
+	public void listUser(Identity identity,
+			@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		User user = getUser(identity);
+		List<User> users = userDao.findByUserid(user.getId());
+		SuUtil.doFilter(filter, users, User.class);
+		SuUtil.outputJson(response, users);
+	}
+
 	@RequestMapping("/balance")
 	public void listBalance(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,
 			HttpServletResponse response) {
 		User user = getUser(identity);
-		List<Balance> balances = balanceDao.findDetailByUseridAndState(user.getId(),
+		List<Balance> balances = balanceDao.findBalanceByUseridAndState(user.getId(),
 				Order.State.paid);
 		SuUtil.doFilter(filter, balances, Balance.class);
 		SuUtil.outputJson(response, balances);
+	}
+
+	@RequestMapping("/salary")
+	public void listSalary(Identity identity,
+			@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		User user = getUser(identity);
+		List<Balance> balances = balanceDao.findSalaryByUseridAndState(user.getId(),
+				Order.State.paid);
+		SuUtil.doFilter(filter, balances, Balance.class);
+		SuUtil.outputJson(response, balances);
+	}
+
+	@RequestMapping("/draw")
+	public void draw(HttpServletRequest request, Identity identity, HttpServletResponse response) {
+		User user = getUser(identity);
+		Result result = userService.subSalary(user.getId(), request);
+		SuUtil.outputJson(response, result);
+	}
+
+	@RequestMapping("share")
+	public void share(HttpServletRequest request, Identity identity,
+			@RequestParam("orderid") Integer orderid, HttpServletResponse response) {
+		PayArg payArg = new PayArg();
+		payArg.setPayType(PayType.share);
+		payArg.setMoney(Setting.shareMoney);
+		User user = getUser(identity);
+		userService.prepay(payArg, user.getId(), request);
+		SuUtil.outputJsonOK(response);
 	}
 
 	@RequestMapping("/prepay")

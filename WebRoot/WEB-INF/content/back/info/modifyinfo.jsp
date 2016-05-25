@@ -43,8 +43,48 @@
 							<td><form:errors path="phone" /></td>
 						</tr>
 						<tr>
-							<td>电话：</td>
-							<td><textarea rows="1" cols="50" name="phone">${info.phone}</textarea></td>
+							<td>服务电话：</td>
+							<td><form:input path="phone" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="shareMoney" /></td>
+						</tr>
+						<tr>
+							<td>分享返现：</td>
+							<td><form:input path="shareMoney" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="salaryLimit" /></td>
+						</tr>
+						<tr>
+							<td>提现阈值：</td>
+							<td><form:input path="salaryLimit" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="prom0" /></td>
+						</tr>
+						<tr>
+							<td>上一级提成：</td>
+							<td><form:input path="prom0" />%</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="prom1" /></td>
+						</tr>
+						<tr>
+							<td>上两级提成：</td>
+							<td><form:input path="prom1" />%</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><form:errors path="prom2" /></td>
+						</tr>
+						<tr>
+							<td>上三级提成：</td>
+							<td><form:input path="prom2" />%</td>
 						</tr>
 						<tr>
 							<td colspan="2" align="right">

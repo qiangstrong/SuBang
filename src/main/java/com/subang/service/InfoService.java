@@ -11,18 +11,21 @@ import com.subang.domain.Faq;
 import com.subang.domain.Feedback;
 import com.subang.domain.Info;
 import com.subang.tool.SuException;
+import com.subang.util.Setting;
 import com.subang.util.WebConst;
 
 @Service
 public class InfoService extends BaseService {
 	/**
-	 * 与产品运营相关的操作
+	 * info
 	 */
-	public Info getInfo() {
-		return infoDao.findALL().get(0);
-	}
-
 	public void modifyInfo(Info info) {
+		Setting.phone = info.getPhone();
+		Setting.shareMoney = info.getShareMoney();
+		Setting.salaryLimit = info.getSalaryLimit();
+		Setting.prom[0] = info.getProm0();
+		Setting.prom[1] = info.getProm1();
+		Setting.prom[2] = info.getProm2();
 		infoDao.update(info);
 	}
 

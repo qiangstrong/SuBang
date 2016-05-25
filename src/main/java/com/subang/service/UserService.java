@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.pay.PayAppRequest;
+import weixin.popular.bean.paymch.Transfers;
+import weixin.popular.bean.paymch.TransfersResult;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.util.PayUtil;
@@ -26,8 +28,10 @@ import com.subang.bean.Result;
 import com.subang.bean.SearchArg;
 import com.subang.domain.Addr;
 import com.subang.domain.Balance;
+import com.subang.domain.Balance.BalanceType;
 import com.subang.domain.City;
 import com.subang.domain.Location;
+import com.subang.domain.Notice.Code;
 import com.subang.domain.Order;
 import com.subang.domain.Order.OrderType;
 import com.subang.domain.Order.State;
@@ -40,6 +44,7 @@ import com.subang.domain.User;
 import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.LocUtil;
+import com.subang.util.Setting;
 import com.subang.util.StratUtil;
 import com.subang.util.SuUtil;
 import com.subang.util.Validator;
@@ -450,10 +455,22 @@ public class UserService extends BaseService {
 		return result;
 	}
 
+	private PrepayResult payByShare(PayArg payArg) {
+		PrepayResult result = new PrepayResult();
+		Balance balance = balanceDao.getDetail(payArg.getOrderid());
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.share);
+		paymentDao.update(payment);
+		payBalance(balance.getOrderno());
+		result.setCode(PrepayResult.Code.succ);
+		return result;
+	}
+
 	public PrepayResult prepay(PayArg payArg, Integer userid, HttpServletRequest request) {
 
 		// 生成本地订单
 		Balance balance = new Balance();
+		balance.setType(BalanceType.balance);
 		balance.setUserid(userid);
 		balance.setMoney(payArg.getMoney());
 		balance = addBalance(balance);
@@ -477,6 +494,10 @@ public class UserService extends BaseService {
 			result = payByExpense(payArg);
 			break;
 		}
+		case share: { // 传入prepay的payArg需要payType、money
+			result = payByShare(payArg);
+			break;
+		}
 		default: {
 			result = new PrepayResult();
 			result.setCode(PrepayResult.Code.succ);
@@ -495,8 +516,16 @@ public class UserService extends BaseService {
 		balance.setTime(new Timestamp(System.currentTimeMillis()));
 		balanceDao.update(balance);
 
+		// 计算折扣
+		double benefit = 0.0;
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		if (payment.getTypeEnum() == PayType.weixin || payment.getTypeEnum() == PayType.alipay
+				|| payment.getTypeEnum() == PayType.cash) {
+			benefit = calcBenefit(balance);
+		}
+
 		User user = userDao.get(balance.getUserid());
-		user.setMoney(user.getMoney() + balance.getMoney() + calcBenefit(balance));
+		user.setMoney(user.getMoney() + balance.getMoney() + benefit);
 		userDao.update(user);
 	}
 
@@ -514,6 +543,7 @@ public class UserService extends BaseService {
 		if (!ComUtil.equal(benefit, 0.0)) {
 			// 生成一个新的balance已记录返现
 			Balance benifitBalance = new Balance();
+			balance.setType(BalanceType.balance);
 			benifitBalance.setUserid(balance.getUserid());
 			benifitBalance.setMoney(benefit);
 			benifitBalance = addBalance(benifitBalance);
@@ -527,6 +557,106 @@ public class UserService extends BaseService {
 		}
 
 		return benefit;
+	}
+
+	/*
+	 * 收益
+	 */
+	// 下单产生交易额时，计算提成
+	public void addSalary(Integer userid, double money) {
+		Balance balance = new Balance();
+		balance.setType(BalanceType.salary);
+		balance.setUserid(userid);
+		balance.setMoney(money);
+		balance = addBalance(balance);
+		balance.setState(Order.State.paid);
+		balance.setTime(new Timestamp(System.currentTimeMillis()));
+		balanceDao.update(balance);
+
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.promote);
+		paymentDao.update(payment);
+
+		User user = userDao.get(userid);
+		user.setSalary(user.getSalary() + balance.getMoney());
+		userDao.update(user);
+	}
+
+	// 用户提现；只能全部提现；只能提现到微信；只有用户在微信公众平台登录过，才能提现
+	public Result subSalary(Integer userid, HttpServletRequest request) {
+		Result result = new Result();
+		User user = userDao.get(userid);
+		if (user.getOpenid() == null) {
+			result.setCode(Result.ERR);
+			result.setMsg("您的账号尚未在微信公众平台登录过。暂时无法提现。");
+			return result;
+		}
+		if (user.getSalary() < Setting.salaryLimit) {
+			result.setCode(Result.ERR);
+			result.setMsg("收益满" + Setting.salaryLimit + "元才可以提现");
+			return result;
+		}
+
+		// 生成本地订单
+		Balance balance = new Balance();
+		balance.setType(BalanceType.salary);
+		balance.setUserid(userid);
+		balance.setMoney(-user.getSalary());
+		balance = addBalance(balance);
+
+		// 调用微信接口转账
+		String appid = SuUtil.getAppProperty("appid");
+		String mch_id = SuUtil.getAppProperty("mch_id");
+		String apikey = SuUtil.getAppProperty("apikey");
+
+		Transfers transfers = new Transfers();
+		transfers.setMch_appid(appid);
+		transfers.setMchid(mch_id);
+		transfers.setNonce_str(StringUtils.getRandomStringByLength(32));
+		transfers.setPartner_trade_no(balance.getOrderno());
+		transfers.setOpenid(user.getOpenid());
+		transfers.setCheck_name("NO_CHECK");
+		Integer money = (int) (user.getSalary() * 100);
+		transfers.setAmount(money.toString());
+		transfers.setDesc("收益提现");
+		transfers.setSpbill_create_ip(request.getRemoteAddr());
+
+		TransfersResult transfersResult = PayMchAPI.mmpaymkttransfersPromotionTransfers(transfers,
+				apikey);
+
+		// 对错误进行记录
+		if (!transfersResult.getReturn_code().equals("SUCCESS")) {
+			LOG.error("错误码:" + transfersResult.getReturn_code() + "; 错误信息:"
+					+ transfersResult.getReturn_msg());
+			SuUtil.notice(Code.money, transfersResult.getReturn_msg());
+			result.setCode(Result.ERR);
+			result.setMsg(transfersResult.getReturn_msg());
+			return result;
+		}
+
+		if (!transfersResult.getResult_code().equals("SUCCESS")) {
+			LOG.error("错误码:" + transfersResult.getErr_code() + "; 错误信息:"
+					+ transfersResult.getErr_code_des());
+			SuUtil.notice(Code.money, transfersResult.getErr_code_des());
+			result.setCode(Result.ERR);
+			result.setMsg(transfersResult.getErr_code_des());
+			return result;
+		}
+
+		// 更新本地业务状态
+		balance.setState(Order.State.paid);
+		balance.setTime(new Timestamp(System.currentTimeMillis()));
+		balanceDao.update(balance);
+
+		Payment payment = paymentDao.getByOrderno(balance.getOrderno());
+		payment.setType(PayType.weixin);
+		paymentDao.update(payment);
+
+		user.setSalary(0.0);
+		userDao.update(user);
+
+		result.setCode(Result.OK);
+		return result;
 	}
 
 	/**

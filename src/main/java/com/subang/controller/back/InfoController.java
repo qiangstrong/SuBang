@@ -66,7 +66,7 @@ public class InfoController extends BaseController {
 	}
 
 	@RequestMapping("/showmodifyinfo")
-	public ModelAndView showModify(HttpSession session, @RequestParam("infoid") Integer infoid) {
+	public ModelAndView showModifyInfo(HttpSession session, @RequestParam("infoid") Integer infoid) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
 		backStack.push(new PageState("info/modifyinfo", null));
@@ -84,7 +84,7 @@ public class InfoController extends BaseController {
 	}
 
 	@RequestMapping("/modifyinfo")
-	public ModelAndView modify(HttpSession session, @Valid Info info, BindingResult result) {
+	public ModelAndView modifyInfo(HttpSession session, @Valid Info info, BindingResult result) {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(session);
 		if (info.getId() == null) {

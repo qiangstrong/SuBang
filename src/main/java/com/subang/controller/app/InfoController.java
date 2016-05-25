@@ -1,5 +1,7 @@
 package com.subang.controller.app;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,11 @@ import com.subang.util.SuUtil;
 public class InfoController extends BaseController {
 
 	@RequestMapping("/get")
-	public void get(HttpServletResponse response) {
-		Info info = infoService.getInfo();
-		SuUtil.outputJson(response, info);
+	public void get(@RequestParam(value = "filter", required = false) String filter,
+			HttpServletResponse response) {
+		List<Info> infos = infoDao.findALL();
+		SuUtil.doFilter(filter, infos, Info.class);
+		SuUtil.outputJson(response, infos.get(0));
 	}
 
 	@RequestMapping("/addfeedback")

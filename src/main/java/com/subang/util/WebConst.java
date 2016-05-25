@@ -8,6 +8,7 @@ public interface WebConst {
 	String APP_PREFIX = "/app";
 	String LOG_TAG = "subang";
 	String ALIAS_TYPE = "subang_cellnum";
+	String CITY_NAME = "葫芦岛市"; // 如果无法定位用户的城市，则使用这个城市
 
 	String KEY_ADMIN_AUTHCODE = "admin_authcode";
 	String KEY_USER_AUTHCODE = "user_authcode";
@@ -76,4 +77,6 @@ public interface WebConst {
 	int ORDER_NUM = 50; // 前台最多显示50个已完成订单
 
 	int EXPIRED_INTERVAL = 60; // 重复通知（微信服务器发送的消息，不包括支付通知）过滤 时效60秒
+
+	int PROM_LAYER = 3;// 推广提成的层级数
 }

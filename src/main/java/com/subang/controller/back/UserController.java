@@ -266,12 +266,43 @@ public class UserController extends BaseController {
 		BackStack backStack = getBackStack(session);
 		backStack.push(new PageState("user/balance", null));
 
-		List<Balance> balances = balanceDao.findDetailByUseridAndState(userid, Order.State.paid);
+		List<Balance> balances = balanceDao.findBalanceByUseridAndState(userid, Order.State.paid);
 		view.addObject("balances", balances);
 		User user = userDao.get(userid);
 		String desMsg = "用户：" + user.getCellnum() + "。此用户的余额记录如下：";
 		view.addObject(KEY_DES_MSG, desMsg);
 		view.setViewName(VIEW_PREFIX + "/balance");
+		return view;
+	}
+
+	@RequestMapping("/salary")
+	public ModelAndView listSalary(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/salary", null));
+
+		List<Balance> balances = balanceDao.findSalaryByUseridAndState(userid, Order.State.paid);
+		view.addObject("balances", balances);
+		User user = userDao.get(userid);
+		String desMsg = "用户：" + user.getCellnum() + "。此用户的收益记录如下：";
+		view.addObject(KEY_DES_MSG, desMsg);
+		view.setViewName(VIEW_PREFIX + "/balance");
+		return view;
+	}
+
+	// 列出下一级用户
+	@RequestMapping("/user.html")
+	public ModelAndView listUser(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("user/user", null));
+
+		List<User> users = userDao.findByUserid(userid);
+		view.addObject("users", users);
+		User user = userDao.get(userid);
+		String desMsg = "用户：" + user.getCellnum() + "。此用户的下级用户如下：";
+		view.addObject(KEY_DES_MSG, desMsg);
+		view.setViewName(VIEW_PREFIX + "/user");
 		return view;
 	}
 

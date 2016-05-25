@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import weixin.popular.bean.paymch.MchPayNotify;
@@ -27,7 +28,10 @@ import com.subang.domain.Balance;
 import com.subang.domain.Order;
 import com.subang.domain.Rebate;
 import com.subang.domain.User;
+import com.subang.domain.Payment.PayType;
 import com.subang.util.PayUtil;
+import com.subang.util.Setting;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 @Controller("balanceController_weixin")
@@ -42,7 +46,7 @@ public class BalanceController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		User user = getUser(session);
 		view.addObject("user", user);
-		List<Balance> balances = balanceDao.findDetailByUseridAndState(user.getId(),
+		List<Balance> balances = balanceDao.findBalanceByUseridAndState(user.getId(),
 				Order.State.paid);
 		view.addObject("balances", balances);
 		view.setViewName(INDEX_PAGE);
@@ -160,6 +164,21 @@ public class BalanceController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX + "/user/index.html");
 		return view;
+	}
+
+	/*
+	 * 用户下单分享后，由前端通通知后台，为用户增加余额。存在用户恶意请求这个地址，获取余额的风险。
+	 * orderid是为了防止这种风险的参数，但目前没有使用这个参数
+	 */
+	@RequestMapping("share")
+	public void share(HttpServletRequest request, @RequestParam("orderid") Integer orderid,
+			HttpServletResponse response) {
+		PayArg payArg = new PayArg();
+		payArg.setPayType(PayType.share);
+		payArg.setMoney(Setting.shareMoney);
+		User user = getUser(request.getSession());
+		userService.prepay(payArg, user.getId(), request);
+		SuUtil.outputJsonOK(response);
 	}
 
 }

@@ -9,6 +9,7 @@ import weixin.popular.support.TokenManager;
 
 import com.subang.util.ComUtil;
 import com.subang.util.PushUtil;
+import com.subang.util.Setting;
 import com.subang.util.SmsUtil;
 import com.subang.util.StratUtil;
 import com.subang.util.SuUtil;
@@ -24,6 +25,7 @@ public class ContextListener implements ServletContextListener {
 		StratUtil.init();
 		PushUtil.init();
 		ComUtil.init();
+		Setting.init();
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {

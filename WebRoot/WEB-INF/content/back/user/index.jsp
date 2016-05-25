@@ -79,6 +79,7 @@
 						<th>手机号</th>
 						<th>积分</th>
 						<th>余额</th>
+						<th>收益</th>
 						<th>来源</th>	
 						<th>充值</th>
 						<th>下单</th>					
@@ -86,6 +87,8 @@
 						<th>卡券</th>
 						<th>订单</th>						
 						<th>充值记录</th>
+						<th>收益记录</th>
+						<th>下级用户</th>
 						<th>修改</th>
 					</tr>
 					<%count=0;%>
@@ -97,6 +100,7 @@
 							<td>${user.cellnum}</td>
 							<td>${user.score}</td>
 							<td>${user.money}</td>
+							<td>${user.salary}</td>
 							<td>${user.clientDes}</td>
 							<td>
 								<a href="back/user/showrecharge.html?userid=${user.id}">充值</a>
@@ -114,7 +118,13 @@
 								<a href="back/user/order.html?userid=${user.id}">订单</a>
 							</td>
 							<td>
-								<a href="back/user/balance.html?userid=${user.id}">充值记录</a>
+								<a href="back/user/balance.html?userid=${user.id}">余额记录</a>
+							</td>
+							<td>
+								<a href="back/user/salary.html?userid=${user.id}">收益记录</a>
+							</td>
+							<td>
+								<a href="back/user/user.html?userid=${user.id}">下级用户</a>
 							</td>
 							<td>
 								<a href="back/user/showmodify.html?userid=${user.id}">修改</a>

@@ -158,6 +158,11 @@ public class OrderController extends BaseController {
 			e.printStackTrace();
 		}
 		view.setViewName("redirect:" + INDEX_PAGE + ".html?type=" + WebConst.ORDER_STATE_DONE);
+
+		// 添加评价分享红包功能后的地址
+		// view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX +
+		// "/activity/share.html?orderid="
+		// + orderid);
 		return view;
 	}
 

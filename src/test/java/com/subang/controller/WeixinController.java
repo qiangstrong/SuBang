@@ -36,9 +36,16 @@ public class WeixinController extends BaseController {
 	}
 
 	@RequestMapping("/index")
-	public ModelAndView index() {
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView view = new ModelAndView();
-		String url = "http://202.118.18.56/subang/test/weixin/index.html";
+		StringBuffer homeUrl = request.getRequestURL();
+		String queryString = request.getQueryString();
+		if (queryString != null) {
+			homeUrl.append("?").append(queryString);
+		}
+
+		String url = homeUrl.toString();
+		System.err.println(url);
 		String[] jsApiList = { "checkJsApi", "onMenuShareTimeline" };
 		String configStr = JsUtil.generateConfigJson(TicketManager.getDefaultTicket(), false,
 				SuUtil.getAppProperty("appid"), url, jsApiList);

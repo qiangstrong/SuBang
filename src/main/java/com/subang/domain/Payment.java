@@ -10,14 +10,8 @@ public class Payment implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 * 订单付款，有四种方式(balance, weixin, alipay, cash)；
-	 * 如果由取衣员代为支付，记录为现金支付；后台支付，分为余额支付和现金支付。 用户充值，只有四种方式(weixin, alipay, cash,
-	 * rebate)； 在管理端由管理员代为充值的，记录为cash；rebate表示由活动引起的返现（比如，红包，充值返现）
-	 * expense为支出类型。例如订单付款。使用余额付款时，需要生成balance订单，此时记录为expense类型。
-	 */
 	public enum PayType {
-		balance, weixin, alipay, cash, expense, rebate;
+		balance, weixin, alipay, cash, expense, rebate, share, promote;
 
 		public static PayType toPayType(String arg) {
 			return PayType.values()[new Integer(arg)];
@@ -29,23 +23,29 @@ public class Payment implements Filter, Serializable {
 			}
 			String description = null;
 			switch (payType) {
-			case balance:
+			case balance: // 用于订单付款。使用用户余额为订单支付
 				description = "余额";
 				break;
-			case weixin:
+			case weixin: // 用于订单付款，用户余额
 				description = "微信";
 				break;
-			case alipay:
+			case alipay: // 用于订单付款，用户余额
 				description = "支付宝";
 				break;
-			case cash:
+			case cash: // 用于订单付款，用户余额。 在管理端由管理员代为充值的，记录为cash
 				description = "现金";
 				break;
-			case expense:
+			case expense: // 用于用户余额。用户余额的支出，例如用余额为订单付款。
 				description = "支出";
 				break;
-			case rebate:
-				description = "返现";
+			case rebate: // 用于用户余额。比如充值1000，返现500。其中500记录为rebate
+				description = "充值返现";
+				break;
+			case share: // 用于用户余额。比如用户下单后分享到朋友圈，返现
+				description = "分享返现";
+				break;
+			case promote:
+				description = "推广收益";
 				break;
 			}
 			return description;

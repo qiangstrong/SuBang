@@ -1,7 +1,9 @@
 package com.subang.controller.weixin;
 
+import java.util.List;
 import java.util.TimerTask;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -12,15 +14,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.subang.bean.Result;
 import com.subang.controller.BaseController;
+import com.subang.domain.Balance;
+import com.subang.domain.Order;
 import com.subang.domain.User;
 import com.subang.domain.User.Client;
 import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
+import com.subang.util.Setting;
 import com.subang.util.SmsUtil;
 import com.subang.util.SmsUtil.SmsType;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
+import com.subang.util.Validator;
 import com.subang.util.WebConst;
 
 @Controller("userController_weixin")
@@ -37,7 +43,7 @@ public class UserController extends BaseController {
 	public ModelAndView index(HttpSession session) {
 		ModelAndView view = new ModelAndView();
 		view.addObject("user", getUser(session));
-		view.addObject("phone", infoService.getInfo().getPhone());
+		view.addObject("phone", Setting.phone);
 		view.setViewName(INDEX_PAGE);
 		return view;
 	}
@@ -168,5 +174,90 @@ public class UserController extends BaseController {
 			result.setMsg("该手机号码已经被注册。");
 		}
 		SuUtil.outputJson(response, result);
+	}
+
+	// 推广注册用户
+	@RequestMapping("/promote")
+	public ModelAndView promote(@RequestParam("cellnum") String cellnum,
+			@RequestParam(value = "cellnumProm", required = false) String cellnumProm) {
+		ModelAndView view = new ModelAndView();
+		User user = userDao.getByCellnum(cellnum);
+		if (user == null) {
+			view.addObject(KEY_INFO_MSG, "发生错误。");
+			view.setViewName(VIEW_PREFIX + "/promote");
+			return view;
+		}
+		if (cellnumProm == null) {
+			view.addObject("cellnum", ComUtil.hideCellnum(cellnum));
+			view.setViewName(VIEW_PREFIX + "/promote");
+			return view;
+		}
+		if (!Validator.validCellnum(cellnumProm).isOk()) {
+			view.addObject(KEY_INFO_MSG, "发生错误。");
+			view.addObject("cellnum", ComUtil.hideCellnum(cellnum));
+			view.setViewName(VIEW_PREFIX + "/promote");
+			return view;
+		}
+		User userProm = userDao.getByCellnum(cellnumProm);
+		if (userProm != null) {
+			view.addObject(KEY_INFO_MSG, "old"); // 此处由前端根据此代码，自定义消息
+			view.addObject("cellnum", ComUtil.hideCellnum(cellnum));
+			view.setViewName(VIEW_PREFIX + "/promote");
+			return view;
+		}
+
+		userProm = new User();
+		userProm.setCellnum(cellnumProm);
+		userProm.setClient(Client.promotion);
+		userProm.setUserid(user.getId());
+		try {
+			userService.addUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		view.addObject(KEY_INFO_MSG, "new"); // 此处由前端根据此代码，自定义消息
+		view.addObject("cellnum", ComUtil.hideCellnum(cellnum));
+		view.setViewName(VIEW_PREFIX + "/promote");
+		return view;
+	}
+
+	/*
+	 * 收益
+	 */
+	@RequestMapping("/salary")
+	public ModelAndView listSalary(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		User user = getUser(session);
+		view.addObject("user", user);
+		List<Balance> balances = balanceDao.findSalaryByUseridAndState(user.getId(),
+				Order.State.paid);
+		view.addObject("balances", balances);
+		List<User> users = userDao.findByUserid(user.getId());
+		view.addObject("users", users);
+		view.setViewName(VIEW_PREFIX + "/salary");
+		return view;
+	}
+
+	@RequestMapping("/predraw")
+	public ModelAndView predraw(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		User user = getUser(session);
+		view.addObject("user", user);
+		view.setViewName(VIEW_PREFIX + "/predraw");
+		return view;
+	}
+
+	@RequestMapping("/draw")
+	public ModelAndView draw(HttpServletRequest request) {
+		ModelAndView view = new ModelAndView();
+		User user = getUser(request.getSession());
+		Result result = userService.subSalary(user.getId(), request);
+		if (!result.isOk()) {
+			view.addObject(KEY_INFO_MSG, "提现失败。" + result.getMsg());
+		} else {
+			view.addObject(KEY_INFO_MSG, "提现成功。");
+		}
+		view.setViewName(VIEW_PREFIX + "/drawresult");
+		return view;
 	}
 }

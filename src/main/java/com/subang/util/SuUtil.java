@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
+import weixin.popular.client.LocalHttpClient;
+import weixin.popular.support.TicketManager;
+import weixin.popular.util.JsUtil;
 import weixin.popular.util.JsonUtil;
 
 import com.subang.bean.Result;
@@ -33,7 +36,6 @@ import com.subang.domain.face.Filter;
 public class SuUtil extends BaseUtil {
 
 	private static ServletContext servletContext = null;
-	private static Properties su_properties = null;
 	private static Properties app_properties = null;
 	private static Properties msg_properties = null;
 	private static NoticeDao noticeDao = null;
@@ -50,16 +52,11 @@ public class SuUtil extends BaseUtil {
 
 	public static void init(ServletContext servletContext) {
 		SuUtil.servletContext = servletContext;
-		su_properties = new Properties();
 		app_properties = new Properties();
 		msg_properties = new Properties();
 		String path = null;
 		InputStream in = null;
 		try {
-			path = servletContext.getRealPath("WEB-INF/classes/subang.properties");
-			in = new BufferedInputStream(new FileInputStream(path));
-			su_properties.load(in);
-			in.close();
 			path = servletContext.getRealPath("WEB-INF/classes/app.properties");
 			in = new BufferedInputStream(new FileInputStream(path));
 			app_properties.load(in);
@@ -71,6 +68,9 @@ public class SuUtil extends BaseUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		path = servletContext.getRealPath("WEB-INF/apiclient_cert.p12");
+		LocalHttpClient.initMchKeyStore("PKCS12", path, getAppProperty("mch_id"));
 	}
 
 	public static ServletContext getServletContext() {
@@ -87,9 +87,12 @@ public class SuUtil extends BaseUtil {
 		return basePath;
 	}
 
-	// 获取与业务相关的配置信息
-	public static String getSuProperty(String key) {
-		return su_properties.getProperty(key);
+	public static String getPromPath(HttpServletRequest request, String cellnum) {
+		return getBasePath(request) + "weixin/user/promote.html?cellnum=" + cellnum;
+	}
+
+	public static String getSharePath(HttpServletRequest request) {
+		return getBasePath(request) + "content/weixin/activity/share.htm";
 	}
 
 	// 获取与app相关的配置
@@ -212,5 +215,20 @@ public class SuUtil extends BaseUtil {
 
 	public static void notice(Code code, String msg) {
 		noticeDao.save(new Notice(code.ordinal(), msg));
+	}
+
+	// 计算微信jsapi的配置
+	public static String getJsapiConfig(HttpServletRequest request) {
+		StringBuffer url = request.getRequestURL();
+		String queryString = request.getQueryString();
+		if (queryString != null) {
+			url.append("?").append(queryString);
+		}
+
+		String[] jsApiList = { "checkJsApi", "onMenuShareTimeline", "onMenuShareAppMessage",
+				"onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone" };
+		String config = JsUtil.generateConfigJson(TicketManager.getDefaultTicket(), false,
+				SuUtil.getAppProperty("appid"), url.toString(), jsApiList);
+		return config;
 	}
 }

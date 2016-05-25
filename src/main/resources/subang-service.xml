@@ -31,4 +31,7 @@
 	<bean  class="com.subang.util.StratUtil">
     	<property name="userDao" ref="userDao"/>
 	</bean>
+	<bean  class="com.subang.util.Setting">
+    	<property name="infoDao" ref="infoDao"/>
+	</bean>
 </beans>

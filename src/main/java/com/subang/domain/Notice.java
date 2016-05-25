@@ -9,7 +9,7 @@ public class Notice implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Code {
-		sms, incomplete, push
+		sms, incomplete, push, money
 	}
 
 	private Integer id;

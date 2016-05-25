@@ -20,6 +20,7 @@ import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.LocUtil;
 import com.subang.util.SuUtil;
+import com.subang.util.WebConst;
 
 @Service
 public class RegionService extends BaseService {
@@ -253,7 +254,7 @@ public class RegionService extends BaseService {
 		if (location != null && location.getCityid() != null) {
 			return location.getCityid();
 		}
-		City city = ComUtil.getFirst(cityDao.findByName(SuUtil.getSuProperty("defaultCityname")));
+		City city = ComUtil.getFirst(cityDao.findByName(WebConst.CITY_NAME));
 		return city.getId();
 	}
 

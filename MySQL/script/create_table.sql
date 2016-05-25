@@ -152,11 +152,14 @@ create table `user_t`(
     `nickname` varchar(100),				#微信昵称，也可以作为本系统的用户名
     `password` char(50),					#用户密码;不需要用户密码，目前为null，以后为了app的用户认证，可使用动态密码（比如验证码）
     `cellnum` char(11) not null unique,		#用户绑定的电话号码
-    `score` int not null default 0,			#积分
-    `money` double not null default 0,		#用户余额
+    `score` int not null,					#积分
+    `money` double not null,				#用户余额
+    `salary` double not null,				#用户收益
     `client` tinyint,						#用户的来源
     `addrid` int,							#用户的默认地址
-    foreign key(`addrid`) references `addr_t`(`id`) on delete set null
+    `userid` int,							#用户的上级用户
+    foreign key(`addrid`) references `addr_t`(`id`) on delete set null,
+    foreign key(`userid`) references `user_t`(`id`) on delete set null
 );
 
 #用户位置表，用于为用户提供位置服务
@@ -223,10 +226,11 @@ create table `order_t`(
     foreign key(`laundryid`) references `laundry_t`(`id`) on delete restrict
 );
 
-#余额表，记录余额的每一笔收支
+#余额收益历史表，记录用户余额，收益的每一笔收支
 drop table if exists balance_t;
 create table `balance_t`(
 	`id` int auto_Increment primary key,	
+    `type` tinyint,							#类型：余额，收益
     `orderno` char(14) not null unique,		#订单号
     `state` tinyint not null,				#订单状态
     `money` double not null,				#订单金额
@@ -287,11 +291,16 @@ create table `admin_t`(
     `password` char(50) not null
 );
 
-#信息表
+#信息表,包括系统的设置信息，只存储一条记录
 drop table if exists info_t;
 create table `info_t`(
 	`id` int auto_Increment primary key,
-    `phone` char(12) not null				#客服电话
+    `phone` char(12) not null,				#客服电话
+    `share_money` double not null,			#用户分享返现的金额
+    `salary_limit` double not null,			#用户收益体现的限制额度
+    `prom0` int not null,					#用户推广的提成。上一级的提成
+    `prom1` int not null,					#上两级的提成
+    `prom2` int not null					#上三级的提成
 );
 
 #常见问题表

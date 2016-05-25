@@ -16,7 +16,7 @@ public class User implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Client {
-		weixin, user, worker, back;
+		weixin, user, worker, back, promotion;
 
 		public static String toClientDes(Client client) {
 			if (client == null) {
@@ -35,6 +35,9 @@ public class User implements Filter, Serializable {
 				break;
 			case back:
 				description = "后台";
+				break;
+			case promotion:
+				description = "推广";
 				break;
 			}
 			return description;
@@ -56,18 +59,18 @@ public class User implements Filter, Serializable {
 	@Min(0)
 	private Integer score;
 	private Double money;
+	private Double salary;
 	private Integer client; // 用户注册的方式
 	private Integer addrid; // 用户的默认地址
+	private Integer userid;
 
 	public User() {
 		this.login = false;
-		this.score = 0;
-		this.money = 0.0;
 	}
 
 	public User(Integer id, Boolean login, String openid, String userno, String nickname,
-			String password, String cellnum, Integer score, Double money, Integer client,
-			Integer addrid) {
+			String password, String cellnum, Integer score, Double money, Double salary,
+			Integer client, Integer addrid, Integer userid) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -78,8 +81,10 @@ public class User implements Filter, Serializable {
 		this.cellnum = cellnum;
 		this.score = score;
 		this.money = money;
+		this.salary = salary;
 		this.client = client;
 		this.addrid = addrid;
+		this.userid = userid;
 	}
 
 	public Integer getId() {
@@ -138,6 +143,13 @@ public class User implements Filter, Serializable {
 		return cellnum;
 	}
 
+	public String getHiddenCellnum() {
+		if (cellnum == null) {
+			return null;
+		}
+		return ComUtil.hideCellnum(cellnum);
+	}
+
 	public void setCellnum(String cellnum) {
 		this.cellnum = cellnum;
 	}
@@ -156,6 +168,14 @@ public class User implements Filter, Serializable {
 
 	public void setMoney(Double money) {
 		this.money = ComUtil.round(money);
+	}
+
+	public Double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(Double salary) {
+		this.salary = ComUtil.round(salary);
 	}
 
 	public Integer getClient() {
@@ -189,6 +209,14 @@ public class User implements Filter, Serializable {
 		this.addrid = addrid;
 	}
 
+	public Integer getUserid() {
+		return userid;
+	}
+
+	public void setUserid(Integer userid) {
+		this.userid = userid;
+	}
+
 	public void doFilter(Object object) {
 		User user = (User) object;
 		if (this.id == null) {
@@ -218,8 +246,14 @@ public class User implements Filter, Serializable {
 		if (this.money == null) {
 			user.money = null;
 		}
+		if (this.salary == null) {
+			user.salary = null;
+		}
 		if (this.addrid == null) {
 			user.addrid = null;
+		}
+		if (this.userid == null) {
+			user.userid = null;
 		}
 	}
 

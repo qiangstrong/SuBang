@@ -14,7 +14,12 @@ public class Balance implements Filter, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public enum BalanceType {
+		balance, salary
+	}
+
 	private Integer id;
+	private Integer type;
 	private String orderno; // 订单号
 	private Integer state;
 	@Digits(integer = 4, fraction = 1)
@@ -27,10 +32,11 @@ public class Balance implements Filter, Serializable {
 	public Balance() {
 	}
 
-	public Balance(Integer id, String orderno, Integer state, Double money, Timestamp time,
-			Integer userid, Integer payType) {
+	public Balance(Integer id, Integer type, String orderno, Integer state, Double money,
+			Timestamp time, Integer userid, Integer payType) {
 		super();
 		this.id = id;
+		this.type = type;
 		this.orderno = orderno;
 		this.state = state;
 		this.money = money;
@@ -45,6 +51,25 @@ public class Balance implements Filter, Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public BalanceType getTypeEnum() {
+		if (type == null) {
+			return null;
+		}
+		return BalanceType.values()[type];
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public void setType(BalanceType type) {
+		this.type = type.ordinal();
 	}
 
 	public String getOrderno() {
@@ -139,6 +164,9 @@ public class Balance implements Filter, Serializable {
 		Balance balance = (Balance) object;
 		if (this.id == null) {
 			balance.id = null;
+		}
+		if (this.type == null) {
+			balance.type = null;
 		}
 		if (this.orderno == null) {
 			balance.orderno = null;

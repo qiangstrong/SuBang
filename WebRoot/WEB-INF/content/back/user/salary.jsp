@@ -10,21 +10,19 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>产品运营</title>
+	<title>收益记录</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 </head>
 <body>
-	<c:if test="${errMsg!=null}">
-		<script>
-			alert('${errMsg}');
-		</script>
-	</c:if>
 	<%@ include file="../common/header.jsp"%>
-	<%@ include file="infoheader.jsp"%>
 	<table align="center">
+		<tr>
+			<td>${desMsg}</td>
+			<td align="right"><a href="back/user/index/back.html">返回</a></td>
+		</tr>
 		<tr>
 			<td colspan="2">
 				<c:if test="${infoMsg!=null}">
@@ -34,36 +32,24 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+			<%!int count; %>
 			<table border="1" cellpadding="5">
-				<c:forEach var="info" items="${infos}">
+				<tr>
+					<th>编号</th>
+					<th>交易号</th>
+					<th>类型</th>
+					<th>金额</th>
+					<th>时间</th>
+				</tr>
+				<%count=0;%>
+				<c:forEach var="balance" items="${balances}">
 					<tr>
-						<th>服务电话</th>
-						<td>${info.phone}</td>
+						<td><%=++count%></td>
+						<td>${balance.orderno}</td>
+						<td>${balance.payTypeDes}</td>
+						<td>${balance.moneyDes}</td>
+						<td>${balance.timeDes}</td>
 					</tr>
-					<tr>
-						<th>分享返现</th>
-						<td>${info.shareMoney}</td>
-					</tr>
-					<tr>
-						<th>提现阈值</th>
-						<td>${info.salaryLimit}</td>
-					</tr>
-					<tr>
-						<th>上一级提成</th>
-						<td>${info.prom0}%</td>
-					</tr>
-					<tr>
-						<th>上两级提成</th>
-						<td>${info.prom1}%</td>
-					</tr>
-					<tr>
-						<th>上三级提成</th>
-						<td>${info.prom2}%</td>
-					</tr>
-					<tr>
-						<th>修改</th>
-						<td><a href="back/info/showmodifyinfo.html?infoid=${info.id}">修改</a></td>
-					</tr>	
 				</c:forEach>
 			</table>
 			</td>

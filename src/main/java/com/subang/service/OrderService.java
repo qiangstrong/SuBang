@@ -41,6 +41,7 @@ import com.subang.domain.Worker;
 import com.subang.tool.SuException;
 import com.subang.util.ComUtil;
 import com.subang.util.PushUtil;
+import com.subang.util.Setting;
 import com.subang.util.StratUtil;
 import com.subang.util.StratUtil.ScoreType;
 import com.subang.util.SuUtil;
@@ -189,11 +190,7 @@ public class OrderService extends BaseService {
 			throw new SuException("价格输入错误。");
 		}
 		order.setMoney(money);
-		if (money < new Double(SuUtil.getSuProperty("orderMoney"))) {
-			order.setFreight(new Double(SuUtil.getSuProperty("orderFreight")));
-		} else {
-			order.setFreight(0.0);
-		}
+		order.setFreight(0.0);
 		order.setState(State.priced);
 		orderDao.update(order);
 
@@ -288,6 +285,21 @@ public class OrderService extends BaseService {
 		history.setOperation(State.delivered);
 		history.setOrderid(order.getId());
 		historyDao.save(history);
+
+		promote(order);
+	}
+
+	// 推广收益计算
+	private void promote(Order order) {
+		User user = userDao.get(order.getUserid());
+		for (int i = 0; i < WebConst.PROM_LAYER; i++) {
+			if (user.getUserid() == null) {
+				break;
+			}
+			user = userDao.get(user.getUserid());
+			double money = order.getMoney() * Setting.prom[i];
+			userService.addSalary(user.getId(), money);
+		}
 	}
 
 	public void remarkOrder(Integer orderid, String remark) throws SuException {

@@ -63,19 +63,20 @@ public class UserDao extends BaseDao<User> {
 	}
 
 	public void save(User user) {
-		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into user_t values(null,?,?,?,?,?,?,?,?,?,?,?,?)";
 		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
-				user.getClient(), user.getAddrid() };
+				user.getSalary(), user.getClient(), user.getAddrid(), user.getUserid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(User user) {
-		String sql = "update user_t set login=?,openid=? ,userno=?, nickname=? ,password=? , "
-				+ "cellnum=? ,score=? ,money=?, client=?, addrid=? where id=?";
+		String sql = "update user_t set login=?, openid=? ,userno=?, nickname=? ,password=? , "
+				+ "cellnum=? ,score=? ,money=?, salary=?, client=?, addrid=?, userid=? where id=?";
 		Object[] args = { user.getLogin(), user.getOpenid(), user.getUserno(), user.getNickname(),
 				user.getPassword(), user.getCellnum(), user.getScore(), user.getMoney(),
-				user.getClient(), user.getAddrid(), user.getId() };
+				user.getSalary(), user.getClient(), user.getAddrid(), user.getUserid(),
+				user.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 
@@ -146,6 +147,14 @@ public class UserDao extends BaseDao<User> {
 	public List<User> findByNickname(String nickname) {
 		String sql = "select * from user_t where nickname like ?";
 		Object[] args = { ComUtil.getLikeStr(nickname) };
+		List<User> users = jdbcTemplate.query(sql, args,
+				new BeanPropertyRowMapper<User>(User.class));
+		return users;
+	}
+
+	public List<User> findByUserid(Integer userid) {
+		String sql = "select * from user_t where userid=?";
+		Object[] args = { userid };
 		List<User> users = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
