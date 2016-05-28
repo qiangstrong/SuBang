@@ -39,6 +39,7 @@ import com.subang.domain.Payment;
 import com.subang.domain.Payment.PayType;
 import com.subang.domain.Rebate;
 import com.subang.domain.Ticket;
+import com.subang.domain.TicketCode;
 import com.subang.domain.TicketType;
 import com.subang.domain.User;
 import com.subang.tool.SuException;
@@ -145,7 +146,7 @@ public class UserService extends BaseService {
 	 * 用户地址
 	 */
 	// 用户添加地址
-	public void addAddr(Addr addr) {
+	public Addr addAddr(Addr addr) {
 		addr.setValid(true);
 		addrDao.save(addr);
 		User user = userDao.get(addr.getUserid());
@@ -156,6 +157,7 @@ public class UserService extends BaseService {
 				userDao.update(user);
 			}
 		}
+		return addr;
 	}
 
 	// 管理员删除地址
@@ -243,7 +245,7 @@ public class UserService extends BaseService {
 	 * 用户卡券
 	 */
 	// 用户购买卡券。对于参加活动领取的卡券，其实现放到活动管理部分
-	public void addTicket(Integer userid, Integer ticketTypeid) throws SuException {
+	public void addTicketByScore(Integer userid, Integer ticketTypeid) throws SuException {
 		User user = userDao.get(userid);
 		TicketType ticketType = ticketTypeDao.get(ticketTypeid);
 		if (user.getScore() < ticketType.getScore()) {
@@ -256,6 +258,27 @@ public class UserService extends BaseService {
 		ticketDao.save(ticket);
 		user.setScore(user.getScore() - ticketType.getScore());
 		userDao.update(user);
+	}
+
+	// 用户使用优惠码兑换卡券
+	public void addTicketByCode(Integer userid, String codeno) throws SuException {
+		TicketCode ticketCode = ticketCodeDao.getByCodeno(codeno);
+		if (ticketCode == null || !ticketCode.isUsable()) {
+			throw new SuException("优惠码已失效");
+		}
+		if (!ticketCode.getValid()) {
+			throw new SuException("优惠码已兑换");
+		}
+
+		TicketType ticketType = ticketTypeDao.get(ticketCode.getTicketTypeid());
+		Ticket ticket = new Ticket();
+		ticket.setDeadline(ticketType.getDeadline());
+		ticket.setUserid(userid);
+		ticket.setTicketTypeid(ticketType.getId());
+		ticketDao.save(ticket);
+
+		ticketCode.setValid(false);
+		ticketCodeDao.update(ticketCode);
 	}
 
 	public void addTicketBack(Ticket ticket) {

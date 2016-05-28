@@ -29,7 +29,7 @@ public class PriceService extends BaseService {
 			throw new SuException("未选择图标文件。");
 		}
 		do {
-			category.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+			category.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 		} while (SuUtil.fileExist(category.getIcon()));
 		try {
 			categoryDao.save(category);
@@ -43,7 +43,7 @@ public class PriceService extends BaseService {
 		String icon_old = category.getIcon();
 		if (!icon.isEmpty()) {
 			do {
-				category.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+				category.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 			} while (SuUtil.fileExist(category.getIcon()));
 		}
 		try {
@@ -125,7 +125,7 @@ public class PriceService extends BaseService {
 			throw new SuException("未选择图标文件。");
 		}
 		do {
-			clothesType.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+			clothesType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 		} while (SuUtil.fileExist(clothesType.getIcon()));
 		try {
 			clothesTypeDao.save(clothesType);
@@ -139,7 +139,7 @@ public class PriceService extends BaseService {
 		String icon_old = clothesType.getIcon();
 		if (!icon.isEmpty()) {
 			do {
-				clothesType.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+				clothesType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 			} while (SuUtil.fileExist(clothesType.getIcon()));
 		}
 		try {

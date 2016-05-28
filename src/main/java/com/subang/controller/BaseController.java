@@ -34,6 +34,7 @@ import com.subang.dao.RegionDao;
 import com.subang.dao.ServiceDao;
 import com.subang.dao.SnapshotDao;
 import com.subang.dao.StatDao;
+import com.subang.dao.TicketCodeDao;
 import com.subang.dao.TicketDao;
 import com.subang.dao.TicketTypeDao;
 import com.subang.dao.UserDao;
@@ -112,6 +113,8 @@ public class BaseController {
 	protected SnapshotDao snapshotDao;
 	@Autowired
 	protected StatDao statDao;
+	@Autowired
+	protected TicketCodeDao ticketCodeDao;
 	@Autowired
 	protected TicketDao ticketDao;
 	@Autowired

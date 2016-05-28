@@ -120,6 +120,18 @@ create table `ticket_type_t`(
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
 );
 
+#优惠码表
+drop table if exists ticket_code_t;
+create table `ticket_code_t`(
+	`id` int auto_increment primary key,
+    `valid` tinyint not null default 1,		#优惠券是否有效（没有使用过为有效）。1：有效
+    `codeno` char(8) not null unique,		#优惠码
+    `start` datetime not null,				#有效期，起始日期
+    `end` datetime not null,				#有效期，截止日期
+    `ticket_typeid` int not null,			#优惠码对应的优惠券类型
+    foreign key (`ticket_typeid`) references `ticket_type_t`(`id`) on delete restrict
+);
+
 #商家（洗衣店）表
 drop table if exists laundry_t;
 create table `laundry_t`(

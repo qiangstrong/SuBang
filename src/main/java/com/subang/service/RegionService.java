@@ -32,7 +32,7 @@ public class RegionService extends BaseService {
 			throw new SuException("未选择服务范围文件。");
 		}
 		do {
-			city.calcScope(SuUtil.getIcon(scope.getOriginalFilename()));
+			city.calcScope(SuUtil.getFilename(scope.getOriginalFilename()));
 		} while (SuUtil.fileExist(city.getScope()));
 		try {
 			cityDao.save(city);
@@ -46,7 +46,7 @@ public class RegionService extends BaseService {
 		String scope_old = city.getScope();
 		if (!scope.isEmpty()) {
 			do {
-				city.calcScope(SuUtil.getIcon(scope.getOriginalFilename()));
+				city.calcScope(SuUtil.getFilename(scope.getOriginalFilename()));
 			} while (SuUtil.fileExist(city.getScope()));
 		}
 		try {

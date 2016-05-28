@@ -2,6 +2,7 @@ package com.subang.controller.weixin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -9,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.subang.bean.Result;
 import com.subang.bean.TicketDetail;
 import com.subang.controller.BaseController;
 import com.subang.tool.SuException;
+import com.subang.util.SuUtil;
 import com.subang.util.WebConst;
 
 @Controller("ticketController_weixin")
@@ -36,12 +39,26 @@ public class TicketController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		view.addObject(KEY_INFO_MSG, "兑换成功。");
 		try {
-			userService.addTicket(getUser(session).getId(), ticketTypeid);
+			userService.addTicketByScore(getUser(session).getId(), ticketTypeid);
 		} catch (SuException e) {
 			view.addObject(KEY_INFO_MSG, "兑换失败。" + e.getMessage());
 		}
 		view.setViewName(VIEW_PREFIX + "/addresult");
 		return view;
+	}
+
+	@RequestMapping("/exg")
+	public void exchange(HttpSession session, @RequestParam("codeno") String codeno,
+			HttpServletResponse response) {
+		Result result = new Result();
+		result.setCode(Result.OK);
+		try {
+			userService.addTicketByCode(getUser(session).getId(), codeno);
+		} catch (SuException e) {
+			result.setCode(Result.ERR);
+			result.setMsg(e.getMessage());
+		}
+		SuUtil.outputJson(response, result);
 	}
 
 }

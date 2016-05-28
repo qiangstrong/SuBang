@@ -140,7 +140,7 @@ public class OrderService extends BaseService {
 	}
 
 	// 用户添加订单。 工作人员使用app查询自己的订单，不再给工作人员发送短信。 下单的时候生成支付信息（由数据库触发器保证）
-	public void addOrder(Order order) {
+	public Order addOrder(Order order) {
 
 		order.setState(State.accepted);
 		Addr addr = addrDao.get(order.getAddrid());
@@ -176,6 +176,7 @@ public class OrderService extends BaseService {
 
 		Worker worker = workerDao.get(workerid);
 		PushUtil.send(new String[] { worker.getCellnum() });
+		return order;
 	}
 
 	// 取衣员计价

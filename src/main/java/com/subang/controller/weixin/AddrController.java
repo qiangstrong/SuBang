@@ -89,12 +89,12 @@ public class AddrController extends BaseController {
 			return view;
 		}
 		addr.setUserid(user.getId());
-		userService.addAddr(addr);
+		addr = userService.addAddr(addr);
 		if (categoryid == null) {
 			view.setViewName("redirect:" + INDEX_PAGE + ".html");
 		} else {
 			view.setViewName("redirect:" + WebConst.WEIXIN_PREFIX
-					+ "/order/showadd.html?categoryid=" + categoryid);
+					+ "/order/showadd.html?categoryid=" + categoryid + "&addrid=" + addr.getId());
 		}
 
 		return view;
@@ -112,7 +112,8 @@ public class AddrController extends BaseController {
 		AddrData addrData;
 		if (addr.getRegionid() == null) {
 			addrData = regionService.getAddrDataByUserid(user.getId());
-			// addr.setDetail(addrData.getDetail());
+			// addr.setDetail(addrData.getDetail()); //不自动定位
+			addr.setCellnum(user.getCellnum());
 		} else {
 			addrData = regionService.getAddrDataByRegionid(addr.getRegionid());
 		}

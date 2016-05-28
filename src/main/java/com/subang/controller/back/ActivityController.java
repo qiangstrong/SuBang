@@ -17,10 +17,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.subang.bean.MsgArg;
 import com.subang.bean.PageArg;
 import com.subang.bean.PageState;
+import com.subang.bean.Pagination;
 import com.subang.controller.BaseController;
 import com.subang.domain.Banner;
 import com.subang.domain.Category;
 import com.subang.domain.Rebate;
+import com.subang.domain.TicketCode;
 import com.subang.domain.TicketType;
 import com.subang.tool.BackStack;
 import com.subang.tool.SuException;
@@ -199,6 +201,115 @@ public class ActivityController extends BaseController {
 		if (ticketType.getCategoryid() == null) {
 			ticketType.setCategoryid(0);
 		}
+	}
+
+	/*
+	 * 优惠码
+	 */
+	@RequestMapping("/ticketcode/back")
+	public ModelAndView ticketCodeBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/ticketcode.html");
+		return view;
+	}
+
+	@RequestMapping("/ticketcode")
+	public ModelAndView listTicketCode(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.clear("activity/ticketcode");
+
+		if (!backStack.isTop("activity/ticketcode")) {
+			backStack.push(new PageState("activity/ticketcode", new PageArg()));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
+		PageState pageState = backStack.peek();
+		List<TicketCode> ticketCodes = ticketCodeDao
+				.findAll(pageState.getPageArg().getPagination());
+		view.addObject("ticketCodes", ticketCodes);
+		view.addObject("pagination", pageState.getPageArg().getPagination());
+		view.setViewName(VIEW_PREFIX + "/ticketcode");
+		return view;
+	}
+
+	@RequestMapping("/ticketcode/page")
+	public ModelAndView ticketCodePaginate(HttpSession session, @Valid Pagination pagination,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		if (!result.hasErrors()) {
+			pagination.calc();
+			PageState pageState = getBackStack(session).peek();
+			pageState.getPageArg().setPagination(pagination);
+		}
+
+		view.setViewName("redirect:" + VIEW_PREFIX + "/ticketcode.html");
+		return view;
+	}
+
+	@RequestMapping("/showaddticketcode")
+	public ModelAndView showAddTicketCode(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/addticketcode", null));
+
+		TicketCode ticketCode = new TicketCode();
+		view.addObject("ticketCode", ticketCode);
+
+		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
+		view.addObject("ticketTypes", ticketTypes);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addticketcode"));
+		view.setViewName(VIEW_PREFIX + "/addticketcode");
+		return view;
+	}
+
+	@RequestMapping("/addticketcode")
+	public ModelAndView addTicketCode(HttpServletRequest request, @Valid TicketCode ticketCode,
+			BindingResult result) throws Exception {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+				MultipartFile codenoFile = multipartRequest.getFile("codenoFile");
+				activityService.addTicketCode(ticketCode, codenoFile);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
+		}
+		List<TicketType> ticketTypes = ticketTypeDao.findDetailValidAll();
+		view.addObject("ticketTypes", ticketTypes);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addticketcode"));
+		view.setViewName(VIEW_PREFIX + "/addticketcode");
+		return view;
+	}
+
+	@RequestMapping("/deleteticketcode")
+	public ModelAndView deleteTicketCode(HttpSession session,
+			@RequestParam("ticketCodeids") String ticketCodeids) {
+		ModelAndView view = new ModelAndView();
+		activityService.deleteTicketCodes(SuUtil.getIds(ticketCodeids));
+		setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		view.setViewName("redirect:" + VIEW_PREFIX + "/ticketcode.html");
+		return view;
 	}
 
 	@RequestMapping("/banner/back")

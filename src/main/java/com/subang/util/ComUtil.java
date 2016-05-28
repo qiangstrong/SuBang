@@ -218,8 +218,6 @@ public class ComUtil extends BaseUtil {
 	}
 
 	public static void main(String[] args) {
-		String cellnum = "15502457990";
-		String string = hideCellnum(cellnum);
-		System.out.println(string);
+
 	}
 }

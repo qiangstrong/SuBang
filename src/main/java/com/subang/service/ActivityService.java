@@ -1,6 +1,10 @@
 package com.subang.service;
 
+import java.io.FileInputStream;
 import java.util.List;
+
+import jxl.Sheet;
+import jxl.Workbook;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -9,9 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.subang.domain.Banner;
 import com.subang.domain.Rebate;
+import com.subang.domain.TicketCode;
 import com.subang.domain.TicketType;
 import com.subang.tool.SuException;
 import com.subang.util.SuUtil;
+import com.subang.util.Validator;
+import com.subang.util.WebConst;
 
 @Service
 public class ActivityService extends BaseService {
@@ -24,7 +31,7 @@ public class ActivityService extends BaseService {
 			throw new SuException("未选择图标文件。");
 		}
 		do {
-			ticketType.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+			ticketType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 		} while (SuUtil.fileExist(ticketType.getIcon()));
 		try {
 			ticketTypeDao.save(ticketType);
@@ -38,7 +45,7 @@ public class ActivityService extends BaseService {
 		String icon_old = ticketType.getIcon();
 		if (!icon.isEmpty()) {
 			do {
-				ticketType.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+				ticketType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 			} while (SuUtil.fileExist(ticketType.getIcon()));
 		}
 		try {
@@ -72,6 +79,90 @@ public class ActivityService extends BaseService {
 	}
 
 	/**
+	 * 优惠码
+	 */
+	public void addTicketCode(TicketCode ticketCode, MultipartFile codenoFile) throws SuException,
+			Exception {
+		// 检查截止期
+		TicketType ticketType = ticketTypeDao.get(ticketCode.getTicketTypeid());
+		if (ticketType == null) {
+			throw new SuException("优惠券类型不存在。");
+		}
+		if (ticketType.getDeadline() != null) {
+			if (ticketCode.getEnd().after(ticketType.getDeadline())) {
+				throw new SuException("优惠码的截止期不能晚于优惠券的截止期。");
+			}
+		}
+		if (ticketCode.getStart().after(ticketCode.getEnd())) {
+			throw new SuException("起始日期不能晚于截止日期。");
+		}
+
+		// 临时保存上传的文件
+		if (codenoFile.isEmpty()) {
+			throw new SuException("未选择优惠码文件。");
+		}
+		String codenoPath = null;
+		do {
+			codenoPath = WebConst.TEMP_PATH + SuUtil.getFilename(codenoFile.getOriginalFilename());
+		} while (SuUtil.fileExist(codenoPath));
+		SuUtil.saveMultipartFile(codenoFile, codenoPath);
+
+		// 依次添加优惠码
+		boolean isLenErr = false;
+		boolean isKeyErr = false;
+		FileInputStream fis = null;
+		Workbook workbook = null;
+		ticketCode.setValid(true);
+		try {
+			fis = new FileInputStream(SuUtil.getRealPath(codenoPath));
+			workbook = Workbook.getWorkbook(fis);
+			Sheet sheet = workbook.getSheet(0);
+			int rowNum = sheet.getRows();
+			for (int i = 0; i < rowNum; i++) {
+				String codeno = sheet.getCell(0, i).getContents();
+				if (codeno.length() == 0) {
+					continue;
+				}
+				if (codeno.length() > Validator.CODENO_LENGTH) {
+					isLenErr = true;
+					continue;
+				}
+				ticketCode.setCodeno(codeno);
+				try {
+					ticketCodeDao.save(ticketCode);
+				} catch (DuplicateKeyException e) {
+					isKeyErr = true;
+				}
+			}
+		} finally {
+			if (fis != null) {
+				fis.close();
+			}
+			if (workbook != null) {
+				workbook.close();
+			}
+		}
+
+		// 如果出错，抛出异常
+		String msg = "";
+		if (isLenErr) {
+			msg = "优惠码长度不能超过" + Validator.CELLNUM_LENGTH + "位。";
+		}
+		if (isKeyErr) {
+			msg = msg + "优惠码不能重复。";
+		}
+		if (isLenErr | isKeyErr) {
+			throw new SuException("部分优惠码没有成功添加。" + msg);
+		}
+	}
+
+	public void deleteTicketCodes(List<Integer> ticketCodeids) {
+		for (Integer ticketCodeid : ticketCodeids) {
+			ticketCodeDao.delete(ticketCodeid);
+		}
+	}
+
+	/**
 	 * 横幅
 	 */
 	public void addBanner(Banner banner, MultipartFile icon) throws SuException {
@@ -79,7 +170,7 @@ public class ActivityService extends BaseService {
 			throw new SuException("未选择图标文件。");
 		}
 		do {
-			banner.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+			banner.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 		} while (SuUtil.fileExist(banner.getIcon()));
 		bannerDao.save(banner);
 		SuUtil.saveMultipartFile(icon, banner.getIcon());
@@ -89,7 +180,7 @@ public class ActivityService extends BaseService {
 		String icon_old = banner.getIcon();
 		if (!icon.isEmpty()) {
 			do {
-				banner.calcIcon(SuUtil.getIcon(icon.getOriginalFilename()));
+				banner.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
 			} while (SuUtil.fileExist(banner.getIcon()));
 		}
 		bannerDao.update(banner);
@@ -139,6 +230,7 @@ public class ActivityService extends BaseService {
 	 */
 	public void clear() {
 		ticketDao.deleteInvalid();
+		ticketCodeDao.deleteInvalid();
 		ticketTypeDao.deleteInvalid();
 	}
 }

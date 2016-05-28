@@ -9,6 +9,7 @@ public interface WebConst {
 	String LOG_TAG = "subang";
 	String ALIAS_TYPE = "subang_cellnum";
 	String CITY_NAME = "葫芦岛市"; // 如果无法定位用户的城市，则使用这个城市
+	String TEMP_PATH = "WEB-INF/temp/"; // 临时文件的存放路径
 
 	String KEY_ADMIN_AUTHCODE = "admin_authcode";
 	String KEY_USER_AUTHCODE = "user_authcode";

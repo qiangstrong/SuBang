@@ -137,13 +137,14 @@ public class UserController extends BaseController {
 	@RequestMapping("/addaddr")
 	public void addAddr(Identity identity, @Valid Addr addr, BindingResult result,
 			HttpServletResponse response) {
-		List<Result> results = SuUtil.getResults(result.getFieldErrors());
+		AddrDetail addrDetail = new AddrDetail();
 		if (!result.hasErrors()) {
 			User user = getUser(identity);
 			addr.setUserid(user.getId());
-			userService.addAddr(addr);
+			addr = userService.addAddr(addr);
+			addrDetail = addrDao.getDetail(addr.getId());
 		}
-		SuUtil.outputJson(response, results);
+		SuUtil.outputJson(response, addrDetail); // 返回的数据中，id为null表示添加错误
 	}
 
 	@RequestMapping("/deleteaddr")
@@ -175,7 +176,22 @@ public class UserController extends BaseController {
 		Result result = new Result();
 		result.setCode(Result.OK);
 		try {
-			userService.addTicket(getUser(identity).getId(), ticketTypeid);
+			userService.addTicketByScore(getUser(identity).getId(), ticketTypeid);
+		} catch (SuException e) {
+			result.setCode(Result.ERR);
+			result.setMsg(e.getMessage());
+		}
+		SuUtil.outputJson(response, result);
+	}
+
+	// 用户使用优惠码兑换（exchange）优惠券
+	@RequestMapping("exgticket")
+	public void exgTicket(Identity identity, @RequestParam("codeno") String codeno,
+			HttpServletResponse response) {
+		Result result = new Result();
+		result.setCode(Result.OK);
+		try {
+			userService.addTicketByCode(getUser(identity).getId(), codeno);
 		} catch (SuException e) {
 			result.setCode(Result.ERR);
 			result.setMsg(e.getMessage());

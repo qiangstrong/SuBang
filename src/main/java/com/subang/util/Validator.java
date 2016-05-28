@@ -10,6 +10,7 @@ public class Validator extends BaseUtil {
 	public static final int CELLNUM_LENGTH = 11;
 	public static final int BARCODE_LENGTH = 13;
 	public static final int USERNO_LENGTH = 10;
+	public static final int CODENO_LENGTH = 8; // 优惠码的最大长度
 
 	// 11位数字
 	public static Result validCellnum(String cellnum) {

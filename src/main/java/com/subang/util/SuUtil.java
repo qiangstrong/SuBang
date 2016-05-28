@@ -206,8 +206,8 @@ public class SuUtil extends BaseUtil {
 		return ComUtil.getRandomStr(WebConst.AUTHCODE_LENGTH);
 	}
 
-	// 计算管理员上传图片的文件名。日期+固定位数的随机字符串+上传文件的后缀
-	public static String getIcon(String originalFilename) {
+	// 计算管理员上传的文件名。日期+固定位数的随机字符串+上传文件的后缀
+	public static String getFilename(String originalFilename) {
 		String no_date = ComUtil.getOrdernoFormat().format(new Date());
 		return no_date + ComUtil.getRandomStr(WebConst.ICON_RANDOM_LENGTH)
 				+ ComUtil.getSuffix(originalFilename);

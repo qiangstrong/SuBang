@@ -16,7 +16,6 @@ import com.subang.bean.OrderDetail;
 import com.subang.bean.PayArg;
 import com.subang.bean.PrepayResult;
 import com.subang.bean.PrepayResult.Code;
-import com.subang.bean.Result;
 import com.subang.controller.BaseController;
 import com.subang.domain.Clothes;
 import com.subang.domain.History;
@@ -73,13 +72,12 @@ public class OrderController extends BaseController {
 	@RequestMapping("/add")
 	public void add(Identity identity, @Valid Order order, BindingResult result,
 			HttpServletResponse response) {
-		List<Result> results = SuUtil.getResults(result.getFieldErrors());
 		if (!result.hasErrors()) {
 			User user = getUser(identity);
 			order.setUserid(user.getId());
-			orderService.addOrder(order);
+			order = orderService.addOrder(order);
 		}
-		SuUtil.outputJson(response, results);
+		SuUtil.outputJson(response, order);
 	}
 
 	@RequestMapping("/price")
