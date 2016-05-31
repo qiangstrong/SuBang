@@ -23,18 +23,18 @@ public class TicketTypeDao extends BaseDao<TicketType> {
 	}
 
 	public void save(TicketType ticketType) {
-		String sql = "insert into ticket_type_t values(null,?,?,?,?,?,?,?)";
-		Object[] args = { ticketType.getName(), ticketType.getIcon(), ticketType.getMoney(),
-				ticketType.getScore(), ticketType.getDeadline(), ticketType.getComment(),
-				ticketType.getCategoryid() };
+		String sql = "insert into ticket_type_t values(null,?,?,?,?,?,?,?,?)";
+		Object[] args = { ticketType.getName(), ticketType.getIcon(), ticketType.getPoster(),
+				ticketType.getMoney(), ticketType.getScore(), ticketType.getDeadline(),
+				ticketType.getComment(), ticketType.getCategoryid() };
 		jdbcTemplate.update(sql, args);
 	}
 
 	public void update(TicketType ticketType) {
-		String sql = "update ticket_type_t set name=?,icon=?,money=?,score=?,deadline=?,comment=?,categoryid=? where id=?";
-		Object[] args = { ticketType.getName(), ticketType.getIcon(), ticketType.getMoney(),
-				ticketType.getScore(), ticketType.getDeadline(), ticketType.getComment(),
-				ticketType.getCategoryid(), ticketType.getId() };
+		String sql = "update ticket_type_t set name=?, icon=?, poster=?, money=?, score=? ,deadline=?, comment=?, categoryid=? where id=?";
+		Object[] args = { ticketType.getName(), ticketType.getIcon(), ticketType.getPoster(),
+				ticketType.getMoney(), ticketType.getScore(), ticketType.getDeadline(),
+				ticketType.getComment(), ticketType.getCategoryid(), ticketType.getId() };
 		jdbcTemplate.update(sql, args);
 	}
 

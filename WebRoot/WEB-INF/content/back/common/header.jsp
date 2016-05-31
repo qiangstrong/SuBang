@@ -3,6 +3,7 @@
 		<tr>
 			<td align="center"><a href="back/index.html">系统首页</a></td>
 			<td align="center"><a href="back/order/index.html">订单管理</a></td>
+			<td align="center"><a href="back/record/index.html">商城订单</a></td>
 			<td align="center"><a href="back/user/index.html">用户管理</a></td>
 			<td align="center"><a href="back/laundry/index.html">商家管理</a></td>
 			<td align="center"><a href="back/worker/index.html">人员管理</a></td>

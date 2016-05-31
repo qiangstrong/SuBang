@@ -34,19 +34,6 @@ public class TicketController extends BaseController {
 		return view;
 	}
 
-	@RequestMapping("/add")
-	public ModelAndView add(HttpSession session, @RequestParam("tickettypeid") Integer ticketTypeid) {
-		ModelAndView view = new ModelAndView();
-		view.addObject(KEY_INFO_MSG, "兑换成功。");
-		try {
-			userService.addTicketByScore(getUser(session).getId(), ticketTypeid);
-		} catch (SuException e) {
-			view.addObject(KEY_INFO_MSG, "兑换失败。" + e.getMessage());
-		}
-		view.setViewName(VIEW_PREFIX + "/addresult");
-		return view;
-	}
-
 	@RequestMapping("/exg")
 	public void exchange(HttpSession session, @RequestParam("codeno") String codeno,
 			HttpServletResponse response) {

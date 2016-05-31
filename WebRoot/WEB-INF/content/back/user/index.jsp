@@ -85,7 +85,8 @@
 						<th>下单</th>					
 						<th>地址</th>
 						<th>卡券</th>
-						<th>订单</th>						
+						<th>订单</th>		
+						<th>商城订单</th>					
 						<th>充值记录</th>
 						<th>收益记录</th>
 						<th>下级用户</th>
@@ -116,6 +117,9 @@
 							</td>						
 							<td>
 								<a href="back/user/order.html?userid=${user.id}">订单</a>
+							</td>
+							<td>
+								<a href="back/user/record.html?userid=${user.id}">商城订单</a>
 							</td>
 							<td>
 								<a href="back/user/balance.html?userid=${user.id}">余额记录</a>

@@ -16,6 +16,7 @@ public class Pagination {
 		type = WebConst.CUR;
 		pageno = 1;
 		pagenum = 1;
+		recordnum = 0;
 	}
 
 	public Pagination(Integer type, Integer pageno, Integer pagenum, Integer recordnum) {

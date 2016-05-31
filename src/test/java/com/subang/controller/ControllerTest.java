@@ -1,23 +1,16 @@
 package com.subang.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.subang.util.SuUtil;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/test")
-public class ControllerTest extends BaseController  {
-	
+public class ControllerTest extends BaseController {
+
 	@RequestMapping("/index")
-	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		try {
-			throw new Exception("测试。");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void login(@RequestParam(value = "type", required = false) Integer type)
+			throws Exception {
+		System.out.println(type);
 	}
 }

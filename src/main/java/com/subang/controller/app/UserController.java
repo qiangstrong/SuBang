@@ -109,6 +109,13 @@ public class UserController extends BaseController {
 		SuUtil.outputJson(response, result);
 	}
 
+	@RequestMapping("/getaddr")
+	public void getAddr(Identity identity, @RequestParam("addrid") Integer addrid,
+			HttpServletResponse response) {
+		AddrDetail addrDetail = addrDao.getDetail(addrid);
+		SuUtil.outputJson(response, addrDetail);
+	}
+
 	@RequestMapping("/addr")
 	public void listAddr(Identity identity,
 			@RequestParam(value = "filter", required = false) String filter,

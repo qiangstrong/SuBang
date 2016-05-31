@@ -562,4 +562,16 @@ public class UserController extends BaseController {
 		List<Category> categorys = categoryDao.findAll();
 		view.addObject("categorys", categorys);
 	}
+
+	/**
+	 * 商城订单
+	 */
+	@RequestMapping("/record")
+	public ModelAndView listRecord(HttpSession session, @RequestParam("userid") Integer userid) {
+		ModelAndView view = new ModelAndView();
+		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_USERID, userid.toString());
+		setPageArg(session, searchArg);
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/record/index.html");
+		return view;
+	}
 }

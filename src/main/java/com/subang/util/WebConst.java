@@ -80,4 +80,9 @@ public interface WebConst {
 	int EXPIRED_INTERVAL = 60; // 重复通知（微信服务器发送的消息，不包括支付通知）过滤 时效60秒
 
 	int PROM_LAYER = 3;// 推广提成的层级数
+
+	// 积分商城中物品的类型
+	int GOODS_TYPE_ALL = 1;
+	int GOODS_TYPE_VIRTUAL = 1;
+	int GOODS_TYPE_REAL = 1;
 }

@@ -63,6 +63,8 @@ public class UserService extends BaseService {
 		switch (searchArg.getType()) {
 		case WebConst.SEARCH_NULL:
 			users = new ArrayList<User>();
+			pagination.setRecordnum(0);
+			pagination.round();
 			break;
 		case WebConst.SEARCH_ALL:
 			users = userDao.findAll(pagination);
@@ -168,7 +170,7 @@ public class UserService extends BaseService {
 		for (Integer addrid : addrids) {
 			addr = addrDao.get(addrid);
 			user = userDao.get(addr.getUserid());
-			if (orderDao.findNumByAddrid(addrid) == 0) {
+			if (!isAddrRefed(addr.getId())) {
 				addrDao.delete(addrid);
 				if (user.getAddrid() == addrid) {
 					List<Addr> addrs = addrDao.findByUserid(user.getId());
@@ -190,7 +192,7 @@ public class UserService extends BaseService {
 	public void deleteAddr(Integer addrid) {
 		Addr addr = addrDao.get(addrid);
 		User user = userDao.get(addr.getUserid());
-		if (orderDao.findNumByAddrid(addrid) == 0) {
+		if (!isAddrRefed(addr.getId())) {
 			addrDao.delete(addrid);
 		} else {
 			addr.setValid(false);
@@ -205,6 +207,14 @@ public class UserService extends BaseService {
 			}
 			userDao.update(user);
 		}
+	}
+
+	// 地址是否被实体（订单，商城订单）引用
+	public boolean isAddrRefed(Integer addrid) {
+		if (orderDao.findNumByAddrid(addrid) == 0 && recordDao.findNumByAddrid(addrid) == 0) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

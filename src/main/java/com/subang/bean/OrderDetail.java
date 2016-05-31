@@ -125,6 +125,10 @@ public class OrderDetail extends Order implements Filter {
 		this.payType = payType;
 	}
 
+	public void setPayType(PayType payType) {
+		this.payType = payType.ordinal();
+	}
+
 	public Double getMoneyTicket() {
 		return moneyTicket;
 	}

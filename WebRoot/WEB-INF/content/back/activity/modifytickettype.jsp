@@ -55,6 +55,15 @@
 							<td>图标：</td>
 							<td><input type="file" name="iconImg"/></td>
 						</tr>
+						<form:hidden path="poster"/>
+						<tr>
+							<td>大图标：</td>
+							<td><img  src="${ticketType.poster}" /></td>
+						</tr>
+						<tr>
+							<td>大图标：</td>
+							<td><input type="file" name="posterImg"/></td>
+						</tr>
 						<tr>
 							<td></td>
 							<td><form:errors path="money" /></td>

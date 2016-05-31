@@ -31,9 +31,7 @@ public class RegionService extends BaseService {
 		if (scope.isEmpty()) {
 			throw new SuException("未选择服务范围文件。");
 		}
-		do {
-			city.calcScope(SuUtil.getFilename(scope.getOriginalFilename()));
-		} while (SuUtil.fileExist(city.getScope()));
+		city.calcScope(scope.getOriginalFilename());
 		try {
 			cityDao.save(city);
 		} catch (DuplicateKeyException e) {
@@ -45,9 +43,7 @@ public class RegionService extends BaseService {
 	public void modifyCity(City city, MultipartFile scope) throws SuException {
 		String scope_old = city.getScope();
 		if (!scope.isEmpty()) {
-			do {
-				city.calcScope(SuUtil.getFilename(scope.getOriginalFilename()));
-			} while (SuUtil.fileExist(city.getScope()));
+			city.calcScope(scope.getOriginalFilename());
 		}
 		try {
 			cityDao.update(city);

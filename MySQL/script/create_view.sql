@@ -37,6 +37,13 @@ from ticket_t,ticket_typedetail_v
 where ticket_t.ticket_typeid=ticket_typedetail_v.id
 );
 
+drop view if exists recorddetail_v;
+create view recorddetail_v
+as( select record_t.*, goods_t.name, goods_t.icon, goods_t.money, goods_t.score, payment_t.type `pay_type`
+from record_t, goods_t, payment_t
+where record_t.goodsid=goods_t.id and record_t.orderno=payment_t.orderno
+);
+
 
 
 

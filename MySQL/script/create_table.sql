@@ -112,10 +112,11 @@ create table `ticket_type_t`(
 	`id` int auto_increment primary key,
     `name` char(10) not null unique,
     `icon` char(100) not null,
-    `money` double not null,				#卡券的金额
+	`poster` char(100) not null,			#详情页面展示的海报
+    `money` double not null,				#卡券可以抵扣的金额
     `score` int not null,					#兑换这张卡券所需的积分
     `deadline` datetime,					#过期时间，过期后的卡券作废
-    `comment` varchar(1000),				#备注（卡券的使用规则等）
+    `comment` varchar(1000) not null,		#备注（卡券的使用规则等）
 	`categoryid` int,						#卡券所属的类别
     foreign key (`categoryid`) references `category_t`(`id`) on delete cascade
 );
@@ -130,6 +131,19 @@ create table `ticket_code_t`(
     `end` datetime not null,				#有效期，截止日期
     `ticket_typeid` int not null,			#优惠码对应的优惠券类型
     foreign key (`ticket_typeid`) references `ticket_type_t`(`id`) on delete restrict
+);
+
+#商品表
+drop table if exists goods_t;
+create table `goods_t`(
+	`id` int auto_increment primary key,
+    `name` char(10) not null unique,
+    `icon` char(100) not null,
+    `poster` char(100) not null,			#详情页面展示的海报
+    `money` double not null,				#兑换商品所需的金额
+    `score` int not null,					#兑换商品所需的积分
+    `count` int not null,					#商品的数量
+    `comment` varchar(1000) not null		#备注（商品的使用规则等）	
 );
 
 #商家（洗衣店）表
@@ -231,7 +245,7 @@ create table `order_t`(
     `addrid` int not null,
     `workerid` int not null,
     `laundryid` int,    
-    foreign key (`categoryid`) references `category_t`(`id`) on delete cascade,
+    foreign key (`categoryid`) references `category_t`(`id`) on delete restrict,
     foreign key(`userid`) references `user_t`(`id`) on delete cascade,
     foreign key(`addrid`) references `addr_t`(`id`) on delete cascade,
     foreign key(`workerid`) references `worker_t`(`id`) on delete restrict,
@@ -244,11 +258,28 @@ create table `balance_t`(
 	`id` int auto_Increment primary key,	
     `type` tinyint,							#类型：余额，收益
     `orderno` char(14) not null unique,		#订单号
-    `state` tinyint not null,				#订单状态
+    `state` tinyint not null,				#订单状态：accepted，paid
     `money` double not null,				#订单金额
     `time` datetime,						#订单完成支付的时间
     `userid` int not null,
     foreign key(`userid`) references `user_t`(`id`) on delete cascade
+);
+
+#商品的兑换记录。优惠券不产生兑换记录
+drop table if exists record_t;
+create table `record_t`(
+	`id` int auto_Increment primary key,	
+    `orderno` char(14) not null unique,		#订单号
+    `state` tinyint not null,				#订单状态:paid, delivered
+    `time` datetime,						#订单完成支付的时间
+    `goodsid` int not null,
+    `userid` int not null,
+    `addrid` int not null,
+    `workerid` int not null,
+    foreign key(`goodsid`) references `goods_t`(`id`) on delete restrict,
+    foreign key(`userid`) references `user_t`(`id`) on delete cascade,
+    foreign key(`addrid`) references `addr_t`(`id`) on delete cascade,
+    foreign key(`workerid`) references `worker_t`(`id`) on delete restrict
 );
 
 #支付表，记录订单的支付信息和特定于api的参数

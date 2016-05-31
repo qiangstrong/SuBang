@@ -1,6 +1,7 @@
 package com.subang.util;
 
 import com.subang.domain.Notice.Code;
+import com.subang.domain.Order.OrderType;
 import com.umeng.push.AndroidNotification;
 import com.umeng.push.PushClient;
 import com.umeng.push.android.AndroidCustomizedcast;
@@ -15,17 +16,25 @@ public class PushUtil extends BaseUtil {
 		appsecret = SuUtil.getAppProperty("appsecret_umeng_worker");
 	}
 
-	public static boolean send(String[] cellnums) {
+	public static boolean send(String[] cellnums, OrderType orderType) {
 		if (cellnums.length == 0) {
 			return true;
 		}
+
+		String text;
+		if (orderType == OrderType.record) {
+			text = "您的商城订单有变动，请注意查看。";
+		} else {
+			text = "您的订单有变动，请注意查看。";
+		}
+
 		boolean result = false;
 		try {
 			AndroidCustomizedcast customizedcast = new AndroidCustomizedcast(appkey, appsecret);
 			customizedcast.setAlias(toAlias(cellnums), WebConst.ALIAS_TYPE);
-			customizedcast.setTicker("您的订单有变动，请注意查看。");
+			customizedcast.setTicker(text);
 			customizedcast.setTitle("订单变动");
-			customizedcast.setText("您的订单有变动，请注意查看。");
+			customizedcast.setText(text);
 			customizedcast.goAppAfterOpen();
 			customizedcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
 			customizedcast.setProductionMode();
@@ -52,10 +61,7 @@ public class PushUtil extends BaseUtil {
 	}
 
 	public static void main(String[] args) {
-		appkey = "5662e474e0f55a71d40027d5";
-		appsecret = "m86jzw7ou4oy3pupoiiz51usmkz4nzhe";
-		boolean result = send(new String[] { "15502457990" });
-		System.out.println(result);
+
 	}
 
 }

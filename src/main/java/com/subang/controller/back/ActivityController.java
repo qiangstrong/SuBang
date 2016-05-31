@@ -21,6 +21,7 @@ import com.subang.bean.Pagination;
 import com.subang.controller.BaseController;
 import com.subang.domain.Banner;
 import com.subang.domain.Category;
+import com.subang.domain.Goods;
 import com.subang.domain.Rebate;
 import com.subang.domain.TicketCode;
 import com.subang.domain.TicketType;
@@ -99,7 +100,8 @@ public class ActivityController extends BaseController {
 			try {
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 				MultipartFile icon = multipartRequest.getFile("iconImg");
-				activityService.addTicketType(ticketType, icon);
+				MultipartFile poster = multipartRequest.getFile("posterImg");
+				activityService.addTicketType(ticketType, icon, poster);
 			} catch (SuException e) {
 				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
 				isException = true;
@@ -172,7 +174,8 @@ public class ActivityController extends BaseController {
 			try {
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 				MultipartFile icon = multipartRequest.getFile("iconImg");
-				activityService.modifyTicketType(ticketType, icon);
+				MultipartFile poster = multipartRequest.getFile("posterImg");
+				activityService.modifyTicketType(ticketType, icon, poster);
 			} catch (SuException e) {
 				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
 				isException = true;
@@ -201,6 +204,149 @@ public class ActivityController extends BaseController {
 		if (ticketType.getCategoryid() == null) {
 			ticketType.setCategoryid(0);
 		}
+	}
+
+	/**
+	 * 商品
+	 */
+	@RequestMapping("/goods/back")
+	public ModelAndView goodsBack(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.pop();
+		view.setViewName("redirect:" + VIEW_PREFIX + "/goods.html");
+		return view;
+	}
+
+	@RequestMapping("/goods")
+	public ModelAndView listGoods(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.clear("activity/goods");
+
+		if (!backStack.isTop("activity/goods")) {
+			backStack.push(new PageState("activity/goods", null));
+		}
+		PageArg pageArg = getPageArg(session);
+		if (pageArg != null) {
+			// 此页面不接受para类型的参数
+			switch (pageArg.getArgType()) {
+			case msg:
+				MsgArg msgArg = (MsgArg) pageArg;
+				view.addObject(msgArg.getKey(), msgArg.getMsg());
+				break;
+			}
+		}
+
+		List<Goods> goodss = goodsDao.findAll();
+		view.addObject("goodss", goodss);
+		view.setViewName(VIEW_PREFIX + "/goods");
+		return view;
+	}
+
+	@RequestMapping("/showaddgoods")
+	public ModelAndView showAddGoods(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/addgoods", null));
+
+		Goods goods = new Goods();
+		view.addObject("goods", goods);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addgoods"));
+		view.setViewName(VIEW_PREFIX + "/addgoods");
+		return view;
+	}
+
+	@RequestMapping("/addgoods")
+	public ModelAndView addGoods(HttpServletRequest request, @Valid Goods goods,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
+		if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+				MultipartFile icon = multipartRequest.getFile("iconImg");
+				MultipartFile poster = multipartRequest.getFile("posterImg");
+				activityService.addGoods(goods, icon, poster);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
+		}
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/addgoods"));
+		view.setViewName(VIEW_PREFIX + "/addgoods");
+		return view;
+	}
+
+	@RequestMapping("/deletegoods")
+	public ModelAndView deleteGoods(HttpSession session, @RequestParam("goodsids") String goodsids) {
+		ModelAndView view = new ModelAndView();
+		boolean isException = false;
+		try {
+			activityService.deleteGoodss(SuUtil.getIds(goodsids));
+		} catch (SuException e) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除失败。" + e.getMessage()));
+			isException = true;
+		}
+		if (!isException) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "删除成功。"));
+		}
+		view.setViewName("redirect:" + VIEW_PREFIX + "/goods.html");
+		return view;
+	}
+
+	@RequestMapping("/showmodifygoods")
+	public ModelAndView showModifyGoods(HttpSession session,
+			@RequestParam("goodsid") Integer goodsid) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(session);
+		backStack.push(new PageState("activity/modifygoods", null));
+
+		Goods goods = goodsDao.get(goodsid);
+		if (goods == null) {
+			setPageArg(session, new MsgArg(KEY_INFO_MSG, "修改失败。数据不存在。"));
+			view.setViewName("redirect:" + backStack.getBackLink("activity/modifygoods"));
+			return view;
+		}
+		view.addObject("goods", goods);
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifygoods"));
+		view.setViewName(VIEW_PREFIX + "/modifygoods");
+		return view;
+	}
+
+	@RequestMapping("/modifygoods")
+	public ModelAndView modifyGoods(HttpServletRequest request, @Valid Goods goods,
+			BindingResult result) {
+		ModelAndView view = new ModelAndView();
+		BackStack backStack = getBackStack(request.getSession());
+		if (goods.getId() == null) {
+			view.addObject(KEY_INFO_MSG, "修改失败。发生错误。");
+		} else if (!result.hasErrors()) {
+			boolean isException = false;
+			try {
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+				MultipartFile icon = multipartRequest.getFile("iconImg");
+				MultipartFile poster = multipartRequest.getFile("posterImg");
+				activityService.modifyGoods(goods, icon, poster);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "修改失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "修改成功。");
+			}
+		}
+
+		view.addObject(KEY_BACK_LINK, backStack.getBackLink("activity/modifygoods"));
+		view.setViewName(VIEW_PREFIX + "/modifygoods");
+		return view;
 	}
 
 	/*

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.ComUtil;
+import com.subang.util.SuUtil;
+import com.subang.util.WebConst;
 
 public class Snapshot implements Filter, Serializable {
 
@@ -42,8 +45,11 @@ public class Snapshot implements Filter, Serializable {
 		this.icon = icon;
 	}
 
-	public void calcIcon(String icon) {
-		this.icon = iconPath + icon;
+	public void calcIcon(String orderno, String iconName) {
+		do {
+			icon = iconPath + orderno + ComUtil.getRandomStr(WebConst.ICON_RANDOM_LENGTH)
+					+ ComUtil.getSuffix(iconName);
+		} while (SuUtil.fileExist(icon));
 	}
 
 	public Integer getClothesid() {

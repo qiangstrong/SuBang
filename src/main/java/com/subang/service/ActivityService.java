@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.subang.domain.Banner;
+import com.subang.domain.Goods;
 import com.subang.domain.Rebate;
 import com.subang.domain.TicketCode;
 import com.subang.domain.TicketType;
@@ -26,37 +27,46 @@ public class ActivityService extends BaseService {
 	/**
 	 * 优惠券类型
 	 */
-	public void addTicketType(TicketType ticketType, MultipartFile icon) throws SuException {
-		if (icon.isEmpty()) {
+	public void addTicketType(TicketType ticketType, MultipartFile icon, MultipartFile poster)
+			throws SuException {
+		if (icon.isEmpty() || poster.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
-		do {
-			ticketType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-		} while (SuUtil.fileExist(ticketType.getIcon()));
+		ticketType.calcIcon(icon.getOriginalFilename());
+		ticketType.calcPoster(poster.getOriginalFilename());
 		try {
 			ticketTypeDao.save(ticketType);
 		} catch (DuplicateKeyException e) {
 			throw new SuException("优惠券名称不能相同。");
 		}
 		SuUtil.saveMultipartFile(icon, ticketType.getIcon());
+		SuUtil.saveMultipartFile(poster, ticketType.getPoster());
 	}
 
-	public void modifyTicketType(TicketType ticketType, MultipartFile icon) throws SuException {
+	public void modifyTicketType(TicketType ticketType, MultipartFile icon, MultipartFile poster)
+			throws SuException {
 		String icon_old = ticketType.getIcon();
+		String poster_old = ticketType.getPoster();
 		if (!icon.isEmpty()) {
-			do {
-				ticketType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-			} while (SuUtil.fileExist(ticketType.getIcon()));
+			ticketType.calcIcon(icon.getOriginalFilename());
+		}
+		if (!poster.isEmpty()) {
+			ticketType.calcPoster(poster.getOriginalFilename());
 		}
 		try {
 			ticketTypeDao.update(ticketType);
 		} catch (DuplicateKeyException e) {
-			ticketType.setIcon(icon_old);
+			ticketType.setIcon(icon_old); // 在发生异常时，不改变上层传入的数据
+			ticketType.setPoster(poster_old);
 			throw new SuException("优惠券名称不能相同。");
 		}
 		if (!icon.isEmpty()) {
 			SuUtil.deleteFile(icon_old);
 			SuUtil.saveMultipartFile(icon, ticketType.getIcon());
+		}
+		if (!poster.isEmpty()) {
+			SuUtil.deleteFile(poster_old);
+			SuUtil.saveMultipartFile(poster, ticketType.getPoster());
 		}
 	}
 
@@ -68,6 +78,7 @@ public class ActivityService extends BaseService {
 				ticketTypeDao.delete(ticketTypeid);
 				if (ticketType != null) {
 					SuUtil.deleteFile(ticketType.getIcon());
+					SuUtil.deleteFile(ticketType.getPoster());
 				}
 			} catch (DataIntegrityViolationException e) {
 				isAll = false;
@@ -163,15 +174,77 @@ public class ActivityService extends BaseService {
 	}
 
 	/**
+	 * 商品
+	 */
+	public void addGoods(Goods goods, MultipartFile icon, MultipartFile poster) throws SuException {
+		if (icon.isEmpty() || poster.isEmpty()) {
+			throw new SuException("未选择图标文件。");
+		}
+		goods.calcIcon(icon.getOriginalFilename());
+		goods.calcPoster(poster.getOriginalFilename());
+		try {
+			goodsDao.save(goods);
+		} catch (DuplicateKeyException e) {
+			throw new SuException("商品名称不能相同。");
+		}
+		SuUtil.saveMultipartFile(icon, goods.getIcon());
+		SuUtil.saveMultipartFile(poster, goods.getPoster());
+	}
+
+	public void modifyGoods(Goods goods, MultipartFile icon, MultipartFile poster)
+			throws SuException {
+		String icon_old = goods.getIcon();
+		String poster_old = goods.getPoster();
+		if (!icon.isEmpty()) {
+			goods.calcIcon(icon.getOriginalFilename());
+		}
+		if (!poster.isEmpty()) {
+			goods.calcPoster(poster.getOriginalFilename());
+		}
+		try {
+			goodsDao.update(goods);
+		} catch (DuplicateKeyException e) {
+			goods.setIcon(icon_old); // 在发生异常时，不改变上层传入的数据
+			goods.setPoster(poster_old);
+			throw new SuException("商品名称不能相同。");
+		}
+		if (!icon.isEmpty()) {
+			SuUtil.deleteFile(icon_old);
+			SuUtil.saveMultipartFile(icon, goods.getIcon());
+		}
+		if (!poster.isEmpty()) {
+			SuUtil.deleteFile(poster_old);
+			SuUtil.saveMultipartFile(poster, goods.getPoster());
+		}
+	}
+
+	public void deleteGoodss(List<Integer> goodsids) throws SuException {
+		boolean isAll = true;
+		for (Integer goodsid : goodsids) {
+			try {
+				Goods goods = goodsDao.get(goodsid);
+				goodsDao.delete(goodsid);
+				if (goods != null) {
+					SuUtil.deleteFile(goods.getIcon());
+					SuUtil.deleteFile(goods.getPoster());
+				}
+			} catch (DataIntegrityViolationException e) {
+				isAll = false;
+			}
+		}
+		if (!isAll) {
+			throw new SuException("部分商品没有成功删除。可能是用户的商城订单引用了这些商品。");
+		}
+	}
+
+	/**
 	 * 横幅
 	 */
 	public void addBanner(Banner banner, MultipartFile icon) throws SuException {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
-		do {
-			banner.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-		} while (SuUtil.fileExist(banner.getIcon()));
+		banner.calcIcon(icon.getOriginalFilename());
 		bannerDao.save(banner);
 		SuUtil.saveMultipartFile(icon, banner.getIcon());
 	}
@@ -179,9 +252,7 @@ public class ActivityService extends BaseService {
 	public void modifyBanner(Banner banner, MultipartFile icon) throws SuException {
 		String icon_old = banner.getIcon();
 		if (!icon.isEmpty()) {
-			do {
-				banner.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-			} while (SuUtil.fileExist(banner.getIcon()));
+			banner.calcIcon(icon.getOriginalFilename());
 		}
 		bannerDao.update(banner);
 		if (!icon.isEmpty()) {

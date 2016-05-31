@@ -21,6 +21,7 @@ import com.subang.dao.CostDao;
 import com.subang.dao.DistrictDao;
 import com.subang.dao.FaqDao;
 import com.subang.dao.FeedbackDao;
+import com.subang.dao.GoodsDao;
 import com.subang.dao.HistoryDao;
 import com.subang.dao.InfoDao;
 import com.subang.dao.LaundryDao;
@@ -30,6 +31,7 @@ import com.subang.dao.OrderDao;
 import com.subang.dao.PaymentDao;
 import com.subang.dao.PriceDao;
 import com.subang.dao.RebateDao;
+import com.subang.dao.RecordDao;
 import com.subang.dao.RegionDao;
 import com.subang.dao.ServiceDao;
 import com.subang.dao.SnapshotDao;
@@ -48,6 +50,7 @@ import com.subang.service.LaundryService;
 import com.subang.service.MiscService;
 import com.subang.service.OrderService;
 import com.subang.service.PriceService;
+import com.subang.service.RecordService;
 import com.subang.service.RegionService;
 import com.subang.service.RoleService;
 import com.subang.service.StatService;
@@ -70,8 +73,6 @@ public class BaseController {
 	@Autowired
 	protected BannerDao bannerDao;
 	@Autowired
-	protected RebateDao rebateDao;
-	@Autowired
 	protected CategoryDao categoryDao;
 	@Autowired
 	protected CityDao cityDao;
@@ -90,6 +91,8 @@ public class BaseController {
 	@Autowired
 	protected FeedbackDao feedbackDao;
 	@Autowired
+	protected GoodsDao goodsDao;
+	@Autowired
 	protected HistoryDao historyDao;
 	@Autowired
 	protected InfoDao infoDao;
@@ -105,6 +108,10 @@ public class BaseController {
 	protected PaymentDao paymentDao;
 	@Autowired
 	protected PriceDao priceDao;
+	@Autowired
+	protected RebateDao rebateDao;
+	@Autowired
+	protected RecordDao recordDao;
 	@Autowired
 	protected RegionDao regionDao;
 	@Autowired
@@ -131,9 +138,13 @@ public class BaseController {
 	@Autowired
 	protected LaundryService laundryService;
 	@Autowired
+	protected MiscService miscService;
+	@Autowired
 	protected OrderService orderService;
 	@Autowired
 	protected PriceService priceService;
+	@Autowired
+	protected RecordService recordService;
 	@Autowired
 	protected RegionService regionService;
 	@Autowired
@@ -144,8 +155,6 @@ public class BaseController {
 	protected UserService userService;
 	@Autowired
 	protected WorkerService workerService;
-	@Autowired
-	protected MiscService miscService;
 
 	protected static final String KEY_ADMIN = "admin";
 	protected static final String KEY_USER = "user";

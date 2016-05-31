@@ -171,14 +171,14 @@ public class OrderDao extends BaseDao<Order> {
 	}
 
 	public List<OrderDetail> findDetail(SearchArg searchArg, Pagination pagination) {
-		String sql1 = "call count0(?,?,?,?,?)";
+		String sql1 = "call countOrder(?,?,?,?,?)";
 		Object[] args1 = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
 				searchArg.getStartTime(), searchArg.getEndTime() };
 		int recordnum = jdbcTemplate.queryForInt(sql1, args1);
 		pagination.setRecordnum(recordnum);
 		pagination.round();
 
-		String sql = "call find(?,?,?,?,?,?,?)";
+		String sql = "call findOrder(?,?,?,?,?,?,?)";
 		Object[] args = { searchArg.getType(), searchArg.getUpperid(), searchArg.getArg(),
 				searchArg.getStartTime(), searchArg.getEndTime(), pagination.getOffset(),
 				WebConst.PAGE_SIZE };
@@ -243,18 +243,24 @@ public class OrderDao extends BaseDao<Order> {
 		return orderDetails;
 	}
 
-	public List<OrderDetail> findDetailByUseridAndState(Integer userid, State state) {
-		String sql = "select * from orderdetail_v where userid=? and state=? limit "
-				+ WebConst.ORDER_NUM;
+	public List<OrderDetail> findDetailByUseridAndState(Integer userid, State state,
+			boolean limitNum) {
+		String sql = "select * from orderdetail_v where userid=? and state=?";
+		if (limitNum) {
+			sql += " limit " + WebConst.ORDER_NUM;
+		}
 		Object[] args = { userid, state.ordinal() };
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));
 		return orderDetails;
 	}
 
-	public List<OrderDetail> findDetailByWorkeridAndState(Integer workerid, State state) {
-		String sql = "select * from orderdetail_v where workerid=? and state=? limit "
-				+ WebConst.ORDER_NUM;
+	public List<OrderDetail> findDetailByWorkeridAndState(Integer workerid, State state,
+			boolean limitNum) {
+		String sql = "select * from orderdetail_v where workerid=? and state=?";
+		if (limitNum) {
+			sql += " limit " + WebConst.ORDER_NUM;
+		}
 		Object[] args = { workerid, state.ordinal() };
 		List<OrderDetail> orderDetails = jdbcTemplate.query(sql, args,
 				new BeanPropertyRowMapper<OrderDetail>(OrderDetail.class));

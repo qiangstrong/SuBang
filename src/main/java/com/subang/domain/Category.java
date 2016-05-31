@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.SuUtil;
 
 public class Category implements Filter, Serializable {
 
@@ -61,8 +62,10 @@ public class Category implements Filter, Serializable {
 		this.icon = icon;
 	}
 
-	public void calcIcon(String icon) {
-		this.icon = iconPath + icon;
+	public void calcIcon(String iconName) {
+		do {
+			icon = iconPath + SuUtil.getFilename(iconName);
+		} while (SuUtil.fileExist(icon));
 	}
 
 	public String getComment() {

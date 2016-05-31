@@ -28,9 +28,7 @@ public class PriceService extends BaseService {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
-		do {
-			category.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-		} while (SuUtil.fileExist(category.getIcon()));
+		category.calcIcon(icon.getOriginalFilename());
 		try {
 			categoryDao.save(category);
 		} catch (DuplicateKeyException e) {
@@ -42,9 +40,7 @@ public class PriceService extends BaseService {
 	public void modifyCategory(Category category, MultipartFile icon) throws SuException {
 		String icon_old = category.getIcon();
 		if (!icon.isEmpty()) {
-			do {
-				category.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-			} while (SuUtil.fileExist(category.getIcon()));
+			category.calcIcon(icon.getOriginalFilename());
 		}
 		try {
 			categoryDao.update(category);
@@ -72,7 +68,7 @@ public class PriceService extends BaseService {
 			}
 		}
 		if (!isAll) {
-			throw new SuException("部分类别没有成功删除。可能是用户的优惠券引用了这些类别。");
+			throw new SuException("部分类别没有成功删除。可能是用户的优惠券或订单引用了这些类别。");
 		}
 	}
 
@@ -124,9 +120,7 @@ public class PriceService extends BaseService {
 		if (icon.isEmpty()) {
 			throw new SuException("未选择图标文件。");
 		}
-		do {
-			clothesType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-		} while (SuUtil.fileExist(clothesType.getIcon()));
+		clothesType.calcIcon(icon.getOriginalFilename());
 		try {
 			clothesTypeDao.save(clothesType);
 		} catch (DuplicateKeyException e) {
@@ -138,9 +132,7 @@ public class PriceService extends BaseService {
 	public void modifyClothesType(ClothesType clothesType, MultipartFile icon) throws SuException {
 		String icon_old = clothesType.getIcon();
 		if (!icon.isEmpty()) {
-			do {
-				clothesType.calcIcon(SuUtil.getFilename(icon.getOriginalFilename()));
-			} while (SuUtil.fileExist(clothesType.getIcon()));
+			clothesType.calcIcon(icon.getOriginalFilename());
 		}
 		try {
 			clothesTypeDao.update(clothesType);

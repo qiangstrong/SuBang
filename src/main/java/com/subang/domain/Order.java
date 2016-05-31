@@ -17,7 +17,7 @@ public class Order implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum OrderType {
-		order, balance
+		order, balance, record
 	}
 
 	public enum State {
@@ -25,6 +25,40 @@ public class Order implements Filter, Serializable {
 
 		public static State toState(String arg) {
 			return State.values()[new Integer(arg)];
+		}
+
+		public static String toStateDes(State state) {
+			String description = null;
+			if (state == null) {
+				return null;
+			}
+			switch (state) {
+			case accepted:
+				description = "已接受";
+				break;
+			case priced:
+				description = "已计价";
+				break;
+			case paid:
+				description = "已支付";
+				break;
+			case fetched:
+				description = "已取走";
+				break;
+			case checked:
+				description = "已洗衣";
+				break;
+			case delivered:
+				description = "已送达";
+				break;
+			case remarked:
+				description = "已评价";
+				break;
+			case canceled:
+				description = "已取消";
+				break;
+			}
+			return description;
 		}
 	}
 
@@ -109,37 +143,7 @@ public class Order implements Filter, Serializable {
 	}
 
 	public String getStateDes() {
-		String description = null;
-		if (state == null) {
-			return null;
-		}
-		switch (getStateEnum()) {
-		case accepted:
-			description = "已接受";
-			break;
-		case priced:
-			description = "已计价";
-			break;
-		case paid:
-			description = "已支付";
-			break;
-		case fetched:
-			description = "已取走";
-			break;
-		case checked:
-			description = "已洗衣";
-			break;
-		case delivered:
-			description = "已送达";
-			break;
-		case remarked:
-			description = "已评价";
-			break;
-		case canceled:
-			description = "已取消";
-			break;
-		}
-		return description;
+		return State.toStateDes(getStateEnum());
 	}
 
 	public void setState(Integer state) {

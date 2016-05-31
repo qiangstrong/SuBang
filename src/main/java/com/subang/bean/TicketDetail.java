@@ -15,10 +15,10 @@ public class TicketDetail extends TicketType implements Filter {
 	public TicketDetail() {
 	}
 
-	public TicketDetail(Integer id, String name, String icon, Double money, Integer score,
-			Timestamp deadline, String comment, Integer categoryid, String categoryname,
-			Integer userid, Integer ticketTypeid) {
-		super(id, name, icon, money, score, deadline, comment, categoryid, categoryname);
+	public TicketDetail(Integer id, String name, String icon, String poster, Double money,
+			Integer score, Timestamp deadline, String comment, Integer categoryid,
+			String categoryname, Integer userid, Integer ticketTypeid) {
+		super(id, name, icon, poster, money, score, deadline, comment, categoryid, categoryname);
 		this.userid = userid;
 		this.ticketTypeid = ticketTypeid;
 	}

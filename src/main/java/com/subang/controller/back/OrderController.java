@@ -617,10 +617,18 @@ public class OrderController extends BaseController {
 		ModelAndView view = new ModelAndView();
 		BackStack backStack = getBackStack(request.getSession());
 		if (!result.hasErrors()) {
-			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-			MultipartFile icon = multipartRequest.getFile("iconImg");
-			orderService.addSnapshot(snapshot, icon);
-			view.addObject(KEY_INFO_MSG, "添加成功。");
+			boolean isException = false;
+			try {
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+				MultipartFile icon = multipartRequest.getFile("iconImg");
+				orderService.addSnapshot(snapshot, icon);
+			} catch (SuException e) {
+				view.addObject(KEY_INFO_MSG, "添加失败。" + e.getMessage());
+				isException = true;
+			}
+			if (!isException) {
+				view.addObject(KEY_INFO_MSG, "添加成功。");
+			}
 		}
 
 		view.addObject(KEY_BACK_LINK, backStack.getBackLink("order/addsnapshot"));

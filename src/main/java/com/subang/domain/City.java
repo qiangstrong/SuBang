@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.subang.domain.face.Filter;
+import com.subang.util.SuUtil;
 
 public class City implements Filter, Serializable {
 
@@ -58,8 +59,10 @@ public class City implements Filter, Serializable {
 		this.scope = scope;
 	}
 
-	public void calcScope(String scope) {
-		this.scope = scopePath + scope;
+	public void calcScope(String scopeName) {
+		do {
+			scope = scopePath + SuUtil.getFilename(scopeName);
+		} while (SuUtil.fileExist(scope));
 	}
 
 	public String getScopeText() {

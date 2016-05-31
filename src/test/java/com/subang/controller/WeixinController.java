@@ -21,7 +21,7 @@ public class WeixinController extends BaseController {
 
 	@RequestMapping("/login")
 	public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		User user = userDao.get(21);
+		User user = userDao.get(23);
 		setUser(request.getSession(), user);
 		SuUtil.outputStreamWrite(response.getOutputStream(), "登录成功。");
 	}

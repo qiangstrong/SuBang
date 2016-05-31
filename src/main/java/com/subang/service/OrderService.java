@@ -64,6 +64,8 @@ public class OrderService extends BaseService {
 		switch (searchArg.getType()) {
 		case WebConst.SEARCH_NULL:
 			orderDetails = new ArrayList<OrderDetail>();
+			pagination.setRecordnum(0);
+			pagination.round();
 			break;
 		case WebConst.SEARCH_ALL:
 		case WebConst.SEARCH_ORDER_STATE:
@@ -89,19 +91,20 @@ public class OrderService extends BaseService {
 		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 		switch (stateType) {
 		case WebConst.ORDER_STATE_UNDONE:
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.accepted));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.priced));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.paid));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.fetched));
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.checked));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.accepted, false));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.priced, false));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.paid, false));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.fetched, false));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.checked, false));
 			break;
 		case WebConst.ORDER_STATE_DONE:
-			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.delivered));
+			orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.delivered, true));
 			if (orderDetails.size() < WebConst.ORDER_NUM) {
-				orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.remarked));
+				orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.remarked,
+						true));
 				if (orderDetails.size() < WebConst.ORDER_NUM) {
-					orderDetails
-							.addAll(orderDao.findDetailByUseridAndState(userid, State.canceled));
+					orderDetails.addAll(orderDao.findDetailByUseridAndState(userid, State.canceled,
+							true));
 				}
 			}
 			if (orderDetails.size() > WebConst.ORDER_NUM) {
@@ -117,19 +120,24 @@ public class OrderService extends BaseService {
 		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 		switch (stateType) {
 		case WebConst.ORDER_STATE_FETCH:
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.accepted));
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.priced));
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.paid));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.accepted,
+					false));
+			orderDetails.addAll(orderDao
+					.findDetailByWorkeridAndState(workerid, State.priced, false));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.paid, false));
 			break;
 		case WebConst.ORDER_STATE_DELIVER:
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.fetched));
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.checked));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.fetched,
+					false));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.checked,
+					false));
 			break;
 		case WebConst.ORDER_STATE_FINISH:
-			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.delivered));
+			orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.delivered,
+					true));
 			if (orderDetails.size() < WebConst.ORDER_NUM) {
-				orderDetails
-						.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.remarked));
+				orderDetails.addAll(orderDao.findDetailByWorkeridAndState(workerid, State.remarked,
+						true));
 			}
 			if (orderDetails.size() > WebConst.ORDER_NUM) {
 				orderDetails = orderDetails.subList(0, WebConst.ORDER_NUM);
@@ -141,8 +149,7 @@ public class OrderService extends BaseService {
 
 	// 用户添加订单。 工作人员使用app查询自己的订单，不再给工作人员发送短信。 下单的时候生成支付信息（由数据库触发器保证）
 	public Order addOrder(Order order) {
-
-		order.setState(State.accepted);
+		// 分配取衣员
 		Addr addr = addrDao.get(order.getAddrid());
 		Region region = regionDao.get(addr.getRegionid());
 		Integer workerid = region.getWorkerid();
@@ -152,6 +159,8 @@ public class OrderService extends BaseService {
 		}
 		order.setWorkerid(workerid);
 
+		// 生成订单号,保存订单
+		order.setState(State.accepted);
 		boolean flag;
 		do {
 			try {
@@ -162,20 +171,22 @@ public class OrderService extends BaseService {
 				flag = true;
 			}
 		} while (flag);
-
 		order = orderDao.getByOrderno(order.getOrderno());
 
+		// 生成历史记录
 		History history = new History();
 		history.setOperation(State.accepted);
 		history.setOrderid(order.getId());
 		historyDao.save(history);
 
+		// 更新用户默认地址
 		User user = userDao.get(order.getUserid());
 		user.setAddrid(order.getAddrid());
 		userDao.update(user);
 
+		// 向取衣员推送通知
 		Worker worker = workerDao.get(workerid);
-		PushUtil.send(new String[] { worker.getCellnum() });
+		PushUtil.send(new String[] { worker.getCellnum() }, OrderType.order);
 		return order;
 	}
 
@@ -245,7 +256,8 @@ public class OrderService extends BaseService {
 		if (!workerid_old.equals(workerid)) {
 			Worker worker_old = workerDao.get(workerid_old);
 			Worker worker = workerDao.get(workerid);
-			PushUtil.send(new String[] { worker_old.getCellnum(), worker.getCellnum() });
+			PushUtil.send(new String[] { worker_old.getCellnum(), worker.getCellnum() },
+					OrderType.order);
 		}
 
 		order_old.setLaundryid(order.getLaundryid());
@@ -351,7 +363,7 @@ public class OrderService extends BaseService {
 		historyDao.save(history);
 
 		Worker worker = workerDao.get(order.getWorkerid());
-		PushUtil.send(new String[] { worker.getCellnum() });
+		PushUtil.send(new String[] { worker.getCellnum() }, OrderType.order);
 		return true;
 	}
 
@@ -365,7 +377,7 @@ public class OrderService extends BaseService {
 		Order order = orderDao.get(orderid);
 		orderDao.delete(orderid);
 		Addr addr = addrDao.get(order.getAddrid());
-		if (!addr.getValid() && orderDao.findNumByAddrid(addr.getId()) == 0) {
+		if (!addr.getValid() && !userService.isAddrRefed(addr.getId())) {
 			addrDao.delete(addr.getId());
 		}
 	}
@@ -670,17 +682,14 @@ public class OrderService extends BaseService {
 	/**
 	 * 快照
 	 */
-	public void addSnapshot(Snapshot snapshot, MultipartFile icon) {
-		if (!icon.isEmpty()) {
-			Clothes clothes = clothesDao.get(snapshot.getClothesid());
-			String orderno = orderDao.get(clothes.getOrderid()).getOrderno();
-			do {
-				String filename = orderno + ComUtil.getRandomStr(WebConst.ICON_RANDOM_LENGTH)
-						+ ComUtil.getSuffix(icon.getOriginalFilename());
-				snapshot.calcIcon(filename);
-			} while (SuUtil.fileExist(snapshot.getIcon()));
-			SuUtil.saveMultipartFile(icon, snapshot.getIcon());
+	public void addSnapshot(Snapshot snapshot, MultipartFile icon) throws SuException {
+		if (icon.isEmpty()) {
+			throw new SuException("未选择图标文件。");
 		}
+		Clothes clothes = clothesDao.get(snapshot.getClothesid());
+		String orderno = orderDao.get(clothes.getOrderid()).getOrderno();
+		snapshot.calcIcon(orderno, icon.getOriginalFilename());
+		SuUtil.saveMultipartFile(icon, snapshot.getIcon());
 		snapshotDao.save(snapshot);
 	}
 

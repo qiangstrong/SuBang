@@ -11,7 +11,7 @@ public class Payment implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum PayType {
-		balance, weixin, alipay, cash, expense, rebate, share, promote;
+		balance, weixin, alipay, cash, expense, rebate, share, promote, score;
 
 		public static PayType toPayType(String arg) {
 			return PayType.values()[new Integer(arg)];
@@ -23,7 +23,7 @@ public class Payment implements Filter, Serializable {
 			}
 			String description = null;
 			switch (payType) {
-			case balance: // 用于订单付款。使用用户余额为订单支付
+			case balance: // 用于订单付款，商城订单。使用用户余额为订单支付
 				description = "余额";
 				break;
 			case weixin: // 用于订单付款，用户余额
@@ -35,7 +35,7 @@ public class Payment implements Filter, Serializable {
 			case cash: // 用于订单付款，用户余额。 在管理端由管理员代为充值的，记录为cash
 				description = "现金";
 				break;
-			case expense: // 用于用户余额。用户余额的支出，例如用余额为订单付款。
+			case expense: // 用于用户余额。用户余额的支出，例如用余额为订单付款、为商城订单付款。
 				description = "支出";
 				break;
 			case rebate: // 用于用户余额。比如充值1000，返现500。其中500记录为rebate
@@ -44,8 +44,11 @@ public class Payment implements Filter, Serializable {
 			case share: // 用于用户余额。比如用户下单后分享到朋友圈，返现
 				description = "分享返现";
 				break;
-			case promote:
+			case promote:// 用于用户收益。推广的人员下单并支付时的提成
 				description = "推广收益";
+				break;
+			case score:// 用于商城订单。使用积分兑换商城商品
+				description = "积分";
 				break;
 			}
 			return description;

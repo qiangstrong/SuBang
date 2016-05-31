@@ -82,6 +82,7 @@
 						<th>地址</th>
 						<th>备注</th>
 						<th>订单</th>
+						<th>商城订单</th>
 						<th>区域</th>
 						<th>修改</th>
 					</tr>
@@ -97,6 +98,9 @@
 							<td>${worker.comment}</td>
 							<td>
 								<a href="back/worker/order.html?workerid=${worker.id}">订单</a>
+							</td>
+							<td>
+								<a href="back/worker/record.html?workerid=${worker.id}">商城订单</a>
 							</td>
 							<td>
 								<a href="back/worker/area.html?workerid=${worker.id}">区域</a>

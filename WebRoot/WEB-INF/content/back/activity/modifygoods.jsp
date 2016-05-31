@@ -10,7 +10,7 @@
 <html>
 <head>
 	<base href="<%=basePath%>">
-	<title>添加卡券类型</title>
+	<title>修改商品信息</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -35,7 +35,8 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<form:form modelAttribute="ticketType" action="back/activity/addtickettype.html" method="post" enctype="multipart/form-data">
+				<form:form modelAttribute="goods" action="back/activity/modifygoods.html" method="post" enctype="multipart/form-data">
+					<form:hidden path="id"/>					
 					<table>
 						<tr>
 							<td></td>
@@ -45,9 +46,19 @@
 							<td>名称：</td>
 							<td><form:input path="name" /></td>
 						</tr>
+						<form:hidden path="icon"/>
+						<tr>
+							<td>图标：</td>
+							<td><img  src="${goods.icon}" /></td>
+						</tr>
 						<tr>
 							<td>图标：</td>
 							<td><input type="file" name="iconImg"/></td>
+						</tr>
+						<form:hidden path="poster"/>
+						<tr>
+							<td>大图标：</td>
+							<td><img  src="${goods.poster}" /></td>
 						</tr>
 						<tr>
 							<td>大图标：</td>
@@ -71,11 +82,11 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td><form:errors path="deadline" /></td>
+							<td><form:errors path="count" /></td>
 						</tr>
 						<tr>
-							<td>期限：</td>
-							<td><input type="date" name="deadline" value="${ticketType.deadlineDes}"/></td>
+							<td>数量：</td>
+							<td><form:input path="count"/></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -83,16 +94,10 @@
 						</tr>
 						<tr>
 							<td>备注：</td>
-							<td><textarea rows="5" cols="135" name="comment">${ticketType.comment}</textarea></td>
+							<td><textarea rows="5" cols="135" name="comment">${goods.comment}</textarea></td>
 						</tr>
-						<tr>
-							<td>类别：</td>
-							<td>    
-								<form:select path="categoryid" items="${categorys}" itemLabel="name" itemValue="id"></form:select>  
-        					</td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="添加" /></td>
+						<tr >
+							<td><input type="submit" value="修改" /></td>
 							<td><input type="reset" value="重置" /></td>
 						</tr>
 					</table>

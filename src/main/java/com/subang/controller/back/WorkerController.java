@@ -195,6 +195,15 @@ public class WorkerController extends BaseController {
 		return view;
 	}
 
+	@RequestMapping("/record")
+	public ModelAndView listRecord(HttpSession session, @RequestParam("workerid") Integer workerid) {
+		ModelAndView view = new ModelAndView();
+		SearchArg searchArg = new SearchArg(WebConst.SEARCH_ORDER_WORKERID, workerid.toString());
+		setPageArg(session, searchArg);
+		view.setViewName("redirect:" + WebConst.BACK_PREFIX + "/record/index.html");
+		return view;
+	}
+
 	@RequestMapping("/area/back")
 	public ModelAndView areaBack(HttpSession session) {
 		ModelAndView view = new ModelAndView();

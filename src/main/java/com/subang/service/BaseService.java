@@ -17,6 +17,7 @@ import com.subang.dao.CostDao;
 import com.subang.dao.DistrictDao;
 import com.subang.dao.FaqDao;
 import com.subang.dao.FeedbackDao;
+import com.subang.dao.GoodsDao;
 import com.subang.dao.HistoryDao;
 import com.subang.dao.InfoDao;
 import com.subang.dao.LaundryDao;
@@ -26,6 +27,7 @@ import com.subang.dao.OrderDao;
 import com.subang.dao.PaymentDao;
 import com.subang.dao.PriceDao;
 import com.subang.dao.RebateDao;
+import com.subang.dao.RecordDao;
 import com.subang.dao.RegionDao;
 import com.subang.dao.ServiceDao;
 import com.subang.dao.SnapshotDao;
@@ -51,8 +53,6 @@ public class BaseService {
 	@Autowired
 	protected BannerDao bannerDao;
 	@Autowired
-	protected RebateDao rebateDao;
-	@Autowired
 	protected CategoryDao categoryDao;
 	@Autowired
 	protected CityDao cityDao;
@@ -71,6 +71,8 @@ public class BaseService {
 	@Autowired
 	protected FeedbackDao feedbackDao;
 	@Autowired
+	protected GoodsDao goodsDao;
+	@Autowired
 	protected HistoryDao historyDao;
 	@Autowired
 	protected InfoDao infoDao;
@@ -86,6 +88,10 @@ public class BaseService {
 	protected PaymentDao paymentDao;
 	@Autowired
 	protected PriceDao priceDao;
+	@Autowired
+	protected RebateDao rebateDao;
+	@Autowired
+	protected RecordDao recordDao;
 	@Autowired
 	protected RegionDao regionDao;
 	@Autowired
